@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Hero } from "@/components/sections/Hero";
+import { connection } from "next/server";
 import { HeroChatPreview } from "@/components/sections/HeroChatPreview";
 import { TrustBar } from "@/components/sections/TrustBar";
 import { Services } from "@/components/sections/Services";
@@ -9,6 +9,7 @@ import { AITeaser } from "@/components/sections/AITeaser";
 import { Testimonials } from "@/components/sections/Testimonials";
 import { FinalCTA } from "@/components/sections/FinalCTA";
 import { JsonLd } from "@/components/seo/JsonLd";
+import { getPublishedProjects } from "@/lib/projects";
 import { createMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = createMetadata({
@@ -24,7 +25,10 @@ export const metadata: Metadata = createMetadata({
   ],
 });
 
-export default function Home() {
+export default async function Home() {
+  await connection();
+  const projects = await getPublishedProjects();
+
   return (
     <>
       <JsonLd
@@ -42,10 +46,9 @@ export default function Home() {
         }}
       />
       <HeroChatPreview />
-      <Hero />
       <Services />
       <AITeaser />
-      <Portfolio />
+      <Portfolio projects={projects} />
       <TrustBar />
       <Testimonials />
       <HowItWorks />

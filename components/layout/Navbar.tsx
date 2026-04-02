@@ -89,7 +89,7 @@ export function Navbar() {
 
           <button
             className={cn(
-              "relative z-50 p-2 md:hidden",
+              "relative z-[70] p-2 md:hidden",
               isHome && !isScrolled ? "text-white" : "text-[color:var(--color-text-primary)]"
             )}
             onClick={() => setIsMenuOpen(!isMenuOpen)}
@@ -102,7 +102,7 @@ export function Navbar() {
 
       <div
         className={cn(
-          "fixed inset-y-0 right-0 z-40 flex w-full max-w-sm flex-col border-l border-[color:var(--color-border)] bg-[rgba(10,10,15,0.96)] px-8 pt-28 shadow-[0_0_60px_rgba(0,0,0,0.45)] backdrop-blur-2xl transition-transform duration-500 md:hidden",
+          "fixed inset-y-0 right-0 z-[60] flex w-full max-w-sm flex-col border-l border-[color:var(--color-border)] bg-[rgba(10,10,15,0.96)] px-8 pt-28 shadow-[0_0_60px_rgba(0,0,0,0.45)] backdrop-blur-2xl transition-transform duration-500 md:hidden",
           isMenuOpen ? "translate-x-0" : "translate-x-full"
         )}
       >

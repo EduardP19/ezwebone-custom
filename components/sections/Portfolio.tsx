@@ -1,10 +1,14 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { PROJECTS } from "@/lib/site-content";
+import type { Project } from "@/lib/projects";
 import { ProjectCard } from "@/components/ui/ProjectCard";
 
-export function Portfolio() {
+interface PortfolioProps {
+  projects: Project[];
+}
+
+export function Portfolio({ projects }: PortfolioProps) {
   return (
     <section id="projects" className="section-shell bg-[color:var(--color-bg-dark)] py-24 md:py-32">
       <div className="relative mx-auto max-w-7xl px-4 md:px-6">
@@ -19,14 +23,14 @@ export function Portfolio() {
         </div>
 
         <div className="mt-14 grid grid-cols-1 gap-8 lg:grid-cols-2">
-          {PROJECTS.map((project, index) => (
+          {projects.map((project, index) => (
             <motion.div
-              key={project.title}
+              key={project.slug}
               initial={{ opacity: 0, y: 24 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, amount: 0.2 }}
               transition={{ duration: 0.55, delay: index * 0.06 }}
-              className={index === 0 ? "lg:col-span-2" : ""}
+              className={project.featured || index === 0 ? "lg:col-span-2" : ""}
             >
               <ProjectCard {...project} />
             </motion.div>

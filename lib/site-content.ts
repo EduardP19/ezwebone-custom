@@ -76,49 +76,6 @@ export const BUSINESS_STAGES = [
   },
 ];
 
-export const PROJECTS = [
-  {
-    title: "Say I Do Weddings",
-    category: "Wedding · Web Design",
-    image: "/portfolio/project1.png",
-    description:
-      "A romantic, conversion-focused site for a UK wedding planner. Increased enquiries by 3x in the first month.",
-    highlights: ["Mobile First", "SEO Ready", "Booking Integrated"],
-  },
-  {
-    title: "Txengo",
-    category: "Creative · Portfolio",
-    image: "/portfolio/project3.png",
-    description:
-      "A bold creative portfolio with punchy visuals, structured storytelling, and smooth motion that keeps the work front and centre.",
-    highlights: ["Bold Visuals", "Motion Led", "Grid Layout"],
-  },
-  {
-    title: "The Memory Corners",
-    category: "Events · Booking Site",
-    image: "/portfolio/project2.png",
-    description:
-      "A polished site for a photo booth company with online booking flows, event galleries, and a layout built to convert busy visitors fast.",
-    highlights: ["Online Booking", "Gallery Ready", "Event Focused"],
-  },
-  {
-    title: "Proveit",
-    category: "Community · Platform",
-    image: "/portfolio/project4.png",
-    description:
-      "A trust-focused platform for the Romanian community in the UK with stronger content structure, blog integration, and a clearer membership journey.",
-    highlights: ["Trust Focused", "Blog Integrated", "Community First"],
-  },
-  {
-    title: "Study and Succeed",
-    category: "Education · Agency",
-    image: "/portfolio/project5.png",
-    description:
-      "A bilingual language travel site with clearer programme filtering, student-first navigation, and a cleaner path from discovery to enquiry.",
-    highlights: ["Bilingual", "Programme Filters", "Student First"],
-  },
-];
-
 export const STATS = [
   { value: 5, suffix: "", label: "Years Experience" },
   { value: 115, suffix: "+", label: "Business Partners" },

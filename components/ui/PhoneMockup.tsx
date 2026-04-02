@@ -1,3 +1,5 @@
+import Image from "next/image";
+
 export function PhoneMockup() {
   return (
     <div className="mx-auto w-full max-w-[22rem] rounded-[2.2rem] border border-white/10 bg-[#09090f] p-3 shadow-[0_24px_90px_rgba(0,0,0,0.35)]">
@@ -7,9 +9,20 @@ export function PhoneMockup() {
 
       <div className="rounded-[1.65rem] border border-white/6 bg-[linear-gradient(180deg,#111118,#171727)] p-4">
         <div className="mb-4 flex items-center justify-between">
-          <div>
-            <p className="text-sm font-semibold text-white">Mia</p>
-            <p className="text-xs text-[color:var(--color-text-secondary)]">Resevia AI receptionist</p>
+          <div className="flex items-center gap-3">
+            <div className="flex h-11 w-11 items-center justify-center rounded-2xl border border-white/8 bg-white/6">
+              <Image
+                src="/resevia/logo.svg"
+                alt="Resevia logo"
+                width={28}
+                height={28}
+                className="h-7 w-7"
+              />
+            </div>
+            <div>
+              <p className="text-sm font-semibold text-white">Sophia</p>
+              <p className="text-xs text-[color:var(--color-text-secondary)]">Resevia AI receptionist</p>
+            </div>
           </div>
           <div className="live-dot" />
         </div>

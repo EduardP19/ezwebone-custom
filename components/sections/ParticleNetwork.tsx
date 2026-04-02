@@ -20,8 +20,8 @@ interface ParticleNetworkProps {
 
 export function ParticleNetwork({
   className,
-  count = 80,
-  maxDistance = 150,
+  count = 110,
+  maxDistance = 180,
   interactive = true,
 }: ParticleNetworkProps) {
   const canvasRef = React.useRef<HTMLCanvasElement>(null);
@@ -55,9 +55,9 @@ export function ParticleNetwork({
     const createParticle = (): Particle => ({
       x: Math.random() * width,
       y: Math.random() * height,
-      vx: (Math.random() - 0.5) * 0.28,
-      vy: (Math.random() - 0.5) * 0.28,
-      radius: Math.random() * 1.2 + 0.8,
+      vx: (Math.random() - 0.5) * 0.32,
+      vy: (Math.random() - 0.5) * 0.32,
+      radius: Math.random() * 1.45 + 0.95,
     });
 
     const buildParticles = () => {
@@ -90,27 +90,27 @@ export function ParticleNetwork({
           context.beginPath();
           context.moveTo(particle.x, particle.y);
           context.lineTo(neighbor.x, neighbor.y);
-          context.strokeStyle = `rgba(167, 139, 250, ${opacity * 0.22})`;
-          context.lineWidth = 1;
+          context.strokeStyle = `rgba(196, 181, 253, ${opacity * 0.34})`;
+          context.lineWidth = 1.15;
           context.stroke();
         }
 
-        let dotOpacity = 0.34;
+        let dotOpacity = 0.5;
         let glowStrength = 0;
 
         if (interactive && mediaQuery.matches && pointer.active) {
           const pointerDistance = Math.hypot(pointer.x - particle.x, pointer.y - particle.y);
 
-          if (pointerDistance < 200) {
-            const interactionOpacity = 1 - pointerDistance / 200;
-            dotOpacity = 0.34 + interactionOpacity * 0.5;
+          if (pointerDistance < 220) {
+            const interactionOpacity = 1 - pointerDistance / 220;
+            dotOpacity = 0.5 + interactionOpacity * 0.35;
             glowStrength = interactionOpacity;
 
             context.beginPath();
             context.moveTo(particle.x, particle.y);
             context.lineTo(pointer.x, pointer.y);
-            context.strokeStyle = `rgba(124, 58, 237, ${interactionOpacity * 0.28})`;
-            context.lineWidth = 1;
+            context.strokeStyle = `rgba(167, 139, 250, ${interactionOpacity * 0.42})`;
+            context.lineWidth = 1.25;
             context.stroke();
           }
         }
@@ -118,8 +118,8 @@ export function ParticleNetwork({
         context.beginPath();
         context.arc(particle.x, particle.y, particle.radius, 0, Math.PI * 2);
         context.fillStyle = `rgba(245, 245, 247, ${dotOpacity})`;
-        context.shadowBlur = glowStrength ? 16 : 0;
-        context.shadowColor = "rgba(167, 139, 250, 0.8)";
+        context.shadowBlur = glowStrength ? 20 : 10;
+        context.shadowColor = "rgba(196, 181, 253, 0.88)";
         context.fill();
         context.shadowBlur = 0;
       }

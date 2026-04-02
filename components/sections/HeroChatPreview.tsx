@@ -26,37 +26,37 @@ const TRUST_IMAGES = [
 ];
 
 const TYPEWRITER_PROMPTS = [
-  "I run a salon and keep missing calls from clients...",
-  "I need a website that actually brings in customers...",
-  "Can you automate my booking confirmations and follow-ups?",
-  "I want to rank on Google but don't know where to start...",
-  "How can AI help my small business grow?",
+  "Missed calls are costing us bookings.",
+  "We need a website that brings leads in.",
+  "Can you automate our follow-ups?",
+  "How do we rank higher on Google?",
+  "What can AI do for our business?",
 ];
 
 const SERVICE_PILLS = [
   {
     label: "Websites",
-    prompt: "Hi, I need a custom website for my business. Where should I start?",
+    prompt: "We need a better website. Where should we start?",
   },
   {
     label: "Automations",
-    prompt: "Hi, I'd like help automating my business. Where should I start?",
+    prompt: "We want to automate parts of the business. What should we fix first?",
   },
   {
     label: "AI Agents",
-    prompt: "Hi, I'm interested in an AI agent for my business. How does that work?",
+    prompt: "We are interested in an AI agent. How could that work for us?",
   },
   {
     label: "Marketing",
-    prompt: "Hi, I need help with online marketing and ads. What do you offer?",
+    prompt: "We need help with marketing and ads. What do you offer?",
   },
   {
     label: "SEO",
-    prompt: "Hi, I want my business to rank higher on Google. Can you help with SEO?",
+    prompt: "We want to rank higher on Google. Can you help with SEO?",
   },
   {
     label: "Lead Gen",
-    prompt: "Hi, I need help generating more leads for my business. What's the best approach?",
+    prompt: "We need more leads. What approach would you recommend?",
   },
 ];
 
@@ -328,7 +328,7 @@ export function HeroChatPreview() {
 
   return (
     <section className="section-shell relative min-h-[100svh] bg-[color:var(--color-bg-dark)] pt-20 pb-14 sm:pt-22 sm:pb-18 md:pt-24 md:pb-20">
-      <ParticleNetwork className="opacity-55" count={58} interactive={false} maxDistance={140} />
+      <ParticleNetwork className="opacity-80" count={94} interactive={false} maxDistance={190} />
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(124,58,237,0.18),transparent_34%)]" />
       <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,rgba(10,10,15,0.22),rgba(10,10,15,0.9))]" />
 
@@ -368,9 +368,9 @@ export function HeroChatPreview() {
 
             <div>
               <h1 className="text-4xl font-semibold leading-[0.96] tracking-tight text-[color:var(--color-text-primary)] sm:text-5xl md:text-7xl">
-                Build Smarter.
+                Websites. Automations.
                 <br />
-                Grow Faster.
+                AI Agents. Growth.
               </h1>
               <p className="mx-auto mt-4 max-w-2xl text-base leading-7 text-[color:var(--color-text-secondary)] sm:text-lg sm:leading-8 md:text-xl">
                 Tell us what your business needs and we&apos;ll guide you toward the right website, automation, AI, or growth solution.
@@ -378,21 +378,25 @@ export function HeroChatPreview() {
             </div>
 
             <div className="mx-auto w-full max-w-2xl">
-              <div className="hero-chat-preview__scrollbar mb-3 flex justify-start overflow-x-auto px-1 sm:mb-4 sm:justify-center">
-                <div className="flex min-w-max gap-3 pb-2">
+              <div className="hero-chat-preview__pill-viewport hero-chat-preview__scrollbar mb-3 flex justify-start overflow-x-auto pr-8 pl-1 sm:mb-4 sm:justify-center sm:pr-1">
+                <div className="flex min-w-max gap-2.5 pb-2 sm:gap-3">
                   {SERVICE_PILLS.map((pill) => {
                     const isActive = activePill === pill.label;
+                    const arePillsLocked = chatState !== "idle" || messages.length > 0;
 
                     return (
                       <button
                         key={pill.label}
                         type="button"
-                      onClick={() => handlePillClick(pill.label, pill.prompt)}
-                      className={cn(
-                          "rounded-full border px-3.5 py-2 text-xs font-medium transition-all duration-200 sm:px-4 sm:text-sm",
-                        isActive
-                          ? "border-[color:var(--color-primary)] bg-[color:var(--color-primary)]/10 text-[color:var(--color-text-accent)]"
-                          : "border-[color:var(--color-border)] bg-[color:var(--color-bg-elevated)] text-[color:var(--color-text-secondary)] hover:border-[color:var(--color-primary)]/50 hover:text-[color:var(--color-text-primary)]"
+                        disabled={arePillsLocked}
+                        onClick={() => handlePillClick(pill.label, pill.prompt)}
+                        className={cn(
+                          "shrink-0 rounded-full border px-3.5 py-2 text-xs font-medium transition-all duration-200 sm:px-4 sm:text-sm",
+                          isActive
+                            ? "border-[color:var(--color-primary)] bg-[color:var(--color-primary)]/10 text-[color:var(--color-text-accent)]"
+                            : arePillsLocked
+                              ? "border-[color:var(--color-border)] bg-[color:var(--color-bg-elevated)] text-[color:var(--color-text-secondary)]/65"
+                              : "border-[color:var(--color-border)] bg-[color:var(--color-bg-elevated)] text-[color:var(--color-text-secondary)] hover:border-[color:var(--color-primary)]/50 hover:text-[color:var(--color-text-primary)]"
                         )}
                       >
                         {pill.label}
@@ -422,8 +426,8 @@ export function HeroChatPreview() {
                           className="mb-5"
                           innerClassName="min-h-[96px] bg-[rgba(10,10,15,0.72)] px-4 py-5 sm:min-h-[112px] sm:px-5 sm:py-6"
                         >
-                          <div className="flex min-h-[54px] items-center text-base italic text-[color:var(--color-text-secondary)] sm:min-h-[64px] sm:text-lg">
-                            <span>{typewriterText}</span>
+                          <div className="flex min-h-[54px] items-center text-sm italic leading-6 text-[color:var(--color-text-secondary)] sm:min-h-[64px] sm:text-lg">
+                            <span className="max-w-[28ch] sm:max-w-none">{typewriterText}</span>
                             <span className="hero-chat-preview__cursor ml-1" />
                           </div>
                         </RunningBorder>
@@ -550,6 +554,22 @@ export function HeroChatPreview() {
 
         .hero-chat-preview__scrollbar::-webkit-scrollbar {
           display: none;
+        }
+
+        .hero-chat-preview__pill-viewport {
+          mask-image: linear-gradient(
+            to right,
+            rgba(0, 0, 0, 1) 0%,
+            rgba(0, 0, 0, 1) 82%,
+            rgba(0, 0, 0, 0.35) 94%,
+            rgba(0, 0, 0, 0) 100%
+          );
+        }
+
+        @media (min-width: 640px) {
+          .hero-chat-preview__pill-viewport {
+            mask-image: none;
+          }
         }
 
         .hero-chat-preview__cursor {
