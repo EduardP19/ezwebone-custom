@@ -49,7 +49,7 @@ function InstagramIcon({ size = 18 }: { size?: number }) {
 export function Footer() {
   return (
     <footer className="mt-auto border-t border-[color:var(--color-border)] bg-[color:var(--color-bg-dark)] text-[color:var(--color-text-primary)]">
-      <div className="mx-auto max-w-7xl px-4 py-20 md:px-6">
+      <div className="mx-auto max-w-7xl px-4 pb-14 pt-12 md:px-6 md:pb-16 md:pt-14">
         <div className="grid grid-cols-1 gap-12 md:grid-cols-3">
           <div>
             <Link href="/" className="inline-flex items-center">

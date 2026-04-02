@@ -28,7 +28,12 @@ export function Services() {
               viewport={{ once: true, amount: 0.2 }}
               transition={{ duration: 0.55, delay: index * 0.06 }}
             >
-              <ServiceCard {...service} />
+              <ServiceCard
+                title={service.title}
+                description={service.shortDescription}
+                icon={service.icon}
+                compact
+              />
             </motion.div>
           ))}
         </div>

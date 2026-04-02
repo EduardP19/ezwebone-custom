@@ -13,7 +13,7 @@ export function FinalCTA({ variant = "black" }: FinalCTAProps) {
   void variant;
 
   return (
-    <section className="section-shell bg-[color:var(--color-bg-dark)] py-24 md:py-32">
+    <section className="section-shell bg-[color:var(--color-bg-dark)] pt-20 pb-14 md:pt-24 md:pb-18">
       <ParticleNetwork count={46} maxDistance={130} interactive={false} className="opacity-50" />
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(124,58,237,0.22),transparent_30%)]" />
 

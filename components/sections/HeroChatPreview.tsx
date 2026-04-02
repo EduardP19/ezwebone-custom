@@ -34,30 +34,12 @@ const TYPEWRITER_PROMPTS = [
 ];
 
 const SERVICE_PILLS = [
-  {
-    label: "Websites",
-    prompt: "We need a better website. Where should we start?",
-  },
-  {
-    label: "Automations",
-    prompt: "We want to automate parts of the business. What should we fix first?",
-  },
-  {
-    label: "AI Agents",
-    prompt: "We are interested in an AI agent. How could that work for us?",
-  },
-  {
-    label: "Marketing",
-    prompt: "We need help with marketing and ads. What do you offer?",
-  },
-  {
-    label: "SEO",
-    prompt: "We want to rank higher on Google. Can you help with SEO?",
-  },
-  {
-    label: "Lead Gen",
-    prompt: "We need more leads. What approach would you recommend?",
-  },
+  { label: "Websites" },
+  { label: "Automations" },
+  { label: "AI Agents" },
+  { label: "Marketing" },
+  { label: "SEO" },
+  { label: "Lead Gen" },
 ];
 
 const EMAIL_CAPTURE_PROMPT =
@@ -147,7 +129,7 @@ function RunningBorder({
   className,
   innerClassName,
   radius = "1.5rem",
-  duration = "4s",
+  duration = "6.75s",
 }: React.PropsWithChildren<{
   className?: string;
   innerClassName?: string;
@@ -177,7 +159,6 @@ export function HeroChatPreview() {
   const timersRef = React.useRef<number[]>([]);
 
   const [chatState, setChatState] = React.useState<ChatState>("idle");
-  const [activePill, setActivePill] = React.useState<string | null>(null);
   const [inputValue, setInputValue] = React.useState("");
   const [messages, setMessages] = React.useState<ChatMessage[]>([]);
   const [isStreaming, setIsStreaming] = React.useState(false);
@@ -255,19 +236,6 @@ export function HeroChatPreview() {
     setChatState((current) => (current === "idle" ? "active" : current));
   }, []);
 
-  const handlePillClick = React.useCallback(
-    (label: string, prompt: string) => {
-      setActivePill(label);
-      setInputValue(prompt);
-      setEmailError(null);
-      activateChat();
-      queueTimeout(() => {
-        inputRef.current?.focus();
-      }, 20);
-    },
-    [activateChat, queueTimeout]
-  );
-
   const handleSendMessage = React.useCallback(() => {
     const nextValue = inputValue.trim();
     if (!nextValue || isStreaming || chatState === "captured") {
@@ -301,7 +269,6 @@ export function HeroChatPreview() {
 
     activateChat();
     setEmailError(null);
-    setActivePill(null);
 
     const nextUserCount = userMessageCount + 1;
 
@@ -380,35 +347,21 @@ export function HeroChatPreview() {
             <div className="mx-auto w-full max-w-2xl">
               <div className="hero-chat-preview__pill-viewport hero-chat-preview__scrollbar mb-3 flex justify-start overflow-x-auto pr-8 pl-1 sm:mb-4 sm:justify-center sm:pr-1">
                 <div className="flex min-w-max gap-2.5 pb-2 sm:gap-3">
-                  {SERVICE_PILLS.map((pill) => {
-                    const isActive = activePill === pill.label;
-                    const arePillsLocked = chatState !== "idle" || messages.length > 0;
-
-                    return (
-                      <button
-                        key={pill.label}
-                        type="button"
-                        disabled={arePillsLocked}
-                        onClick={() => handlePillClick(pill.label, pill.prompt)}
-                        className={cn(
-                          "shrink-0 rounded-full border px-3.5 py-2 text-xs font-medium transition-all duration-200 sm:px-4 sm:text-sm",
-                          isActive
-                            ? "border-[color:var(--color-primary)] bg-[color:var(--color-primary)]/10 text-[color:var(--color-text-accent)]"
-                            : arePillsLocked
-                              ? "border-[color:var(--color-border)] bg-[color:var(--color-bg-elevated)] text-[color:var(--color-text-secondary)]/65"
-                              : "border-[color:var(--color-border)] bg-[color:var(--color-bg-elevated)] text-[color:var(--color-text-secondary)] hover:border-[color:var(--color-primary)]/50 hover:text-[color:var(--color-text-primary)]"
-                        )}
-                      >
+                  {SERVICE_PILLS.map((pill) => (
+                    <span
+                      key={pill.label}
+                      className="shrink-0 rounded-full border border-[color:var(--color-border)] bg-[color:var(--color-bg-elevated)] px-3.5 py-2 text-xs font-medium text-[color:var(--color-text-secondary)] sm:px-4 sm:text-sm"
+                    >
                         {pill.label}
-                      </button>
-                    );
-                  })}
+                    </span>
+                  ))}
                 </div>
               </div>
 
               <RunningBorder
-                radius="1.5rem"
-                className="shadow-[0_30px_90px_rgba(124,58,237,0.08)]"
+                radius="2.15rem"
+                duration="6.75s"
+                className="shadow-[0_36px_120px_rgba(124,58,237,0.14)]"
                 innerClassName="bg-[rgba(17,17,24,0.82)] p-3.5 backdrop-blur-2xl sm:p-4 md:p-6"
               >
                 <div className="min-h-[280px] text-left sm:min-h-[320px]">
@@ -422,7 +375,8 @@ export function HeroChatPreview() {
                         transition={{ duration: 0.3 }}
                       >
                         <RunningBorder
-                          radius="1rem"
+                          radius="1.35rem"
+                          duration="7.8s"
                           className="mb-5"
                           innerClassName="min-h-[96px] bg-[rgba(10,10,15,0.72)] px-4 py-5 sm:min-h-[112px] sm:px-5 sm:py-6"
                         >
@@ -444,7 +398,7 @@ export function HeroChatPreview() {
                       >
                         {messages.length === 0 ? (
                           <div className="rounded-2xl border border-dashed border-white/10 bg-white/3 px-4 py-5 text-xs text-[color:var(--color-text-secondary)] sm:text-sm">
-                            Start typing below or use one of the service pills to prefill the first message.
+                            Start typing below to begin the conversation.
                           </div>
                         ) : null}
 
@@ -495,18 +449,9 @@ export function HeroChatPreview() {
                           value={inputValue}
                           onFocus={activateChat}
                           onChange={(event) => {
-                            const nextInputValue = event.target.value;
-                            const selectedPrompt = SERVICE_PILLS.find(
-                              (pill) => pill.label === activePill
-                            )?.prompt;
-
                             activateChat();
-                            setInputValue(nextInputValue);
+                            setInputValue(event.target.value);
                             setEmailError(null);
-
-                            if (activePill && nextInputValue !== selectedPrompt) {
-                              setActivePill(null);
-                            }
                           }}
                           placeholder={
                             chatState === "awaiting_email"
@@ -583,26 +528,47 @@ export function HeroChatPreview() {
         .hero-chat-preview__running-border {
           position: relative;
           overflow: hidden;
+          isolation: isolate;
           border-radius: var(--hero-border-radius, 1.5rem);
           padding: 1px;
-          background: rgba(124, 58, 237, 0.12);
-          box-shadow: inset 0 0 0 1px rgba(124, 58, 237, 0.18);
+          background:
+            linear-gradient(180deg, rgba(167, 139, 250, 0.16), rgba(124, 58, 237, 0.06)),
+            rgba(124, 58, 237, 0.08);
+          box-shadow:
+            inset 0 0 0 1px rgba(196, 181, 253, 0.1),
+            0 0 0 1px rgba(124, 58, 237, 0.08);
         }
 
         .hero-chat-preview__running-border::before {
           content: "";
           position: absolute;
-          inset: -140%;
+          inset: -128%;
           background: conic-gradient(
-            from 0deg,
+            from 8deg,
             transparent 0deg,
-            rgba(124, 58, 237, 0.96) 72deg,
-            rgba(167, 139, 250, 0.98) 160deg,
-            rgba(124, 58, 237, 0.96) 240deg,
-            transparent 320deg,
+            transparent 36deg,
+            rgba(124, 58, 237, 0.28) 86deg,
+            rgba(167, 139, 250, 0.9) 142deg,
+            rgba(124, 58, 237, 0.36) 206deg,
+            transparent 272deg,
             transparent 360deg
           );
-          animation: hero-chat-preview-spin var(--hero-spin-duration, 4s) linear infinite;
+          filter: blur(10px);
+          opacity: 0.95;
+          animation: hero-chat-preview-spin var(--hero-spin-duration, 6.75s) linear infinite;
+        }
+
+        .hero-chat-preview__running-border::after {
+          content: "";
+          position: absolute;
+          inset: 10% 8%;
+          z-index: 0;
+          border-radius: calc(var(--hero-border-radius, 1.5rem) * 0.92);
+          background:
+            radial-gradient(circle at 50% 12%, rgba(167, 139, 250, 0.22), transparent 34%),
+            radial-gradient(circle at 50% 88%, rgba(124, 58, 237, 0.14), transparent 30%);
+          filter: blur(24px);
+          opacity: 0.88;
         }
 
         .hero-chat-preview__running-border-inner {
@@ -610,6 +576,9 @@ export function HeroChatPreview() {
           z-index: 1;
           height: 100%;
           border-radius: calc(var(--hero-border-radius, 1.5rem) - 1px);
+          box-shadow:
+            inset 0 1px 0 rgba(255, 255, 255, 0.04),
+            inset 0 -24px 50px rgba(124, 58, 237, 0.05);
         }
 
         @keyframes hero-chat-preview-spin {

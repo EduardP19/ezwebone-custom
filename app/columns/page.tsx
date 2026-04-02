@@ -7,8 +7,17 @@ import { ColumnCard } from "@/components/ui/ColumnCard";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { FinalCTA } from "@/components/sections/FinalCTA";
 
+type Column = {
+  id: string;
+  slug: string;
+  title: string;
+  subtitle: string | null;
+  cover_image: string | null;
+  created_at: string;
+};
+
 export default function ColumnsPage() {
-  const [columns, setColumns] = useState<any[]>([]);
+  const [columns, setColumns] = useState<Column[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -19,7 +28,7 @@ export default function ColumnsPage() {
         return;
       }
 
-      const { data, error } = await supabase
+      const { data } = await supabase
         .from("columns")
         .select("*")
         .eq("published", true)
@@ -32,7 +41,7 @@ export default function ColumnsPage() {
   }, []);
 
   return (
-    <div className="py-20 bg-[#fafafa]">
+    <div className="bg-[#fafafa]">
       <JsonLd
         data={{
           "@context": "https://schema.org",
@@ -47,7 +56,7 @@ export default function ColumnsPage() {
         }}
       />
       
-      <div className="container mx-auto px-4 md:px-6">
+      <div className="container mx-auto px-4 py-20 md:px-6">
         <div className="max-w-3xl mb-20">
           <Badge className="mb-4">Columns & Insights</Badge>
           <h1 className="text-4xl md:text-6xl font-display font-bold tracking-tight text-brand-black mb-6">

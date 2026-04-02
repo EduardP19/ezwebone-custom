@@ -27,14 +27,15 @@ export default async function BlogPage() {
   const posts = await getPublishedBlogPosts();
 
   return (
-    <div className="py-16 md:py-20 bg-gradient-to-b from-white via-brand-warm/30 to-white">
-      <div className="container mx-auto px-4 md:px-6">
+    <div className="section-shell bg-[color:var(--color-bg-dark)]">
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(124,58,237,0.16),transparent_32%)]" />
+      <div className="container mx-auto px-4 py-16 md:px-6 md:py-20">
         <div className="max-w-3xl mb-14 md:mb-16">
           <Badge className="mb-4">Journal</Badge>
-          <h1 className="text-4xl md:text-6xl font-display font-bold tracking-tight text-brand-black mb-6">
+          <h1 className="text-4xl md:text-6xl font-display font-bold tracking-tight text-[color:var(--color-text-primary)] mb-6">
             Strategy notes for service brands that want to look sharper and grow with intent.
           </h1>
-          <p className="text-xl text-brand-gray leading-relaxed">
+          <p className="text-xl text-[color:var(--color-text-secondary)] leading-relaxed">
             Essays on positioning, search visibility, paid growth, automation, and the systems behind better-fit enquiries.
           </p>
         </div>
@@ -45,9 +46,9 @@ export default async function BlogPage() {
               <Link key={post.slug} href={`/blog/${post.slug}`} className="block h-full">
                 <Card
                   padding="sm"
-                  className="h-full border border-brand-border/70 hover:border-brand-purple/40 transition-all group bg-white/95 backdrop-blur-sm"
+                  className="h-full border-[color:var(--color-border)] bg-[color:var(--color-bg-card)] shadow-[0_20px_60px_rgba(0,0,0,0.18)] transition-all group hover:border-[rgba(124,58,237,0.4)]"
                 >
-                  <div className="aspect-[16/9] bg-brand-warm rounded-xl mb-5 overflow-hidden relative">
+                  <div className="aspect-[16/9] bg-[color:var(--color-bg-elevated)] rounded-xl mb-5 overflow-hidden relative">
                     <Image
                       src={post.cover_image || FALLBACK_IMAGE}
                       alt={post.title}
@@ -55,23 +56,23 @@ export default async function BlogPage() {
                       className="object-cover group-hover:scale-105 transition-transform duration-500"
                     />
                   </div>
-                  <div className="flex items-center gap-3 text-[10px] font-bold text-brand-gray uppercase tracking-widest mb-3">
+                  <div className="flex items-center gap-3 text-[10px] font-bold text-[color:var(--color-text-secondary)] uppercase tracking-widest mb-3">
                     <span>{formatPostDate(post.created_at)}</span>
-                    <span className="w-1 h-1 rounded-full bg-brand-gray/60" />
+                    <span className="w-1 h-1 rounded-full bg-[color:var(--color-text-secondary)]/60" />
                     <span>{estimateReadTime(post.content)} min read</span>
                   </div>
-                  <h2 className="text-xl font-bold text-brand-black mb-2 group-hover:text-brand-purple transition-colors leading-snug">
+                  <h2 className="text-xl font-bold text-[color:var(--color-text-primary)] mb-2 group-hover:text-[color:var(--color-primary-light)] transition-colors leading-snug">
                     {post.title}
                   </h2>
-                  <p className="text-brand-gray text-sm leading-relaxed line-clamp-3">
+                  <p className="text-[color:var(--color-text-secondary)] text-sm leading-relaxed line-clamp-3">
                     {post.excerpt || "Read this latest update from EZWebOne."}
                   </p>
                 </Card>
               </Link>
             ))
           ) : (
-            <Card className="md:col-span-2 border border-brand-border/80 bg-white">
-              <p className="text-brand-gray text-sm">No published posts yet.</p>
+            <Card className="md:col-span-2 border-[color:var(--color-border)] bg-[color:var(--color-bg-card)]">
+              <p className="text-[color:var(--color-text-secondary)] text-sm">No published posts yet.</p>
             </Card>
           )}
         </div>

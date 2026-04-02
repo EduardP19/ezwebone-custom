@@ -6,6 +6,9 @@ import { Card } from "@/components/ui/Card";
 import Link from "next/link";
 import { useState } from "react";
 
+const FIELD_CLASS_NAME =
+  "w-full rounded-2xl border border-brand-purple/20 bg-brand-purple/6 px-4 py-3 text-brand-purple-deep placeholder:text-brand-purple-deep/55 outline-none transition-colors focus:border-brand-purple focus:ring-2 focus:ring-brand-purple/15";
+
 export function ContactPageClient() {
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
@@ -31,6 +34,9 @@ export function ContactPageClient() {
     try {
       const resp = await fetch("/api/contact", {
         method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
         body: JSON.stringify(data),
       });
 
@@ -103,33 +109,33 @@ export function ContactPageClient() {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div className="space-y-2">
                     <label className="text-sm font-semibold text-brand-black uppercase tracking-[0.16em]">First name *</label>
-                    <input name="firstName" type="text" className="w-full px-4 py-3 rounded-2xl border border-brand-border focus:border-brand-purple outline-none transition-colors bg-white" placeholder="John" required />
+                    <input name="firstName" type="text" className={FIELD_CLASS_NAME} placeholder="John" required />
                   </div>
                   <div className="space-y-2">
                     <label className="text-sm font-semibold text-brand-black uppercase tracking-[0.16em]">Last name</label>
-                    <input name="lastName" type="text" className="w-full px-4 py-3 rounded-2xl border border-brand-border focus:border-brand-purple outline-none transition-colors bg-white" placeholder="Doe" />
+                    <input name="lastName" type="text" className={FIELD_CLASS_NAME} placeholder="Doe" />
                   </div>
                 </div>
 
                 <div className="space-y-2">
                   <label className="text-sm font-semibold text-brand-black uppercase tracking-[0.16em]">Email address *</label>
-                  <input name="email" type="email" className="w-full px-4 py-3 rounded-2xl border border-brand-border focus:border-brand-purple outline-none transition-colors bg-white" placeholder="john@example.com" required />
+                  <input name="email" type="email" className={FIELD_CLASS_NAME} placeholder="john@example.com" required />
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div className="space-y-2">
                     <label className="text-sm font-semibold text-brand-black uppercase tracking-[0.16em]">Phone number</label>
-                    <input name="phone" type="tel" className="w-full px-4 py-3 rounded-2xl border border-brand-border focus:border-brand-purple outline-none transition-colors bg-white" placeholder="07123 456789" />
+                    <input name="phone" type="tel" className={FIELD_CLASS_NAME} placeholder="07123 456789" />
                   </div>
                   <div className="space-y-2">
                     <label className="text-sm font-semibold text-brand-black uppercase tracking-[0.16em]">Business name</label>
-                    <input name="businessName" type="text" className="w-full px-4 py-3 rounded-2xl border border-brand-border focus:border-brand-purple outline-none transition-colors bg-white" placeholder="Your business" />
+                    <input name="businessName" type="text" className={FIELD_CLASS_NAME} placeholder="Your business" />
                   </div>
                 </div>
 
                 <div className="space-y-2">
                   <label className="text-sm font-semibold text-brand-black uppercase tracking-[0.16em]">What do you need most?</label>
-                  <select name="serviceInterest" className="w-full px-4 py-3 rounded-2xl border border-brand-border focus:border-brand-purple outline-none transition-colors bg-white">
+                  <select name="serviceInterest" className={`${FIELD_CLASS_NAME} appearance-none`}>
                     <option>Premium website redesign</option>
                     <option>SEO and content growth</option>
                     <option>Automation and follow-up systems</option>
@@ -140,7 +146,7 @@ export function ContactPageClient() {
 
                 <div className="space-y-2">
                   <label className="text-sm font-semibold text-brand-black uppercase tracking-[0.16em]">Tell us about the business and the shift you want</label>
-                  <textarea name="message" rows={5} className="w-full px-4 py-3 rounded-2xl border border-brand-border focus:border-brand-purple outline-none transition-colors bg-white" placeholder="What is working, what is not, and what should feel different after the project?" />
+                  <textarea name="message" rows={5} className={FIELD_CLASS_NAME} placeholder="What is working, what is not, and what should feel different after the project?" />
                 </div>
 
                 {error && <p className="text-red-600 text-sm font-medium">{error}</p>}
