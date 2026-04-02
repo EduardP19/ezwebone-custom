@@ -13,6 +13,12 @@ export default function ColumnsPage() {
 
   useEffect(() => {
     async function fetchColumns() {
+      if (!supabase) {
+        setColumns([]);
+        setLoading(false);
+        return;
+      }
+
       const { data, error } = await supabase
         .from("columns")
         .select("*")

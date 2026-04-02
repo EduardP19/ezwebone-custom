@@ -1,5 +1,5 @@
 import { cache } from "react";
-import { createClient } from "@supabase/supabase-js";
+import { supabase } from "@/lib/supabase";
 
 export interface BlogPost {
   id: string;
@@ -12,18 +12,13 @@ export interface BlogPost {
   created_at: string;
 }
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
-
-if (!supabaseUrl || !supabaseAnonKey) {
-  throw new Error("Missing Supabase environment variables for blog data.");
-}
-
-const supabase = createClient(supabaseUrl, supabaseAnonKey);
-
 const blogSelect = "id, slug, title, excerpt, content, cover_image, published, created_at";
 
 export const getPublishedBlogPosts = cache(async (): Promise<BlogPost[]> => {
+  if (!supabase) {
+    return [];
+  }
+
   const { data, error } = await supabase
     .from("blog")
     .select(blogSelect)
@@ -38,6 +33,10 @@ export const getPublishedBlogPosts = cache(async (): Promise<BlogPost[]> => {
 });
 
 export const getPublishedBlogPostBySlug = cache(async (slug: string): Promise<BlogPost | null> => {
+  if (!supabase) {
+    return null;
+  }
+
   const { data, error } = await supabase
     .from("blog")
     .select(blogSelect)

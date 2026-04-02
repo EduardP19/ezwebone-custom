@@ -3,6 +3,13 @@ import { supabase } from "@/lib/supabase";
 
 export async function POST(req: Request) {
   try {
+    if (!supabase) {
+      return NextResponse.json(
+        { error: "Lead capture is not configured on this deployment." },
+        { status: 503 }
+      );
+    }
+
     const body = await req.json();
     const { firstName, lastName, email, phone, businessName, serviceInterest, message, sourcePage } = body;
 

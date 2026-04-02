@@ -17,6 +17,11 @@ export default function ColumnDetailPage({ params }: { params: { slug: string } 
 
   useEffect(() => {
     async function fetchColumn() {
+      if (!supabase) {
+        setLoading(false);
+        return;
+      }
+
       const { data, error } = await supabase
         .from("columns")
         .select("*")

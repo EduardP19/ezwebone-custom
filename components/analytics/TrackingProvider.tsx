@@ -144,6 +144,8 @@ function sectionFromElement(el: HTMLElement): string {
 }
 
 async function insertLog(payload: LogPayload) {
+  if (!supabase) return;
+
   const { error } = await supabase.from("logs").insert([payload]);
   if (error && process.env.NODE_ENV !== "production") {
     console.warn("Tracking insert failed:", error.message);
