@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Hero } from "@/components/sections/Hero";
+import { HeroChatPreview } from "@/components/sections/HeroChatPreview";
 import { TrustBar } from "@/components/sections/TrustBar";
 import { Services } from "@/components/sections/Services";
 import { HowItWorks } from "@/components/sections/HowItWorks";
@@ -40,6 +41,7 @@ export default function Home() {
           },
         }}
       />
+      <HeroChatPreview />
       <Hero />
       <Services />
       <AITeaser />
