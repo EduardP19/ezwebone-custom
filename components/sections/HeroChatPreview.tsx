@@ -3,7 +3,7 @@
 import * as React from "react";
 import Image from "next/image";
 import { AnimatePresence, motion } from "framer-motion";
-import { ArrowRight, CheckCheck, Sparkles } from "lucide-react";
+import { ArrowRight, CheckCheck } from "lucide-react";
 import { ParticleNetwork } from "@/components/sections/ParticleNetwork";
 import { Button } from "@/components/ui/Button";
 import { cn } from "@/lib/utils";
@@ -327,28 +327,21 @@ export function HeroChatPreview() {
   }, [activateChat, chatState, inputValue, isStreaming, streamAssistantMessage, userMessageCount]);
 
   return (
-    <section className="section-shell relative min-h-[100svh] bg-[color:var(--color-bg-dark)] pt-32 pb-24">
+    <section className="section-shell relative min-h-[100svh] bg-[color:var(--color-bg-dark)] pt-20 pb-14 sm:pt-22 sm:pb-18 md:pt-24 md:pb-20">
       <ParticleNetwork className="opacity-55" count={58} interactive={false} maxDistance={140} />
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(124,58,237,0.18),transparent_34%)]" />
       <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,rgba(10,10,15,0.22),rgba(10,10,15,0.9))]" />
 
       <div className="relative z-10 mx-auto max-w-7xl px-4 md:px-6">
-        <div className="mx-auto flex min-h-[calc(100svh-8rem)] max-w-4xl items-center">
+        <div className="mx-auto flex min-h-[calc(100svh-5.5rem)] max-w-4xl items-start md:min-h-[calc(100svh-6rem)]">
           <motion.div
-            className="w-full space-y-8 text-center"
+            className="w-full space-y-6 text-center sm:space-y-7 md:space-y-8"
             initial={{ opacity: 0, y: 28 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, amount: 0.2 }}
             transition={{ duration: 0.7, ease: "easeOut" }}
           >
-            <div className="mx-auto inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-[11px] text-[color:var(--color-text-secondary)] backdrop-blur-xl">
-              <Sparkles className="h-3.5 w-3.5 text-[color:var(--color-text-accent)]" />
-              <span className="mono-label text-[10px] text-[color:var(--color-text-secondary)]">
-                AI Hero Preview
-              </span>
-            </div>
-
-            <div className="flex flex-wrap items-center justify-center gap-3 text-sm text-[color:var(--color-text-secondary)]">
+            <div className="mx-auto flex max-w-3xl flex-wrap items-center justify-center gap-x-3 gap-y-2 text-xs text-[color:var(--color-text-secondary)] sm:text-sm">
               <div className="flex -space-x-2">
                 {TRUST_IMAGES.map((image) => (
                   <Image
@@ -369,23 +362,23 @@ export function HeroChatPreview() {
               <span className="hidden text-[color:var(--color-border)] sm:inline">·</span>
               <span className="inline-flex items-center gap-2">
                 <span className="live-dot" />
-                Live Preview
+                Live Now
               </span>
             </div>
 
             <div>
-              <h1 className="text-5xl font-semibold tracking-tight text-[color:var(--color-text-primary)] md:text-7xl">
+              <h1 className="text-4xl font-semibold leading-[0.96] tracking-tight text-[color:var(--color-text-primary)] sm:text-5xl md:text-7xl">
                 Build Smarter.
                 <br />
                 Grow Faster.
               </h1>
-              <p className="mx-auto mt-4 max-w-2xl text-lg text-[color:var(--color-text-secondary)] md:text-xl">
-                Tell us what your business needs. This preview explores a more guided AI-led hero without replacing the current one yet.
+              <p className="mx-auto mt-4 max-w-2xl text-base leading-7 text-[color:var(--color-text-secondary)] sm:text-lg sm:leading-8 md:text-xl">
+                Tell us what your business needs and we&apos;ll guide you toward the right website, automation, AI, or growth solution.
               </p>
             </div>
 
             <div className="mx-auto w-full max-w-2xl">
-              <div className="hero-chat-preview__scrollbar mb-4 flex justify-start overflow-x-auto px-1 sm:justify-center">
+              <div className="hero-chat-preview__scrollbar mb-3 flex justify-start overflow-x-auto px-1 sm:mb-4 sm:justify-center">
                 <div className="flex min-w-max gap-3 pb-2">
                   {SERVICE_PILLS.map((pill) => {
                     const isActive = activePill === pill.label;
@@ -394,12 +387,12 @@ export function HeroChatPreview() {
                       <button
                         key={pill.label}
                         type="button"
-                        onClick={() => handlePillClick(pill.label, pill.prompt)}
-                        className={cn(
-                          "rounded-full border px-4 py-2 text-sm font-medium transition-all duration-200",
-                          isActive
-                            ? "border-[color:var(--color-primary)] bg-[color:var(--color-primary)]/10 text-[color:var(--color-text-accent)]"
-                            : "border-[color:var(--color-border)] bg-[color:var(--color-bg-elevated)] text-[color:var(--color-text-secondary)] hover:border-[color:var(--color-primary)]/50 hover:text-[color:var(--color-text-primary)]"
+                      onClick={() => handlePillClick(pill.label, pill.prompt)}
+                      className={cn(
+                          "rounded-full border px-3.5 py-2 text-xs font-medium transition-all duration-200 sm:px-4 sm:text-sm",
+                        isActive
+                          ? "border-[color:var(--color-primary)] bg-[color:var(--color-primary)]/10 text-[color:var(--color-text-accent)]"
+                          : "border-[color:var(--color-border)] bg-[color:var(--color-bg-elevated)] text-[color:var(--color-text-secondary)] hover:border-[color:var(--color-primary)]/50 hover:text-[color:var(--color-text-primary)]"
                         )}
                       >
                         {pill.label}
@@ -412,9 +405,9 @@ export function HeroChatPreview() {
               <RunningBorder
                 radius="1.5rem"
                 className="shadow-[0_30px_90px_rgba(124,58,237,0.08)]"
-                innerClassName="bg-[rgba(17,17,24,0.82)] p-4 backdrop-blur-2xl md:p-6"
+                innerClassName="bg-[rgba(17,17,24,0.82)] p-3.5 backdrop-blur-2xl sm:p-4 md:p-6"
               >
-                <div className="min-h-[320px] text-left">
+                <div className="min-h-[280px] text-left sm:min-h-[320px]">
                   <AnimatePresence mode="wait">
                     {chatState === "idle" ? (
                       <motion.div
@@ -427,9 +420,9 @@ export function HeroChatPreview() {
                         <RunningBorder
                           radius="1rem"
                           className="mb-5"
-                          innerClassName="min-h-[112px] bg-[rgba(10,10,15,0.72)] px-5 py-6"
+                          innerClassName="min-h-[96px] bg-[rgba(10,10,15,0.72)] px-4 py-5 sm:min-h-[112px] sm:px-5 sm:py-6"
                         >
-                          <div className="flex min-h-[64px] items-center text-lg italic text-[color:var(--color-text-secondary)]">
+                          <div className="flex min-h-[54px] items-center text-base italic text-[color:var(--color-text-secondary)] sm:min-h-[64px] sm:text-lg">
                             <span>{typewriterText}</span>
                             <span className="hero-chat-preview__cursor ml-1" />
                           </div>
@@ -443,10 +436,10 @@ export function HeroChatPreview() {
                         exit={{ opacity: 0 }}
                         transition={{ duration: 0.3 }}
                         ref={historyRef}
-                        className="mb-5 max-h-[300px] space-y-3 overflow-y-auto pr-1"
+                        className="mb-5 max-h-[260px] space-y-3 overflow-y-auto pr-1 sm:max-h-[300px]"
                       >
                         {messages.length === 0 ? (
-                          <div className="rounded-2xl border border-dashed border-white/10 bg-white/3 px-4 py-5 text-sm text-[color:var(--color-text-secondary)]">
+                          <div className="rounded-2xl border border-dashed border-white/10 bg-white/3 px-4 py-5 text-xs text-[color:var(--color-text-secondary)] sm:text-sm">
                             Start typing below or use one of the service pills to prefill the first message.
                           </div>
                         ) : null}
@@ -457,7 +450,7 @@ export function HeroChatPreview() {
                               key={message.id}
                               initial={{ opacity: 0, y: 10 }}
                               animate={{ opacity: 1, y: 0 }}
-                              className="ml-auto max-w-[80%] rounded-2xl rounded-br-md bg-[color:var(--color-primary)]/15 px-4 py-3 text-[color:var(--color-text-primary)]"
+                              className="ml-auto max-w-[88%] rounded-2xl rounded-br-md bg-[color:var(--color-primary)]/15 px-4 py-3 text-sm text-[color:var(--color-text-primary)] sm:max-w-[80%]"
                             >
                               {message.text}
                             </motion.div>
@@ -466,7 +459,7 @@ export function HeroChatPreview() {
                               key={message.id}
                               initial={{ opacity: 0, y: 10 }}
                               animate={{ opacity: 1, y: 0 }}
-                              className="max-w-[80%] rounded-2xl rounded-bl-md bg-[color:var(--color-bg-elevated)] px-4 py-3 text-[color:var(--color-text-primary)]"
+                              className="max-w-[88%] rounded-2xl rounded-bl-md bg-[color:var(--color-bg-elevated)] px-4 py-3 text-sm text-[color:var(--color-text-primary)] sm:max-w-[80%]"
                             >
                               <span className="mr-2 inline-flex rounded bg-[color:var(--color-primary)]/20 px-1.5 py-0.5 font-mono text-xs text-[color:var(--color-text-accent)]">
                                 EZ
@@ -480,7 +473,7 @@ export function HeroChatPreview() {
                   </AnimatePresence>
 
                   {chatState === "captured" ? (
-                    <div className="flex items-center justify-center gap-2 rounded-2xl border border-emerald-500/25 bg-emerald-500/10 px-4 py-4 text-sm font-medium text-emerald-200">
+                    <div className="flex items-center justify-center gap-2 rounded-2xl border border-emerald-500/25 bg-emerald-500/10 px-4 py-4 text-xs font-medium text-emerald-200 sm:text-sm">
                       <CheckCheck className="h-4 w-4" />
                       Recommendation on its way
                     </div>
@@ -523,7 +516,7 @@ export function HeroChatPreview() {
                         <Button
                           type="submit"
                           size="md"
-                          className="min-h-14 min-w-[132px] gap-2"
+                          className="min-h-14 w-full min-w-[132px] gap-2 sm:w-auto"
                           disabled={isStreaming || inputValue.trim().length === 0}
                         >
                           {chatState === "awaiting_email" ? "Send" : "Send"}
@@ -544,10 +537,6 @@ export function HeroChatPreview() {
                   )}
                 </div>
               </RunningBorder>
-
-              <p className="mt-4 text-center text-xs text-[color:var(--color-text-secondary)]/80">
-                UI preview only. Responses in this section are mocked locally so we can compare layout, motion, and interaction before wiring a real agent.
-              </p>
             </div>
           </motion.div>
         </div>
