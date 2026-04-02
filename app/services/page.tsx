@@ -1,142 +1,87 @@
-"use client";
-
-import { Badge } from "@/components/ui/Badge";
+import type { Metadata } from "next";
+import Link from "next/link";
 import { Button } from "@/components/ui/Button";
-import { Card } from "@/components/ui/Card";
-import { Check } from "lucide-react";
 import { FinalCTA } from "@/components/sections/FinalCTA";
 import { JsonLd } from "@/components/seo/JsonLd";
+import { createMetadata } from "@/lib/seo";
+import { SERVICES } from "@/lib/site-content";
+import { ServiceCard } from "@/components/ui/ServiceCard";
+import { BusinessJourney } from "@/components/sections/BusinessJourney";
 
-const SERVICES_DETAIL = [
-  {
-    title: "Landing Pages",
-    description: "Perfect mini-project for your big campaigns, whether it's cold emails, ads or referrals.",
-    includes: [
-      "High-conversion design focused on a single action",
-      "Lightning-fast load times (< 1s)",
-      "Mobile-first responsive layout",
-      "Integrated lead capture form",
-      "A/B testing ready structure",
-      "Pixel and tracking integration",
-    ],
-  },
-  {
-    title: "SEO Optimization",
-    description: "Built-in SEO best practices to help your site rank higher in search results.",
-    includes: [
-      "Comprehensive on-page SEO setup",
-      "Semantic HTML5 structure",
-      "Optimised meta titles and descriptions",
-      "Image alt-text and compression",
-      "XML Sitemap and robots.txt generation",
-      "Google Search Console integration",
-    ],
-  },
-  {
-    title: "Marketing & Integrations",
-    description: "Connect your website with automated social posting, pixel tracking, and ad retargeting to grow consistently.",
-    includes: [
-      "Meta Pixel and Google Tag Manager setup",
-      "Automated social media posting hooks",
-      "Email marketing (Mailchimp/Klaviyo) integration",
-      "Ad campaign tracking and attribution",
-      "CRM syncing (HubSpot/Salesforce)",
-    ],
-  },
-  {
-    title: "Leads Generation",
-    description: "Boost website traffic and turn it into qualified leads and real opportunities.",
-    includes: [
-      "Strategic CTA placement for max conversion",
-      "Interactive lead magnets and pop-ups",
-      "Automated follow-up sequences",
-      "Lead qualification logic",
-      "Detailed traffic and conversion analytics",
-    ],
-  },
-  {
-    title: "Automations",
-    description: "Streamline your business processes by automating repetitive tasks and workflows.",
-    includes: [
-      "Workflow mapping and bottleneck identification",
-      "Zapier / Make.com integration",
-      "Automated booking and scheduling (Calendly)",
-      "Internal notification systems (Slack/Email)",
-      "Custom business logic and API connections",
-    ],
-  },
-  {
-    title: "AI Agents",
-    badge: "Powered by Resevia",
-    description: "Put your enquiries on autopilot. Our AI agents answer questions and handle bookings 24/7.",
-    includes: [
-      "Custom-trained AI receptionist",
-      "Multichannel support (Web, WhatsApp, Voice)",
-      "Calendar and booking system sync",
-      "Continuous learning and optimization",
-    ],
-  },
-];
+export const metadata: Metadata = createMetadata({
+  title: "Services | Websites, Automations, AI Agents, SEO and Lead Gen",
+  description:
+    "Explore EZWebOne services: custom websites, automations, AI agents, marketing, SEO, and lead generation systems for small businesses.",
+  path: "/services",
+  keywords: [
+    "website agency uk",
+    "business automation agency",
+    "ai agents for salons and small business",
+    "seo and lead generation services",
+  ],
+});
 
 export default function ServicesPage() {
   return (
-    <div className="py-20 bg-white">
+    <div className="bg-[color:var(--color-bg-dark)]">
       <JsonLd
+        id="services-schema"
         data={{
           "@context": "https://schema.org",
           "@type": "ItemList",
-          "itemListElement": SERVICES_DETAIL.map((service, index) => ({
+          itemListElement: SERVICES.map((service, index) => ({
             "@type": "ListItem",
-            "position": index + 1,
-            "item": {
+            position: index + 1,
+            item: {
               "@type": "Service",
-              "name": service.title,
-              "description": service.description,
-              "provider": {
+              name: service.title,
+              description: service.description,
+              provider: {
                 "@type": "Organization",
-                "name": "EZWebOne"
-              }
-            }
-          }))
+                name: "EZWebOne",
+              },
+            },
+          })),
         }}
       />
-      <div className="container mx-auto px-4 md:px-6">
-        <div className="max-w-3xl mb-16">
-          <Badge className="mb-4">Our Services</Badge>
-          <h1 className="text-4xl md:text-6xl font-display font-bold tracking-tight text-brand-black mb-6">
-            What We Build
-          </h1>
-          <p className="text-xl text-brand-gray leading-relaxed">
-            Every service we offer is designed to help your business get found, look credible, and convert more visitors into customers.
-          </p>
-        </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          {SERVICES_DETAIL.map((service) => (
-            <Card key={service.title} padding="sm" className="flex flex-col h-full border-2 hover:border-brand-purple/30 transition-all group">
-              <div className="mb-6">
-                {service.badge && <Badge className="mb-3">{service.badge}</Badge>}
-                <h2 className="text-xl font-display font-bold text-brand-black mb-2 group-hover:text-brand-purple transition-colors">{service.title}</h2>
-                {service.description && <p className="text-brand-gray text-xs leading-relaxed">{service.description}</p>}
+      <section className="section-shell py-28 md:py-32">
+        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(124,58,237,0.18),transparent_30%)]" />
+        <div className="relative mx-auto max-w-7xl px-4 md:px-6">
+          <div className="grid grid-cols-1 gap-12 lg:grid-cols-[minmax(0,1fr)_420px]">
+            <div className="max-w-3xl">
+              <p className="mono-label text-xs text-[color:var(--color-text-accent)]">Services</p>
+              <h1 className="mt-4 text-5xl font-semibold tracking-tight text-[color:var(--color-text-primary)] md:text-7xl">
+                Websites, automations, AI agents, and the systems that make them useful.
+              </h1>
+              <p className="mt-6 text-lg leading-8 text-[color:var(--color-text-secondary)]">
+                We build for small businesses that want more leads, less admin, and digital systems that keep working after launch.
+              </p>
+
+              <div className="mt-10 flex flex-col gap-4 sm:flex-row">
+                <Link href="/contact">
+                  <Button size="lg">Book a Free Call</Button>
+                </Link>
+                <Link href="/portfolio">
+                  <Button size="lg" variant="secondary">
+                    See Projects
+                  </Button>
+                </Link>
               </div>
+            </div>
 
-              <ul className="space-y-3 mb-8 flex-grow">
-                {service.includes.map((item) => (
-                  <li key={item} className="flex gap-2 text-brand-black/80">
-                    <Check className="text-brand-purple flex-shrink-0" size={16} />
-                    <span className="text-xs">{item}</span>
-                  </li>
-                ))}
-              </ul>
+            <BusinessJourney />
+          </div>
 
-              <Button size="sm" className="w-full">Enquire Now</Button>
-            </Card>
-          ))}
+          <div className="mt-16 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+            {SERVICES.map((service) => (
+              <ServiceCard key={service.title} {...service} />
+            ))}
+          </div>
         </div>
+      </section>
 
-      </div>
-
-      <FinalCTA variant="orange" />
+      <FinalCTA />
     </div>
   );
 }

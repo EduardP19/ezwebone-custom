@@ -1,52 +1,69 @@
-"use client";
-
+import type { Metadata } from "next";
 import { Badge } from "@/components/ui/Badge";
-import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
-import Link from "next/link";
 import Image from "next/image";
 import { FinalCTA } from "@/components/sections/FinalCTA";
+import { createMetadata } from "@/lib/seo";
 
 const ALL_PROJECTS = [
-  { name: "Say I Do Weddings", industry: "Events", image: "/portfolio/project1.png" },
-  { name: "The Memory Corners", industry: "Events", image: "/portfolio/project2.png" },
-  { name: "Txengo", industry: "Creative", image: "/portfolio/project3.png" },
-  { name: "ProveIt", industry: "Community", image: "/portfolio/project4.png" },
-  { name: "Study and Succeed", industry: "Travel", image: "/portfolio/project5.png" },
+  {
+    name: "Say I Do Weddings",
+    industry: "Luxury Events",
+    image: "/portfolio/project1.png",
+    summary: "Designed to feel more refined, reassure quickly, and support higher-value enquiries.",
+  },
+  {
+    name: "The Memory Corners",
+    industry: "Experiential Brand",
+    image: "/portfolio/project2.png",
+    summary: "Upgraded visual confidence and offer presentation for a more polished buyer journey.",
+  },
+  {
+    name: "Txengo",
+    industry: "Creative Consultant",
+    image: "/portfolio/project3.png",
+    summary: "Editorial storytelling and premium pacing to make the portfolio feel more ownable and valuable.",
+  },
+  {
+    name: "ProveIt",
+    industry: "Community Platform",
+    image: "/portfolio/project4.png",
+    summary: "Clearer structure and stronger information design for a more trustworthy digital product experience.",
+  },
+  {
+    name: "Study and Succeed",
+    industry: "Education Brand",
+    image: "/portfolio/project5.png",
+    summary: "Improved hierarchy and conversion flow so visitors understand the offer faster and act sooner.",
+  },
 ];
 
-const CATEGORIES = ["All", "Events", "Creative", "Community", "Travel", "Health"];
+export const metadata: Metadata = createMetadata({
+  title: "Selected Work and Website Case Studies",
+  description:
+    "Browse selected EZWebOne projects and see how sharper positioning, better marketing systems, and stronger digital execution improve trust and conversion.",
+  path: "/portfolio",
+  keywords: ["marketing agency portfolio uk", "service brand case studies", "digital marketing systems for service brands"],
+});
 
 export default function PortfolioPage() {
   return (
-    <div className="py-20 bg-white">
+    <div className="py-20 bg-[#fbf7f1]">
       <div className="container mx-auto px-4 md:px-6">
         <div className="max-w-3xl mb-16">
-          <Badge className="mb-4">Portfolio</Badge>
-          <h1 className="text-4xl md:text-6xl font-display font-bold tracking-tight text-brand-black mb-6">
-            Our Work
+          <Badge className="mb-4">Selected Work</Badge>
+          <h1 className="text-4xl md:text-6xl font-display font-semibold tracking-tight text-brand-black leading-[0.95] text-balance">
+            A look at the kind of clarity and confidence we build into every project.
           </h1>
-          <p className="text-xl text-brand-gray leading-relaxed">
-            Every project is custom-designed for the client's industry, audience, and goals. No templates. No cookie-cutter layouts.
+          <p className="mt-5 text-xl text-brand-gray leading-relaxed">
+            These projects vary by sector, but they share the same goal: make the brand feel more trusted, more valuable, and easier to buy from.
           </p>
-        </div>
-
-        {/* Filter Tabs */}
-        <div className="flex flex-wrap gap-4 mb-12">
-          {CATEGORIES.map((cat) => (
-            <button
-              key={cat}
-              className="px-6 py-2 rounded-full border border-brand-border text-sm font-medium hover:border-brand-purple hover:text-brand-purple transition-all"
-            >
-              {cat}
-            </button>
-          ))}
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {ALL_PROJECTS.map((project) => (
-            <Card key={project.name} padding="sm" className="group">
-               <div className="aspect-video bg-brand-warm rounded-lg mb-4 overflow-hidden relative">
+            <Card key={project.name} padding="sm" className="group h-full">
+              <div className="aspect-[4/5] bg-brand-warm rounded-[1.25rem] mb-5 overflow-hidden relative">
                 <Image
                   src={project.image}
                   alt={project.name}
@@ -54,16 +71,17 @@ export default function PortfolioPage() {
                   className="object-cover group-hover:scale-105 transition-transform duration-500"
                 />
               </div>
-              <Badge className="mb-3 bg-brand-warm text-brand-gray">{project.industry}</Badge>
-              <h3 className="text-xl font-bold text-brand-black mb-2">{project.name}</h3>
-              <p className="text-sm text-brand-gray">Custom web project for {project.industry} sector.</p>
+              <Badge className="mb-3">{project.industry}</Badge>
+              <h2 className="text-2xl font-display font-semibold text-brand-black mb-3">{project.name}</h2>
+              <p className="text-brand-gray leading-relaxed">{project.summary}</p>
             </Card>
           ))}
         </div>
-
       </div>
 
-      <FinalCTA variant="black" />
+      <div className="mt-16">
+        <FinalCTA variant="black" />
+      </div>
     </div>
   );
 }

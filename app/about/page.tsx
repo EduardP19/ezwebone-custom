@@ -1,103 +1,131 @@
-"use client";
-
-import { Badge } from "@/components/ui/Badge";
+import type { Metadata } from "next";
+import Link from "next/link";
 import { Button } from "@/components/ui/Button";
 import { FinalCTA } from "@/components/sections/FinalCTA";
 import { JsonLd } from "@/components/seo/JsonLd";
+import { absoluteUrl, createMetadata } from "@/lib/seo";
 
 const STATS = [
-  { label: "Projects Delivered", value: "110+" },
-  { label: "Client Rating", value: "5.0" },
-  { label: "Average Delivery", value: "5 Days" },
-  { label: "Client Ownership", value: "100%" },
+  { label: "Years in digital", value: "5" },
+  { label: "Business partners", value: "115+" },
+  { label: "Websites launched", value: "154" },
+  { label: "Countries served", value: "6" },
 ];
+
+const PRINCIPLES = [
+  {
+    title: "Specific beats generic",
+    description:
+      "We do not write fluffy agency copy or hide weak offers behind nice visuals. Everything has to be clear, direct, and useful to the buyer.",
+  },
+  {
+    title: "Automation should remove work",
+    description:
+      "If a system adds friction, it is not automation. We build flows that save time, answer faster, and keep leads moving without more admin.",
+  },
+  {
+    title: "AI should feel practical",
+    description:
+      "The goal is not to say your business uses AI. The goal is to use it where it makes money or saves time - calls, follow-up, booking, and lead qualification.",
+  },
+];
+
+export const metadata: Metadata = createMetadata({
+  title: "About EZWebOne",
+  description:
+    "Learn about EZWebOne, the UK digital agency building websites, automations, AI agents, and growth systems for small businesses.",
+  path: "/about",
+  keywords: ["about ezwebone", "uk digital agency", "web automation ai agency uk"],
+});
 
 export default function AboutPage() {
   return (
-    <div className="py-20 bg-white">
+    <div className="bg-[color:var(--color-bg-dark)]">
       <JsonLd
+        id="about-schema"
         data={{
           "@context": "https://schema.org",
-          "@type": "LocalBusiness",
-          "name": "EZWebOne",
-          "image": "https://ezwebone.co.uk/logo.png",
-          "@id": "https://ezwebone.co.uk",
-          "url": "https://ezwebone.co.uk",
-          "telephone": "", 
-          "address": {
+          "@type": "ProfessionalService",
+          name: "EZWebOne",
+          image: absoluteUrl("/brand/ez-logo-circle.png"),
+          "@id": "https://ezwebone.co.uk/about",
+          url: "https://ezwebone.co.uk/about",
+          description:
+            "UK digital agency building websites, automations, AI agents, and lead generation systems for small businesses.",
+          address: {
             "@type": "PostalAddress",
-            "streetAddress": "",
-            "addressLocality": "Hemel Hempstead",
-            "addressRegion": "Hertfordshire",
-            "postalCode": "",
-            "addressCountry": "GB"
+            addressLocality: "Hemel Hempstead",
+            addressRegion: "Hertfordshire",
+            addressCountry: "GB",
           },
-          "geo": {
-            "@type": "GeoCoordinates",
-            "latitude": 51.7527,
-            "longitude": -0.4694
-          },
-          "openingHoursSpecification": {
-            "@type": "OpeningHoursSpecification",
-            "dayOfWeek": [
-              "Monday",
-              "Tuesday",
-              "Wednesday",
-              "Thursday",
-              "Friday"
-            ],
-            "opens": "09:00",
-            "closes": "18:00"
-          },
-          "founder": {
+          founder: {
             "@type": "Person",
-            "name": "Eduard"
-          }
+            name: "Eduard",
+          },
         }}
       />
-      <div className="container mx-auto px-4 md:px-6">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center mb-20">
-          <div>
-            <Badge className="mb-4">About Us</Badge>
-            <h1 className="text-4xl md:text-6xl font-display font-bold tracking-tight text-brand-black mb-8">
-              Small team. Big results.
-            </h1>
-            <div className="space-y-6 text-lg text-brand-gray leading-relaxed">
-              <p>
-                EZWebOne is a UK-based digital agency run by Eduard — a web designer and developer with a background in STEM and a focus on building fast, practical websites for small businesses.
-              </p>
-              <p>
-                We started EZWebOne to solve a simple problem: most small businesses either can't afford a decent website or get locked into expensive contracts with agencies that don't deliver.
-              </p>
-              <p>
-                We do things differently. You get a custom-built site, delivered in 5 days, with no contracts and full ownership from day one.
-              </p>
-              <p className="italic text-brand-black font-medium">
-                We're based in Hemel Hempstead and work with clients across the UK. Currently expanding into AI automation via Resevia.
-              </p>
+
+      <section className="section-shell py-28 md:py-32">
+        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(124,58,237,0.18),transparent_30%)]" />
+        <div className="relative mx-auto max-w-7xl px-4 md:px-6">
+          <div className="grid grid-cols-1 gap-12 lg:grid-cols-[minmax(0,1fr)_420px]">
+            <div className="max-w-3xl">
+              <p className="mono-label text-xs text-[color:var(--color-text-accent)]">About EZWebOne</p>
+              <h1 className="mt-4 text-5xl font-semibold tracking-tight text-[color:var(--color-text-primary)] md:text-7xl">
+                Built for small businesses that need real systems, not more noise.
+              </h1>
+              <div className="mt-8 space-y-6 text-lg leading-8 text-[color:var(--color-text-secondary)]">
+                <p>
+                  EZWebOne started as a web design service and grew into something more useful: a digital agency that builds the full system around growth.
+                </p>
+                <p>
+                  That means the website, the automation behind it, the AI tools that answer faster, and the lead generation flow that turns interest into paying customers.
+                </p>
+                <p>
+                  We are based in Hemel Hempstead and work with small businesses across the UK that want to look sharper, move faster, and stop losing opportunities to slow processes.
+                </p>
+              </div>
+
+              <div className="mt-10">
+                <Link href="/contact">
+                  <Button size="lg">Book a Free Call</Button>
+                </Link>
+              </div>
+            </div>
+
+            <div className="surface-elevated rounded-[2rem] border border-white/10 p-8">
+              <p className="mono-label text-xs text-[color:var(--color-text-secondary)]">What we care about</p>
+              <div className="mt-6 space-y-8">
+                {PRINCIPLES.map((item) => (
+                  <div key={item.title}>
+                    <h2 className="text-2xl font-semibold tracking-tight text-[color:var(--color-text-primary)]">
+                      {item.title}
+                    </h2>
+                    <p className="mt-3 leading-7 text-[color:var(--color-text-secondary)]">
+                      {item.description}
+                    </p>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
-          <div className="aspect-square bg-brand-warm rounded-3xl flex items-center justify-center p-12">
-             <div className="text-center">
-                <span className="font-display font-black text-9xl text-brand-purple opacity-20 italic">5</span>
-                <p className="font-display font-bold text-3xl text-brand-black -mt-6">Days to live.</p>
-             </div>
+
+          <div className="mt-16 grid grid-cols-2 gap-5 md:grid-cols-4">
+            {STATS.map((stat) => (
+              <div key={stat.label} className="surface-card p-6 text-center">
+                <p className="text-4xl font-semibold tracking-tight text-[color:var(--color-text-primary)]">
+                  {stat.value}
+                </p>
+                <p className="mt-3 text-sm text-[color:var(--color-text-secondary)]">
+                  {stat.label}
+                </p>
+              </div>
+            ))}
           </div>
         </div>
+      </section>
 
-        {/* Stats Row */}
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 py-16 border-y border-brand-border mb-20">
-          {STATS.map((stat) => (
-            <div key={stat.label} className="text-center">
-              <p className="text-4xl md:text-5xl font-display font-extrabold text-brand-black mb-2">{stat.value}</p>
-              <p className="text-xs uppercase tracking-widest font-bold text-brand-gray">{stat.label}</p>
-            </div>
-          ))}
-        </div>
-
-      </div>
-
-      <FinalCTA variant="purple" />
+      <FinalCTA />
     </div>
   );
 }

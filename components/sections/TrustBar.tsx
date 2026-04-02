@@ -1,40 +1,75 @@
 "use client";
 
-import { motion } from "framer-motion";
+import * as React from "react";
+import { STATS } from "@/lib/site-content";
 
-const CLIENTS = [
-  "Say I Do Weddings",
-  "The Memory Corners",
-  "Txengo",
-  "ProveIt",
-  "Study and Succeed",
-];
+function StatItem({
+  value,
+  suffix,
+  label,
+}: {
+  value: number;
+  suffix: string;
+  label: string;
+}) {
+  const [count, setCount] = React.useState(0);
+  const ref = React.useRef<HTMLDivElement>(null);
+
+  React.useEffect(() => {
+    const element = ref.current;
+    if (!element) return;
+
+    let frame = 0;
+    let started = false;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry.isIntersecting || started) return;
+        started = true;
+
+        const start = performance.now();
+        const duration = 1200;
+
+        const tick = (now: number) => {
+          const progress = Math.min((now - start) / duration, 1);
+          setCount(Math.round(value * progress));
+          if (progress < 1) {
+            frame = window.requestAnimationFrame(tick);
+          }
+        };
+
+        frame = window.requestAnimationFrame(tick);
+        observer.disconnect();
+      },
+      { threshold: 0.4 }
+    );
+
+    observer.observe(element);
+
+    return () => {
+      observer.disconnect();
+      window.cancelAnimationFrame(frame);
+    };
+  }, [value]);
+
+  return (
+    <div ref={ref} className="flex flex-col items-center gap-2 text-center">
+      <p className="text-4xl font-semibold tracking-tight text-[color:var(--color-text-primary)] md:text-5xl">
+        {count}
+        {suffix}
+      </p>
+      <p className="text-sm text-[color:var(--color-text-secondary)]">{label}</p>
+    </div>
+  );
+}
 
 export function TrustBar() {
   return (
-    <section className="bg-brand-warm py-12 border-y border-brand-border overflow-hidden">
-      <div className="container mx-auto px-4 md:px-6 text-center">
-        <motion.p
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
-          className="text-xs font-bold uppercase tracking-widest text-brand-gray mb-8"
-        >
-          Trusted by small businesses across the UK
-        </motion.p>
-        
-        <div className="flex flex-wrap items-center justify-center gap-x-12 gap-y-8 opacity-40 grayscale">
-          {CLIENTS.map((name, i) => (
-            <motion.span
-              key={name}
-              initial={{ opacity: 0, scale: 0.9 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              viewport={{ once: true }}
-              transition={{ delay: i * 0.1 }}
-              className="font-display font-extrabold text-xl md:text-2xl text-brand-black whitespace-nowrap"
-            >
-              {name}
-            </motion.span>
+    <section className="section-shell border-y border-white/8 bg-[linear-gradient(90deg,rgba(124,58,237,0.12),rgba(17,17,24,1),rgba(124,58,237,0.12))] py-10">
+      <div className="mx-auto max-w-7xl px-4 md:px-6">
+        <div className="grid grid-cols-2 gap-8 md:grid-cols-4 md:divide-x md:divide-[color:var(--color-border)]">
+          {STATS.map((stat) => (
+            <StatItem key={stat.label} {...stat} />
           ))}
         </div>
       </div>

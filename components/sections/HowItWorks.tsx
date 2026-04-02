@@ -1,55 +1,72 @@
 "use client";
 
+import * as React from "react";
 import { motion } from "framer-motion";
-import { Badge } from "@/components/ui/Badge";
-
-const STEPS = [
-  {
-    title: "Discovery Call (Day 1)",
-    description: "Tell us about your business, goals, and what you need. We ask the right questions so nothing gets missed.",
-  },
-  {
-    title: "Design & Build (Days 2–4)",
-    description: "We design and build your full site. You get daily updates and can request changes at any point.",
-  },
-  {
-    title: "Review & Launch (Day 5)",
-    description: "You review the final site. We make any last tweaks. Then we go live and hand everything over to you.",
-  },
-  {
-    title: "You're in Control",
-    description: "Your domain. Your hosting. Your website. We give you a full handover and training so you can manage it yourself.",
-  },
-];
+import { PROCESS_STEPS } from "@/lib/site-content";
 
 export function HowItWorks() {
+  const ref = React.useRef<HTMLElement>(null);
+  const [isVisible, setIsVisible] = React.useState(false);
+
+  React.useEffect(() => {
+    const element = ref.current;
+    if (!element) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsVisible(true);
+          observer.disconnect();
+        }
+      },
+      { threshold: 0.25 }
+    );
+
+    observer.observe(element);
+    return () => observer.disconnect();
+  }, []);
+
   return (
-    <section className="py-24 bg-brand-warm">
-      <div className="container mx-auto px-4 md:px-6">
-        <div className="text-center mb-16">
-          <Badge className="mb-4">Our Process</Badge>
-          <h2 className="text-3xl md:text-5xl font-display font-bold tracking-tight text-brand-black">
-            From brief to live in 5 days.
+    <section ref={ref} className="section-shell bg-[color:var(--color-bg-dark)] py-24 md:py-32">
+      <div className="relative mx-auto max-w-7xl px-4 md:px-6">
+        <div className="max-w-3xl">
+          <p className="mono-label text-xs text-[color:var(--color-text-accent)]">Process</p>
+          <h2 className="mt-4 text-4xl font-semibold tracking-tight text-[color:var(--color-text-primary)] md:text-6xl">
+            From Idea to Live in 5 Days
           </h2>
         </div>
 
-        <div className="relative max-w-6xl mx-auto">
+        <div className="relative mt-16">
+          <div className="absolute left-5 top-0 bottom-0 hidden w-px bg-white/8 md:left-0 md:right-0 md:top-5 md:block md:h-px md:w-auto" />
+          <motion.div
+            className="absolute left-5 top-0 hidden w-px bg-[linear-gradient(180deg,var(--color-primary-light),var(--color-primary))] shadow-[0_0_24px_rgba(124,58,237,0.45)] md:left-0 md:right-0 md:top-5 md:block md:h-px"
+            animate={
+              isVisible
+                ? { width: "100%", height: 1, opacity: 1 }
+                : { width: "0%", height: 1, opacity: 0.4 }
+            }
+            transition={{ duration: 1.1, ease: "easeOut" }}
+          />
 
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-12 text-center relative z-10">
-            {STEPS.map((step, i) => (
+          <div className="grid gap-8 md:grid-cols-4">
+            {PROCESS_STEPS.map((step, index) => (
               <motion.div
-                key={step.title}
-                initial={{ opacity: 0, y: 20 }}
+                key={step.step}
+                initial={{ opacity: 0, y: 24 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: i * 0.1 }}
-                className="flex flex-col items-center"
+                viewport={{ once: true, amount: 0.2 }}
+                transition={{ duration: 0.5, delay: index * 0.08 }}
+                className="relative pl-14 md:pl-0 md:pt-12"
               >
-                <div className="w-10 h-10 rounded-full bg-brand-black text-white flex items-center justify-center font-bold mb-6">
-                  {i + 1}
+                <div className="absolute left-0 top-0 flex h-10 w-10 items-center justify-center rounded-full border border-[rgba(124,58,237,0.4)] bg-[color:var(--color-bg-elevated)] text-sm font-semibold text-[color:var(--color-text-primary)] shadow-[0_0_16px_rgba(124,58,237,0.18)] md:left-1/2 md:-translate-x-1/2">
+                  {step.step}
                 </div>
-                <h3 className="text-lg font-bold text-brand-black mb-4">{step.title}</h3>
-                <p className="text-sm text-brand-gray leading-relaxed">{step.description}</p>
+                <h3 className="text-xl font-semibold text-[color:var(--color-text-primary)]">
+                  {step.title}
+                </h3>
+                <p className="mt-3 text-base leading-7 text-[color:var(--color-text-secondary)]">
+                  {step.description}
+                </p>
               </motion.div>
             ))}
           </div>

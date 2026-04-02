@@ -1,72 +1,34 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Badge } from "@/components/ui/Badge";
-import { Card } from "@/components/ui/Card";
-import { Button } from "@/components/ui/Button";
-import Link from "next/link";
-import Image from "next/image";
-
-const PROJECTS = [
-  {
-    name: "Say I Do Weddings",
-    industry: "Wedding Organiser",
-    image: "/portfolio/project1.png",
-  },
-  {
-    name: "The Memory Corners",
-    industry: "Photo Booth Company",
-    image: "/portfolio/project2.png",
-  },
-  {
-    name: "Txengo",
-    industry: "Creative Designer Portfolio",
-    image: "/portfolio/project3.png",
-  },
-];
+import { PROJECTS } from "@/lib/site-content";
+import { ProjectCard } from "@/components/ui/ProjectCard";
 
 export function Portfolio() {
   return (
-    <section className="py-24 bg-white" id="portfolio">
-      <div className="container mx-auto px-4 md:px-6">
-        <div className="flex flex-col md:flex-row justify-between items-end gap-6 mb-16">
-          <div className="max-w-2xl">
-            <Badge className="mb-4">Our Work</Badge>
-            <h2 className="text-3xl md:text-5xl font-display font-bold tracking-tight text-brand-black mb-4">
-              Built for real businesses. Designed to convert.
-            </h2>
-            <p className="text-brand-gray text-lg">
-              Here's a selection of recent projects. Every site is custom — no templates, no shortcuts.
-            </p>
-          </div>
-          <Link href="/portfolio">
-            <Button variant="secondary">See All Projects</Button>
-          </Link>
+    <section id="projects" className="section-shell bg-[color:var(--color-bg-dark)] py-24 md:py-32">
+      <div className="relative mx-auto max-w-7xl px-4 md:px-6">
+        <div className="max-w-3xl">
+          <p className="mono-label text-xs text-[color:var(--color-text-accent)]">Projects</p>
+          <h2 className="mt-4 text-4xl font-semibold tracking-tight text-[color:var(--color-text-primary)] md:text-6xl">
+            Work That Speaks for Itself
+          </h2>
+          <p className="mt-5 text-lg leading-8 text-[color:var(--color-text-secondary)]">
+            Real businesses. Real results. Every project is built to perform.
+          </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {PROJECTS.map((project, i) => (
+        <div className="mt-14 grid grid-cols-1 gap-8 lg:grid-cols-2">
+          {PROJECTS.map((project, index) => (
             <motion.div
-              key={project.name}
-              initial={{ opacity: 0, scale: 0.95 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              viewport={{ once: true }}
-              transition={{ delay: i * 0.1 }}
+              key={project.title}
+              initial={{ opacity: 0, y: 24 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.2 }}
+              transition={{ duration: 0.55, delay: index * 0.06 }}
+              className={index === 0 ? "lg:col-span-2" : ""}
             >
-              <Card padding="sm" className="group cursor-pointer">
-                <div className="aspect-[4/3] bg-brand-warm rounded-lg mb-6 overflow-hidden relative">
-                  <Image
-                    src={project.image}
-                    alt={project.name}
-                    fill
-                    className="object-cover group-hover:scale-105 transition-transform duration-500"
-                  />
-                </div>
-                <Badge className="mb-3 bg-brand-warm text-brand-gray font-medium">{project.industry}</Badge>
-                <h3 className="text-xl font-bold text-brand-black group-hover:text-brand-purple transition-colors">
-                  {project.name}
-                </h3>
-              </Card>
+              <ProjectCard {...project} />
             </motion.div>
           ))}
         </div>
