@@ -81,8 +81,8 @@ export default function ColumnsPage() {
                 key={column.id}
                 slug={column.slug}
                 title={column.title}
-                subtitle={column.subtitle}
-                coverImage={column.cover_image}
+                subtitle={column.subtitle ?? undefined}
+                coverImage={column.cover_image ?? undefined}
                 publishedAt={column.created_at}
               />
             ))}
