@@ -38,8 +38,8 @@ export function Hero() {
   return (
     <section className="section-shell relative min-h-[100svh] bg-[color:var(--color-bg-dark)] pt-28 md:pt-32">
       <ParticleNetwork className="opacity-90" count={80} maxDistance={150} interactive />
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(124,58,237,0.22),transparent_34%)]" />
-      <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,rgba(10,10,15,0.14),rgba(10,10,15,0.9))]" />
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(154,124,255,0.24),transparent_36%)]" />
+      <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,rgba(22,17,34,0.14),rgba(22,17,34,0.88))]" />
 
       <div className="relative z-10 mx-auto flex min-h-[100svh] max-w-7xl items-center px-4 pb-20 md:px-6">
         <motion.div

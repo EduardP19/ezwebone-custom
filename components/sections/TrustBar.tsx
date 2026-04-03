@@ -65,7 +65,7 @@ function StatItem({
 
 export function TrustBar() {
   return (
-    <section className="section-shell border-y border-white/8 bg-[linear-gradient(90deg,rgba(124,58,237,0.12),rgba(17,17,24,1),rgba(124,58,237,0.12))] py-10">
+    <section className="section-shell border-y border-white/8 bg-[linear-gradient(90deg,rgba(154,124,255,0.14),rgba(34,26,52,1),rgba(154,124,255,0.14))] py-10">
       <div className="mx-auto max-w-7xl px-4 md:px-6">
         <div className="grid grid-cols-2 gap-8 md:grid-cols-4 md:divide-x md:divide-[color:var(--color-border)]">
           {STATS.map((stat) => (

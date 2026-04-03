@@ -77,7 +77,7 @@ export function ProjectCard({
           }
         }}
         className={cn(
-          "group cursor-pointer overflow-hidden rounded-[1.6rem] border border-[color:var(--color-border)] bg-[color:var(--color-bg-card)] text-left transition duration-300 hover:scale-[1.01] hover:border-[rgba(124,58,237,0.5)] hover:shadow-[0_28px_80px_rgba(124,58,237,0.12)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--color-primary-light)] focus-visible:ring-offset-2 focus-visible:ring-offset-[color:var(--color-bg-dark)]",
+          "group cursor-pointer overflow-hidden rounded-[1.6rem] border border-[color:var(--color-border)] bg-[color:var(--color-bg-card)] text-left transition duration-300 hover:scale-[1.01] hover:border-[rgba(154,124,255,0.45)] hover:shadow-[0_28px_80px_rgba(154,124,255,0.14)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--color-primary-light)] focus-visible:ring-offset-2 focus-visible:ring-offset-[color:var(--color-bg-dark)]",
           className
         )}
         aria-haspopup="dialog"
@@ -136,7 +136,7 @@ export function ProjectCard({
               role="dialog"
               aria-modal="true"
               aria-labelledby={dialogTitleId}
-              className="relative flex max-h-[90vh] w-full max-w-5xl flex-col overflow-hidden rounded-[2rem] border border-[color:var(--color-border)] bg-[rgba(10,10,15,0.96)] shadow-[0_40px_140px_rgba(0,0,0,0.45)]"
+              className="relative flex max-h-[90vh] w-full max-w-5xl flex-col overflow-hidden rounded-[2rem] border border-[color:var(--color-border)] bg-[rgba(21,16,33,0.96)] shadow-[0_40px_140px_rgba(0,0,0,0.4)]"
               initial={{ opacity: 0, y: 20, scale: 0.97 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: 14, scale: 0.98 }}
@@ -146,7 +146,7 @@ export function ProjectCard({
               <button
                 type="button"
                 onClick={closeModal}
-                className="absolute right-4 top-4 z-10 inline-flex h-11 w-11 items-center justify-center rounded-full border border-white/10 bg-[rgba(10,10,15,0.72)] text-[color:var(--color-text-primary)] transition hover:border-[color:var(--color-primary-light)] hover:text-white"
+                className="absolute right-4 top-4 z-10 inline-flex h-11 w-11 items-center justify-center rounded-full border border-white/10 bg-[rgba(26,20,40,0.76)] text-[color:var(--color-text-primary)] transition hover:border-[color:var(--color-primary-light)] hover:text-white"
                 aria-label={`Close ${title} details`}
               >
                 <X size={18} />
@@ -161,7 +161,7 @@ export function ProjectCard({
                     className="object-cover object-top"
                     style={{ objectPosition: "center top" }}
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-[rgba(10,10,15,0.58)] via-transparent to-transparent" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-[rgba(21,16,33,0.56)] via-transparent to-transparent" />
                 </div>
 
                 <div className="min-h-0 overflow-y-auto p-6 md:p-8">

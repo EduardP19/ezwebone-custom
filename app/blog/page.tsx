@@ -28,7 +28,7 @@ export default async function BlogPage() {
 
   return (
     <div className="section-shell bg-[color:var(--color-bg-dark)]">
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(124,58,237,0.16),transparent_32%)]" />
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(154,124,255,0.18),transparent_34%)]" />
       <div className="container mx-auto px-4 py-16 md:px-6 md:py-20">
         <div className="max-w-3xl mb-14 md:mb-16">
           <Badge className="mb-4">Journal</Badge>
@@ -46,7 +46,7 @@ export default async function BlogPage() {
               <Link key={post.slug} href={`/blog/${post.slug}`} className="block h-full">
                 <Card
                   padding="sm"
-                  className="h-full border-[color:var(--color-border)] bg-[color:var(--color-bg-card)] shadow-[0_20px_60px_rgba(0,0,0,0.18)] transition-all group hover:border-[rgba(124,58,237,0.4)]"
+                  className="h-full border-[color:var(--color-border)] bg-[color:var(--color-bg-card)] shadow-[0_20px_60px_rgba(0,0,0,0.16)] transition-all group hover:border-[rgba(154,124,255,0.38)]"
                 >
                   <div className="aspect-[16/9] bg-[color:var(--color-bg-elevated)] rounded-xl mb-5 overflow-hidden relative">
                     <Image

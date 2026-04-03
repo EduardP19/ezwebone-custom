@@ -7,7 +7,7 @@ import { TestimonialCard } from "@/components/ui/TestimonialCard";
 export function Testimonials() {
   return (
     <section className="section-shell bg-[color:var(--color-bg-dark)] py-24 md:py-32">
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(124,58,237,0.12),transparent_32%)]" />
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(154,124,255,0.16),transparent_34%)]" />
 
       <div className="relative mx-auto max-w-7xl px-4 md:px-6">
         <div className="max-w-3xl">

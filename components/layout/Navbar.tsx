@@ -47,7 +47,7 @@ export function Navbar() {
         "fixed left-0 right-0 top-0 z-[80] transition-all duration-300",
         isHome && !isScrolled && !isMenuOpen
           ? "bg-transparent py-5"
-          : "border-b border-[color:var(--color-border)] bg-[rgba(10,10,15,0.8)] py-3 backdrop-blur-xl"
+          : "border-b border-[color:var(--color-border)] bg-[rgba(23,18,36,0.82)] py-3 backdrop-blur-xl"
       )}
     >
       <div className="mx-auto w-full max-w-7xl px-4 md:px-6">
@@ -114,7 +114,7 @@ export function Navbar() {
       >
         <div
           className={cn(
-            "absolute inset-0 bg-[rgba(6,6,10,0.82)] backdrop-blur-xl transition-opacity duration-300",
+            "absolute inset-0 bg-[rgba(15,11,24,0.72)] backdrop-blur-xl transition-opacity duration-300",
             isMenuOpen ? "opacity-100" : "opacity-0"
           )}
           onClick={() => setIsMenuOpen(false)}
@@ -124,7 +124,7 @@ export function Navbar() {
         <div
           id="mobile-navigation"
           className={cn(
-            "relative flex min-h-screen flex-col bg-[rgba(10,10,15,0.98)] px-6 pb-10 pt-28 shadow-[0_0_80px_rgba(0,0,0,0.55)] transition-all duration-500 sm:px-8",
+            "relative flex min-h-screen flex-col bg-[rgba(24,18,38,0.98)] px-6 pb-10 pt-28 shadow-[0_0_80px_rgba(0,0,0,0.45)] transition-all duration-500 sm:px-8",
             isMenuOpen ? "translate-y-0 opacity-100" : "-translate-y-3 opacity-0"
           )}
         >

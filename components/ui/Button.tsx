@@ -10,7 +10,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
   ({ className, variant = "primary", size = "md", ...props }, ref) => {
     const variants = {
       primary:
-        "border border-[color:var(--color-primary)] bg-[color:var(--color-primary)] text-white shadow-[0_12px_40px_rgba(124,58,237,0.28)] hover:border-[color:var(--color-primary-light)] hover:bg-[color:var(--color-primary-light)] hover:shadow-[0_18px_50px_rgba(124,58,237,0.36)] transition-all",
+        "border border-[color:var(--color-primary)] bg-[color:var(--color-primary)] text-white shadow-[0_12px_40px_rgba(154,124,255,0.24)] hover:border-[color:var(--color-primary-light)] hover:bg-[color:var(--color-primary-light)] hover:shadow-[0_18px_50px_rgba(154,124,255,0.3)] transition-all",
       secondary:
         "border border-[color:var(--color-border)] bg-white/5 text-[color:var(--color-text-primary)] backdrop-blur-xl hover:border-[color:var(--color-primary-light)] hover:bg-white/8 transition-all",
       ghost: "border border-transparent text-[color:var(--color-text-primary)] hover:bg-white/5",

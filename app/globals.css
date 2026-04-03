@@ -2,30 +2,30 @@
 @plugin "@tailwindcss/typography";
 
 :root {
-  --background: #0a0a0f;
-  --foreground: #f5f5f7;
+  --background: #171225;
+  --foreground: #fcf9ff;
 }
 
 @theme {
-  --color-primary: #7c3aed;
-  --color-primary-light: #a78bfa;
-  --color-primary-dark: #5b21b6;
-  --color-bg-dark: #0a0a0f;
-  --color-bg-card: #111118;
-  --color-bg-elevated: #1a1a24;
-  --color-border: #2a2a3a;
-  --color-text-primary: #f5f5f7;
-  --color-text-secondary: #a1a1aa;
-  --color-text-accent: #c4b5fd;
+  --color-primary: #9a7cff;
+  --color-primary-light: #d6c7ff;
+  --color-primary-dark: #7154d9;
+  --color-bg-dark: #171225;
+  --color-bg-card: #211934;
+  --color-bg-elevated: #2b2141;
+  --color-border: #43375f;
+  --color-text-primary: #fcf9ff;
+  --color-text-secondary: #c9c0dc;
+  --color-text-accent: #ece4ff;
   --color-live: #22c55e;
-  --color-brand-black: #101826;
-  --color-brand-blue: #7c3aed;
-  --color-brand-purple: #a78bfa;
-  --color-brand-purple-deep: #5b21b6;
+  --color-brand-black: #281d3e;
+  --color-brand-blue: #9a7cff;
+  --color-brand-purple: #d2c1ff;
+  --color-brand-purple-deep: #7c60e6;
   --color-brand-orange: #f59e0b;
-  --color-brand-warm: #f3f4f6;
-  --color-brand-border: #d4d4d8;
-  --color-brand-gray: #71717a;
+  --color-brand-warm: #f8f3ff;
+  --color-brand-border: #ddd3ef;
+  --color-brand-gray: #7b7292;
 
   --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
   --font-display: var(--font-space-grotesk), ui-sans-serif, system-ui, sans-serif;
@@ -36,8 +36,8 @@
   .bg-grid {
     background-size: 40px 40px;
     background-image:
-      linear-gradient(to right, rgba(127, 180, 199, 0.1) 1px, transparent 1px),
-      linear-gradient(to bottom, rgba(127, 180, 199, 0.1) 1px, transparent 1px);
+      linear-gradient(to right, rgba(205, 191, 255, 0.08) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(205, 191, 255, 0.08) 1px, transparent 1px);
   }
 
   .bg-checker {
@@ -50,10 +50,10 @@
 
   .bg-mesh {
     background-image:
-      radial-gradient(at 0% 0%, rgba(127, 180, 199, 0.18) 0px, transparent 50%),
-      radial-gradient(at 100% 0%, rgba(93, 141, 165, 0.14) 0px, transparent 50%),
-      radial-gradient(at 100% 100%, rgba(214, 184, 110, 0.08) 0px, transparent 50%),
-      radial-gradient(at 0% 100%, rgba(127, 180, 199, 0.12) 0px, transparent 50%);
+      radial-gradient(at 0% 0%, rgba(214, 199, 255, 0.2) 0px, transparent 50%),
+      radial-gradient(at 100% 0%, rgba(154, 124, 255, 0.16) 0px, transparent 50%),
+      radial-gradient(at 100% 100%, rgba(255, 214, 235, 0.08) 0px, transparent 50%),
+      radial-gradient(at 0% 100%, rgba(196, 176, 255, 0.14) 0px, transparent 50%);
   }
 
   .text-balance {
@@ -100,8 +100,8 @@
 
 body {
   background:
-    radial-gradient(circle at top, rgb(124 58 237 / 0.16), transparent 28%),
-    linear-gradient(180deg, #08080d 0%, var(--background) 100%);
+    radial-gradient(circle at top, rgb(154 124 255 / 0.24), transparent 30%),
+    linear-gradient(180deg, #130f1f 0%, var(--background) 100%);
   color: var(--foreground);
   font-family: var(--font-sans);
 }
@@ -112,7 +112,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 ::selection {
-  background: rgb(124 58 237 / 0.28);
+  background: rgb(154 124 255 / 0.32);
   color: var(--foreground);
 }
 

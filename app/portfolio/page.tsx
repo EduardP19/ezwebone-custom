@@ -20,7 +20,7 @@ export default async function PortfolioPage() {
 
   return (
     <div className="section-shell bg-[color:var(--color-bg-dark)]">
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(124,58,237,0.16),transparent_32%)]" />
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(154,124,255,0.18),transparent_34%)]" />
       <div className="container mx-auto px-4 py-20 md:px-6">
         <div className="max-w-3xl mb-16">
           <Badge className="mb-4">Selected Work</Badge>

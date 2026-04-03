@@ -11,7 +11,7 @@ interface TestimonialCardProps {
 export function TestimonialCard({ name, business, quote, image }: TestimonialCardProps) {
   return (
     <article className="relative h-full overflow-hidden rounded-[1.6rem] border border-[color:var(--color-border)] bg-[color:var(--color-bg-card)] p-8">
-      <span className="pointer-events-none absolute right-6 top-2 text-8xl font-semibold text-[rgba(124,58,237,0.12)]">
+      <span className="pointer-events-none absolute right-6 top-2 text-8xl font-semibold text-[rgba(154,124,255,0.14)]">
         &quot;
       </span>
 

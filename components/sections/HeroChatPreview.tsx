@@ -296,8 +296,8 @@ export function HeroChatPreview() {
   return (
     <section className="section-shell relative min-h-[100svh] bg-[color:var(--color-bg-dark)] pt-20 pb-14 sm:pt-22 sm:pb-18 md:pt-24 md:pb-20">
       <ParticleNetwork className="opacity-80" count={94} interactive={false} maxDistance={190} />
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(124,58,237,0.18),transparent_34%)]" />
-      <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,rgba(10,10,15,0.22),rgba(10,10,15,0.9))]" />
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(154,124,255,0.2),transparent_36%)]" />
+      <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,rgba(22,17,34,0.16),rgba(22,17,34,0.86))]" />
 
       <div className="relative z-10 mx-auto max-w-7xl px-4 md:px-6">
         <div className="mx-auto flex min-h-[calc(100svh-5.5rem)] max-w-4xl items-start md:min-h-[calc(100svh-6rem)]">
@@ -361,8 +361,8 @@ export function HeroChatPreview() {
               <RunningBorder
                 radius="2.15rem"
                 duration="6.75s"
-                className="shadow-[0_36px_120px_rgba(124,58,237,0.14)]"
-                innerClassName="bg-[rgba(17,17,24,0.82)] p-3.5 backdrop-blur-2xl sm:p-4 md:p-6"
+                className="shadow-[0_36px_120px_rgba(154,124,255,0.18)]"
+                innerClassName="bg-[rgba(34,26,52,0.8)] p-3.5 backdrop-blur-2xl sm:p-4 md:p-6"
               >
                 <div className="min-h-[280px] text-left sm:min-h-[320px]">
                   <AnimatePresence mode="wait">
@@ -378,7 +378,7 @@ export function HeroChatPreview() {
                           radius="1.35rem"
                           duration="7.8s"
                           className="mb-5"
-                          innerClassName="min-h-[96px] bg-[rgba(10,10,15,0.72)] px-4 py-5 sm:min-h-[112px] sm:px-5 sm:py-6"
+                          innerClassName="min-h-[96px] bg-[rgba(27,21,43,0.72)] px-4 py-5 sm:min-h-[112px] sm:px-5 sm:py-6"
                         >
                           <div className="flex min-h-[54px] items-center text-sm italic leading-6 text-[color:var(--color-text-secondary)] sm:min-h-[64px] sm:text-lg">
                             <span className="max-w-[28ch] sm:max-w-none">{typewriterText}</span>
@@ -459,7 +459,7 @@ export function HeroChatPreview() {
                               : "Tell us about your business..."
                           }
                           disabled={isStreaming}
-                          className="min-h-14 rounded-2xl border border-white/10 bg-[rgba(10,10,15,0.84)] px-4 text-base text-[color:var(--color-text-primary)] placeholder:text-[color:var(--color-text-secondary)]/80 outline-none transition focus:border-[color:var(--color-primary)]/60"
+                          className="min-h-14 rounded-2xl border border-white/10 bg-[rgba(31,24,48,0.88)] px-4 text-base text-[color:var(--color-text-primary)] placeholder:text-[color:var(--color-text-secondary)]/80 outline-none transition focus:border-[color:var(--color-primary)]/60"
                         />
 
                         <Button

@@ -66,7 +66,7 @@ export default function AboutPage() {
       />
 
       <section className="section-shell py-28 md:py-32">
-        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(124,58,237,0.18),transparent_30%)]" />
+        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(154,124,255,0.2),transparent_32%)]" />
         <div className="relative mx-auto max-w-7xl px-4 md:px-6">
           <div className="grid grid-cols-1 gap-12 lg:grid-cols-[minmax(0,1fr)_420px]">
             <div className="max-w-3xl">
