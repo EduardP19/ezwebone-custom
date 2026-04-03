@@ -84,7 +84,7 @@ export function ProjectCard({
         aria-expanded={isOpen}
       >
         <div className="relative aspect-[16/9] overflow-hidden">
-          <Image src={image} alt={title} fill className="object-cover" />
+          <Image src={image} alt={title} fill className="object-cover object-top" />
         </div>
 
         <div className="p-6">
@@ -148,7 +148,7 @@ export function ProjectCard({
 
               <div className="grid min-h-0 flex-1 grid-cols-1 md:grid-cols-[1.05fr_0.95fr]">
                 <div className="relative min-h-[260px] bg-[color:var(--color-bg-elevated)] md:min-h-full">
-                  <Image src={image} alt={title} fill className="object-cover" />
+                  <Image src={image} alt={title} fill className="object-cover object-top" />
                   <div className="absolute inset-0 bg-gradient-to-t from-[rgba(10,10,15,0.58)] via-transparent to-transparent" />
                 </div>
 
