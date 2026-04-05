@@ -53,15 +53,26 @@ export function Navbar() {
       <div className="mx-auto w-full max-w-7xl px-4 md:px-6">
         <div className="flex items-center justify-between gap-6">
           <Link href="/" className="relative z-40 flex items-center">
-            <BrandLogo
-              variant="wordmark"
-              priority
-              size={52}
-              className={cn(
-                "h-9 w-auto sm:h-10",
-                isHome && !isScrolled ? "brightness-125 saturate-110" : "brightness-110"
-              )}
-            />
+            <span className="inline-flex items-center gap-3">
+              <BrandLogo
+                variant="mark"
+                priority
+                size={44}
+                className={cn(
+                  "h-9 w-9 sm:h-10 sm:w-10",
+                  isHome && !isScrolled ? "brightness-125 saturate-110" : "brightness-110"
+                )}
+              />
+              <BrandLogo
+                variant="wordmark"
+                priority
+                size={52}
+                className={cn(
+                  "h-9 w-auto sm:h-10",
+                  isHome && !isScrolled ? "brightness-125 saturate-110" : "brightness-110"
+                )}
+              />
+            </span>
           </Link>
 
           <div className="hidden md:flex items-center gap-8">

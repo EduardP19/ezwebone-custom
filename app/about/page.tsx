@@ -3,6 +3,7 @@ import Link from "next/link";
 import { Button } from "@/components/ui/Button";
 import { FinalCTA } from "@/components/sections/FinalCTA";
 import { JsonLd } from "@/components/seo/JsonLd";
+import { BRAND_LOGO_MARK_SRC } from "@/lib/brand";
 import { absoluteUrl, createMetadata } from "@/lib/seo";
 
 const STATS = [
@@ -47,7 +48,7 @@ export default function AboutPage() {
           "@context": "https://schema.org",
           "@type": "ProfessionalService",
           name: "EZWebOne",
-          image: absoluteUrl("/brand/ez-logo-circle.png"),
+          image: absoluteUrl(BRAND_LOGO_MARK_SRC),
           "@id": "https://ezwebone.co.uk/about",
           url: "https://ezwebone.co.uk/about",
           description:

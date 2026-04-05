@@ -7,6 +7,7 @@ import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { TrackingProvider } from "@/components/analytics/TrackingProvider";
+import { BRAND_LOGO_MARK_SRC } from "@/lib/brand";
 import { absoluteUrl, siteConfig } from "@/lib/seo";
 
 const inter = Inter({
@@ -60,11 +61,11 @@ export const metadata: Metadata = {
   },
   icons: {
     icon: [
-      { url: "/brand/ez-logo-circle.png", type: "image/png" },
+      { url: BRAND_LOGO_MARK_SRC, type: "image/png" },
     ],
-    shortcut: "/brand/ez-logo-circle.png",
+    shortcut: BRAND_LOGO_MARK_SRC,
     apple: [
-      { url: "/brand/ez-logo-circle.png", type: "image/png" },
+      { url: BRAND_LOGO_MARK_SRC, type: "image/png" },
     ],
   },
   category: "business",
@@ -91,7 +92,7 @@ export default function RootLayout({
             "@type": "ProfessionalService",
             name: "EZWebOne",
             url: "https://ezwebone.co.uk",
-            logo: absoluteUrl("/brand/ez-logo-circle.png"),
+            logo: absoluteUrl(BRAND_LOGO_MARK_SRC),
             description:
               "UK digital agency building websites, automations, AI agents, SEO systems, and lead generation for small businesses.",
             address: {

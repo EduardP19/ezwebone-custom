@@ -9,7 +9,8 @@ const FOOTER_LINKS = {
     { label: "Blog", href: "/blog" },
     { label: "About", href: "/about" },
     { label: "Privacy Policy", href: "/privacy" },
-    { label: "Terms of Use", href: "/terms" },
+    { label: "Cookie Policy", href: "/cookies" },
+    { label: "Terms & Conditions", href: "/terms" },
   ],
   contact: [
     { label: "+44 7448 929894", href: "tel:+447448929894" },
@@ -53,7 +54,10 @@ export function Footer() {
         <div className="grid grid-cols-1 gap-12 md:grid-cols-3">
           <div>
             <Link href="/" className="inline-flex items-center">
-              <BrandLogo variant="wordmark" size={58} className="h-10 w-auto" />
+              <span className="inline-flex items-center gap-3">
+                <BrandLogo variant="mark" size={40} className="h-10 w-10" />
+                <BrandLogo variant="wordmark" size={58} className="h-10 w-auto" />
+              </span>
             </Link>
             <p className="mt-5 max-w-sm text-sm leading-7 text-[color:var(--color-text-secondary)]">
               Websites, automations, and AI agents for businesses that want to grow.

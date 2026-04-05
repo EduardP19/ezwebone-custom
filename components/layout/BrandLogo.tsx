@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { BRAND_LOGO_MARK_SRC, BRAND_LOGO_WORDMARK_SRC } from "@/lib/brand";
 import { cn } from "@/lib/utils";
 
 interface BrandLogoProps {
@@ -16,7 +17,7 @@ export function BrandLogo({
 }: BrandLogoProps) {
   return (
     <Image
-      src={variant === "wordmark" ? "/logo.svg" : "/brand/ez-logo-circle.png"}
+      src={variant === "wordmark" ? BRAND_LOGO_WORDMARK_SRC : BRAND_LOGO_MARK_SRC}
       alt="EZWebOne logo"
       width={variant === "wordmark" ? size * 3 : size}
       height={size}

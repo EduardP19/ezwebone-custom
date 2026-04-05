@@ -1,11 +1,17 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { usePathname, useSearchParams } from "next/navigation";
+import { CookieConsentBanner } from "@/components/analytics/CookieConsentBanner";
+import {
+  TRACKING_CONSENT_UPDATED_EVENT,
+  TRACKING_SESSION_KEY,
+  TRACKING_UTM_KEY,
+  type TrackingConsentState,
+  readTrackingConsent,
+  updateTrackingConsent,
+} from "@/lib/consent";
 import { supabase } from "@/lib/supabase";
-
-const SESSION_KEY = "ezw_session_id";
-const UTM_KEY = "ezw_utm";
 
 type UTMFields = {
   utm_source: string | null;
@@ -41,10 +47,10 @@ type LogPayload = {
 };
 
 function getOrCreateSessionId(): string {
-  const existing = window.localStorage.getItem(SESSION_KEY);
+  const existing = window.localStorage.getItem(TRACKING_SESSION_KEY);
   if (existing) return existing;
   const id = crypto.randomUUID();
-  window.localStorage.setItem(SESSION_KEY, id);
+  window.localStorage.setItem(TRACKING_SESSION_KEY, id);
   return id;
 }
 
@@ -66,7 +72,7 @@ function readStoredUtms(): UTMFields {
     utm_term: null,
     utm_content: null,
   };
-  const raw = window.sessionStorage.getItem(UTM_KEY);
+  const raw = window.sessionStorage.getItem(TRACKING_UTM_KEY);
   if (!raw) return fallback;
 
   try {
@@ -88,7 +94,7 @@ function mergeAndStoreUtms(searchParams: URLSearchParams): UTMFields {
     utm_content: fromUrl.utm_content ?? stored.utm_content,
   };
 
-  window.sessionStorage.setItem(UTM_KEY, JSON.stringify(merged));
+  window.sessionStorage.setItem(TRACKING_UTM_KEY, JSON.stringify(merged));
   return merged;
 }
 
@@ -155,9 +161,25 @@ async function insertLog(payload: LogPayload) {
 export function TrackingProvider() {
   const pathname = usePathname();
   const searchParams = useSearchParams();
+  const [consent, setConsent] = useState<TrackingConsentState | null | undefined>(undefined);
 
   useEffect(() => {
-    if (!pathname) return;
+    const syncConsent = () => {
+      setConsent(readTrackingConsent());
+    };
+
+    syncConsent();
+    window.addEventListener(TRACKING_CONSENT_UPDATED_EVENT, syncConsent);
+    window.addEventListener("storage", syncConsent);
+
+    return () => {
+      window.removeEventListener(TRACKING_CONSENT_UPDATED_EVENT, syncConsent);
+      window.removeEventListener("storage", syncConsent);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!pathname || consent !== "accepted") return;
 
     const sessionId = getOrCreateSessionId();
     const utms = mergeAndStoreUtms(searchParams);
@@ -186,9 +208,11 @@ export function TrackingProvider() {
         title: document.title || null,
       },
     });
-  }, [pathname, searchParams]);
+  }, [pathname, searchParams, consent]);
 
   useEffect(() => {
+    if (consent !== "accepted") return;
+
     const onClick = (event: MouseEvent) => {
       const target = event.target as Element | null;
       if (!target) return;
@@ -237,7 +261,20 @@ export function TrackingProvider() {
 
     document.addEventListener("click", onClick, true);
     return () => document.removeEventListener("click", onClick, true);
-  }, []);
+  }, [consent]);
 
-  return null;
+  if (consent !== null) {
+    return null;
+  }
+
+  if (consent === undefined) {
+    return null;
+  }
+
+  return (
+    <CookieConsentBanner
+      onAccept={() => updateTrackingConsent("accepted")}
+      onReject={() => updateTrackingConsent("rejected")}
+    />
+  );
 }
