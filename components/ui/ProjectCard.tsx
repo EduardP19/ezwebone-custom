@@ -2,8 +2,9 @@
 
 import * as React from "react";
 import Image from "next/image";
-import Link from "next/link";
 import { AnimatePresence, motion } from "framer-motion";
+import { LocalizedLink } from "@/components/i18n/LocalizedLink";
+import { useI18n } from "@/components/i18n/LocaleProvider";
 import { ArrowUpRight, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -34,6 +35,7 @@ export function ProjectCard({
 }: ProjectCardProps) {
   const [isOpen, setIsOpen] = React.useState(false);
   const dialogTitleId = React.useId();
+  const { dictionary } = useI18n();
 
   React.useEffect(() => {
     if (!isOpen) {
@@ -117,7 +119,7 @@ export function ProjectCard({
           </div>
 
           <div className="mt-6 inline-flex items-center gap-2 text-sm font-medium text-[color:var(--color-text-accent)] transition group-hover:text-white">
-            View Details
+            {dictionary.common.viewDetails}
             <ArrowUpRight size={14} />
           </div>
         </div>
@@ -126,7 +128,7 @@ export function ProjectCard({
       <AnimatePresence>
         {isOpen ? (
           <motion.div
-            className="fixed inset-0 z-[130] flex items-center justify-center bg-[rgba(5,5,10,0.78)] p-4 backdrop-blur-xl md:p-6"
+            className="fixed inset-0 z-[130] flex items-start justify-center overflow-y-auto bg-[rgba(5,5,10,0.78)] p-4 backdrop-blur-xl md:items-center md:p-6"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -136,7 +138,7 @@ export function ProjectCard({
               role="dialog"
               aria-modal="true"
               aria-labelledby={dialogTitleId}
-              className="relative flex max-h-[90vh] w-full max-w-5xl flex-col overflow-hidden rounded-[2rem] border border-[color:var(--color-border)] bg-[rgba(10,10,15,0.96)] shadow-[0_40px_140px_rgba(0,0,0,0.45)]"
+              className="relative my-4 flex max-h-[92dvh] w-full max-w-5xl flex-col overflow-y-auto rounded-[2rem] border border-[color:var(--color-border)] bg-[rgba(10,10,15,0.96)] shadow-[0_40px_140px_rgba(0,0,0,0.45)] md:my-0 md:max-h-[90vh] md:overflow-hidden"
               initial={{ opacity: 0, y: 20, scale: 0.97 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: 14, scale: 0.98 }}
@@ -147,7 +149,7 @@ export function ProjectCard({
                 type="button"
                 onClick={closeModal}
                 className="absolute right-4 top-4 z-10 inline-flex h-11 w-11 items-center justify-center rounded-full border border-white/10 bg-[rgba(10,10,15,0.72)] text-[color:var(--color-text-primary)] transition hover:border-[color:var(--color-primary-light)] hover:text-white"
-                aria-label={`Close ${title} details`}
+                aria-label={`${dictionary.common.closeDetails}: ${title}`}
               >
                 <X size={18} />
               </button>
@@ -164,7 +166,7 @@ export function ProjectCard({
                   <div className="absolute inset-0 bg-gradient-to-t from-[rgba(10,10,15,0.58)] via-transparent to-transparent" />
                 </div>
 
-                <div className="min-h-0 overflow-y-auto p-6 md:p-8">
+                <div className="min-h-0 p-6 md:overflow-y-auto md:p-8">
                   <div className="pr-12">
                     <div className="flex flex-wrap items-center gap-3">
                       <span className="inline-flex rounded-full border border-white/10 bg-[color:var(--color-bg-elevated)] px-3 py-1 text-xs text-[color:var(--color-text-accent)]">
@@ -182,17 +184,6 @@ export function ProjectCard({
                       >
                         {title}
                       </h3>
-                      {liveUrl ? (
-                        <a
-                          href={liveUrl}
-                          target="_blank"
-                          rel="noreferrer"
-                          aria-label={`Open ${title} live site`}
-                          className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-[color:var(--color-border)] bg-white/5 text-[color:var(--color-text-accent)] transition hover:border-[color:var(--color-primary-light)] hover:text-white"
-                        >
-                          <ArrowUpRight size={18} />
-                        </a>
-                      ) : null}
                     </div>
                     <p className="mt-4 text-base leading-7 text-[color:var(--color-text-secondary)]">
                       {summary}
@@ -202,7 +193,7 @@ export function ProjectCard({
                   <div className="mt-8 space-y-7">
                     <div>
                       <p className="mono-label text-xs text-[color:var(--color-text-accent)]">
-                        Overview
+                        {dictionary.common.overview}
                       </p>
                       <p className="mt-3 text-sm leading-7 text-[color:var(--color-text-secondary)] md:text-base">
                         {description}
@@ -212,7 +203,7 @@ export function ProjectCard({
                     {caseStudy ? (
                       <div>
                         <p className="mono-label text-xs text-[color:var(--color-text-accent)]">
-                          Case Study
+                          {dictionary.common.caseStudy}
                         </p>
                         <p className="mt-3 text-sm leading-7 text-[color:var(--color-text-secondary)] md:text-base">
                           {caseStudy}
@@ -222,7 +213,7 @@ export function ProjectCard({
 
                     <div>
                       <p className="mono-label text-xs text-[color:var(--color-text-accent)]">
-                        What We Focused On
+                        {dictionary.common.whatWeFocusedOn}
                       </p>
                       <div className="mt-4 flex flex-wrap gap-2.5">
                         {highlights.map((item) => (
@@ -237,12 +228,23 @@ export function ProjectCard({
                     </div>
 
                     <div className="flex flex-wrap gap-3 pt-2">
-                      <Link
+                      <LocalizedLink
                         href="/contact"
                         className="inline-flex items-center gap-2 rounded-full border border-[color:var(--color-border)] bg-white/5 px-5 py-3 text-sm font-semibold text-[color:var(--color-text-primary)] transition hover:border-[color:var(--color-primary-light)] hover:text-white"
                       >
-                        Discuss a Similar Project
-                      </Link>
+                        {dictionary.common.discussSimilarProject}
+                      </LocalizedLink>
+                      {liveUrl ? (
+                        <a
+                          href={liveUrl}
+                          target="_blank"
+                          rel="noreferrer"
+                          aria-label={`${dictionary.common.openLiveSite}: ${title}`}
+                          className="inline-flex items-center rounded-full bg-[rgba(109,40,217,0.9)] px-5 py-3 text-sm font-semibold text-white transition hover:bg-[color:var(--color-text-accent)]"
+                        >
+                          Go to Website
+                        </a>
+                      ) : null}
                     </div>
                   </div>
                 </div>
