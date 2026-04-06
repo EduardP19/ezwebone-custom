@@ -1,3 +1,5 @@
+import type { Locale } from "@/lib/i18n/config";
+import { getLocalizedProjectFields } from "@/lib/project-content";
 import { supabase } from "@/lib/supabase";
 
 export interface Project {
@@ -7,6 +9,7 @@ export interface Project {
   category: string;
   industry: string;
   image: string;
+  beforeImage: string | null;
   description: string;
   summary: string;
   highlights: string[];
@@ -25,6 +28,7 @@ type ProjectRow = {
   category: string;
   industry: string;
   image: string;
+  before_image: string | null;
   description: string;
   summary: string;
   highlights: string[] | null;
@@ -44,6 +48,7 @@ const FALLBACK_PROJECTS: Project[] = [
     category: "Wedding · Web Design",
     industry: "Luxury Events",
     image: "/portfolio/project1.png",
+    beforeImage: null,
     description:
       "A romantic, conversion-focused site for a UK wedding planner. Designed to feel premium quickly and support higher-value enquiries.",
     summary:
@@ -64,6 +69,7 @@ const FALLBACK_PROJECTS: Project[] = [
     category: "Events · Booking Site",
     industry: "Experiential Brand",
     image: "/portfolio/project2.png",
+    beforeImage: null,
     description:
       "A polished site for a photo booth company with online booking flows, event galleries, and a layout built to convert busy visitors fast.",
     summary:
@@ -84,6 +90,7 @@ const FALLBACK_PROJECTS: Project[] = [
     category: "Creative · Portfolio",
     industry: "Creative Consultant",
     image: "/portfolio/project3.png",
+    beforeImage: null,
     description:
       "A bold creative portfolio with punchy visuals, structured storytelling, and smooth motion that keeps the work front and centre.",
     summary:
@@ -104,6 +111,7 @@ const FALLBACK_PROJECTS: Project[] = [
     category: "Community · Platform",
     industry: "Community Platform",
     image: "/portfolio/project4.png",
+    beforeImage: null,
     description:
       "A trust-focused platform for the Romanian community in the UK with stronger content structure, blog integration, and a clearer membership journey.",
     summary:
@@ -124,6 +132,7 @@ const FALLBACK_PROJECTS: Project[] = [
     category: "Education · Agency",
     industry: "Education Brand",
     image: "/portfolio/project5.png",
+    beforeImage: null,
     description:
       "A bilingual language travel site with clearer programme filtering, student-first navigation, and a cleaner path from discovery to enquiry.",
     summary:
@@ -140,7 +149,7 @@ const FALLBACK_PROJECTS: Project[] = [
 ];
 
 const projectSelect =
-  "id, slug, title, category, industry, image, description, summary, highlights, live_url, case_study, featured, published, sort_order, created_at";
+  "id, slug, title, category, industry, image, before_image, description, summary, highlights, live_url, case_study, featured, published, sort_order, created_at";
 
 function normalizeProject(project: ProjectRow): Project {
   return {
@@ -150,6 +159,7 @@ function normalizeProject(project: ProjectRow): Project {
     category: project.category,
     industry: project.industry,
     image: project.image,
+    beforeImage: project.before_image,
     description: project.description,
     summary: project.summary,
     highlights: project.highlights ?? [],
@@ -162,9 +172,28 @@ function normalizeProject(project: ProjectRow): Project {
   };
 }
 
-export async function getPublishedProjects(): Promise<Project[]> {
+function localizeProject(project: Project, locale: Locale): Project {
+  const localized = getLocalizedProjectFields(project.slug, locale);
+
+  if (!localized) {
+    return project;
+  }
+
+  return {
+    ...project,
+    title: localized.title ?? project.title,
+    category: localized.category ?? project.category,
+    industry: localized.industry ?? project.industry,
+    description: localized.description ?? project.description,
+    summary: localized.summary ?? project.summary,
+    highlights: localized.highlights ?? project.highlights,
+    caseStudy: localized.caseStudy ?? project.caseStudy,
+  };
+}
+
+export async function getPublishedProjects(locale: Locale = "en"): Promise<Project[]> {
   if (!supabase) {
-    return FALLBACK_PROJECTS;
+    return FALLBACK_PROJECTS.map((project) => localizeProject(project, locale));
   }
 
   const { data, error } = await supabase
@@ -178,9 +207,11 @@ export async function getPublishedProjects(): Promise<Project[]> {
     if (process.env.NODE_ENV !== "production") {
       console.warn("Projects query failed, using fallback data:", error.message);
     }
-    return FALLBACK_PROJECTS;
+    return FALLBACK_PROJECTS.map((project) => localizeProject(project, locale));
   }
 
   const projects = ((data ?? []) as ProjectRow[]).map(normalizeProject);
-  return projects.length > 0 ? projects : FALLBACK_PROJECTS;
+  const result = projects.length > 0 ? projects : FALLBACK_PROJECTS;
+
+  return result.map((project) => localizeProject(project, locale));
 }

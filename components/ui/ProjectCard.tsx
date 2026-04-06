@@ -13,6 +13,7 @@ interface ProjectCardProps {
   category: string;
   industry: string;
   image: string;
+  beforeImage?: string | null;
   description: string;
   summary: string;
   highlights: string[];
@@ -26,6 +27,7 @@ export function ProjectCard({
   category,
   industry,
   image,
+  beforeImage,
   description,
   summary,
   highlights,
@@ -34,8 +36,11 @@ export function ProjectCard({
   className,
 }: ProjectCardProps) {
   const [isOpen, setIsOpen] = React.useState(false);
+  const [previewMode, setPreviewMode] = React.useState<"before" | "after">("after");
   const dialogTitleId = React.useId();
   const { dictionary } = useI18n();
+  const hasBeforeImage = Boolean(beforeImage);
+  const activeImage = previewMode === "before" && beforeImage ? beforeImage : image;
 
   React.useEffect(() => {
     if (!isOpen) {
@@ -56,6 +61,11 @@ export function ProjectCard({
       document.body.style.overflow = previousOverflow;
       window.removeEventListener("keydown", handleKeyDown);
     };
+  }, [isOpen]);
+
+  React.useEffect(() => {
+    if (!isOpen) return;
+    setPreviewMode("after");
   }, [isOpen]);
 
   const openModal = React.useCallback(() => {
@@ -157,12 +167,50 @@ export function ProjectCard({
               <div className="grid min-h-0 flex-1 grid-cols-1 md:grid-cols-[1.05fr_0.95fr]">
                 <div className="relative min-h-[320px] bg-[color:var(--color-bg-elevated)] md:min-h-full">
                   <Image
-                    src={image}
+                    src={activeImage}
                     alt={title}
                     fill
                     className="object-cover object-top"
                     style={{ objectPosition: "center top" }}
                   />
+                  {hasBeforeImage ? (
+                    <div className="absolute left-4 top-4 z-[1] rounded-2xl border border-white/15 bg-[rgba(10,10,15,0.78)] p-2.5 backdrop-blur">
+                      <p className="mb-2 text-[10px] font-semibold uppercase tracking-[0.16em] text-[color:var(--color-text-accent)]">
+                        Compare Views
+                      </p>
+                      <div className="inline-flex rounded-full border border-white/15 bg-black/25 p-1">
+                        <button
+                          type="button"
+                          onClick={() => setPreviewMode("before")}
+                          className={cn(
+                            "rounded-full px-3 py-1.5 text-xs font-semibold transition",
+                            previewMode === "before"
+                              ? "bg-[color:var(--color-text-accent)] text-[color:var(--color-bg-dark)] shadow-[0_8px_22px_rgba(201,169,110,0.45)]"
+                              : "text-[color:var(--color-text-secondary)] hover:text-white"
+                          )}
+                        >
+                          BEFORE
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => setPreviewMode("after")}
+                          className={cn(
+                            "rounded-full px-3 py-1.5 text-xs font-semibold transition",
+                            previewMode === "after"
+                              ? "bg-[color:var(--color-text-accent)] text-[color:var(--color-bg-dark)] shadow-[0_8px_22px_rgba(201,169,110,0.45)]"
+                              : "text-[color:var(--color-text-secondary)] hover:text-white"
+                          )}
+                        >
+                          AFTER
+                        </button>
+                      </div>
+                    </div>
+                  ) : null}
+                  {hasBeforeImage ? (
+                    <div className="absolute bottom-4 left-4 z-[1] rounded-full border border-[color:var(--color-text-accent)]/60 bg-[rgba(10,10,15,0.78)] px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-[color:var(--color-text-accent)] backdrop-blur">
+                      {previewMode === "before" ? "Before snapshot" : "After snapshot"}
+                    </div>
+                  ) : null}
                   <div className="absolute inset-0 bg-gradient-to-t from-[rgba(10,10,15,0.58)] via-transparent to-transparent" />
                 </div>
 

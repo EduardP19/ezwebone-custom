@@ -3,7 +3,8 @@
 import * as React from "react";
 import Image from "next/image";
 import { AnimatePresence, motion } from "framer-motion";
-import { ArrowRight, CheckCheck } from "lucide-react";
+import { ArrowRight, CheckCheck, MessageCircle } from "lucide-react";
+import { useI18n } from "@/components/i18n/LocaleProvider";
 import { ParticleNetwork } from "@/components/sections/ParticleNetwork";
 import { Button } from "@/components/ui/Button";
 import { cn } from "@/lib/utils";
@@ -25,32 +26,9 @@ const TRUST_IMAGES = [
   "/clients/client3.png",
 ];
 
-const TYPEWRITER_PROMPTS = [
-  "Missed calls are costing us bookings.",
-  "We need a website that brings leads in.",
-  "Can you automate our follow-ups?",
-  "How do we rank higher on Google?",
-  "What can AI do for our business?",
-];
-
-const SERVICE_PILLS = [
-  { label: "Websites" },
-  { label: "Automations" },
-  { label: "AI Agents" },
-  { label: "Marketing" },
-  { label: "SEO" },
-  { label: "Lead Gen" },
-];
-
-const EMAIL_CAPTURE_PROMPT =
-  "I've got a clear picture of what your business needs. I can put together a personalised recommendation with the right service mix and realistic next steps. What's the best email to send it to?";
-
-const EMAIL_CONFIRMATION_PROMPT =
-  "You're all set. Check your inbox within 24 hours and we'll send over a personalised recommendation. Is there anything else you'd like this preview to reflect later?";
-
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-function useTypewriter(prompts: string[], enabled: boolean) {
+function useTypewriter(prompts: readonly string[], enabled: boolean) {
   const [promptIndex, setPromptIndex] = React.useState(0);
   const [displayText, setDisplayText] = React.useState("");
   const [isDeleting, setIsDeleting] = React.useState(false);
@@ -93,7 +71,17 @@ function useTypewriter(prompts: string[], enabled: boolean) {
   return displayText;
 }
 
-function getMockAssistantResponse(input: string) {
+function getMockAssistantResponse(
+  input: string,
+  responses: {
+    salon: string;
+    seo: string;
+    leadGen: string;
+    automation: string;
+    ai: string;
+    fallback: string;
+  }
+) {
   const normalized = input.toLowerCase();
 
   if (
@@ -102,26 +90,26 @@ function getMockAssistantResponse(input: string) {
     normalized.includes("missed calls") ||
     normalized.includes("booking")
   ) {
-    return "For salons and service businesses, we'd usually start with Resevia so missed calls turn into booked conversations instead of lost revenue. We can pair that with a stronger website or automations once the enquiry flow is under control. Is missed-call recovery or booking admin the bigger issue for you right now?";
+    return responses.salon;
   }
 
   if (normalized.includes("seo") || normalized.includes("google") || normalized.includes("rank")) {
-    return "SEO usually works best when the website structure, service pages, and local intent all line up around what people actually search for. We'd tighten the technical foundation first, then build content that supports rankings and leads. Are you trying to rank for your town, a specific service, or both?";
+    return responses.seo;
   }
 
   if (normalized.includes("lead") || normalized.includes("ads") || normalized.includes("marketing")) {
-    return "Lead generation gets stronger when the offer, landing page, and follow-up system are built as one flow instead of separate pieces. We can help with the ads side, the page itself, and the automation that keeps warm leads moving. Are you mainly trying to lower your cost per lead or increase lead quality?";
+    return responses.leadGen;
   }
 
   if (normalized.includes("autom") || normalized.includes("workflow") || normalized.includes("follow-up")) {
-    return "Automation is usually the fastest win when leads, bookings, or admin tasks are still being handled manually. We'd map the repetitive steps first, then connect the tools so follow-ups happen consistently without adding more work to your team. Which process feels the most repetitive at the moment?";
+    return responses.automation;
   }
 
   if (normalized.includes("ai") || normalized.includes("agent")) {
-    return "AI agents are most useful when they solve one high-value bottleneck like missed calls, first-response speed, or repetitive customer questions. We'd normally shape the workflow around your business first, then decide where an AI layer makes the biggest difference. What job would you want the AI handling every day?";
+    return responses.ai;
   }
 
-  return "We'd usually start by understanding how people find you today and where the biggest drop-off happens between interest and enquiry. From there, we can recommend the right mix of website, automation, AI, SEO, or lead gen support. What kind of business are you running at the moment?";
+  return responses.fallback;
 }
 
 function RunningBorder({
@@ -154,9 +142,12 @@ function RunningBorder({
 }
 
 export function HeroChatPreview() {
+  const sectionRef = React.useRef<HTMLElement>(null);
   const inputRef = React.useRef<HTMLInputElement>(null);
   const historyRef = React.useRef<HTMLDivElement>(null);
   const timersRef = React.useRef<number[]>([]);
+  const { dictionary } = useI18n();
+  const heroCopy = dictionary.home.hero;
 
   const [chatState, setChatState] = React.useState<ChatState>("idle");
   const [inputValue, setInputValue] = React.useState("");
@@ -164,7 +155,7 @@ export function HeroChatPreview() {
   const [isStreaming, setIsStreaming] = React.useState(false);
   const [emailError, setEmailError] = React.useState<string | null>(null);
 
-  const typewriterText = useTypewriter(TYPEWRITER_PROMPTS, chatState === "idle");
+  const typewriterText = useTypewriter(heroCopy.typewriterPrompts, chatState === "idle");
 
   const userMessageCount = messages.filter(
     (message) => message.role === "user" && message.kind === "chat"
@@ -236,6 +227,14 @@ export function HeroChatPreview() {
     setChatState((current) => (current === "idle" ? "active" : current));
   }, []);
 
+  const openChatWindow = React.useCallback(() => {
+    activateChat();
+    sectionRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
+    window.setTimeout(() => {
+      inputRef.current?.focus();
+    }, 220);
+  }, [activateChat]);
+
   const handleSendMessage = React.useCallback(() => {
     const nextValue = inputValue.trim();
     if (!nextValue || isStreaming || chatState === "captured") {
@@ -244,7 +243,7 @@ export function HeroChatPreview() {
 
     if (chatState === "awaiting_email") {
       if (!EMAIL_REGEX.test(nextValue)) {
-        setEmailError("That doesn't look like an email — try again?");
+        setEmailError(heroCopy.emailError);
         return;
       }
 
@@ -260,7 +259,7 @@ export function HeroChatPreview() {
       ]);
       setInputValue("");
 
-      streamAssistantMessage(EMAIL_CONFIRMATION_PROMPT, () => {
+      streamAssistantMessage(heroCopy.emailConfirmationPrompt, () => {
         setChatState("captured");
       });
 
@@ -283,18 +282,21 @@ export function HeroChatPreview() {
     ]);
     setInputValue("");
 
-    streamAssistantMessage(getMockAssistantResponse(nextValue), () => {
+    streamAssistantMessage(getMockAssistantResponse(nextValue, heroCopy.assistantResponses), () => {
       if (nextUserCount < 5) {
         return;
       }
 
       setChatState("awaiting_email");
-      streamAssistantMessage(EMAIL_CAPTURE_PROMPT);
+      streamAssistantMessage(heroCopy.emailCapturePrompt);
     });
-  }, [activateChat, chatState, inputValue, isStreaming, streamAssistantMessage, userMessageCount]);
+  }, [activateChat, chatState, heroCopy, inputValue, isStreaming, streamAssistantMessage, userMessageCount]);
 
   return (
-    <section className="section-shell relative min-h-[100svh] bg-[color:var(--color-bg-dark)] pt-20 pb-14 sm:pt-22 sm:pb-18 md:pt-24 md:pb-20">
+    <section
+      ref={sectionRef}
+      className="section-shell relative min-h-[100svh] bg-[color:var(--color-bg-dark)] pt-20 pb-14 sm:pt-22 sm:pb-18 md:pt-24 md:pb-20"
+    >
       <ParticleNetwork className="opacity-80" count={94} interactive={false} maxDistance={190} />
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(124,58,237,0.18),transparent_34%)]" />
       <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,rgba(10,10,15,0.22),rgba(10,10,15,0.9))]" />
@@ -321,38 +323,39 @@ export function HeroChatPreview() {
                   />
                 ))}
               </div>
-              <span>110+ Happy Clients</span>
+              <span>{dictionary.home.trust.happyClients}</span>
               <span className="hidden text-[color:var(--color-border)] sm:inline">·</span>
               <span>
-                <span className="text-[color:var(--color-text-primary)]">★★★★★</span> 5.0 on Google
+                <span className="text-[color:var(--color-text-primary)]">★★★★★</span>{" "}
+                {dictionary.home.trust.googleRating}
               </span>
               <span className="hidden text-[color:var(--color-border)] sm:inline">·</span>
               <span className="inline-flex items-center gap-2">
                 <span className="live-dot" />
-                Live Now
+                {dictionary.home.trust.liveNow}
               </span>
             </div>
 
             <div>
               <h1 className="text-4xl font-semibold leading-[0.96] tracking-tight text-[color:var(--color-text-primary)] sm:text-5xl md:text-7xl">
-                Websites. Automations.
+                {heroCopy.heading[0]}
                 <br />
-                AI Agents. Growth.
+                {heroCopy.heading[1]}
               </h1>
               <p className="mx-auto mt-4 max-w-2xl text-base leading-7 text-[color:var(--color-text-secondary)] sm:text-lg sm:leading-8 md:text-xl">
-                Tell us what your business needs and we&apos;ll guide you toward the right website, automation, AI, or growth solution.
+                {heroCopy.body}
               </p>
             </div>
 
             <div className="mx-auto w-full max-w-2xl">
               <div className="hero-chat-preview__pill-viewport hero-chat-preview__scrollbar mb-3 flex justify-start overflow-x-auto pr-8 pl-1 sm:mb-4 sm:justify-center sm:pr-1">
                 <div className="flex min-w-max gap-2.5 pb-2 sm:gap-3">
-                  {SERVICE_PILLS.map((pill) => (
+                  {heroCopy.servicePills.map((pill) => (
                     <span
-                      key={pill.label}
+                      key={pill}
                       className="shrink-0 rounded-full border border-[color:var(--color-border)] bg-[color:var(--color-bg-elevated)] px-3.5 py-2 text-xs font-medium text-[color:var(--color-text-secondary)] sm:px-4 sm:text-sm"
                     >
-                        {pill.label}
+                        {pill}
                     </span>
                   ))}
                 </div>
@@ -398,7 +401,7 @@ export function HeroChatPreview() {
                       >
                         {messages.length === 0 ? (
                           <div className="rounded-2xl border border-dashed border-white/10 bg-white/3 px-4 py-5 text-xs text-[color:var(--color-text-secondary)] sm:text-sm">
-                            Start typing below to begin the conversation.
+                            {heroCopy.startTyping}
                           </div>
                         ) : null}
 
@@ -433,7 +436,7 @@ export function HeroChatPreview() {
                   {chatState === "captured" ? (
                     <div className="flex items-center justify-center gap-2 rounded-2xl border border-emerald-500/25 bg-emerald-500/10 px-4 py-4 text-xs font-medium text-emerald-200 sm:text-sm">
                       <CheckCheck className="h-4 w-4" />
-                      Recommendation on its way
+                      {heroCopy.captured}
                     </div>
                   ) : (
                     <>
@@ -455,8 +458,8 @@ export function HeroChatPreview() {
                           }}
                           placeholder={
                             chatState === "awaiting_email"
-                              ? "Your email address..."
-                              : "Tell us about your business..."
+                              ? heroCopy.placeholderEmail
+                              : heroCopy.placeholderChat
                           }
                           disabled={isStreaming}
                           className="min-h-14 rounded-2xl border border-white/10 bg-[rgba(10,10,15,0.84)] px-4 text-base text-[color:var(--color-text-primary)] placeholder:text-[color:var(--color-text-secondary)]/80 outline-none transition focus:border-[color:var(--color-primary)]/60"
@@ -479,7 +482,10 @@ export function HeroChatPreview() {
 
                       {messagesRemaining ? (
                         <p className="mt-3 text-center text-xs text-[color:var(--color-text-secondary)]">
-                          {messagesRemaining} message{messagesRemaining === 1 ? "" : "s"} remaining
+                          {messagesRemaining}{" "}
+                          {messagesRemaining === 1
+                            ? heroCopy.remainingMessages.singular
+                            : heroCopy.remainingMessages.plural}
                         </p>
                       ) : null}
                     </>
@@ -490,6 +496,16 @@ export function HeroChatPreview() {
           </motion.div>
         </div>
       </div>
+
+      <button
+        type="button"
+        onClick={openChatWindow}
+        className="fixed bottom-5 right-4 z-[120] inline-flex items-center gap-2 rounded-full border border-[color:var(--color-text-accent)]/45 bg-[color:var(--color-primary)] px-4 py-3 text-sm font-semibold text-white shadow-[0_16px_36px_rgba(124,58,237,0.42)] transition hover:bg-[color:var(--color-text-accent)] hover:text-[color:var(--color-bg-dark)] sm:bottom-6 sm:right-6"
+        aria-label="Open AI chat"
+      >
+        <MessageCircle className="h-4 w-4" />
+        Ask AI
+      </button>
 
       <style jsx global>{`
         .hero-chat-preview__scrollbar {
