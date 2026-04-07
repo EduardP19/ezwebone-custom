@@ -1,0 +1,3 @@
+-- Placeholder migration.
+-- The linked ezwebone-agency database already has this migration recorded remotely,
+-- but the original SQL file is not present in this repository.
