@@ -27,7 +27,7 @@ type OpenAIResponsesOutput = {
   }>;
 };
 
-const PROMPT_PATH = path.join(process.cwd(), ".claude/agents/salon-lead-qualifier.md");
+const PROMPT_PATH = path.join(process.cwd(), "agents", "prequalify", "prompt.md");
 let cachedSystemPrompt: string | null = null;
 
 function normalizeInput(input: unknown): Required<Pick<PrequalifyInput, "message">> & {

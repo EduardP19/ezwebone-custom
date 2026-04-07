@@ -3,13 +3,14 @@
 import * as React from "react";
 import Image from "next/image";
 import { AnimatePresence, motion } from "framer-motion";
-import { ArrowRight, CheckCheck, MessageCircle } from "lucide-react";
+import { ArrowRight, CheckCircle2, MessageCircle } from "lucide-react";
+import { LocalizedLink } from "@/components/i18n/LocalizedLink";
 import { useI18n } from "@/components/i18n/LocaleProvider";
 import { ParticleNetwork } from "@/components/sections/ParticleNetwork";
 import { Button } from "@/components/ui/Button";
 import { cn } from "@/lib/utils";
 
-type ChatState = "idle" | "active" | "awaiting_email" | "captured";
+type ChatState = "idle" | "active" | "awaiting_email" | "report_sent" | "locked";
 type ChatRole = "user" | "assistant";
 type ChatKind = "chat" | "email";
 
@@ -27,6 +28,10 @@ const TRUST_IMAGES = [
 ];
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const SESSION_COOKIE = "ezw_prequalify_session";
+const TRIAL_LOCK_COOKIE = "ezw_prequalify_locked";
+const TRIAL_MESSAGE_LIMIT = 2;
+const REPORT_SENT_DURATION_MS = 7000;
 
 function useTypewriter(prompts: readonly string[], enabled: boolean) {
   const [promptIndex, setPromptIndex] = React.useState(0);
@@ -112,6 +117,56 @@ function getMockAssistantResponse(
   return responses.fallback;
 }
 
+function readCookie(name: string) {
+  if (typeof document === "undefined") {
+    return null;
+  }
+
+  const prefix = `${name}=`;
+  const item = document.cookie
+    .split(";")
+    .map((part) => part.trim())
+    .find((part) => part.startsWith(prefix));
+
+  if (!item) {
+    return null;
+  }
+
+  return decodeURIComponent(item.slice(prefix.length));
+}
+
+function ensureSessionIdCookie() {
+  const existing = readCookie(SESSION_COOKIE);
+  if (existing) {
+    return existing;
+  }
+
+  const nextValue = crypto.randomUUID();
+  const oneYear = 60 * 60 * 24 * 365;
+  document.cookie = `${SESSION_COOKIE}=${encodeURIComponent(nextValue)}; Max-Age=${oneYear}; Path=/; SameSite=Lax`;
+  return nextValue;
+}
+
+function setTrialLockedCookie() {
+  if (typeof document === "undefined") {
+    return;
+  }
+
+  const oneYear = 60 * 60 * 24 * 365;
+  document.cookie = `${TRIAL_LOCK_COOKIE}=1; Max-Age=${oneYear}; Path=/; SameSite=Lax`;
+}
+
+type AgentSessionResponse = {
+  sessionId: string;
+  messagesUsed: number;
+  trialLimit: number;
+  limitReached: boolean;
+  trialComplete: boolean;
+  emailCaptured: boolean;
+  email: string | null;
+  reportSent: boolean;
+};
+
 function RunningBorder({
   children,
   className,
@@ -146,13 +201,16 @@ export function HeroChatPreview() {
   const inputRef = React.useRef<HTMLInputElement>(null);
   const historyRef = React.useRef<HTMLDivElement>(null);
   const timersRef = React.useRef<number[]>([]);
-  const { dictionary } = useI18n();
+  const { dictionary, locale } = useI18n();
   const heroCopy = dictionary.home.hero;
 
   const [chatState, setChatState] = React.useState<ChatState>("idle");
   const [inputValue, setInputValue] = React.useState("");
   const [messages, setMessages] = React.useState<ChatMessage[]>([]);
   const [isStreaming, setIsStreaming] = React.useState(false);
+  const [isSessionLoading, setIsSessionLoading] = React.useState(true);
+  const [sessionId, setSessionId] = React.useState<string | null>(null);
+  const [capturedEmail, setCapturedEmail] = React.useState<string | null>(null);
   const [emailError, setEmailError] = React.useState<string | null>(null);
 
   const typewriterText = useTypewriter(heroCopy.typewriterPrompts, chatState === "idle");
@@ -161,9 +219,12 @@ export function HeroChatPreview() {
     (message) => message.role === "user" && message.kind === "chat"
   ).length;
 
+  const remainingHintStart = Math.max(1, TRIAL_MESSAGE_LIMIT - 2);
   const messagesRemaining =
-    chatState === "active" && userMessageCount >= 3 && userMessageCount < 5
-      ? 5 - userMessageCount
+    chatState === "active" &&
+    userMessageCount >= remainingHintStart &&
+    userMessageCount < TRIAL_MESSAGE_LIMIT
+      ? TRIAL_MESSAGE_LIMIT - userMessageCount
       : null;
 
   const queueTimeout = React.useCallback((callback: () => void, delay: number) => {
@@ -223,6 +284,61 @@ export function HeroChatPreview() {
     };
   }, []);
 
+  React.useEffect(() => {
+    let isCancelled = false;
+
+    const bootstrapSession = async () => {
+      const nextSessionId = ensureSessionIdCookie();
+      setSessionId(nextSessionId);
+      const localTrialLocked = readCookie(TRIAL_LOCK_COOKIE) === "1";
+
+      if (localTrialLocked) {
+        setChatState("locked");
+      }
+
+      try {
+        const response = await fetch(
+          `/api/agent-chat?sessionId=${encodeURIComponent(nextSessionId)}&locale=${locale}`,
+          {
+            method: "GET",
+            cache: "no-store",
+          }
+        );
+
+        if (!response.ok) {
+          return;
+        }
+
+        const payload = (await response.json()) as AgentSessionResponse;
+        if (isCancelled) {
+          return;
+        }
+
+        setCapturedEmail(payload.email ?? null);
+
+        if (payload.limitReached) {
+          setTrialLockedCookie();
+          setChatState("locked");
+          return;
+        }
+
+        if (payload.messagesUsed > 0) {
+          setChatState("active");
+        }
+      } finally {
+        if (!isCancelled) {
+          setIsSessionLoading(false);
+        }
+      }
+    };
+
+    void bootstrapSession();
+
+    return () => {
+      isCancelled = true;
+    };
+  }, [locale]);
+
   const activateChat = React.useCallback(() => {
     setChatState((current) => (current === "idle" ? "active" : current));
   }, []);
@@ -235,9 +351,28 @@ export function HeroChatPreview() {
     }, 220);
   }, [activateChat]);
 
+  const startReportAndLockFlow = React.useCallback(
+    (email: string | null) => {
+      setCapturedEmail(email);
+      setTrialLockedCookie();
+      setChatState("report_sent");
+      queueTimeout(() => {
+        setChatState("locked");
+      }, REPORT_SENT_DURATION_MS);
+    },
+    [queueTimeout]
+  );
+
   const handleSendMessage = React.useCallback(() => {
     const nextValue = inputValue.trim();
-    if (!nextValue || isStreaming || chatState === "captured") {
+    if (
+      !nextValue ||
+      isStreaming ||
+      isSessionLoading ||
+      !sessionId ||
+      chatState === "locked" ||
+      chatState === "report_sent"
+    ) {
       return;
     }
 
@@ -258,18 +393,46 @@ export function HeroChatPreview() {
         },
       ]);
       setInputValue("");
+      setIsStreaming(true);
 
-      streamAssistantMessage(heroCopy.emailConfirmationPrompt, () => {
-        setChatState("captured");
-      });
+      void fetch("/api/agent-chat", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          action: "capture_email",
+          sessionId,
+          email: nextValue,
+        }),
+      })
+        .then(async (response) => {
+          const payload = (await response.json()) as Partial<AgentSessionResponse> & { error?: string };
+          if (!response.ok) {
+            throw new Error(payload.error ?? "Failed to save email.");
+          }
+
+          startReportAndLockFlow(typeof payload.email === "string" ? payload.email : nextValue);
+        })
+        .catch(() => {
+          setEmailError(heroCopy.emailError);
+        })
+        .finally(() => {
+          setIsStreaming(false);
+        });
 
       return;
     }
 
     activateChat();
     setEmailError(null);
-
     const nextUserCount = userMessageCount + 1;
+    const history = messages
+      .filter((message) => message.kind === "chat")
+      .map((message) => ({
+        role: message.role,
+        text: message.text,
+      }));
 
     setMessages((current) => [
       ...current,
@@ -281,28 +444,90 @@ export function HeroChatPreview() {
       },
     ]);
     setInputValue("");
+    setIsStreaming(true);
 
-    streamAssistantMessage(getMockAssistantResponse(nextValue, heroCopy.assistantResponses), () => {
-      if (nextUserCount < 5) {
-        return;
-      }
+    void fetch("/api/agent-chat", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        action: "chat",
+        sessionId,
+        locale,
+        message: nextValue,
+        history,
+      }),
+    })
+      .then(async (response) => {
+        const payload = (await response.json()) as {
+          reply?: string;
+          error?: string;
+          limitReached?: boolean;
+          needsEmail?: boolean;
+          email?: string | null;
+        };
 
-      setChatState("awaiting_email");
-      streamAssistantMessage(heroCopy.emailCapturePrompt);
-    });
-  }, [activateChat, chatState, heroCopy, inputValue, isStreaming, streamAssistantMessage, userMessageCount]);
+        if (!response.ok) {
+          if (response.status === 429) {
+            setIsStreaming(false);
+            setTrialLockedCookie();
+            setChatState("locked");
+            return;
+          }
+
+          throw new Error(payload.error ?? "Failed to process message.");
+        }
+
+        const reply =
+          typeof payload.reply === "string" && payload.reply.trim().length > 0
+            ? payload.reply.trim()
+            : getMockAssistantResponse(nextValue, heroCopy.assistantResponses);
+
+        streamAssistantMessage(reply, () => {
+          const hitLimit = payload.limitReached === true || nextUserCount >= TRIAL_MESSAGE_LIMIT;
+          if (!hitLimit) {
+            return;
+          }
+
+          startReportAndLockFlow(typeof payload.email === "string" ? payload.email : null);
+        });
+      })
+      .catch(() => {
+        setIsStreaming(false);
+        streamAssistantMessage(getMockAssistantResponse(nextValue, heroCopy.assistantResponses), () => {
+          if (nextUserCount >= TRIAL_MESSAGE_LIMIT) {
+            startReportAndLockFlow(null);
+          }
+        });
+      });
+  }, [
+    activateChat,
+    chatState,
+    heroCopy,
+    inputValue,
+    isSessionLoading,
+    isStreaming,
+    locale,
+    messages,
+    queueTimeout,
+    startReportAndLockFlow,
+    sessionId,
+    userMessageCount,
+    streamAssistantMessage,
+  ]);
 
   return (
     <section
       ref={sectionRef}
-      className="section-shell relative min-h-[100svh] bg-[color:var(--color-bg-dark)] pt-20 pb-14 sm:pt-22 sm:pb-18 md:pt-24 md:pb-20"
+      className="section-shell relative min-h-[100svh] bg-[color:var(--color-bg-dark)] pt-18 pb-12 sm:pt-22 sm:pb-18 md:pt-24 md:pb-20"
     >
       <ParticleNetwork className="opacity-80" count={94} interactive={false} maxDistance={190} />
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(124,58,237,0.18),transparent_34%)]" />
       <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,rgba(10,10,15,0.22),rgba(10,10,15,0.9))]" />
 
-      <div className="relative z-10 mx-auto max-w-7xl px-4 md:px-6">
-        <div className="mx-auto flex min-h-[calc(100svh-5.5rem)] max-w-4xl items-start md:min-h-[calc(100svh-6rem)]">
+      <div className="relative z-10 mx-auto max-w-7xl px-3 sm:px-4 md:px-6">
+        <div className="mx-auto flex min-h-[calc(100svh-5rem)] max-w-4xl items-start md:min-h-[calc(100svh-6rem)]">
           <motion.div
             className="w-full space-y-6 text-center sm:space-y-7 md:space-y-8"
             initial={{ opacity: 0, y: 28 }}
@@ -310,7 +535,7 @@ export function HeroChatPreview() {
             viewport={{ once: true, amount: 0.2 }}
             transition={{ duration: 0.7, ease: "easeOut" }}
           >
-            <div className="mx-auto flex max-w-3xl flex-wrap items-center justify-center gap-x-3 gap-y-2 text-xs text-[color:var(--color-text-secondary)] sm:text-sm">
+            <div className="mx-auto flex max-w-3xl flex-wrap items-center justify-center gap-x-2.5 gap-y-2 text-[11px] text-[color:var(--color-text-secondary)] sm:gap-x-3 sm:text-sm">
               <div className="flex -space-x-2">
                 {TRUST_IMAGES.map((image) => (
                   <Image
@@ -337,12 +562,12 @@ export function HeroChatPreview() {
             </div>
 
             <div>
-              <h1 className="text-4xl font-semibold leading-[0.96] tracking-tight text-[color:var(--color-text-primary)] sm:text-5xl md:text-7xl">
+              <h1 className="text-[2.2rem] font-semibold leading-[0.96] tracking-tight text-[color:var(--color-text-primary)] sm:text-5xl md:text-7xl">
                 {heroCopy.heading[0]}
                 <br />
                 {heroCopy.heading[1]}
               </h1>
-              <p className="mx-auto mt-4 max-w-2xl text-base leading-7 text-[color:var(--color-text-secondary)] sm:text-lg sm:leading-8 md:text-xl">
+              <p className="mx-auto mt-3.5 max-w-2xl text-[15px] leading-6 text-[color:var(--color-text-secondary)] sm:mt-4 sm:text-lg sm:leading-8 md:text-xl">
                 {heroCopy.body}
               </p>
             </div>
@@ -365,11 +590,18 @@ export function HeroChatPreview() {
                 radius="2.15rem"
                 duration="6.75s"
                 className="shadow-[0_36px_120px_rgba(124,58,237,0.14)]"
-                innerClassName="bg-[rgba(17,17,24,0.82)] p-3.5 backdrop-blur-2xl sm:p-4 md:p-6"
+                innerClassName="bg-[rgba(17,17,24,0.82)] p-3 backdrop-blur-2xl sm:p-4 md:p-6"
               >
-                <div className="min-h-[280px] text-left sm:min-h-[320px]">
-                  <AnimatePresence mode="wait">
-                    {chatState === "idle" ? (
+                <div
+                  className={cn(
+                    "min-h-[272px] text-left sm:min-h-[320px]",
+                    (chatState === "report_sent" || chatState === "locked") &&
+                      "flex items-center justify-center text-center"
+                  )}
+                >
+                  {chatState === "report_sent" || chatState === "locked" ? null : (
+                    <AnimatePresence mode="wait">
+                      {chatState === "idle" ? (
                       <motion.div
                         key="idle"
                         initial={{ opacity: 0 }}
@@ -389,7 +621,7 @@ export function HeroChatPreview() {
                           </div>
                         </RunningBorder>
                       </motion.div>
-                    ) : (
+                      ) : (
                       <motion.div
                         key="active"
                         initial={{ opacity: 0 }}
@@ -397,7 +629,7 @@ export function HeroChatPreview() {
                         exit={{ opacity: 0 }}
                         transition={{ duration: 0.3 }}
                         ref={historyRef}
-                        className="mb-5 max-h-[260px] space-y-3 overflow-y-auto pr-1 sm:max-h-[300px]"
+                        className="mb-4 max-h-[245px] space-y-2.5 overflow-y-auto pr-1 sm:mb-5 sm:max-h-[300px] sm:space-y-3"
                       >
                         {messages.length === 0 ? (
                           <div className="rounded-2xl border border-dashed border-white/10 bg-white/3 px-4 py-5 text-xs text-[color:var(--color-text-secondary)] sm:text-sm">
@@ -411,7 +643,7 @@ export function HeroChatPreview() {
                               key={message.id}
                               initial={{ opacity: 0, y: 10 }}
                               animate={{ opacity: 1, y: 0 }}
-                              className="ml-auto max-w-[88%] rounded-2xl rounded-br-md bg-[color:var(--color-primary)]/15 px-4 py-3 text-sm text-[color:var(--color-text-primary)] sm:max-w-[80%]"
+                              className="ml-auto max-w-[92%] rounded-2xl rounded-br-md bg-[color:var(--color-primary)]/15 px-3.5 py-2.5 text-[13px] leading-6 text-[color:var(--color-text-primary)] sm:max-w-[80%] sm:px-4 sm:py-3 sm:text-sm"
                             >
                               {message.text}
                             </motion.div>
@@ -420,7 +652,7 @@ export function HeroChatPreview() {
                               key={message.id}
                               initial={{ opacity: 0, y: 10 }}
                               animate={{ opacity: 1, y: 0 }}
-                              className="max-w-[88%] rounded-2xl rounded-bl-md bg-[color:var(--color-bg-elevated)] px-4 py-3 text-sm text-[color:var(--color-text-primary)] sm:max-w-[80%]"
+                              className="max-w-[92%] rounded-2xl rounded-bl-md bg-[color:var(--color-bg-elevated)] px-3.5 py-2.5 text-[13px] leading-6 text-[color:var(--color-text-primary)] sm:max-w-[80%] sm:px-4 sm:py-3 sm:text-sm"
                             >
                               <span className="mr-2 inline-flex rounded bg-[color:var(--color-primary)]/20 px-1.5 py-0.5 font-mono text-xs text-[color:var(--color-text-accent)]">
                                 EZ
@@ -430,13 +662,43 @@ export function HeroChatPreview() {
                           )
                         )}
                       </motion.div>
-                    )}
-                  </AnimatePresence>
+                      )}
+                    </AnimatePresence>
+                  )}
 
-                  {chatState === "captured" ? (
-                    <div className="flex items-center justify-center gap-2 rounded-2xl border border-emerald-500/25 bg-emerald-500/10 px-4 py-4 text-xs font-medium text-emerald-200 sm:text-sm">
-                      <CheckCheck className="h-4 w-4" />
-                      {heroCopy.captured}
+                  {chatState === "report_sent" ? (
+                    <div className="w-full max-w-xl space-y-3 rounded-2xl border border-emerald-500/25 bg-emerald-500/10 px-4.5 py-4.5 text-emerald-200 sm:px-6 sm:py-6">
+                      <div className="flex items-center justify-center gap-2 text-sm font-semibold sm:text-base">
+                        <CheckCircle2 className="h-4 w-4" />
+                        {heroCopy.captured}
+                      </div>
+                      <p className="text-center text-[13px] leading-6 text-emerald-100 sm:text-sm">
+                        {heroCopy.reportSentWarmMessage}
+                      </p>
+                      <p className="text-center text-[13px] leading-6 text-emerald-100 sm:text-sm">
+                        {heroCopy.reportSentEta}
+                      </p>
+                      <p className="break-words text-center text-[13px] leading-6 text-emerald-100 sm:text-sm">
+                        {heroCopy.reportSentOnEmail} {capturedEmail ?? heroCopy.placeholderEmail}
+                      </p>
+                      <p className="text-center text-[13px] leading-6 text-emerald-100 sm:text-sm">
+                        {heroCopy.reportSentSpamHint}
+                      </p>
+                    </div>
+                  ) : chatState === "locked" ? (
+                    <div className="w-full max-w-xl space-y-4 rounded-2xl border border-[color:var(--color-primary)]/30 bg-[rgba(124,58,237,0.09)] px-4.5 py-4.5 text-center sm:px-6 sm:py-6">
+                      <p className="text-center text-sm font-semibold text-[color:var(--color-text-primary)] sm:text-base">
+                        {heroCopy.trialUsedTitle}
+                      </p>
+                      <p className="text-center text-[13px] leading-6 text-[color:var(--color-text-secondary)] sm:text-sm">
+                        {heroCopy.trialUsedBody}
+                      </p>
+                      <LocalizedLink
+                        href="/contact"
+                        className="inline-flex min-h-12 w-full items-center justify-center rounded-full border border-[color:var(--color-primary)] bg-[color:var(--color-primary)] px-6 py-3 text-sm font-semibold text-white shadow-[0_12px_36px_rgba(124,58,237,0.32)] transition hover:border-[color:var(--color-primary-light)] hover:bg-[color:var(--color-primary-light)] sm:w-auto"
+                      >
+                        {heroCopy.trialUsedCta}
+                      </LocalizedLink>
                     </div>
                   ) : (
                     <>
@@ -461,7 +723,7 @@ export function HeroChatPreview() {
                               ? heroCopy.placeholderEmail
                               : heroCopy.placeholderChat
                           }
-                          disabled={isStreaming}
+                          disabled={isStreaming || isSessionLoading}
                           className="min-h-14 rounded-2xl border border-white/10 bg-[rgba(10,10,15,0.84)] px-4 text-base text-[color:var(--color-text-primary)] placeholder:text-[color:var(--color-text-secondary)]/80 outline-none transition focus:border-[color:var(--color-primary)]/60"
                         />
 
@@ -469,7 +731,7 @@ export function HeroChatPreview() {
                           type="submit"
                           size="md"
                           className="min-h-14 w-full min-w-[132px] gap-2 sm:w-auto"
-                          disabled={isStreaming || inputValue.trim().length === 0}
+                          disabled={isStreaming || isSessionLoading || inputValue.trim().length === 0}
                         >
                           {chatState === "awaiting_email" ? "Send" : "Send"}
                           <ArrowRight className="h-4 w-4" />
@@ -500,121 +762,12 @@ export function HeroChatPreview() {
       <button
         type="button"
         onClick={openChatWindow}
-        className="fixed bottom-5 right-4 z-[120] inline-flex items-center gap-2 rounded-full border border-[color:var(--color-text-accent)]/45 bg-[color:var(--color-primary)] px-4 py-3 text-sm font-semibold text-white shadow-[0_16px_36px_rgba(124,58,237,0.42)] transition hover:bg-[color:var(--color-text-accent)] hover:text-[color:var(--color-bg-dark)] sm:bottom-6 sm:right-6"
+        className="fixed right-3 bottom-[max(0.75rem,env(safe-area-inset-bottom))] z-[120] inline-flex min-h-11 items-center gap-2 rounded-full border border-[color:var(--color-text-accent)]/45 bg-[color:var(--color-primary)] px-3.5 py-2.5 text-[13px] font-semibold text-white shadow-[0_16px_36px_rgba(124,58,237,0.42)] transition hover:bg-[color:var(--color-text-accent)] hover:text-[color:var(--color-bg-dark)] sm:bottom-6 sm:right-6 sm:min-h-0 sm:px-4 sm:py-3 sm:text-sm"
         aria-label="Open AI chat"
       >
         <MessageCircle className="h-4 w-4" />
         Ask AI
       </button>
-
-      <style jsx global>{`
-        .hero-chat-preview__scrollbar {
-          -ms-overflow-style: none;
-          scrollbar-width: none;
-        }
-
-        .hero-chat-preview__scrollbar::-webkit-scrollbar {
-          display: none;
-        }
-
-        .hero-chat-preview__pill-viewport {
-          mask-image: linear-gradient(
-            to right,
-            rgba(0, 0, 0, 1) 0%,
-            rgba(0, 0, 0, 1) 82%,
-            rgba(0, 0, 0, 0.35) 94%,
-            rgba(0, 0, 0, 0) 100%
-          );
-        }
-
-        @media (min-width: 640px) {
-          .hero-chat-preview__pill-viewport {
-            mask-image: none;
-          }
-        }
-
-        .hero-chat-preview__cursor {
-          display: inline-block;
-          height: 1.15em;
-          width: 0.65ch;
-          border-right: 2px solid rgba(124, 58, 237, 0.95);
-          animation: hero-chat-preview-cursor 1s step-end infinite;
-        }
-
-        .hero-chat-preview__running-border {
-          position: relative;
-          overflow: hidden;
-          isolation: isolate;
-          border-radius: var(--hero-border-radius, 1.5rem);
-          padding: 1px;
-          background:
-            linear-gradient(180deg, rgba(167, 139, 250, 0.16), rgba(124, 58, 237, 0.06)),
-            rgba(124, 58, 237, 0.08);
-          box-shadow:
-            inset 0 0 0 1px rgba(196, 181, 253, 0.1),
-            0 0 0 1px rgba(124, 58, 237, 0.08);
-        }
-
-        .hero-chat-preview__running-border::before {
-          content: "";
-          position: absolute;
-          inset: -128%;
-          background: conic-gradient(
-            from 8deg,
-            transparent 0deg,
-            transparent 36deg,
-            rgba(124, 58, 237, 0.28) 86deg,
-            rgba(167, 139, 250, 0.9) 142deg,
-            rgba(124, 58, 237, 0.36) 206deg,
-            transparent 272deg,
-            transparent 360deg
-          );
-          filter: blur(10px);
-          opacity: 0.95;
-          animation: hero-chat-preview-spin var(--hero-spin-duration, 6.75s) linear infinite;
-        }
-
-        .hero-chat-preview__running-border::after {
-          content: "";
-          position: absolute;
-          inset: 10% 8%;
-          z-index: 0;
-          border-radius: calc(var(--hero-border-radius, 1.5rem) * 0.92);
-          background:
-            radial-gradient(circle at 50% 12%, rgba(167, 139, 250, 0.22), transparent 34%),
-            radial-gradient(circle at 50% 88%, rgba(124, 58, 237, 0.14), transparent 30%);
-          filter: blur(24px);
-          opacity: 0.88;
-        }
-
-        .hero-chat-preview__running-border-inner {
-          position: relative;
-          z-index: 1;
-          height: 100%;
-          border-radius: calc(var(--hero-border-radius, 1.5rem) - 1px);
-          box-shadow:
-            inset 0 1px 0 rgba(255, 255, 255, 0.04),
-            inset 0 -24px 50px rgba(124, 58, 237, 0.05);
-        }
-
-        @keyframes hero-chat-preview-spin {
-          to {
-            transform: rotate(1turn);
-          }
-        }
-
-        @keyframes hero-chat-preview-cursor {
-          0%,
-          50% {
-            border-color: rgba(124, 58, 237, 0.95);
-          }
-
-          51%,
-          100% {
-            border-color: transparent;
-          }
-        }
-      `}</style>
     </section>
   );
 }

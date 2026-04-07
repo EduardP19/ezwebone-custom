@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Suspense } from "react";
 import { Inter, JetBrains_Mono, Space_Grotesk } from "next/font/google";
 import "./globals.css";
+import Head from 'next/head';
 
 import { LocaleProvider } from "@/components/i18n/LocaleProvider";
 import { Navbar } from "@/components/layout/Navbar";
@@ -83,44 +84,49 @@ export default async function RootLayout({
   const dictionary = getDictionary(locale);
 
   return (
-    <html
-      lang={locale}
-      className={`${inter.variable} ${spaceGrotesk.variable} ${jetbrainsMono.variable} h-full antialiased`}
-    >
-      <body className="min-h-full flex flex-col">
-        <LocaleProvider locale={locale} dictionary={dictionary}>
-          <Suspense fallback={null}>
-            <TrackingProvider />
-          </Suspense>
-          <JsonLd
-            id="organization-schema"
-            data={{
-              "@context": "https://schema.org",
-              "@type": "ProfessionalService",
-              name: "EZWebOne",
-              url: "https://ezwebone.co.uk",
-              logo: absoluteUrl(BRAND_LOGO_MARK_SRC),
-              description: dictionary.metadata.siteDescription,
-              address: {
-                "@type": "PostalAddress",
-                addressCountry: "United Kingdom",
-              },
-              areaServed: "United Kingdom",
-              knowsAbout: [
-                "Website design",
-                "Business automations",
-                "AI agents",
-                "SEO",
-                "Lead generation",
-              ],
-              sameAs: ["https://resevia.co.uk"],
-            }}
-          />
-          <Navbar />
-          <main className="flex-grow pt-20">{children}</main>
-          <Footer />
-        </LocaleProvider>
-      </body>
-    </html>
+    <>
+      <Head>
+        <link rel="icon" href={BRAND_LOGO_MARK_SRC} type="image/png" />
+      </Head>
+      <html
+        lang={locale}
+        className={`${inter.variable} ${spaceGrotesk.variable} ${jetbrainsMono.variable} h-full antialiased`}
+      >
+        <body className="min-h-full flex flex-col">
+          <LocaleProvider locale={locale} dictionary={dictionary}>
+            <Suspense fallback={null}>
+              <TrackingProvider />
+            </Suspense>
+            <JsonLd
+              id="organization-schema"
+              data={{
+                "@context": "https://schema.org",
+                "@type": "ProfessionalService",
+                name: "EZWebOne",
+                url: "https://ezwebone.co.uk",
+                logo: absoluteUrl(BRAND_LOGO_MARK_SRC),
+                description: dictionary.metadata.siteDescription,
+                address: {
+                  "@type": "PostalAddress",
+                  addressCountry: "United Kingdom",
+                },
+                areaServed: "United Kingdom",
+                knowsAbout: [
+                  "Website design",
+                  "Business automations",
+                  "AI agents",
+                  "SEO",
+                  "Lead generation",
+                ],
+                sameAs: ["https://resevia.co.uk"],
+              }}
+            />
+            <Navbar />
+            <main className="flex-grow pt-20">{children}</main>
+            <Footer />
+          </LocaleProvider>
+        </body>
+      </html>
+    </>
   );
 }

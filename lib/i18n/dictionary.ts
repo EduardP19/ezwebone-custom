@@ -95,6 +95,15 @@ const dictionaries = {
           plural: "messages remaining",
         },
         captured: "Recommendation on its way",
+        reportSentWarmMessage:
+          "Thank you, we've got enough to build your recommendation and we'll send the report shortly.",
+        reportSentEta: "It can take 1-2 minutes for your recommendation to arrive.",
+        reportSentOnEmail: "Report sent to",
+        reportSentSpamHint: "If you don't see it soon, please check your spam or junk folder.",
+        trialUsedTitle: "Your tasting messages are used.",
+        trialUsedBody:
+          "If you want deeper recommendations and a custom plan, book a strategy call and we will walk through your business in detail.",
+        trialUsedCta: "Book a call",
         placeholderChat: "Tell us about your business...",
         placeholderEmail: "Your email address...",
         assistantResponses: {
@@ -452,6 +461,15 @@ const dictionaries = {
           plural: "mesaje ramase",
         },
         captured: "Recomandarea este pe drum",
+        reportSentWarmMessage:
+          "Multumim, avem suficiente detalii pentru recomandare si iti trimitem raportul in curand.",
+        reportSentEta: "Poate dura 1-2 minute pana cand recomandarea ajunge pe email.",
+        reportSentOnEmail: "Raport trimis pe",
+        reportSentSpamHint: "Daca nu il vezi curand, verifica si folderul spam sau junk.",
+        trialUsedTitle: "Ai folosit mesajele de test disponibile.",
+        trialUsedBody:
+          "Daca vrei recomandari mai detaliate si un plan personalizat, programeaza un apel si discutam punctual despre afacerea ta.",
+        trialUsedCta: "Programeaza un apel",
         placeholderChat: "Spune-ne cate ceva despre afacerea ta...",
         placeholderEmail: "Adresa ta de email...",
         assistantResponses: {
