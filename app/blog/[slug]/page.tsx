@@ -7,6 +7,9 @@ import { ChevronLeft } from "lucide-react";
 import Image from "next/image";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { connection } from "next/server";
+import { localizePath } from "@/lib/i18n/config";
+import { getDictionary } from "@/lib/i18n/dictionary";
+import { getRequestLocale } from "@/lib/i18n/request";
 import {
   estimateReadTime,
   formatPostDate,
@@ -19,14 +22,16 @@ import { createMetadata } from "@/lib/seo";
 const FALLBACK_IMAGE = "/blog/ai.png";
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
+  const locale = await getRequestLocale();
   const { slug } = await params;
-  const post = await getPublishedBlogPostBySlug(slug);
+  const post = await getPublishedBlogPostBySlug(slug, locale);
 
   if (!post) {
     return createMetadata({
-      title: "Journal",
-      description: "Insights from EZWebOne on positioning, SEO, paid growth, websites, and automation.",
+      title: getDictionary(locale).metadata.blog.title,
+      description: getDictionary(locale).metadata.blog.description,
       path: "/blog",
+      locale,
     });
   }
 
@@ -38,13 +43,16 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     path: `/blog/${post.slug}`,
     image: post.cover_image || FALLBACK_IMAGE,
     type: "article",
+    locale,
   });
 }
 
 export default async function BlogPostPage({ params }: { params: Promise<{ slug: string }> }) {
   await connection();
+  const locale = await getRequestLocale();
+  const dictionary = getDictionary(locale);
   const { slug } = await params;
-  const post = await getPublishedBlogPostBySlug(slug);
+  const post = await getPublishedBlogPostBySlug(slug, locale);
 
   if (!post) {
     notFound();
@@ -83,22 +91,26 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
         <div className="absolute inset-0 bg-gradient-to-b from-brand-warm/70 via-white to-white" />
         <div className="container mx-auto px-4 md:px-6 py-10 md:py-14 relative">
           <Link
-            href="/blog"
+            href={localizePath(locale, "/blog")}
             className="inline-flex items-center gap-2 text-brand-gray hover:text-brand-black transition-colors mb-8 group"
           >
             <ChevronLeft size={16} className="group-hover:-translate-x-1 transition-transform" />
-            <span className="text-xs font-bold uppercase tracking-widest">Back to Blog</span>
+            <span className="text-xs font-bold uppercase tracking-widest">
+              {dictionary.common.backToBlog}
+            </span>
           </Link>
 
           <div className="max-w-4xl">
-            <Badge className="mb-4">Journal Entry</Badge>
+            <Badge className="mb-4">{dictionary.pages.blogPost.journalEntry}</Badge>
             <h1 className="text-3xl md:text-5xl font-display font-bold tracking-tight text-brand-black mb-5 leading-tight">
               {post.title}
             </h1>
             <p className="text-sm md:text-base text-brand-gray flex flex-wrap items-center gap-x-3 gap-y-1 uppercase tracking-[0.15em] font-bold">
-              <span>{formatPostDate(post.created_at)}</span>
+              <span>{formatPostDate(post.created_at, locale)}</span>
               <span className="w-1 h-1 rounded-full bg-brand-gray/50" />
-              <span>{readTime} min read</span>
+              <span>
+                {readTime} {dictionary.common.minRead}
+              </span>
             </p>
             {post.excerpt && (
               <p className="mt-5 text-lg md:text-xl text-brand-gray leading-relaxed max-w-3xl">{post.excerpt}</p>
@@ -133,7 +145,9 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
                   </p>
                 ))}
                 {paragraphs.length === 0 && (
-                  <p className="text-brand-gray text-lg leading-8">This post has no content yet.</p>
+                  <p className="text-brand-gray text-lg leading-8">
+                    {dictionary.pages.blogPost.noContent}
+                  </p>
                 )}
               </div>
             )}
@@ -141,28 +155,42 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
 
           <aside className="lg:pl-2">
             <div className="lg:sticky lg:top-28 rounded-2xl border border-brand-border/80 bg-brand-warm/50 p-5 md:p-6">
-              <h2 className="text-xs font-bold uppercase tracking-[0.16em] text-brand-black mb-4">On This Page</h2>
+              <h2 className="text-xs font-bold uppercase tracking-[0.16em] text-brand-black mb-4">
+                {dictionary.pages.blogPost.onThisPage}
+              </h2>
               <div className="space-y-3 text-sm">
                 <div>
-                  <p className="text-brand-gray uppercase text-[10px] tracking-[0.16em] font-bold mb-1">Published</p>
-                  <p className="text-brand-black font-semibold">{formatPostDate(post.created_at)}</p>
+                  <p className="text-brand-gray uppercase text-[10px] tracking-[0.16em] font-bold mb-1">
+                    {dictionary.pages.blogPost.published}
+                  </p>
+                  <p className="text-brand-black font-semibold">
+                    {formatPostDate(post.created_at, locale)}
+                  </p>
                 </div>
                 <div>
-                  <p className="text-brand-gray uppercase text-[10px] tracking-[0.16em] font-bold mb-1">Reading Time</p>
-                  <p className="text-brand-black font-semibold">{readTime} minute read</p>
+                  <p className="text-brand-gray uppercase text-[10px] tracking-[0.16em] font-bold mb-1">
+                    {dictionary.pages.blogPost.readingTime}
+                  </p>
+                  <p className="text-brand-black font-semibold">
+                    {readTime} {dictionary.pages.blogPost.minuteRead}
+                  </p>
                 </div>
                 <div>
-                  <p className="text-brand-gray uppercase text-[10px] tracking-[0.16em] font-bold mb-1">Topic</p>
-                  <p className="text-brand-black font-semibold">Growth &amp; Digital Strategy</p>
+                  <p className="text-brand-gray uppercase text-[10px] tracking-[0.16em] font-bold mb-1">
+                    {dictionary.pages.blogPost.topic}
+                  </p>
+                  <p className="text-brand-black font-semibold">
+                    {dictionary.common.growthAndDigitalStrategy}
+                  </p>
                 </div>
               </div>
               <div className="mt-6 pt-5 border-t border-brand-border">
-                <Link href="/contact" className="block">
+                <Link href={localizePath(locale, "/contact")} className="block">
                   <Button
                     variant="ghost"
                     className="w-full text-xs font-black uppercase tracking-widest border border-brand-border py-6 hover:bg-brand-black hover:text-white transition-all"
                   >
-                    Book a Strategy Call
+                    {dictionary.common.bookStrategyCall}
                   </Button>
                 </Link>
               </div>
@@ -174,13 +202,13 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
       <div className="container mx-auto px-4 md:px-6 pb-20 md:pb-24">
         <div className="rounded-3xl border border-brand-border/80 bg-gradient-to-r from-brand-warm to-white p-8 md:p-10 text-center">
           <h2 className="text-2xl md:text-3xl font-display font-bold text-brand-black mb-4">
-            Ready to turn ideas into booked calls?
+            {dictionary.common.readyToTurnIdeas}
           </h2>
           <p className="text-brand-gray mb-6 max-w-2xl mx-auto leading-relaxed">
-            We design and build conversion-focused websites that help service businesses win more work.
+            {dictionary.common.turnIdeasBody}
           </p>
-          <Link href="/contact">
-            <Button size="lg">Book a Free Call Today</Button>
+          <Link href={localizePath(locale, "/contact")}>
+            <Button size="lg">{dictionary.common.bookFreeCallToday}</Button>
           </Link>
         </div>
       </div>

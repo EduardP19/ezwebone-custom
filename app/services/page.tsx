@@ -3,25 +3,32 @@ import Link from "next/link";
 import { Button } from "@/components/ui/Button";
 import { FinalCTA } from "@/components/sections/FinalCTA";
 import { JsonLd } from "@/components/seo/JsonLd";
+import { localizePath } from "@/lib/i18n/config";
+import { getDictionary } from "@/lib/i18n/dictionary";
+import { getRequestLocale } from "@/lib/i18n/request";
 import { createMetadata } from "@/lib/seo";
-import { SERVICES } from "@/lib/site-content";
+import { getServices } from "@/lib/site-content";
 import { ServiceCard } from "@/components/ui/ServiceCard";
 import { BusinessJourney } from "@/components/sections/BusinessJourney";
 
-export const metadata: Metadata = createMetadata({
-  title: "Services | Websites, Automations, AI Agents, SEO and Lead Gen",
-  description:
-    "Explore EZWebOne services: custom websites, automations, AI agents, marketing, SEO, and lead generation systems for small businesses.",
-  path: "/services",
-  keywords: [
-    "website agency uk",
-    "business automation agency",
-    "ai agents for salons and small business",
-    "seo and lead generation services",
-  ],
-});
+export async function generateMetadata(): Promise<Metadata> {
+  const locale = await getRequestLocale();
+  const copy = getDictionary(locale).metadata.services;
 
-export default function ServicesPage() {
+  return createMetadata({
+    title: copy.title,
+    description: copy.description,
+    path: "/services",
+    keywords: copy.keywords,
+    locale,
+  });
+}
+
+export default async function ServicesPage() {
+  const locale = await getRequestLocale();
+  const dictionary = getDictionary(locale);
+  const services = getServices(locale);
+
   return (
     <div className="bg-[color:var(--color-bg-dark)]">
       <JsonLd
@@ -29,7 +36,7 @@ export default function ServicesPage() {
         data={{
           "@context": "https://schema.org",
           "@type": "ItemList",
-          itemListElement: SERVICES.map((service, index) => ({
+          itemListElement: services.map((service, index) => ({
             "@type": "ListItem",
             position: index + 1,
             item: {
@@ -50,21 +57,23 @@ export default function ServicesPage() {
         <div className="relative mx-auto max-w-7xl px-4 md:px-6">
           <div className="grid grid-cols-1 gap-12 lg:grid-cols-[minmax(0,1fr)_420px]">
             <div className="max-w-3xl">
-              <p className="mono-label text-xs text-[color:var(--color-text-accent)]">Services</p>
+              <p className="mono-label text-xs text-[color:var(--color-text-accent)]">
+                {dictionary.pages.services.badge}
+              </p>
               <h1 className="mt-4 text-5xl font-semibold tracking-tight text-[color:var(--color-text-primary)] md:text-7xl">
-                Websites, automations, AI agents, and the systems that make them useful.
+                {dictionary.pages.services.title}
               </h1>
               <p className="mt-6 text-lg leading-8 text-[color:var(--color-text-secondary)]">
-                We build for small businesses that want more leads, less admin, and digital systems that keep working after launch.
+                {dictionary.pages.services.body}
               </p>
 
               <div className="mt-10 flex flex-col gap-4 sm:flex-row">
-                <Link href="/contact">
-                  <Button size="lg">Book a Free Call</Button>
+                <Link href={localizePath(locale, "/contact")}>
+                  <Button size="lg">{dictionary.common.bookFreeCall}</Button>
                 </Link>
-                <Link href="/portfolio">
+                <Link href={localizePath(locale, "/portfolio")}>
                   <Button size="lg" variant="secondary">
-                    See Projects
+                    {dictionary.common.seeProjects}
                   </Button>
                 </Link>
               </div>
@@ -74,7 +83,7 @@ export default function ServicesPage() {
           </div>
 
           <div className="mt-16 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-            {SERVICES.map((service) => (
+            {services.map((service) => (
               <ServiceCard
                 key={service.title}
                 title={service.title}

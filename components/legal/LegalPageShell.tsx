@@ -5,6 +5,7 @@ interface LegalPageShellProps {
   title: string;
   intro: string;
   updatedOn: string;
+  updatedLabel?: string;
   children: React.ReactNode;
 }
 
@@ -18,6 +19,7 @@ export function LegalPageShell({
   title,
   intro,
   updatedOn,
+  updatedLabel = "Last updated",
   children,
 }: LegalPageShellProps) {
   return (
@@ -25,7 +27,7 @@ export function LegalPageShell({
       <div className="container mx-auto max-w-4xl px-4 md:px-6">
         <Badge className="mb-5">{badge}</Badge>
         <div className="mb-6 flex flex-wrap items-center gap-3 text-xs font-semibold uppercase tracking-[0.18em] text-brand-gray">
-          <span>Last updated</span>
+          <span>{updatedLabel}</span>
           <span className="h-1 w-1 rounded-full bg-brand-gray/40" />
           <span>{updatedOn}</span>
         </div>

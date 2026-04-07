@@ -2,9 +2,13 @@
 
 import { motion } from "framer-motion";
 import { ChevronDown } from "lucide-react";
-import { BUSINESS_STAGES } from "@/lib/site-content";
+import { useI18n } from "@/components/i18n/LocaleProvider";
+import { getBusinessStages } from "@/lib/site-content";
 
 export function BusinessJourney() {
+  const { locale } = useI18n();
+  const stages = getBusinessStages(locale);
+
   return (
     <div className="surface-elevated rounded-[2rem] border border-white/10 p-5 md:p-6">
       <div className="relative">
@@ -17,7 +21,7 @@ export function BusinessJourney() {
         />
 
         <div className="space-y-4">
-          {BUSINESS_STAGES.map((stage, index) => (
+          {stages.map((stage, index) => (
             <motion.div
               key={stage.title}
               whileHover={{ x: 4 }}
@@ -38,7 +42,7 @@ export function BusinessJourney() {
                 {stage.tagline}
               </p>
 
-              {index < BUSINESS_STAGES.length - 1 && (
+              {index < stages.length - 1 && (
                 <ChevronDown
                   size={18}
                   className="absolute bottom-[-1.15rem] left-3 z-10 rounded-full bg-[color:var(--color-bg-dark)] text-[color:var(--color-text-accent)]"

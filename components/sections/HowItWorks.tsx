@@ -2,11 +2,14 @@
 
 import * as React from "react";
 import { motion } from "framer-motion";
-import { PROCESS_STEPS } from "@/lib/site-content";
+import { useI18n } from "@/components/i18n/LocaleProvider";
+import { getProcessSteps } from "@/lib/site-content";
 
 export function HowItWorks() {
   const ref = React.useRef<HTMLElement>(null);
   const [isVisible, setIsVisible] = React.useState(false);
+  const { locale, dictionary } = useI18n();
+  const processSteps = getProcessSteps(locale);
 
   React.useEffect(() => {
     const element = ref.current;
@@ -30,9 +33,11 @@ export function HowItWorks() {
     <section ref={ref} className="section-shell bg-[color:var(--color-bg-dark)] py-24 md:py-32">
       <div className="relative mx-auto max-w-7xl px-4 md:px-6">
         <div className="max-w-3xl">
-          <p className="mono-label text-xs text-[color:var(--color-text-accent)]">Process</p>
+          <p className="mono-label text-xs text-[color:var(--color-text-accent)]">
+            {dictionary.home.process.badge}
+          </p>
           <h2 className="mt-4 text-4xl font-semibold tracking-tight text-[color:var(--color-text-primary)] md:text-6xl">
-            From Idea to Live in 5 Days
+            {dictionary.home.process.title}
           </h2>
         </div>
 
@@ -49,7 +54,7 @@ export function HowItWorks() {
           />
 
           <div className="grid gap-8 md:grid-cols-4">
-            {PROCESS_STEPS.map((step, index) => (
+            {processSteps.map((step, index) => (
               <motion.div
                 key={step.step}
                 initial={{ opacity: 0, y: 24 }}

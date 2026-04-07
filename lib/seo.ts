@@ -1,4 +1,9 @@
 import type { Metadata } from "next";
+import {
+  getLocalizedUrlMap,
+  localizePath,
+  type Locale,
+} from "@/lib/i18n/config";
 
 export const siteConfig = {
   name: "EZWebOne",
@@ -17,9 +22,10 @@ type MetadataOptions = {
   title: string;
   description: string;
   path?: string;
-  keywords?: string[];
+  keywords?: readonly string[];
   image?: string;
   type?: "website" | "article";
+  locale?: Locale;
 };
 
 export function createMetadata({
@@ -29,23 +35,31 @@ export function createMetadata({
   keywords = [],
   image = siteConfig.ogImage,
   type = "website",
+  locale = "en",
 }: MetadataOptions): Metadata {
-  const url = absoluteUrl(path);
+  const localizedPath = localizePath(locale, path);
+  const url = absoluteUrl(localizedPath);
   const imageUrl = absoluteUrl(image);
+  const localizedUrls = getLocalizedUrlMap(path);
 
   return {
     title,
     description,
-    keywords,
+    keywords: [...keywords],
     alternates: {
       canonical: url,
+      languages: {
+        "en-GB": absoluteUrl(localizedUrls.en),
+        "ro-RO": absoluteUrl(localizedUrls.ro),
+        "x-default": absoluteUrl(localizedUrls.en),
+      },
     },
     openGraph: {
       title,
       description,
       url,
       siteName: siteConfig.name,
-      locale: "en_GB",
+      locale: locale === "ro" ? "ro_RO" : "en_GB",
       type,
       images: [
         {

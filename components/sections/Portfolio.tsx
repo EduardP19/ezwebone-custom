@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
+import { useI18n } from "@/components/i18n/LocaleProvider";
 import type { Project } from "@/lib/projects";
 import { ProjectCard } from "@/components/ui/ProjectCard";
 
@@ -9,16 +10,20 @@ interface PortfolioProps {
 }
 
 export function Portfolio({ projects }: PortfolioProps) {
+  const { dictionary } = useI18n();
+
   return (
     <section id="projects" className="section-shell bg-[color:var(--color-bg-dark)] py-24 md:py-32">
       <div className="relative mx-auto max-w-7xl px-4 md:px-6">
         <div className="max-w-3xl">
-          <p className="mono-label text-xs text-[color:var(--color-text-accent)]">Projects</p>
+          <p className="mono-label text-xs text-[color:var(--color-text-accent)]">
+            {dictionary.home.portfolio.badge}
+          </p>
           <h2 className="mt-4 text-4xl font-semibold tracking-tight text-[color:var(--color-text-primary)] md:text-6xl">
-            Work That Speaks for Itself
+            {dictionary.home.portfolio.title}
           </h2>
           <p className="mt-5 text-lg leading-8 text-[color:var(--color-text-secondary)]">
-            Real businesses. Real results. Every project is built to perform.
+            {dictionary.home.portfolio.body}
           </p>
         </div>
 

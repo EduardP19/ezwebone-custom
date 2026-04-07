@@ -4,42 +4,30 @@ import { Button } from "@/components/ui/Button";
 import { FinalCTA } from "@/components/sections/FinalCTA";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { BRAND_LOGO_MARK_SRC } from "@/lib/brand";
+import { localizePath } from "@/lib/i18n/config";
+import { getDictionary } from "@/lib/i18n/dictionary";
+import { getRequestLocale } from "@/lib/i18n/request";
+import { getStats } from "@/lib/site-content";
 import { absoluteUrl, createMetadata } from "@/lib/seo";
 
-const STATS = [
-  { label: "Years in digital", value: "5" },
-  { label: "Business partners", value: "115+" },
-  { label: "Websites launched", value: "154" },
-  { label: "Countries served", value: "6" },
-];
+export async function generateMetadata(): Promise<Metadata> {
+  const locale = await getRequestLocale();
+  const copy = getDictionary(locale).metadata.about;
 
-const PRINCIPLES = [
-  {
-    title: "Specific beats generic",
-    description:
-      "We do not write fluffy agency copy or hide weak offers behind nice visuals. Everything has to be clear, direct, and useful to the buyer.",
-  },
-  {
-    title: "Automation should remove work",
-    description:
-      "If a system adds friction, it is not automation. We build flows that save time, answer faster, and keep leads moving without more admin.",
-  },
-  {
-    title: "AI should feel practical",
-    description:
-      "The goal is not to say your business uses AI. The goal is to use it where it makes money or saves time - calls, follow-up, booking, and lead qualification.",
-  },
-];
+  return createMetadata({
+    title: copy.title,
+    description: copy.description,
+    path: "/about",
+    keywords: copy.keywords,
+    locale,
+  });
+}
 
-export const metadata: Metadata = createMetadata({
-  title: "About EZWebOne",
-  description:
-    "Learn about EZWebOne, the UK digital agency building websites, automations, AI agents, and growth systems for small businesses.",
-  path: "/about",
-  keywords: ["about ezwebone", "uk digital agency", "web automation ai agency uk"],
-});
+export default async function AboutPage() {
+  const locale = await getRequestLocale();
+  const dictionary = getDictionary(locale);
+  const stats = getStats(locale);
 
-export default function AboutPage() {
   return (
     <div className="bg-[color:var(--color-bg-dark)]">
       <JsonLd
@@ -49,15 +37,12 @@ export default function AboutPage() {
           "@type": "ProfessionalService",
           name: "EZWebOne",
           image: absoluteUrl(BRAND_LOGO_MARK_SRC),
-          "@id": "https://ezwebone.co.uk/about",
-          url: "https://ezwebone.co.uk/about",
-          description:
-            "UK digital agency building websites, automations, AI agents, and lead generation systems for small businesses.",
+          "@id": absoluteUrl(localizePath(locale, "/about")),
+          url: absoluteUrl(localizePath(locale, "/about")),
+          description: dictionary.metadata.about.description,
           address: {
             "@type": "PostalAddress",
-            addressLocality: "Hemel Hempstead",
-            addressRegion: "Hertfordshire",
-            addressCountry: "GB",
+            addressCountry: "United Kingdom",
           },
           founder: {
             "@type": "Person",
@@ -71,33 +56,31 @@ export default function AboutPage() {
         <div className="relative mx-auto max-w-7xl px-4 md:px-6">
           <div className="grid grid-cols-1 gap-12 lg:grid-cols-[minmax(0,1fr)_420px]">
             <div className="max-w-3xl">
-              <p className="mono-label text-xs text-[color:var(--color-text-accent)]">About EZWebOne</p>
+              <p className="mono-label text-xs text-[color:var(--color-text-accent)]">
+                {dictionary.pages.about.badge}
+              </p>
               <h1 className="mt-4 text-5xl font-semibold tracking-tight text-[color:var(--color-text-primary)] md:text-7xl">
-                Built for small businesses that need real systems, not more noise.
+                {dictionary.pages.about.title}
               </h1>
               <div className="mt-8 space-y-6 text-lg leading-8 text-[color:var(--color-text-secondary)]">
-                <p>
-                  EZWebOne started as a web design service and grew into something more useful: a digital agency that builds the full system around growth.
-                </p>
-                <p>
-                  That means the website, the automation behind it, the AI tools that answer faster, and the lead generation flow that turns interest into paying customers.
-                </p>
-                <p>
-                  We are based in Hemel Hempstead and work with small businesses across the UK that want to look sharper, move faster, and stop losing opportunities to slow processes.
-                </p>
+                {dictionary.pages.about.paragraphs.map((paragraph) => (
+                  <p key={paragraph}>{paragraph}</p>
+                ))}
               </div>
 
               <div className="mt-10">
-                <Link href="/contact">
-                  <Button size="lg">Book a Free Call</Button>
+                <Link href={localizePath(locale, "/contact")}>
+                  <Button size="lg">{dictionary.common.bookFreeCall}</Button>
                 </Link>
               </div>
             </div>
 
             <div className="surface-elevated rounded-[2rem] border border-white/10 p-8">
-              <p className="mono-label text-xs text-[color:var(--color-text-secondary)]">What we care about</p>
+              <p className="mono-label text-xs text-[color:var(--color-text-secondary)]">
+                {dictionary.pages.about.valuesTitle}
+              </p>
               <div className="mt-6 space-y-8">
-                {PRINCIPLES.map((item) => (
+                {dictionary.pages.about.principles.map((item) => (
                   <div key={item.title}>
                     <h2 className="text-2xl font-semibold tracking-tight text-[color:var(--color-text-primary)]">
                       {item.title}
@@ -112,10 +95,11 @@ export default function AboutPage() {
           </div>
 
           <div className="mt-16 grid grid-cols-2 gap-5 md:grid-cols-4">
-            {STATS.map((stat) => (
+            {stats.map((stat) => (
               <div key={stat.label} className="surface-card p-6 text-center">
                 <p className="text-4xl font-semibold tracking-tight text-[color:var(--color-text-primary)]">
                   {stat.value}
+                  {stat.suffix}
                 </p>
                 <p className="mt-3 text-sm text-[color:var(--color-text-secondary)]">
                   {stat.label}

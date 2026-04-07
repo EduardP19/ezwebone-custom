@@ -184,7 +184,7 @@ agencies that don't deliver.
 We do things differently. You get a custom-built site, delivered in 5 days,
 with no contracts and full ownership from day one.
 
-We're based in Hemel Hempstead and work with clients across the UK.
+We're based in the United Kingdom and work with clients across the UK.
 
 Currently expanding into AI automation — helping small businesses use tools
 like AI receptionists and booking agents to save time and capture more revenue.

@@ -9,25 +9,30 @@ import { AITeaser } from "@/components/sections/AITeaser";
 import { Testimonials } from "@/components/sections/Testimonials";
 import { FinalCTA } from "@/components/sections/FinalCTA";
 import { JsonLd } from "@/components/seo/JsonLd";
+import { localizePath } from "@/lib/i18n/config";
+import { getDictionary } from "@/lib/i18n/dictionary";
+import { getRequestLocale } from "@/lib/i18n/request";
 import { getPublishedProjects } from "@/lib/projects";
-import { createMetadata } from "@/lib/seo";
+import { absoluteUrl, createMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = createMetadata({
-  title: "Websites, Automations, and AI Agents for Small Businesses",
-  description:
-    "EZWebOne is a UK digital agency building websites, automations, AI agents, marketing systems, SEO, and lead generation for small businesses.",
-  path: "/",
-  keywords: [
-    "websites for small businesses uk",
-    "automation agency uk",
-    "ai agents for small business",
-    "lead generation systems uk",
-  ],
-});
+export async function generateMetadata(): Promise<Metadata> {
+  const locale = await getRequestLocale();
+  const copy = getDictionary(locale).metadata.home;
+
+  return createMetadata({
+    title: copy.title,
+    description: copy.description,
+    path: "/",
+    keywords: copy.keywords,
+    locale,
+  });
+}
 
 export default async function Home() {
   await connection();
-  const projects = await getPublishedProjects();
+  const locale = await getRequestLocale();
+  const projects = await getPublishedProjects(locale);
+  const localizedHomeUrl = absoluteUrl(localizePath(locale, "/"));
 
   return (
     <>
@@ -37,7 +42,7 @@ export default async function Home() {
           "@context": "https://schema.org",
           "@type": "WebSite",
           name: "EZWebOne",
-          url: "https://ezwebone.co.uk",
+          url: localizedHomeUrl,
           potentialAction: {
             "@type": "SearchAction",
             target: "https://ezwebone.co.uk/search?q={search_term_string}",

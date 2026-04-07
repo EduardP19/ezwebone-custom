@@ -1,7 +1,8 @@
 "use client";
 
 import * as React from "react";
-import { STATS } from "@/lib/site-content";
+import { useI18n } from "@/components/i18n/LocaleProvider";
+import { getStats } from "@/lib/site-content";
 
 function StatItem({
   value,
@@ -64,11 +65,14 @@ function StatItem({
 }
 
 export function TrustBar() {
+  const { locale } = useI18n();
+  const stats = getStats(locale);
+
   return (
     <section className="section-shell border-y border-white/8 bg-[linear-gradient(90deg,rgba(124,58,237,0.12),rgba(17,17,24,1),rgba(124,58,237,0.12))] py-10">
       <div className="mx-auto max-w-7xl px-4 md:px-6">
         <div className="grid grid-cols-2 gap-8 md:grid-cols-4 md:divide-x md:divide-[color:var(--color-border)]">
-          {STATS.map((stat) => (
+          {stats.map((stat) => (
             <StatItem key={stat.label} {...stat} />
           ))}
         </div>

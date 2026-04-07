@@ -1,4 +1,6 @@
 import { cache } from "react";
+import type { Locale } from "@/lib/i18n/config";
+import { getLocalizedBlogFields } from "@/lib/blog-content";
 import { supabase } from "@/lib/supabase";
 
 export interface BlogPost {
@@ -14,7 +16,22 @@ export interface BlogPost {
 
 const blogSelect = "id, slug, title, excerpt, content, cover_image, published, created_at";
 
-export const getPublishedBlogPosts = cache(async (): Promise<BlogPost[]> => {
+function localizeBlogPost(post: BlogPost, locale: Locale): BlogPost {
+  const localized = getLocalizedBlogFields(post.slug, locale);
+
+  if (!localized) {
+    return post;
+  }
+
+  return {
+    ...post,
+    title: localized.title,
+    excerpt: localized.excerpt,
+    content: localized.content,
+  };
+}
+
+export const getPublishedBlogPosts = cache(async (locale: Locale = "en"): Promise<BlogPost[]> => {
   if (!supabase) {
     return [];
   }
@@ -29,27 +46,29 @@ export const getPublishedBlogPosts = cache(async (): Promise<BlogPost[]> => {
     throw new Error(`Failed to load blog posts: ${error.message}`);
   }
 
-  return (data ?? []) as BlogPost[];
+  return ((data ?? []) as BlogPost[]).map((post) => localizeBlogPost(post, locale));
 });
 
-export const getPublishedBlogPostBySlug = cache(async (slug: string): Promise<BlogPost | null> => {
-  if (!supabase) {
-    return null;
+export const getPublishedBlogPostBySlug = cache(
+  async (slug: string, locale: Locale = "en"): Promise<BlogPost | null> => {
+    if (!supabase) {
+      return null;
+    }
+
+    const { data, error } = await supabase
+      .from("blog")
+      .select(blogSelect)
+      .eq("slug", slug)
+      .eq("published", true)
+      .maybeSingle();
+
+    if (error) {
+      throw new Error(`Failed to load blog post: ${error.message}`);
+    }
+
+    return data ? localizeBlogPost(data as BlogPost, locale) : null;
   }
-
-  const { data, error } = await supabase
-    .from("blog")
-    .select(blogSelect)
-    .eq("slug", slug)
-    .eq("published", true)
-    .maybeSingle();
-
-  if (error) {
-    throw new Error(`Failed to load blog post: ${error.message}`);
-  }
-
-  return (data as BlogPost | null) ?? null;
-});
+);
 
 export function estimateReadTime(content: string | null): number {
   if (!content) return 1;
@@ -58,8 +77,8 @@ export function estimateReadTime(content: string | null): number {
   return Math.max(1, Math.ceil(words / 220));
 }
 
-export function formatPostDate(dateIso: string): string {
-  return new Date(dateIso).toLocaleDateString("en-GB", {
+export function formatPostDate(dateIso: string, locale: Locale = "en"): string {
+  return new Date(dateIso).toLocaleDateString(locale === "ro" ? "ro-RO" : "en-GB", {
     day: "numeric",
     month: "long",
     year: "numeric",

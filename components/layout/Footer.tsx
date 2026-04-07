@@ -1,23 +1,23 @@
-import Link from "next/link";
-import { BrandLogo } from "@/components/layout/BrandLogo";
+"use client";
 
-const FOOTER_LINKS = {
-  quickLinks: [
-    { label: "Home", href: "/" },
-    { label: "Services", href: "/services" },
-    { label: "Projects", href: "/portfolio" },
-    { label: "Blog", href: "/blog" },
-    { label: "About", href: "/about" },
-    { label: "Privacy Policy", href: "/privacy" },
-    { label: "Cookie Policy", href: "/cookies" },
-    { label: "Terms & Conditions", href: "/terms" },
-  ],
-  contact: [
-    { label: "+44 7448 929894", href: "tel:+447448929894" },
-    { label: "support@ezwebone.co.uk", href: "mailto:support@ezwebone.co.uk" },
-    { label: "Hemel Hempstead, UK", href: "#" },
-  ],
-};
+import { BrandLogo } from "@/components/layout/BrandLogo";
+import { LanguageSwitcher } from "@/components/layout/LanguageSwitcher";
+import { LocalizedLink } from "@/components/i18n/LocalizedLink";
+import { useI18n } from "@/components/i18n/LocaleProvider";
+
+const FOOTER_LINKS = [
+  { key: "home", href: "/" },
+  { key: "services", href: "/services" },
+  { key: "portfolio", href: "/portfolio" },
+  { key: "blog", href: "/blog" },
+  { key: "about", href: "/about" },
+  { key: "privacy", href: "/privacy" },
+  { key: "cookies", href: "/cookies" },
+  { key: "terms", href: "/terms" },
+] as const;
+
+const PRIMARY_FOOTER_LINKS = FOOTER_LINKS.slice(0, 4);
+const SECONDARY_FOOTER_LINKS = FOOTER_LINKS.slice(4);
 
 function LinkedInIcon({ size = 18 }: { size?: number }) {
   return (
@@ -48,20 +48,31 @@ function InstagramIcon({ size = 18 }: { size?: number }) {
 }
 
 export function Footer() {
+  const { dictionary } = useI18n();
+
+  const contactLinks = [
+    { label: dictionary.footer.contact.phone, href: "tel:+447448929894" },
+    { label: dictionary.footer.contact.email, href: "mailto:support@ezwebone.co.uk" },
+    { label: dictionary.footer.contact.location, href: null },
+  ];
+
   return (
     <footer className="mt-auto border-t border-[color:var(--color-border)] bg-[color:var(--color-bg-dark)] text-[color:var(--color-text-primary)]">
       <div className="mx-auto max-w-7xl px-4 pb-14 pt-12 md:px-6 md:pb-16 md:pt-14">
         <div className="grid grid-cols-1 gap-12 md:grid-cols-3">
           <div>
-            <Link href="/" className="inline-flex items-center">
+            <LocalizedLink href="/" className="inline-flex items-center">
               <span className="inline-flex items-center gap-3">
                 <BrandLogo variant="mark" size={40} className="h-10 w-10" />
                 <BrandLogo variant="wordmark" size={58} className="h-10 w-auto" />
               </span>
-            </Link>
+            </LocalizedLink>
             <p className="mt-5 max-w-sm text-sm leading-7 text-[color:var(--color-text-secondary)]">
-              Websites, automations, and AI agents for businesses that want to grow.
+              {dictionary.footer.strapline}
             </p>
+            <div className="mt-5">
+              <LanguageSwitcher />
+            </div>
 
             <div className="mt-6 flex items-center gap-3">
               <a
@@ -82,32 +93,64 @@ export function Footer() {
           </div>
 
           <div>
-            <h4 className="mono-label mb-6 text-xs text-[color:var(--color-text-secondary)]">Quick Links</h4>
-            <ul className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-              {FOOTER_LINKS.quickLinks.map((link) => (
-                <li key={link.label}>
-                  <Link
-                    href={link.href}
-                    className="text-sm text-[color:var(--color-text-secondary)] transition-colors hover:text-white"
-                  >
-                    {link.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
+            <div className="grid grid-cols-1 gap-8 sm:grid-cols-2">
+              <div>
+                <h4 className="mono-label mb-6 text-xs text-[color:var(--color-text-secondary)]">
+                  {dictionary.footer.quickLinksTitle}
+                </h4>
+                <ul className="space-y-4">
+                  {PRIMARY_FOOTER_LINKS.map((link) => (
+                    <li key={link.key}>
+                      <LocalizedLink
+                        href={link.href}
+                        className="text-sm text-[color:var(--color-text-secondary)] transition-colors hover:text-white"
+                      >
+                        {dictionary.footer.quickLinks[link.key]}
+                      </LocalizedLink>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              <div>
+                <h4 className="mono-label mb-6 text-xs text-[color:var(--color-text-secondary)]">
+                  {dictionary.footer.usefulLinksTitle}
+                </h4>
+                <ul className="space-y-4">
+                  {SECONDARY_FOOTER_LINKS.map((link) => (
+                    <li key={link.key}>
+                      <LocalizedLink
+                        href={link.href}
+                        className="text-sm text-[color:var(--color-text-secondary)] transition-colors hover:text-white"
+                      >
+                        {dictionary.footer.quickLinks[link.key]}
+                      </LocalizedLink>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
           </div>
 
           <div>
-            <h4 className="mono-label mb-6 text-xs text-[color:var(--color-text-secondary)]">Contact</h4>
+            <h4 className="mono-label mb-6 text-xs text-[color:var(--color-text-secondary)]">
+              {dictionary.footer.contactTitle}
+            </h4>
             <ul className="space-y-4">
-              {FOOTER_LINKS.contact.map((link) => (
+              {contactLinks.map((link) => (
                 <li key={link.label}>
-                  <Link
-                    href={link.href}
-                    className="text-sm leading-7 text-[color:var(--color-text-secondary)] transition-colors hover:text-white"
-                  >
-                    {link.label}
-                  </Link>
+                  {link.href ? (
+                    <a
+                      href={link.href}
+                      className="text-sm leading-7 text-[color:var(--color-text-secondary)] transition-colors hover:text-white"
+                    >
+                      {link.label}
+                    </a>
+                  ) : (
+                    <span className="text-sm leading-7 text-[color:var(--color-text-secondary)]">
+                      {link.label}
+                    </span>
+                  )}
                 </li>
               ))}
             </ul>
@@ -116,7 +159,7 @@ export function Footer() {
 
         <div className="mt-14 border-t border-[color:var(--color-border)] pt-8">
           <p className="text-xs leading-6 text-[color:var(--color-text-secondary)]">
-            EZWebOne is a trading name for EMAGF LTD, registered in England and Wales. All rights reserved.
+            {dictionary.footer.companyStatement}
           </p>
         </div>
       </div>

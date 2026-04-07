@@ -1,26 +1,31 @@
 "use client";
 
 import * as React from "react";
-import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { LocalizedLink } from "@/components/i18n/LocalizedLink";
+import { useI18n } from "@/components/i18n/LocaleProvider";
 import { Button } from "@/components/ui/Button";
 import { BrandLogo } from "@/components/layout/BrandLogo";
+import { LanguageSwitcher } from "@/components/layout/LanguageSwitcher";
+import { localizePath } from "@/lib/i18n/config";
 import { cn } from "@/lib/utils";
 import { Menu, X } from "lucide-react";
 
 const NAV_LINKS = [
-  { label: "Home", href: "/" },
-  { label: "Services", href: "/services" },
-  { label: "Projects", href: "/portfolio" },
-  { label: "Blog", href: "/blog" },
-  { label: "About", href: "/about" },
-];
+  { key: "home", href: "/" },
+  { key: "services", href: "/services" },
+  { key: "portfolio", href: "/portfolio" },
+  { key: "blog", href: "/blog" },
+  { key: "about", href: "/about" },
+] as const;
 
 export function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
   const [isScrolled, setIsScrolled] = React.useState(false);
   const pathname = usePathname();
-  const isHome = pathname === "/";
+  const { locale, dictionary } = useI18n();
+  const homePath = localizePath(locale, "/");
+  const isHome = pathname === homePath;
 
   React.useEffect(() => {
     const handleScroll = () => {
@@ -52,7 +57,7 @@ export function Navbar() {
     >
       <div className="mx-auto w-full max-w-7xl px-4 md:px-6">
         <div className="flex items-center justify-between gap-6">
-          <Link href="/" className="relative z-40 flex items-center">
+          <LocalizedLink href="/" className="relative z-40 flex items-center">
             <span className="inline-flex items-center gap-3">
               <BrandLogo
                 variant="mark"
@@ -73,33 +78,34 @@ export function Navbar() {
                 )}
               />
             </span>
-          </Link>
+          </LocalizedLink>
 
           <div className="hidden md:flex items-center gap-8">
             {NAV_LINKS.map((link) => (
-              <Link
+              <LocalizedLink
                 key={link.href}
                 href={link.href}
                 className={cn(
                   "text-sm font-medium uppercase tracking-[0.16em] transition-colors",
-                  pathname === link.href
+                  pathname === localizePath(locale, link.href)
                     ? "text-white"
                     : isHome && !isScrolled
                       ? "text-white/72 hover:text-white"
                       : "text-[color:var(--color-text-secondary)] hover:text-white"
                 )}
               >
-                {link.label}
-              </Link>
+                {dictionary.nav.links[link.key]}
+              </LocalizedLink>
             ))}
+            <LanguageSwitcher />
           </div>
 
           <div className="hidden md:block">
-            <Link href="/contact">
+            <LocalizedLink href="/contact">
               <Button size="md" className="px-6 py-3 text-sm">
-                Book a Free Call
+                {dictionary.common.bookFreeCall}
               </Button>
-            </Link>
+            </LocalizedLink>
           </div>
 
           <button
@@ -108,7 +114,7 @@ export function Navbar() {
               isHome && !isScrolled && !isMenuOpen ? "text-white" : "text-[color:var(--color-text-primary)]"
             )}
             onClick={() => setIsMenuOpen(!isMenuOpen)}
-            aria-label={isMenuOpen ? "Close menu" : "Open menu"}
+            aria-label={isMenuOpen ? dictionary.nav.closeMenu : dictionary.nav.openMenu}
             aria-expanded={isMenuOpen}
             aria-controls="mobile-navigation"
           >
@@ -141,26 +147,27 @@ export function Navbar() {
         >
           <div className="space-y-6">
             {NAV_LINKS.map((link) => (
-              <Link
+              <LocalizedLink
                 key={link.href}
                 href={link.href}
                 onClick={() => setIsMenuOpen(false)}
                 className="block text-2xl font-display font-semibold tracking-tight text-white"
               >
-                {link.label}
-              </Link>
+                {dictionary.nav.links[link.key]}
+              </LocalizedLink>
             ))}
           </div>
 
           <div className="mt-10 space-y-4">
             <p className="mono-label text-xs text-[color:var(--color-text-secondary)]">
-              Websites, Automations, AI Agents
+              {dictionary.nav.mobileTagline}
             </p>
-            <Link href="/contact" onClick={() => setIsMenuOpen(false)}>
+            <LanguageSwitcher compact />
+            <LocalizedLink href="/contact" onClick={() => setIsMenuOpen(false)}>
               <Button size="lg" className="w-full">
-                Book a Free Call
+                {dictionary.common.bookFreeCall}
               </Button>
-            </Link>
+            </LocalizedLink>
           </div>
         </div>
       </div>

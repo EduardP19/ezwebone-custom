@@ -1,44 +1,33 @@
-"use client";
-
-import { useEffect, useState } from "react";
-import { supabase } from "@/lib/supabase";
+import type { Metadata } from "next";
+import { connection } from "next/server";
 import { Badge } from "@/components/ui/Badge";
 import { ColumnCard } from "@/components/ui/ColumnCard";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { FinalCTA } from "@/components/sections/FinalCTA";
+import { getPublishedColumns } from "@/lib/columns";
+import { localizePath } from "@/lib/i18n/config";
+import { getDictionary } from "@/lib/i18n/dictionary";
+import { getRequestLocale } from "@/lib/i18n/request";
+import { absoluteUrl, createMetadata } from "@/lib/seo";
 
-type Column = {
-  id: string;
-  slug: string;
-  title: string;
-  subtitle: string | null;
-  cover_image: string | null;
-  created_at: string;
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const locale = await getRequestLocale();
+  const copy = getDictionary(locale).metadata.columns;
 
-export default function ColumnsPage() {
-  const [columns, setColumns] = useState<Column[]>([]);
-  const [loading, setLoading] = useState(true);
+  return createMetadata({
+    title: copy.title,
+    description: copy.description,
+    path: "/columns",
+    keywords: copy.keywords,
+    locale,
+  });
+}
 
-  useEffect(() => {
-    async function fetchColumns() {
-      if (!supabase) {
-        setColumns([]);
-        setLoading(false);
-        return;
-      }
-
-      const { data } = await supabase
-        .from("columns")
-        .select("*")
-        .eq("published", true)
-        .order("created_at", { ascending: false });
-      
-      if (data) setColumns(data);
-      setLoading(false);
-    }
-    fetchColumns();
-  }, []);
+export default async function ColumnsPage() {
+  await connection();
+  const locale = await getRequestLocale();
+  const dictionary = getDictionary(locale);
+  const columns = await getPublishedColumns(locale);
 
   return (
     <div className="bg-[#fafafa]">
@@ -46,46 +35,41 @@ export default function ColumnsPage() {
         data={{
           "@context": "https://schema.org",
           "@type": "ItemList",
-          "name": "EZWebOne Columns",
-          "itemListElement": columns.map((col, index) => ({
+          name: locale === "ro" ? "Coloanele EZWebOne" : "EZWebOne Columns",
+          itemListElement: columns.map((column, index) => ({
             "@type": "ListItem",
-            "position": index + 1,
-            "url": `https://ezwebone.co.uk/columns/${col.slug}`,
-            "name": col.title
-          }))
+            position: index + 1,
+            url: absoluteUrl(localizePath(locale, `/columns/${column.slug}`)),
+            name: column.title,
+          })),
         }}
       />
-      
+
       <div className="container mx-auto px-4 py-20 md:px-6">
-        <div className="max-w-3xl mb-20">
-          <Badge className="mb-4">Columns & Insights</Badge>
-          <h1 className="text-4xl md:text-6xl font-display font-bold tracking-tight text-brand-black mb-6">
-            Expert <span className="text-brand-purple italic">Voices</span>. <br />
-            Hard-won insights.
+        <div className="mb-20 max-w-3xl">
+          <Badge className="mb-4">{dictionary.pages.columns.badge}</Badge>
+          <h1 className="mb-6 font-display text-4xl font-bold tracking-tight text-brand-black md:text-6xl">
+            {dictionary.pages.columns.title}
           </h1>
-          <p className="text-xl text-brand-gray leading-relaxed">
-            A growing collection of deep dives into technology, business growth, and the future of digital products.
-          </p>
+          <p className="text-xl leading-relaxed text-brand-gray">{dictionary.pages.columns.body}</p>
         </div>
 
-        {loading ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            {[1, 2, 3, 4].map((i) => (
-              <div key={i} className="h-96 bg-brand-warm animate-pulse rounded-3xl" />
-            ))}
-          </div>
-        ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-20">
+        {columns.length > 0 ? (
+          <div className="mb-20 grid grid-cols-1 gap-8 md:grid-cols-2">
             {columns.map((column) => (
               <ColumnCard
                 key={column.id}
                 slug={column.slug}
                 title={column.title}
                 subtitle={column.subtitle ?? undefined}
-                coverImage={column.cover_image ?? undefined}
-                publishedAt={column.created_at}
+                coverImage={column.coverImage ?? undefined}
+                publishedAt={column.createdAt}
               />
             ))}
+          </div>
+        ) : (
+          <div className="rounded-3xl border border-brand-border bg-white p-6 text-brand-gray">
+            {dictionary.common.noPublishedColumns}
           </div>
         )}
       </div>
