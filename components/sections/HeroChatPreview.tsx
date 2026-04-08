@@ -606,7 +606,7 @@ export function HeroChatPreview({
               >
                 <div
                   className={cn(
-                    "min-h-[272px] text-left sm:min-h-[320px]",
+                    "text-left",
                     (chatState === "report_sent" || chatState === "locked") &&
                       "flex items-center justify-center text-center"
                   )}
