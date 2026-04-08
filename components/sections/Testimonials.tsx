@@ -10,7 +10,7 @@ export function Testimonials() {
   const testimonials = getTestimonials(locale);
 
   return (
-    <section className="section-shell bg-[color:var(--color-bg-dark)] py-24 md:py-32">
+    <section className="section-shell section-shift section-shift-purple bg-[color:var(--color-bg-dark)] py-24 md:py-32">
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(124,58,237,0.12),transparent_32%)]" />
 
       <div className="relative mx-auto max-w-7xl px-4 md:px-6">

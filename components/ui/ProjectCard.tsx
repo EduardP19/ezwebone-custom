@@ -90,7 +90,7 @@ export function ProjectCard({
           }
         }}
         className={cn(
-          "group cursor-pointer overflow-hidden rounded-[1.6rem] border border-[color:var(--color-border)] bg-[color:var(--color-bg-card)] text-left transition duration-300 hover:scale-[1.01] hover:border-[rgba(124,58,237,0.5)] hover:shadow-[0_28px_80px_rgba(124,58,237,0.12)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--color-primary-light)] focus-visible:ring-offset-2 focus-visible:ring-offset-[color:var(--color-bg-dark)]",
+          "group cursor-pointer overflow-hidden rounded-[1.6rem] bg-[color:var(--color-bg-card)] text-left shadow-[0_0_32px_rgba(28,42,68,0.20)] transition duration-300 hover:scale-[1.01] hover:shadow-[0_0_40px_rgba(28,42,68,0.24)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--color-primary-light)] focus-visible:ring-offset-2 focus-visible:ring-offset-[color:var(--color-bg-dark)]",
           className
         )}
         aria-haspopup="dialog"
@@ -104,6 +104,7 @@ export function ProjectCard({
             className="object-cover object-top"
             style={{ objectPosition: "center top" }}
           />
+          <div className="pointer-events-none absolute inset-x-0 bottom-0 h-px bg-[rgba(28,42,68,0.07)]" />
         </div>
 
         <div className="p-6">
@@ -139,7 +140,7 @@ export function ProjectCard({
       <AnimatePresence>
         {isOpen ? (
           <motion.div
-            className="fixed inset-0 z-[130] flex items-start justify-center overflow-y-auto bg-[rgba(5,5,10,0.78)] p-4 backdrop-blur-xl md:items-center md:p-6"
+            className="project-modal-backdrop fixed inset-0 z-[130] flex items-start justify-center overflow-y-auto p-4 backdrop-blur-xl md:items-center md:p-6"
             data-track-label={`Project modal backdrop: ${title}`}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -151,7 +152,7 @@ export function ProjectCard({
               aria-modal="true"
               aria-labelledby={dialogTitleId}
               data-track-label={`Project modal content: ${title}`}
-              className="relative my-4 flex max-h-[92dvh] w-full max-w-5xl flex-col overflow-y-auto rounded-[2rem] border border-[color:var(--color-border)] bg-[rgba(10,10,15,0.96)] shadow-[0_40px_140px_rgba(0,0,0,0.45)] md:my-0 md:max-h-[90vh] md:overflow-hidden"
+              className="project-modal-shell relative my-4 flex max-h-[92dvh] w-full max-w-5xl flex-col overflow-y-auto rounded-[2rem] md:my-0 md:max-h-[90vh] md:overflow-hidden"
               initial={{ opacity: 0, y: 20, scale: 0.97 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: 14, scale: 0.98 }}
@@ -162,7 +163,7 @@ export function ProjectCard({
                 type="button"
                 onClick={closeModal}
                 data-track-label={`Close project modal: ${title}`}
-                className="absolute right-4 top-4 z-10 inline-flex h-11 w-11 items-center justify-center rounded-full border border-white/10 bg-[rgba(10,10,15,0.72)] text-[color:var(--color-text-primary)] transition hover:border-[color:var(--color-primary-light)] hover:text-white"
+                className="project-modal-close absolute right-4 top-4 z-10 inline-flex h-11 w-11 items-center justify-center rounded-full border text-[color:var(--color-text-primary)] transition hover:border-[color:var(--color-primary-light)]"
                 aria-label={`${dictionary.common.closeDetails}: ${title}`}
               >
                 <X size={18} />
@@ -178,11 +179,11 @@ export function ProjectCard({
                     style={{ objectPosition: "center top" }}
                   />
                   {hasBeforeImage ? (
-                    <div className="absolute left-4 top-4 z-[1] rounded-2xl border border-white/15 bg-[rgba(10,10,15,0.78)] p-2.5 backdrop-blur">
+                    <div className="project-modal-compare absolute left-4 top-4 z-[1] rounded-2xl border p-2.5 backdrop-blur">
                       <p className="mb-2 text-[10px] font-semibold uppercase tracking-[0.16em] text-[color:var(--color-text-accent)]">
                         Compare Views
                       </p>
-                      <div className="inline-flex rounded-full border border-white/15 bg-black/25 p-1">
+                      <div className="project-modal-toggle inline-flex rounded-full border p-1">
                         <button
                           type="button"
                           onClick={() => setPreviewMode("before")}
@@ -191,7 +192,7 @@ export function ProjectCard({
                             "rounded-full px-3 py-1.5 text-xs font-semibold transition",
                             previewMode === "before"
                               ? "bg-[color:var(--color-text-accent)] text-[color:var(--color-bg-dark)] shadow-[0_8px_22px_rgba(201,169,110,0.45)]"
-                              : "text-[color:var(--color-text-secondary)] hover:text-white"
+                              : "text-[color:var(--color-text-secondary)] hover:text-[color:var(--color-text-primary)]"
                           )}
                         >
                           BEFORE
@@ -204,7 +205,7 @@ export function ProjectCard({
                             "rounded-full px-3 py-1.5 text-xs font-semibold transition",
                             previewMode === "after"
                               ? "bg-[color:var(--color-text-accent)] text-[color:var(--color-bg-dark)] shadow-[0_8px_22px_rgba(201,169,110,0.45)]"
-                              : "text-[color:var(--color-text-secondary)] hover:text-white"
+                              : "text-[color:var(--color-text-secondary)] hover:text-[color:var(--color-text-primary)]"
                           )}
                         >
                           AFTER
@@ -213,11 +214,12 @@ export function ProjectCard({
                     </div>
                   ) : null}
                   {hasBeforeImage ? (
-                    <div className="absolute bottom-4 left-4 z-[1] rounded-full border border-[color:var(--color-text-accent)]/60 bg-[rgba(10,10,15,0.78)] px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-[color:var(--color-text-accent)] backdrop-blur">
+                    <div className="project-modal-snapshot absolute bottom-4 left-4 z-[1] rounded-full border px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-[color:var(--color-text-accent)] backdrop-blur">
                       {previewMode === "before" ? "Before snapshot" : "After snapshot"}
                     </div>
                   ) : null}
-                  <div className="absolute inset-0 bg-gradient-to-t from-[rgba(10,10,15,0.58)] via-transparent to-transparent" />
+                  <div className="project-modal-image-mask absolute inset-0 bg-gradient-to-t from-[rgba(28,42,68,0.58)] via-transparent to-transparent" />
+                  <div className="pointer-events-none absolute inset-x-0 bottom-0 h-px bg-[rgba(28,42,68,0.07)]" />
                 </div>
 
                 <div className="min-h-0 p-6 md:overflow-y-auto md:p-8">
@@ -287,7 +289,7 @@ export function ProjectCard({
                         target="_blank"
                         rel="noreferrer"
                         data-track-label={`Discuss project: ${title}`}
-                        className="inline-flex items-center gap-2 rounded-full border border-[color:var(--color-border)] bg-white/5 px-5 py-3 text-sm font-semibold text-[color:var(--color-text-primary)] transition hover:border-[color:var(--color-primary-light)] hover:text-white"
+                        className="project-modal-secondary-btn inline-flex items-center gap-2 rounded-full border px-5 py-3 text-sm font-semibold text-[color:var(--color-text-primary)] transition hover:border-[color:var(--color-primary-light)]"
                       >
                         {dictionary.common.discussSimilarProject}
                       </a>

@@ -15,7 +15,7 @@ export function FinalCTA({ variant = "black" }: FinalCTAProps) {
   const { dictionary } = useI18n();
 
   return (
-    <section className="section-shell bg-[color:var(--color-bg-dark)] pt-20 pb-14 md:pt-24 md:pb-18">
+    <section className="section-shell section-shift section-shift-purple bg-[color:var(--color-bg-dark)] pt-20 pb-14 md:pt-24 md:pb-18">
       <ParticleNetwork count={46} maxDistance={130} interactive={false} className="opacity-50" />
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,color-mix(in_srgb,var(--color-primary)_22%,transparent),transparent_30%)]" />
 
@@ -37,9 +37,11 @@ export function FinalCTA({ variant = "black" }: FinalCTAProps) {
               <Button size="lg">{dictionary.common.bookFreeCall}</Button>
             </a>
 
-            <div className="inline-flex rounded-full border border-white/10 bg-white/5 px-4 py-3 text-sm text-[color:var(--color-text-secondary)] backdrop-blur-xl">
-              <span className="text-[color:var(--color-text-primary)]">★★★★★</span>
-              <span className="mx-2">{dictionary.common.ratedGoogle}</span>
+            <div className="inline-flex items-center gap-2 text-sm font-medium">
+              <span className="tracking-[0.08em] text-[#f59e0b] drop-shadow-[0_1px_8px_rgba(245,158,11,0.35)]">
+                ★★★★★
+              </span>
+              <span className="text-[color:var(--color-text-primary)]/90">{dictionary.common.ratedGoogle}</span>
             </div>
           </div>
         </motion.div>

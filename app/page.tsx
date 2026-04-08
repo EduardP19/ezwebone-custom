@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { connection } from "next/server";
 import { HeroChatPreview } from "@/components/sections/HeroChatPreview";
+import { FaqSection } from "@/components/guides/FaqSection";
 import { WhoWeAreMini } from "@/components/sections/WhoWeAreMini";
 import { TrustBar } from "@/components/sections/TrustBar";
 import { Services } from "@/components/sections/Services";
@@ -57,6 +58,16 @@ export default async function Home() {
       <TrustBar />
       <Testimonials />
       <HowItWorks />
+      <FaqSection
+        audience="ezwebone"
+        locale={locale}
+        title={locale === "ro" ? "Intrebari Generale" : "General FAQs"}
+        subtitle={
+          locale === "ro"
+            ? "Intrebari frecvente despre website-uri, automatizari si implementare."
+            : "Common questions about websites, automation, and implementation."
+        }
+      />
       <FinalCTA />
     </>
   );
