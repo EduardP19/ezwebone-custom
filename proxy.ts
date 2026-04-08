@@ -2,10 +2,8 @@ import { NextResponse, type NextRequest } from "next/server";
 import {
   defaultLocale,
   getLocaleFromPathname,
-  localizePath,
   LOCALE_COOKIE,
   LOCALE_HEADER,
-  resolvePreferredLocale,
   stripLocaleFromPathname,
 } from "@/lib/i18n/config";
 
@@ -30,33 +28,22 @@ export function proxy(request: NextRequest) {
   const localeFromPath = getLocaleFromPathname(pathname);
 
   if (!localeFromPath) {
-    const preferredLocale = resolvePreferredLocale(
-      request.cookies.get(LOCALE_COOKIE)?.value,
-      request.headers.get("accept-language")
-    );
+    const requestHeaders = new Headers(request.headers);
+    requestHeaders.set(LOCALE_HEADER, defaultLocale);
 
-    if (preferredLocale === defaultLocale) {
-      const requestHeaders = new Headers(request.headers);
-      requestHeaders.set(LOCALE_HEADER, defaultLocale);
+    const response = NextResponse.next({
+      request: {
+        headers: requestHeaders,
+      },
+    });
 
-      const response = NextResponse.next({
-        request: {
-          headers: requestHeaders,
-        },
-      });
+    response.cookies.set(LOCALE_COOKIE, defaultLocale, {
+      path: "/",
+      maxAge: 60 * 60 * 24 * 365,
+      sameSite: "lax",
+    });
 
-      response.cookies.set(LOCALE_COOKIE, defaultLocale, {
-        path: "/",
-        maxAge: 60 * 60 * 24 * 365,
-        sameSite: "lax",
-      });
-
-      return response;
-    }
-
-    const redirectUrl = request.nextUrl.clone();
-    redirectUrl.pathname = localizePath(preferredLocale, pathname === "/" ? "/" : pathname);
-    return NextResponse.redirect(redirectUrl);
+    return response;
   }
 
   if (localeFromPath === defaultLocale) {

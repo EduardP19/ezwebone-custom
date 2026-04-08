@@ -24,6 +24,8 @@ export type ParsedAgentChatPayload = {
   bypassReview: boolean;
 };
 
+export type ChatAgentKey = "prequalify" | "prequalifyNewBusiness";
+
 function isHistoryItem(value: unknown): value is AgentHistoryItem {
   if (!value || typeof value !== "object") return false;
   const item = value as Partial<AgentHistoryItem>;
@@ -59,8 +61,11 @@ export async function runPrequalifyChat({
   message,
   history,
   locale,
-}: Pick<ParsedAgentChatPayload, "message" | "history" | "locale">) {
-  const result = await runAgent("prequalify", {
+  agentKey = "prequalify",
+}: Pick<ParsedAgentChatPayload, "message" | "history" | "locale"> & {
+  agentKey?: ChatAgentKey;
+}) {
+  const result = await runAgent(agentKey, {
     message,
     history,
     locale,
@@ -80,7 +85,7 @@ export async function runPrequalifyChat({
 
   return {
     reply,
-    source: "prequalify" as const,
+    source: agentKey,
     result,
     locale,
   };

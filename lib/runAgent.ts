@@ -1,6 +1,7 @@
 import { auditAgent } from "@/agents/audit";
 import { emailAgent } from "@/agents/email";
 import { prequalifyAgent } from "@/agents/prequalify";
+import { prequalifyNewBusinessAgent } from "@/agents/prequalify-new-business";
 
 type AgentRunner = {
   run: (input: unknown) => Promise<unknown>;
@@ -8,6 +9,7 @@ type AgentRunner = {
 
 const agentRegistry = {
   prequalify: prequalifyAgent,
+  prequalifyNewBusiness: prequalifyNewBusinessAgent,
   audit: auditAgent,
   email: emailAgent,
 } satisfies Record<string, AgentRunner>;

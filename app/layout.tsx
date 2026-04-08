@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { Suspense } from "react";
 import { Inter, JetBrains_Mono, Space_Grotesk } from "next/font/google";
 import "./globals.css";
-import Head from 'next/head';
 
 import { LocaleProvider } from "@/components/i18n/LocaleProvider";
 import { Navbar } from "@/components/layout/Navbar";
@@ -85,9 +84,6 @@ export default async function RootLayout({
 
   return (
     <>
-      <Head>
-        <link rel="icon" href={BRAND_LOGO_MARK_SRC} type="image/png" />
-      </Head>
       <html
         lang={locale}
         className={`${inter.variable} ${spaceGrotesk.variable} ${jetbrainsMono.variable} h-full antialiased`}

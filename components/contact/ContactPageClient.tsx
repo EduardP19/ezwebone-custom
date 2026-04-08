@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
 import { useState } from "react";
 import { useI18n } from "@/components/i18n/LocaleProvider";
+import { CALENDLY_BOOKING_URL } from "@/lib/links";
 
 const FIELD_CLASS_NAME =
   "w-full rounded-2xl border border-brand-purple/20 bg-brand-purple/6 px-4 py-3 text-brand-purple-deep placeholder:text-brand-purple-deep/55 outline-none transition-colors focus:border-brand-purple focus:ring-2 focus:ring-brand-purple/15";
@@ -74,7 +75,7 @@ export function ContactPageClient() {
                 <p className="text-brand-gray mb-5 leading-relaxed">
                   {copy.directConversationBody}
                 </p>
-                <a href="#project-enquiry">
+                <a href={CALENDLY_BOOKING_URL} target="_blank" rel="noreferrer">
                   <Button className="bg-brand-black text-white hover:bg-black">
                     {copy.directConversationCta}
                   </Button>

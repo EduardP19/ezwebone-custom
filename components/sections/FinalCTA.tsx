@@ -1,10 +1,10 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { LocalizedLink } from "@/components/i18n/LocalizedLink";
 import { useI18n } from "@/components/i18n/LocaleProvider";
 import { Button } from "@/components/ui/Button";
 import { ParticleNetwork } from "@/components/sections/ParticleNetwork";
+import { CALENDLY_BOOKING_URL } from "@/lib/links";
 
 interface FinalCTAProps {
   variant?: "black" | "purple" | "orange" | "glass";
@@ -33,9 +33,9 @@ export function FinalCTA({ variant = "black" }: FinalCTAProps) {
           </p>
 
           <div className="mt-10 flex flex-col items-center gap-4">
-            <LocalizedLink href="/contact">
+            <a href={CALENDLY_BOOKING_URL} target="_blank" rel="noreferrer">
               <Button size="lg">{dictionary.common.bookFreeCall}</Button>
-            </LocalizedLink>
+            </a>
 
             <div className="inline-flex rounded-full border border-white/10 bg-white/5 px-4 py-3 text-sm text-[color:var(--color-text-secondary)] backdrop-blur-xl">
               <span className="text-[color:var(--color-text-primary)]">★★★★★</span>

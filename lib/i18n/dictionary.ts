@@ -145,6 +145,12 @@ const dictionaries = {
         title: "Work That Speaks for Itself",
         body: "Real businesses. Real results. Every project is built to perform.",
       },
+      whoWeAre: {
+        badge: "Who We Are",
+        title: "A small UK team focused on real business outcomes.",
+        body:
+          "We build websites, automations, and AI systems that help service businesses look sharper, respond faster, and convert more enquiries into booked work.",
+      },
       testimonials: {
         badge: "Testimonials",
         title: "Don't Take Our Word For It",
@@ -510,6 +516,12 @@ const dictionaries = {
         badge: "Proiecte",
         title: "Proiecte care vorbesc de la sine",
         body: "Afaceri reale. Rezultate reale. Fiecare proiect este construit sa performeze.",
+      },
+      whoWeAre: {
+        badge: "Cine suntem",
+        title: "O echipa mica din UK, orientata spre rezultate reale.",
+        body:
+          "Construim website-uri, automatizari si sisteme AI care ajuta afacerile de servicii sa arate mai bine, sa raspunda mai rapid si sa transforme mai multe cereri in programari.",
       },
       testimonials: {
         badge: "Testimoniale",

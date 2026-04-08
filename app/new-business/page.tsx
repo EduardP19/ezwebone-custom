@@ -17,40 +17,43 @@ import { absoluteUrl, createMetadata } from "@/lib/seo";
 
 export async function generateMetadata(): Promise<Metadata> {
   const locale = await getRequestLocale();
-  const copy = getDictionary(locale).metadata.home;
 
   return createMetadata({
-    title: copy.title,
-    description: copy.description,
-    path: "/",
-    keywords: copy.keywords,
+    title:
+      locale === "ro"
+        ? "Pachet de lansare pentru afaceri noi"
+        : "New Business Launch Support",
+    description:
+      locale === "ro"
+        ? "Audit rapid si recomandari practice pentru antreprenori romani care au lansat recent o afacere."
+        : "Fast audit and practical recommendations for newly registered business owners.",
+    path: "/new-business",
+    keywords: getDictionary(locale).metadata.home.keywords,
     locale,
   });
 }
 
-export default async function Home() {
+export default async function NewBusinessLandingPage() {
   await connection();
   const locale = await getRequestLocale();
   const projects = await getPublishedProjects(locale);
-  const localizedHomeUrl = absoluteUrl(localizePath(locale, "/"));
+  const localizedUrl = absoluteUrl(localizePath(locale, "/new-business"));
 
   return (
     <>
       <JsonLd
-        id="website-schema"
+        id="new-business-landing-schema"
         data={{
           "@context": "https://schema.org",
-          "@type": "WebSite",
-          name: "EZWebOne",
-          url: localizedHomeUrl,
-          potentialAction: {
-            "@type": "SearchAction",
-            target: "https://ezwebone.co.uk/search?q={search_term_string}",
-            "query-input": "required name=search_term_string"
-          },
+          "@type": "WebPage",
+          name:
+            locale === "ro"
+              ? "Pachet de lansare pentru afaceri noi"
+              : "New Business Launch Support",
+          url: localizedUrl,
         }}
       />
-      <HeroChatPreview />
+      <HeroChatPreview agentKey="prequalifyNewBusiness" />
       <Services />
       <Portfolio projects={projects} />
       <WhoWeAreMini />

@@ -10,6 +10,7 @@ import { connection } from "next/server";
 import { localizePath } from "@/lib/i18n/config";
 import { getDictionary } from "@/lib/i18n/dictionary";
 import { getRequestLocale } from "@/lib/i18n/request";
+import { CALENDLY_BOOKING_URL } from "@/lib/links";
 import {
   estimateReadTime,
   formatPostDate,
@@ -185,14 +186,14 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
                 </div>
               </div>
               <div className="mt-6 pt-5 border-t border-brand-border">
-                <Link href={localizePath(locale, "/contact")} className="block">
+                <a href={CALENDLY_BOOKING_URL} target="_blank" rel="noreferrer" className="block">
                   <Button
                     variant="ghost"
                     className="w-full text-xs font-black uppercase tracking-widest border border-brand-border py-6 hover:bg-brand-black hover:text-white transition-all"
                   >
                     {dictionary.common.bookStrategyCall}
                   </Button>
-                </Link>
+                </a>
               </div>
             </div>
           </aside>
@@ -207,9 +208,9 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
           <p className="text-brand-gray mb-6 max-w-2xl mx-auto leading-relaxed">
             {dictionary.common.turnIdeasBody}
           </p>
-          <Link href={localizePath(locale, "/contact")}>
+          <a href={CALENDLY_BOOKING_URL} target="_blank" rel="noreferrer">
             <Button size="lg">{dictionary.common.bookFreeCallToday}</Button>
-          </Link>
+          </a>
         </div>
       </div>
     </div>

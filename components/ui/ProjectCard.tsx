@@ -3,9 +3,9 @@
 import * as React from "react";
 import Image from "next/image";
 import { AnimatePresence, motion } from "framer-motion";
-import { LocalizedLink } from "@/components/i18n/LocalizedLink";
 import { useI18n } from "@/components/i18n/LocaleProvider";
 import { ArrowUpRight, X } from "lucide-react";
+import { CALENDLY_BOOKING_URL } from "@/lib/links";
 import { cn } from "@/lib/utils";
 
 interface ProjectCardProps {
@@ -81,6 +81,7 @@ export function ProjectCard({
       <article
         role="button"
         tabIndex={0}
+        data-track-label={`Open project modal: ${title}`}
         onClick={openModal}
         onKeyDown={(event) => {
           if (event.key === "Enter" || event.key === " ") {
@@ -139,6 +140,7 @@ export function ProjectCard({
         {isOpen ? (
           <motion.div
             className="fixed inset-0 z-[130] flex items-start justify-center overflow-y-auto bg-[rgba(5,5,10,0.78)] p-4 backdrop-blur-xl md:items-center md:p-6"
+            data-track-label={`Project modal backdrop: ${title}`}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -148,6 +150,7 @@ export function ProjectCard({
               role="dialog"
               aria-modal="true"
               aria-labelledby={dialogTitleId}
+              data-track-label={`Project modal content: ${title}`}
               className="relative my-4 flex max-h-[92dvh] w-full max-w-5xl flex-col overflow-y-auto rounded-[2rem] border border-[color:var(--color-border)] bg-[rgba(10,10,15,0.96)] shadow-[0_40px_140px_rgba(0,0,0,0.45)] md:my-0 md:max-h-[90vh] md:overflow-hidden"
               initial={{ opacity: 0, y: 20, scale: 0.97 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
@@ -158,6 +161,7 @@ export function ProjectCard({
               <button
                 type="button"
                 onClick={closeModal}
+                data-track-label={`Close project modal: ${title}`}
                 className="absolute right-4 top-4 z-10 inline-flex h-11 w-11 items-center justify-center rounded-full border border-white/10 bg-[rgba(10,10,15,0.72)] text-[color:var(--color-text-primary)] transition hover:border-[color:var(--color-primary-light)] hover:text-white"
                 aria-label={`${dictionary.common.closeDetails}: ${title}`}
               >
@@ -182,6 +186,7 @@ export function ProjectCard({
                         <button
                           type="button"
                           onClick={() => setPreviewMode("before")}
+                          data-track-label={`Project preview before: ${title}`}
                           className={cn(
                             "rounded-full px-3 py-1.5 text-xs font-semibold transition",
                             previewMode === "before"
@@ -194,6 +199,7 @@ export function ProjectCard({
                         <button
                           type="button"
                           onClick={() => setPreviewMode("after")}
+                          data-track-label={`Project preview after: ${title}`}
                           className={cn(
                             "rounded-full px-3 py-1.5 text-xs font-semibold transition",
                             previewMode === "after"
@@ -276,17 +282,21 @@ export function ProjectCard({
                     </div>
 
                     <div className="flex flex-wrap gap-3 pt-2">
-                      <LocalizedLink
-                        href="/contact"
+                      <a
+                        href={CALENDLY_BOOKING_URL}
+                        target="_blank"
+                        rel="noreferrer"
+                        data-track-label={`Discuss project: ${title}`}
                         className="inline-flex items-center gap-2 rounded-full border border-[color:var(--color-border)] bg-white/5 px-5 py-3 text-sm font-semibold text-[color:var(--color-text-primary)] transition hover:border-[color:var(--color-primary-light)] hover:text-white"
                       >
                         {dictionary.common.discussSimilarProject}
-                      </LocalizedLink>
+                      </a>
                       {liveUrl ? (
                         <a
                           href={liveUrl}
                           target="_blank"
                           rel="noreferrer"
+                          data-track-label={`Go to website: ${title}`}
                           aria-label={`${dictionary.common.openLiveSite}: ${title}`}
                           className="inline-flex items-center rounded-full bg-[rgba(109,40,217,0.9)] px-5 py-3 text-sm font-semibold text-white transition hover:bg-[color:var(--color-text-accent)]"
                         >

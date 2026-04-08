@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import { Button } from "@/components/ui/Button";
 import { FinalCTA } from "@/components/sections/FinalCTA";
 import { JsonLd } from "@/components/seo/JsonLd";
@@ -7,6 +6,7 @@ import { BRAND_LOGO_MARK_SRC } from "@/lib/brand";
 import { localizePath } from "@/lib/i18n/config";
 import { getDictionary } from "@/lib/i18n/dictionary";
 import { getRequestLocale } from "@/lib/i18n/request";
+import { CALENDLY_BOOKING_URL } from "@/lib/links";
 import { getStats } from "@/lib/site-content";
 import { absoluteUrl, createMetadata } from "@/lib/seo";
 
@@ -69,9 +69,9 @@ export default async function AboutPage() {
               </div>
 
               <div className="mt-10">
-                <Link href={localizePath(locale, "/contact")}>
+                <a href={CALENDLY_BOOKING_URL} target="_blank" rel="noreferrer">
                   <Button size="lg">{dictionary.common.bookFreeCall}</Button>
-                </Link>
+                </a>
               </div>
             </div>
 

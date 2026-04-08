@@ -1,9 +1,10 @@
 import { NextResponse } from "next/server";
-import { type AgentHistoryItem, parseAgentChatPayload, runPrequalifyChat } from "@/lib/agent-chat";
+import { type AgentHistoryItem, type ChatAgentKey, parseAgentChatPayload, runPrequalifyChat } from "@/lib/agent-chat";
 import { supabase } from "@/lib/supabase";
 
 const TRIAL_LIMIT = 2;
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const CHAT_AGENT_KEYS: ChatAgentKey[] = ["prequalify", "prequalifyNewBusiness"];
 
 type TranscriptItemRole = "user" | "assistant" | "system";
 type TranscriptItemKind = "chat" | "email" | "status";
@@ -135,6 +136,10 @@ export async function POST(request: Request) {
   const parsedBody = body && typeof body === "object" ? (body as Record<string, unknown>) : {};
   const action = parsedBody.action === "capture_email" ? "capture_email" : "chat";
   const sessionId = normalizeSessionId(parsedBody.sessionId);
+  const agentKey =
+    typeof parsedBody.agentKey === "string" && CHAT_AGENT_KEYS.includes(parsedBody.agentKey as ChatAgentKey)
+      ? (parsedBody.agentKey as ChatAgentKey)
+      : "prequalify";
 
   if (!sessionId) {
     return NextResponse.json({ error: "sessionId is required." }, { status: 400 });
@@ -216,6 +221,7 @@ export async function POST(request: Request) {
       message: payload.message,
       history,
       locale: payload.locale,
+      agentKey,
     });
 
     const nextMessagesUsed = session.messages_used + 1;

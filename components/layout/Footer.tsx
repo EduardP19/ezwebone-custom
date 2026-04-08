@@ -1,7 +1,6 @@
 "use client";
 
 import { BrandLogo } from "@/components/layout/BrandLogo";
-import { LanguageSwitcher } from "@/components/layout/LanguageSwitcher";
 import { LocalizedLink } from "@/components/i18n/LocalizedLink";
 import { useI18n } from "@/components/i18n/LocaleProvider";
 
@@ -18,6 +17,7 @@ const FOOTER_LINKS = [
 
 const PRIMARY_FOOTER_LINKS = FOOTER_LINKS.slice(0, 4);
 const SECONDARY_FOOTER_LINKS = FOOTER_LINKS.slice(4);
+const SHOW_SOCIAL_ICONS = false;
 
 function LinkedInIcon({ size = 18 }: { size?: number }) {
   return (
@@ -63,33 +63,31 @@ export function Footer() {
           <div>
             <LocalizedLink href="/" className="inline-flex items-center">
               <span className="inline-flex items-center gap-3">
-                <BrandLogo variant="mark" size={40} className="h-10 w-10" />
-                <BrandLogo variant="wordmark" size={58} className="h-10 w-auto" />
+                <BrandLogo variant="mark" size={116} className="h-28 w-28" />
               </span>
             </LocalizedLink>
             <p className="mt-5 max-w-sm text-sm leading-7 text-[color:var(--color-text-secondary)]">
               {dictionary.footer.strapline}
             </p>
-            <div className="mt-5">
-              <LanguageSwitcher />
-            </div>
 
-            <div className="mt-6 flex items-center gap-3">
-              <a
-                href="#"
-                aria-label="EZWebOne on LinkedIn"
-                className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-[color:var(--color-border)] bg-white/5 text-[color:var(--color-text-secondary)] transition hover:border-[color:var(--color-primary-light)] hover:text-white"
-              >
-                <LinkedInIcon size={18} />
-              </a>
-              <a
-                href="#"
-                aria-label="EZWebOne on Instagram"
-                className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-[color:var(--color-border)] bg-white/5 text-[color:var(--color-text-secondary)] transition hover:border-[color:var(--color-primary-light)] hover:text-white"
-              >
-                <InstagramIcon size={18} />
-              </a>
-            </div>
+            {SHOW_SOCIAL_ICONS ? (
+              <div className="mt-6 flex items-center gap-3">
+                <a
+                  href="#"
+                  aria-label="EZWebOne on LinkedIn"
+                  className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-[color:var(--color-border)] bg-white/5 text-[color:var(--color-text-secondary)] transition hover:border-[color:var(--color-primary-light)] hover:text-white"
+                >
+                  <LinkedInIcon size={18} />
+                </a>
+                <a
+                  href="#"
+                  aria-label="EZWebOne on Instagram"
+                  className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-[color:var(--color-border)] bg-white/5 text-[color:var(--color-text-secondary)] transition hover:border-[color:var(--color-primary-light)] hover:text-white"
+                >
+                  <InstagramIcon size={18} />
+                </a>
+              </div>
+            ) : null}
           </div>
 
           <div>

@@ -4,15 +4,16 @@ import * as React from "react";
 import Image from "next/image";
 import { AnimatePresence, motion } from "framer-motion";
 import { ArrowRight, CheckCircle2, MessageCircle } from "lucide-react";
-import { LocalizedLink } from "@/components/i18n/LocalizedLink";
 import { useI18n } from "@/components/i18n/LocaleProvider";
 import { ParticleNetwork } from "@/components/sections/ParticleNetwork";
 import { Button } from "@/components/ui/Button";
+import { CALENDLY_BOOKING_URL } from "@/lib/links";
 import { cn } from "@/lib/utils";
 
 type ChatState = "idle" | "active" | "awaiting_email" | "report_sent" | "locked";
 type ChatRole = "user" | "assistant";
 type ChatKind = "chat" | "email";
+type ChatAgentKey = "prequalify" | "prequalifyNewBusiness";
 
 type ChatMessage = {
   id: string;
@@ -32,6 +33,11 @@ const SESSION_COOKIE = "ezw_prequalify_session";
 const TRIAL_LOCK_COOKIE = "ezw_prequalify_locked";
 const TRIAL_MESSAGE_LIMIT = 2;
 const REPORT_SENT_DURATION_MS = 7000;
+
+type HeroChatPreviewProps = {
+  apiPath?: string;
+  agentKey?: ChatAgentKey;
+};
 
 function useTypewriter(prompts: readonly string[], enabled: boolean) {
   const [promptIndex, setPromptIndex] = React.useState(0);
@@ -196,7 +202,10 @@ function RunningBorder({
   );
 }
 
-export function HeroChatPreview() {
+export function HeroChatPreview({
+  apiPath = "/api/agent-chat",
+  agentKey = "prequalify",
+}: HeroChatPreviewProps) {
   const sectionRef = React.useRef<HTMLElement>(null);
   const inputRef = React.useRef<HTMLInputElement>(null);
   const historyRef = React.useRef<HTMLDivElement>(null);
@@ -298,7 +307,7 @@ export function HeroChatPreview() {
 
       try {
         const response = await fetch(
-          `/api/agent-chat?sessionId=${encodeURIComponent(nextSessionId)}&locale=${locale}`,
+          `${apiPath}?sessionId=${encodeURIComponent(nextSessionId)}&locale=${locale}`,
           {
             method: "GET",
             cache: "no-store",
@@ -395,7 +404,7 @@ export function HeroChatPreview() {
       setInputValue("");
       setIsStreaming(true);
 
-      void fetch("/api/agent-chat", {
+      void fetch(apiPath, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -446,7 +455,7 @@ export function HeroChatPreview() {
     setInputValue("");
     setIsStreaming(true);
 
-    void fetch("/api/agent-chat", {
+    void fetch(apiPath, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -454,6 +463,7 @@ export function HeroChatPreview() {
       body: JSON.stringify({
         action: "chat",
         sessionId,
+        agentKey,
         locale,
         message: nextValue,
         history,
@@ -511,6 +521,8 @@ export function HeroChatPreview() {
     locale,
     messages,
     queueTimeout,
+    apiPath,
+    agentKey,
     startReportAndLockFlow,
     sessionId,
     userMessageCount,
@@ -693,12 +705,14 @@ export function HeroChatPreview() {
                       <p className="text-center text-[13px] leading-6 text-[color:var(--color-text-secondary)] sm:text-sm">
                         {heroCopy.trialUsedBody}
                       </p>
-                      <LocalizedLink
-                        href="/contact"
+                      <a
+                        href={CALENDLY_BOOKING_URL}
+                        target="_blank"
+                        rel="noreferrer"
                         className="inline-flex min-h-12 w-full items-center justify-center rounded-full border border-[color:var(--color-primary)] bg-[color:var(--color-primary)] px-6 py-3 text-sm font-semibold text-white shadow-[0_12px_36px_rgba(124,58,237,0.32)] transition hover:border-[color:var(--color-primary-light)] hover:bg-[color:var(--color-primary-light)] sm:w-auto"
                       >
                         {heroCopy.trialUsedCta}
-                      </LocalizedLink>
+                      </a>
                     </div>
                   ) : (
                     <>

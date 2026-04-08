@@ -7,6 +7,7 @@ import { ArrowDown } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { BusinessJourney } from "@/components/sections/BusinessJourney";
 import { ParticleNetwork } from "@/components/sections/ParticleNetwork";
+import { CALENDLY_BOOKING_URL } from "@/lib/links";
 
 const containerVariants: Variants = {
   hidden: { opacity: 0 },
@@ -77,9 +78,9 @@ export function Hero() {
               variants={itemVariants}
               className="mt-10 flex flex-col items-start gap-4 sm:flex-row"
             >
-              <Link href="/contact">
+              <a href={CALENDLY_BOOKING_URL} target="_blank" rel="noreferrer">
                 <Button size="lg">Book a Free Call</Button>
-              </Link>
+              </a>
               <Link href="/portfolio">
                 <Button
                   size="lg"

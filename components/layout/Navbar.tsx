@@ -6,8 +6,8 @@ import { LocalizedLink } from "@/components/i18n/LocalizedLink";
 import { useI18n } from "@/components/i18n/LocaleProvider";
 import { Button } from "@/components/ui/Button";
 import { BrandLogo } from "@/components/layout/BrandLogo";
-import { LanguageSwitcher } from "@/components/layout/LanguageSwitcher";
 import { localizePath } from "@/lib/i18n/config";
+import { CALENDLY_BOOKING_URL } from "@/lib/links";
 import { cn } from "@/lib/utils";
 import { Menu, X } from "lucide-react";
 
@@ -62,18 +62,9 @@ export function Navbar() {
               <BrandLogo
                 variant="mark"
                 priority
-                size={44}
+                size={132}
                 className={cn(
-                  "h-9 w-9 sm:h-10 sm:w-10",
-                  isHome && !isScrolled ? "brightness-125 saturate-110" : "brightness-110"
-                )}
-              />
-              <BrandLogo
-                variant="wordmark"
-                priority
-                size={52}
-                className={cn(
-                  "h-9 w-auto sm:h-10",
+                  "h-24 w-24 sm:h-28 sm:w-28",
                   isHome && !isScrolled ? "brightness-125 saturate-110" : "brightness-110"
                 )}
               />
@@ -97,15 +88,14 @@ export function Navbar() {
                 {dictionary.nav.links[link.key]}
               </LocalizedLink>
             ))}
-            <LanguageSwitcher />
           </div>
 
           <div className="hidden md:block">
-            <LocalizedLink href="/contact">
+            <a href={CALENDLY_BOOKING_URL} target="_blank" rel="noreferrer">
               <Button size="md" className="px-6 py-3 text-sm">
                 {dictionary.common.bookFreeCall}
               </Button>
-            </LocalizedLink>
+            </a>
           </div>
 
           <button
@@ -162,12 +152,16 @@ export function Navbar() {
             <p className="mono-label text-xs text-[color:var(--color-text-secondary)]">
               {dictionary.nav.mobileTagline}
             </p>
-            <LanguageSwitcher compact />
-            <LocalizedLink href="/contact" onClick={() => setIsMenuOpen(false)}>
+            <a
+              href={CALENDLY_BOOKING_URL}
+              target="_blank"
+              rel="noreferrer"
+              onClick={() => setIsMenuOpen(false)}
+            >
               <Button size="lg" className="w-full">
                 {dictionary.common.bookFreeCall}
               </Button>
-            </LocalizedLink>
+            </a>
           </div>
         </div>
       </div>
