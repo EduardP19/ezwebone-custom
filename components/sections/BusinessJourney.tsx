@@ -10,9 +10,9 @@ export function BusinessJourney() {
   const stages = getBusinessStages(locale);
 
   return (
-    <div className="surface-elevated rounded-[2rem] border border-white/10 p-5 md:p-6">
-      <div className="relative">
-        <div className="absolute left-[1.15rem] top-12 bottom-12 w-px bg-gradient-to-b from-[color:var(--color-primary-light)] via-[color:var(--color-primary)] to-[color:var(--color-primary-dark)]" />
+    <div className="surface-elevated h-fit rounded-[2rem] border border-white/10 p-5 md:p-6">
+      <div className="relative h-fit">
+        <div className="absolute left-[1.15rem] top-12 bottom-6 w-px bg-gradient-to-b from-[color:var(--color-primary-light)] via-[color:var(--color-primary)] to-[color:var(--color-primary-dark)]" />
         <motion.div
           className="absolute left-[0.9rem] top-12 w-2.5 rounded-full bg-[color:var(--color-primary-light)] shadow-[0_0_18px_rgba(167,139,250,0.8)]"
           animate={{ y: [0, 144, 290], opacity: [0.8, 1, 0.8] }}
@@ -26,7 +26,7 @@ export function BusinessJourney() {
               key={stage.title}
               whileHover={{ x: 4 }}
               transition={{ duration: 0.22, ease: "easeOut" }}
-              className="relative rounded-[1.5rem] border border-[color:var(--color-border)] bg-[color:var(--color-bg-card)] p-5 pl-12 shadow-[0_18px_50px_rgba(0,0,0,0.12)]"
+              className="relative rounded-[1.5rem] border border-[color:var(--color-border)] bg-[color:var(--color-bg-card)] px-5 py-6 pl-12 shadow-[0_18px_50px_rgba(0,0,0,0.12)]"
             >
               <div className="absolute left-3 top-6 flex h-7 w-7 items-center justify-center rounded-full border border-[color:var(--color-primary)]/50 bg-[color:var(--color-bg-elevated)] text-[color:var(--color-text-accent)]">
                 <stage.icon size={14} />

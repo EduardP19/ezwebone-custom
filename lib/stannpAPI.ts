@@ -54,9 +54,25 @@ function asString(value: unknown, fallback = "") {
   return nextValue.length > 0 ? nextValue : fallback;
 }
 
+const SIC_LABELS: Record<string, string> = {
+  "96020": "beauty si tratamente de infrumusetare",
+  "96021": "hairdressing si frizerie",
+  "96040": "wellness si intretinere corporala",
+  "86220": "servicii medicale specializate",
+};
+
+function resolveIndustryLabel(rawIndustry: string | null) {
+  const value = asString(rawIndustry, "servicii");
+  const sicOnly = value.match(/^\d{5}$/)?.[0];
+  if (sicOnly && SIC_LABELS[sicOnly]) {
+    return SIC_LABELS[sicOnly];
+  }
+  return value;
+}
+
 function resolveBodyTemplate(item: DirectorRow) {
   const firstName = asString(item.full_name).split(/\s+/)[0] || "antreprenor";
-  const niche = asString(item.industry, "servicii");
+  const niche = resolveIndustryLabel(item.industry);
   const downloadCode = asString(item.download_code, "");
   const customBody = asString(item.letter_template);
 
@@ -66,7 +82,16 @@ function resolveBodyTemplate(item: DirectorRow) {
       customBody ||
       `Salut ${firstName},\n\nIn ${niche}, primul client vine greu, iar urmatorii vin doar daca prezenta ta online inspira incredere.\n\nCand pornesti un business nou, website-ul este primul filtru prin care clientii decid daca te aleg sau merg mai departe.\n\nLa EZWebOne construim website-uri si prezenta digitala pentru firme aflate la inceput de drum, cu accent pe imagine, claritate si incredere.\n\nDaca un client te-ar descoperi astazi online, ar intelege clar ce oferi si de ce sa te aleaga? Raspunsul incepe cu o prezenta online corecta.\n\nCu stima,\nEduard Proca\nCEO & Fondator EZWebOne`,
     highlightText: downloadCode ? `Codul tau ${downloadCode}` : "Ghidul tau practic",
-    qrContentDescription: `Un ghid practic pentru directori aflati la inceput, care vor sa construiasca o prezenta online corecta din prima.`,
+    qrContentDescription: [
+      "Acest ghid iti arata:",
+      "• ce ai nevoie cu adevarat la inceput",
+      "• cum sa atragi primii clienti fara bugete mari",
+      "• cum sa eviti dependenta de platforme",
+      "",
+      downloadCode
+        ? `Acceseaza ghidul la www.ezwebone.co.uk/guides utilizand codul ${downloadCode}`
+        : "Acceseaza ghidul la www.ezwebone.co.uk/guides",
+    ].join("\n"),
     footer: "EZWebOne este numele de trading al companiei EMAGF LTD (UK), inregistrata cu numarul 12437054.",
     privacyNotice: "Datele de contact provin din registre publice UK Companies House.",
   };
@@ -253,16 +278,18 @@ export async function sendDueLetters(params?: {
       const letterStatus = asString(response.data?.status, "sent");
       const now = new Date().toISOString();
 
-      const { error: updateError } = await supabaseAdmin
-        .from(sourceTable)
-        .update({
-          campaign_status: "letter_sent",
-          updated_at: now,
-        })
-        .eq("id", item.id);
+      if (!test) {
+        const { error: updateError } = await supabaseAdmin
+          .from(sourceTable)
+          .update({
+            campaign_status: "letter_sent",
+            updated_at: now,
+          })
+          .eq("id", item.id);
 
-      if (updateError) {
-        throw new Error(`Failed to update campaign status: ${updateError.message}`);
+        if (updateError) {
+          throw new Error(`Failed to update campaign status: ${updateError.message}`);
+        }
       }
 
       const { error: insertError } = await supabaseAdmin
@@ -294,13 +321,15 @@ export async function sendDueLetters(params?: {
       const message = error instanceof Error ? error.message : "Unknown error";
       errors.push({ rowId: item.id, error: message });
 
-      await supabaseAdmin
-        .from(sourceTable)
-        .update({
-          campaign_status: "send_failed",
-          updated_at: new Date().toISOString(),
-        })
-        .eq("id", item.id);
+      if (!test) {
+        await supabaseAdmin
+          .from(sourceTable)
+          .update({
+            campaign_status: "send_failed",
+            updated_at: new Date().toISOString(),
+          })
+          .eq("id", item.id);
+      }
     }
   }
 

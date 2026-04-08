@@ -6,7 +6,6 @@ import { AnimatePresence, motion } from "framer-motion";
 import { ArrowRight, CheckCircle2, MessageCircle } from "lucide-react";
 import { useI18n } from "@/components/i18n/LocaleProvider";
 import { ParticleNetwork } from "@/components/sections/ParticleNetwork";
-import { Button } from "@/components/ui/Button";
 import { CALENDLY_BOOKING_URL } from "@/lib/links";
 import { cn } from "@/lib/utils";
 
@@ -27,6 +26,7 @@ const TRUST_IMAGES = [
   "/clients/client2.png",
   "/clients/client3.png",
 ];
+const COMMAND_TAGS = ["Websites", "Automations", "AI Agents", "Marketing", "SEO", "Lead Gen"];
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const SESSION_COOKIE = "ezw_prequalify_session";
@@ -532,15 +532,13 @@ export function HeroChatPreview({
   return (
     <section
       ref={sectionRef}
-      className="section-shell relative min-h-[calc(100svh-50px)] pt-28 pb-12 sm:min-h-[calc(100svh-50px)] sm:pb-18 md:min-h-[calc(100svh-100px)] md:pb-20"
+      className="section-shell relative min-h-[calc(100svh-450px)] pt-16 pb-8 sm:min-h-[calc(100svh-450px)] sm:pb-10 md:min-h-[calc(100svh-500px)] md:pb-12"
       style={{ backgroundColor: "var(--background)" }}
     >
       <ParticleNetwork className="opacity-45" count={94} interactive={false} maxDistance={190} />
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_82%_40%_at_50%_0%,color-mix(in_srgb,var(--color-primary)_14%,transparent),transparent)]" />
-      <div className="pointer-events-none absolute inset-0 bg-[rgba(91,33,182,0)]" />
-
+      <div className="pointer-events-none absolute inset-0 bg-[rgba(91,33,182,0.10)]" />
       <div className="relative z-10 mx-auto max-w-7xl px-3 sm:px-4 md:px-6">
-        <div className="mx-auto flex min-h-[calc(100svh-5rem)] max-w-4xl items-start md:min-h-[calc(100svh-6rem)]">
+        <div className="mx-auto flex min-h-[calc(100svh-29rem)] max-w-4xl items-start md:min-h-[calc(100svh-31rem)]">
           <motion.div
             className="w-full space-y-6 text-center sm:space-y-7 md:space-y-8"
             initial={{ opacity: 0, y: 28 }}
@@ -564,7 +562,9 @@ export function HeroChatPreview({
               <span>{dictionary.home.trust.happyClients}</span>
               <span className="hidden text-[color:var(--color-border)] sm:inline">·</span>
               <span>
-                <span className="text-[color:var(--color-text-primary)]">★★★★★</span>{" "}
+                <span className="tracking-[0.08em] text-[#f59e0b] drop-shadow-[0_1px_8px_rgba(245,158,11,0.35)]">
+                  ★★★★★
+                </span>{" "}
                 {dictionary.home.trust.googleRating}
               </span>
               <span className="hidden text-[color:var(--color-border)] sm:inline">·</span>
@@ -586,28 +586,24 @@ export function HeroChatPreview({
             </div>
 
             <div className="mx-auto w-full max-w-2xl">
-              <div className="hero-chat-preview__pill-viewport hero-chat-preview__scrollbar mb-3 flex justify-start overflow-x-auto pr-8 pl-1 sm:mb-4 sm:justify-center sm:pr-1">
+              <div className="hero-chat-preview__pill-viewport hero-chat-preview__scrollbar mb-4 flex justify-start overflow-x-auto pr-8 pl-1 sm:mb-5 sm:justify-center sm:pr-1">
                 <div className="flex min-w-max gap-2.5 pb-2 sm:gap-3">
-                  {heroCopy.servicePills.map((pill) => (
-                    <span
-                      key={pill}
-                      className="shrink-0 rounded-full border border-[color:var(--color-border)] bg-[color:var(--color-bg-elevated)] px-3.5 py-2 text-xs font-medium text-[color:var(--color-text-secondary)] sm:px-4 sm:text-sm"
-                    >
-                        {pill}
+                  {COMMAND_TAGS.map((tag) => (
+                    <span key={tag} className="ai-command-chip shrink-0 rounded-full px-3.5 py-2 text-xs font-semibold tracking-[0.02em] sm:px-4 sm:text-sm">
+                      {tag}
                     </span>
                   ))}
                 </div>
               </div>
-
               <RunningBorder
                 radius="2.15rem"
                 duration="6.75s"
-                className="shadow-[0_36px_120px_rgba(124,58,237,0.14)]"
-                innerClassName="bg-[color:var(--color-bg-elevated)]/92 p-3 backdrop-blur-sm sm:p-4 md:p-6"
+                className="ai-command-center shadow-[0_42px_130px_rgba(124,58,237,0.16)]"
+                innerClassName="bg-[rgba(28,42,68,0.30)] p-4 backdrop-blur-[20px] sm:p-5 md:p-6"
               >
                 <div
                   className={cn(
-                    "min-h-[272px] text-left sm:min-h-[320px]",
+                    "text-left",
                     (chatState === "report_sent" || chatState === "locked") &&
                       "flex items-center justify-center text-center"
                   )}
@@ -622,17 +618,9 @@ export function HeroChatPreview({
                         exit={{ opacity: 0 }}
                         transition={{ duration: 0.3 }}
                       >
-                        <RunningBorder
-                          radius="1.35rem"
-                          duration="7.8s"
-                          className="mb-5"
-                          innerClassName="min-h-[96px] bg-[color:var(--color-bg-card)]/90 px-4 py-5 sm:min-h-[112px] sm:px-5 sm:py-6"
-                        >
-                          <div className="flex min-h-[54px] items-center text-sm italic leading-6 text-[color:var(--color-text-secondary)] sm:min-h-[64px] sm:text-lg">
-                            <span className="max-w-[28ch] sm:max-w-none">{typewriterText}</span>
-                            <span className="hero-chat-preview__cursor ml-1" />
-                          </div>
-                        </RunningBorder>
+                        <div className="mb-5 flex min-h-[64px] items-center px-1 text-base italic leading-7 tracking-[0.01em] text-white/92 sm:min-h-[72px] sm:text-lg">
+                          <span className="max-w-[28ch] sm:max-w-none">{heroCopy.placeholderChat}</span>
+                        </div>
                       </motion.div>
                       ) : (
                       <motion.div
@@ -645,13 +633,8 @@ export function HeroChatPreview({
                         className="mb-4 max-h-[245px] space-y-2.5 overflow-y-auto pr-1 sm:mb-5 sm:max-h-[300px] sm:space-y-3"
                       >
                         {messages.length === 0 ? (
-                          <div
-                            className={cn(
-                              "rounded-2xl border border-dashed px-4 py-5 text-xs sm:text-sm",
-                              "border-[color:var(--color-border)] bg-[color:var(--color-bg-card)] text-[color:var(--color-text-secondary)]"
-                            )}
-                          >
-                            {heroCopy.startTyping}
+                          <div className="mb-5 flex min-h-[64px] items-center px-1 text-base italic leading-7 tracking-[0.01em] text-white/92 sm:min-h-[72px] sm:text-lg">
+                            <span className="max-w-[28ch] sm:max-w-none">{heroCopy.placeholderChat}</span>
                           </div>
                         ) : null}
 
@@ -726,7 +709,7 @@ export function HeroChatPreview({
                   ) : (
                     <>
                       <form
-                        className="grid gap-3 sm:grid-cols-[minmax(0,1fr)_auto]"
+                        className="ai-command-bar grid items-center gap-2.5 rounded-[1.4rem] border border-[color:var(--color-border)]/70 bg-[#e5e7eb] p-2.5 sm:grid-cols-[minmax(0,1fr)_auto]"
                         onSubmit={(event) => {
                           event.preventDefault();
                           handleSendMessage();
@@ -744,24 +727,24 @@ export function HeroChatPreview({
                           placeholder={
                             chatState === "awaiting_email"
                               ? heroCopy.placeholderEmail
-                              : heroCopy.placeholderChat
+                              : userMessageCount > 0
+                                ? ""
+                                : chatState === "idle"
+                                ? typewriterText
+                                : "Describe your business and what you'd like AI to solve..."
                           }
                           disabled={isStreaming || isSessionLoading}
-                          className={cn(
-                            "min-h-14 rounded-2xl border px-4 text-base outline-none transition",
-                            "border-[color:var(--color-border)] bg-[color:var(--color-bg-card)] text-[color:var(--color-text-primary)] placeholder:text-[color:var(--color-text-secondary)] focus:border-[color:var(--color-primary)]/45"
-                          )}
+                          className="min-h-14 rounded-[1.05rem] border border-[color:var(--color-border)]/70 bg-white px-4 text-base tracking-[0.01em] text-[color:#111827] outline-none transition placeholder:text-[color:#4b5563]/75 focus:border-[color:var(--color-primary-light)]/70"
                         />
 
-                        <Button
+                        <button
                           type="submit"
-                          size="md"
-                          className="min-h-14 w-full min-w-[132px] gap-2 sm:w-auto"
+                          className="ai-command-send-button inline-flex min-h-14 w-full min-w-[132px] items-center justify-center gap-2 rounded-[1.05rem] px-6 text-sm font-semibold tracking-[0.02em] text-white sm:w-auto"
                           disabled={isStreaming || isSessionLoading || inputValue.trim().length === 0}
                         >
-                          {chatState === "awaiting_email" ? "Send" : "Send"}
+                          Send
                           <ArrowRight className="h-4 w-4" />
-                        </Button>
+                        </button>
                       </form>
 
                       {emailError ? (
@@ -769,7 +752,7 @@ export function HeroChatPreview({
                       ) : null}
 
                       {messagesRemaining ? (
-                        <p className="mt-3 text-center text-xs text-[color:var(--color-text-secondary)]">
+                        <p className="mt-3 text-center text-xs text-white">
                           {messagesRemaining}{" "}
                           {messagesRemaining === 1
                             ? heroCopy.remainingMessages.singular

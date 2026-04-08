@@ -13,7 +13,7 @@ export function Portfolio({ projects }: PortfolioProps) {
   const { dictionary } = useI18n();
 
   return (
-    <section id="projects" className="section-shell bg-[color:var(--color-bg-dark)] py-24 md:py-32">
+    <section id="projects" className="section-shell section-shift section-shift-purple bg-[color:var(--color-bg-dark)] py-24 md:py-32">
       <div className="relative mx-auto max-w-7xl px-4 md:px-6">
         <div className="max-w-3xl">
           <p className="mono-label text-xs text-[color:var(--color-text-accent)]">

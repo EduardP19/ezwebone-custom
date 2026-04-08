@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { usePathname, useSearchParams } from "next/navigation";
 import { CookieConsentBanner } from "@/components/analytics/CookieConsentBanner";
 import { TRACKING_SESSION_KEY, TRACKING_UTM_KEY } from "@/lib/consent";
+import { readTrackingConsent, updateTrackingConsent } from "@/lib/consent";
 import { supabase } from "@/lib/supabase";
 
 type UTMFields = {
@@ -153,9 +154,14 @@ async function insertLog(payload: LogPayload) {
 }
 
 export function TrackingProvider() {
-  const [isVisible, setIsVisible] = useState(true);
+  const [isVisible, setIsVisible] = useState(false);
   const pathname = usePathname();
   const searchParams = useSearchParams();
+
+  useEffect(() => {
+    const consent = readTrackingConsent();
+    setIsVisible(consent === null);
+  }, []);
 
   useEffect(() => {
     const utms = mergeAndStoreUtms(searchParams);
@@ -223,8 +229,14 @@ export function TrackingProvider() {
 
   return (
     <CookieConsentBanner
-      onAccept={() => setIsVisible(false)}
-      onReject={() => setIsVisible(false)}
+      onAccept={() => {
+        updateTrackingConsent("accepted");
+        setIsVisible(false);
+      }}
+      onReject={() => {
+        updateTrackingConsent("rejected");
+        setIsVisible(false);
+      }}
     />
   );
 }

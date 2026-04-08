@@ -100,7 +100,7 @@ const dictionaries = {
         reportSentEta: "It can take 1-2 minutes for your recommendation to arrive.",
         reportSentOnEmail: "Report sent to",
         reportSentSpamHint: "If you don't see it soon, please check your spam or junk folder.",
-        trialUsedTitle: "Your tasting messages are used.",
+        trialUsedTitle: "Your ran out of tasting messages.",
         trialUsedBody:
           "If you want deeper recommendations and a custom plan, book a strategy call and we will walk through your business in detail.",
         trialUsedCta: "Book a call",
@@ -150,6 +150,8 @@ const dictionaries = {
         title: "A small UK team focused on real business outcomes.",
         body:
           "We build websites, automations, and AI systems that help service businesses look sharper, respond faster, and convert more enquiries into booked work.",
+        bodyLight:
+          "We design clean websites, practical automations, and AI systems that help service businesses look professional, respond faster, and turn more enquiries into booked work.",
       },
       testimonials: {
         badge: "Testimonials",
@@ -162,7 +164,7 @@ const dictionaries = {
       finalCta: {
         title: "Ready to Build Something That Actually Works?",
         body:
-          "Book a free 15-minute call. No pitch. No pressure. Just a conversation about what your business needs.",
+          "Book a free 20-minute call. No pitch. No pressure. Just a conversation about what your business needs.",
       },
     },
     pages: {
@@ -472,7 +474,7 @@ const dictionaries = {
         reportSentEta: "Poate dura 1-2 minute pana cand recomandarea ajunge pe email.",
         reportSentOnEmail: "Raport trimis pe",
         reportSentSpamHint: "Daca nu il vezi curand, verifica si folderul spam sau junk.",
-        trialUsedTitle: "Ai folosit mesajele de test disponibile.",
+        trialUsedTitle: "Ai ramas fara mesaje de test disponibile.",
         trialUsedBody:
           "Daca vrei recomandari mai detaliate si un plan personalizat, programeaza un apel si discutam punctual despre afacerea ta.",
         trialUsedCta: "Programeaza un apel",
@@ -522,6 +524,8 @@ const dictionaries = {
         title: "O echipa mica din UK, orientata spre rezultate reale.",
         body:
           "Construim website-uri, automatizari si sisteme AI care ajuta afacerile de servicii sa arate mai bine, sa raspunda mai rapid si sa transforme mai multe cereri in programari.",
+        bodyLight:
+          "Construim website-uri clare, automatizari practice si sisteme AI care ajuta afacerile de servicii sa arate profesionist, sa raspunda mai rapid si sa transforme mai multe cereri in programari.",
       },
       testimonials: {
         badge: "Testimoniale",
@@ -534,7 +538,7 @@ const dictionaries = {
       finalCta: {
         title: "Esti gata sa construim ceva care chiar functioneaza?",
         body:
-          "Programeaza un apel gratuit de 15 minute. Fara pitch. Fara presiune. Doar o conversatie despre ce are nevoie afacerea ta.",
+          "Programeaza un apel gratuit de 20 minute. Fara pitch. Fara presiune. Doar o conversatie despre ce are nevoie afacerea ta.",
       },
     },
     pages: {

@@ -69,7 +69,7 @@ export function TrustBar() {
   const stats = getStats(locale);
 
   return (
-    <section className="section-shell border-y border-white/8 bg-[linear-gradient(90deg,rgba(124,58,237,0.12),rgba(17,17,24,1),rgba(124,58,237,0.12))] py-10">
+    <section className="trustbar-shell section-shift section-shift-cyan section-shell border-y py-10">
       <div className="mx-auto max-w-7xl px-4 md:px-6">
         <div className="grid grid-cols-2 gap-8 md:grid-cols-4 md:divide-x md:divide-[color:var(--color-border)]">
           {stats.map((stat) => (

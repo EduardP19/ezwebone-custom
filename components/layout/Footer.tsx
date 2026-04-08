@@ -5,6 +5,7 @@ import Image from "next/image";
 import { LocalizedLink } from "@/components/i18n/LocalizedLink";
 import { useI18n } from "@/components/i18n/LocaleProvider";
 import { BRAND_LOGO_MARK_DARK_SRC } from "@/lib/brand";
+import { useIsDark } from "@/lib/useTheme";
 
 const FOOTER_LINKS = [
   { key: "home", href: "/" },
@@ -51,6 +52,7 @@ function InstagramIcon({ size = 18 }: { size?: number }) {
 
 export function Footer() {
   const { dictionary } = useI18n();
+  const isDark = useIsDark();
 
   const contactLinks = [
     { label: dictionary.footer.contact.phone, href: "tel:+447448929894" },
@@ -59,7 +61,7 @@ export function Footer() {
   ];
 
   return (
-    <footer className="mt-auto bg-[#08080d] text-white">
+    <footer className={`mt-auto text-white ${isDark ? "bg-[#08080d]" : "bg-[#1C2A44]"}`}>
       <div className="mx-auto max-w-7xl px-4 pb-14 pt-12 md:px-6 md:pb-16 md:pt-14">
         <div className="grid grid-cols-1 gap-12 md:grid-cols-3">
           <div>

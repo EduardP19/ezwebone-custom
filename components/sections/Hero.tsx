@@ -114,7 +114,10 @@ export function Hero() {
               </span>
               <span className="hidden text-[color:var(--color-text-secondary)] sm:inline">·</span>
               <span className="text-sm text-[color:var(--color-text-secondary)]">
-                <span className="text-[color:var(--color-text-primary)]">★★★★★</span> 5.0 on Google
+                <span className="tracking-[0.08em] text-[#f59e0b] drop-shadow-[0_1px_8px_rgba(245,158,11,0.35)]">
+                  ★★★★★
+                </span>{" "}
+                5.0 on Google
               </span>
             </motion.div>
           </div>

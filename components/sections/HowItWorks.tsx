@@ -30,7 +30,7 @@ export function HowItWorks() {
   }, []);
 
   return (
-    <section ref={ref} className="section-shell bg-[color:var(--color-bg-dark)] py-24 md:py-32">
+    <section ref={ref} className="section-shell section-shift section-shift-neutral bg-[color:var(--color-bg-dark)] py-24 md:py-32">
       <div className="relative mx-auto max-w-7xl px-4 md:px-6">
         <div className="max-w-3xl">
           <p className="mono-label text-xs text-[color:var(--color-text-accent)]">
