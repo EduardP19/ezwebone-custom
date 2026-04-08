@@ -402,7 +402,7 @@ export default function GuidesPage() {
               value={code}
               onChange={(event) => setCode(event.target.value.toUpperCase())}
               placeholder={copy.codePlaceholder}
-              className="min-h-12 rounded-xl border border-[color:var(--color-border)] bg-white px-4 text-center text-base font-medium tracking-[0.12em] text-[color:var(--color-text-primary)] outline-none focus:border-[color:var(--color-primary)]/60"
+              className="min-h-12 rounded-xl border border-[color:var(--color-border)] bg-white px-4 text-center text-base font-medium tracking-[0.12em] text-[#1C2A44] placeholder:text-[#1C2A44]/65 outline-none focus:border-[color:var(--color-primary)]/60"
             />
             <button
               type="submit"
