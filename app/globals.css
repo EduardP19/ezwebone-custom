@@ -1,15 +1,63 @@
 @import "tailwindcss";
 @plugin "@tailwindcss/typography";
 
-:root {
+:root,
+[data-theme="dark"] {
   --background: #0a0a0f;
   --foreground: #f5f5f7;
+  --color-primary: #7c3aed;
+  --color-primary-light: #a78bfa;
+  --color-primary-dark: #5b21b6;
+  --color-accent: #06b6d4;
+  --color-accent-light: #67e8f9;
+  --color-bg-dark: #0a0a0f;
+  --color-bg-card: #111118;
+  --color-bg-elevated: #1a1a24;
+  --color-border: #2a2a3a;
+  --color-text-primary: #f5f5f7;
+  --color-text-secondary: #a1a1aa;
+  --color-text-accent: #c4b5fd;
+  --color-live: #22c55e;
+  --color-bg-void: #08080d;
+  --color-mesh-teal: #7fb4c7;
+  --color-mesh-blue: #5d8da5;
+  --color-mesh-gold: #d6b86e;
+  --particle-dot: 245, 245, 247;
+  --particle-line: 196, 181, 253;
+  --particle-hover-line: 167, 139, 250;
+}
+
+[data-theme="light"] {
+  --background: #f4f5f7;
+  --foreground: #111827;
+  --color-primary: #7c3aed;
+  --color-primary-light: #9333ea;
+  --color-primary-dark: #5b21b6;
+  --color-accent: #06b6d4;
+  --color-accent-light: #0891b2;
+  --color-bg-dark: #f4f5f7;
+  --color-bg-card: #ffffff;
+  --color-bg-elevated: #eef0f5;
+  --color-border: #d1d5e0;
+  --color-text-primary: #111827;
+  --color-text-secondary: #4b5563;
+  --color-text-accent: #7c3aed;
+  --color-live: #16a34a;
+  --color-bg-void: #e8eaf0;
+  --color-mesh-teal: #1e293b;
+  --color-mesh-blue: #334155;
+  --color-mesh-gold: #374151;
+  --particle-dot: 17, 24, 39;
+  --particle-line: 30, 41, 59;
+  --particle-hover-line: 124, 58, 237;
 }
 
 @theme {
   --color-primary: #7c3aed;
   --color-primary-light: #a78bfa;
   --color-primary-dark: #5b21b6;
+  --color-accent: #06b6d4;
+  --color-accent-light: #67e8f9;
   --color-bg-dark: #0a0a0f;
   --color-bg-card: #111118;
   --color-bg-elevated: #1a1a24;
@@ -22,10 +70,14 @@
   --color-brand-blue: #7c3aed;
   --color-brand-purple: #a78bfa;
   --color-brand-purple-deep: #5b21b6;
-  --color-brand-orange: #f59e0b;
+  --color-brand-cyan: #06b6d4;
   --color-brand-warm: #f3f4f6;
   --color-brand-border: #d4d4d8;
   --color-brand-gray: #71717a;
+  --color-bg-void: #08080d;
+  --color-mesh-teal: #7fb4c7;
+  --color-mesh-blue: #5d8da5;
+  --color-mesh-gold: #d6b86e;
 
   --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
   --font-display: var(--font-space-grotesk), ui-sans-serif, system-ui, sans-serif;
@@ -36,8 +88,8 @@
   .bg-grid {
     background-size: 40px 40px;
     background-image:
-      linear-gradient(to right, rgba(127, 180, 199, 0.1) 1px, transparent 1px),
-      linear-gradient(to bottom, rgba(127, 180, 199, 0.1) 1px, transparent 1px);
+      linear-gradient(to right, color-mix(in srgb, var(--color-mesh-teal) 10%, transparent) 1px, transparent 1px),
+      linear-gradient(to bottom, color-mix(in srgb, var(--color-mesh-teal) 10%, transparent) 1px, transparent 1px);
   }
 
   .bg-checker {
@@ -50,10 +102,10 @@
 
   .bg-mesh {
     background-image:
-      radial-gradient(at 0% 0%, rgba(127, 180, 199, 0.18) 0px, transparent 50%),
-      radial-gradient(at 100% 0%, rgba(93, 141, 165, 0.14) 0px, transparent 50%),
-      radial-gradient(at 100% 100%, rgba(214, 184, 110, 0.08) 0px, transparent 50%),
-      radial-gradient(at 0% 100%, rgba(127, 180, 199, 0.12) 0px, transparent 50%);
+      radial-gradient(at 0% 0%, color-mix(in srgb, var(--color-mesh-teal) 18%, transparent) 0px, transparent 50%),
+      radial-gradient(at 100% 0%, color-mix(in srgb, var(--color-mesh-blue) 14%, transparent) 0px, transparent 50%),
+      radial-gradient(at 100% 100%, color-mix(in srgb, var(--color-mesh-gold) 8%, transparent) 0px, transparent 50%),
+      radial-gradient(at 0% 100%, color-mix(in srgb, var(--color-mesh-teal) 12%, transparent) 0px, transparent 50%);
   }
 
   .text-balance {
@@ -120,7 +172,7 @@
     display: inline-block;
     height: 1.15em;
     width: 0.65ch;
-    border-right: 2px solid rgba(124, 58, 237, 0.95);
+    border-right: 2px solid color-mix(in srgb, var(--color-primary) 95%, transparent);
     animation: hero-chat-preview-cursor 1s step-end infinite;
   }
 
@@ -131,11 +183,11 @@
     border-radius: var(--hero-border-radius, 1.5rem);
     padding: 1px;
     background:
-      linear-gradient(180deg, rgba(167, 139, 250, 0.16), rgba(124, 58, 237, 0.06)),
-      rgba(124, 58, 237, 0.08);
+      linear-gradient(180deg, color-mix(in srgb, var(--color-primary-light) 16%, transparent), color-mix(in srgb, var(--color-primary) 6%, transparent)),
+      color-mix(in srgb, var(--color-primary) 8%, transparent);
     box-shadow:
-      inset 0 0 0 1px rgba(196, 181, 253, 0.1),
-      0 0 0 1px rgba(124, 58, 237, 0.08);
+      inset 0 0 0 1px color-mix(in srgb, var(--color-text-accent) 10%, transparent),
+      0 0 0 1px color-mix(in srgb, var(--color-primary) 8%, transparent);
   }
 
   .hero-chat-preview__running-border::before {
@@ -146,9 +198,9 @@
       from 8deg,
       transparent 0deg,
       transparent 36deg,
-      rgba(124, 58, 237, 0.28) 86deg,
-      rgba(167, 139, 250, 0.9) 142deg,
-      rgba(124, 58, 237, 0.36) 206deg,
+      color-mix(in srgb, var(--color-primary) 28%, transparent) 86deg,
+      color-mix(in srgb, var(--color-primary-light) 90%, transparent) 142deg,
+      color-mix(in srgb, var(--color-primary) 36%, transparent) 206deg,
       transparent 272deg,
       transparent 360deg
     );
@@ -164,8 +216,8 @@
     z-index: 0;
     border-radius: calc(var(--hero-border-radius, 1.5rem) * 0.92);
     background:
-      radial-gradient(circle at 50% 12%, rgba(167, 139, 250, 0.22), transparent 34%),
-      radial-gradient(circle at 50% 88%, rgba(124, 58, 237, 0.14), transparent 30%);
+      radial-gradient(circle at 50% 12%, color-mix(in srgb, var(--color-primary-light) 22%, transparent), transparent 34%),
+      radial-gradient(circle at 50% 88%, color-mix(in srgb, var(--color-primary) 14%, transparent), transparent 30%);
     filter: blur(24px);
     opacity: 0.88;
   }
@@ -177,17 +229,27 @@
     border-radius: calc(var(--hero-border-radius, 1.5rem) - 1px);
     box-shadow:
       inset 0 1px 0 rgba(255, 255, 255, 0.04),
-      inset 0 -24px 50px rgba(124, 58, 237, 0.05);
+      inset 0 -24px 50px color-mix(in srgb, var(--color-primary) 5%, transparent);
   }
 }
 
 body {
   background:
-    radial-gradient(circle at top, rgb(124 58 237 / 0.16), transparent 28%),
-    linear-gradient(180deg, #08080d 0%, var(--background) 100%);
+    radial-gradient(circle at top, color-mix(in srgb, var(--color-primary) 10%, transparent), transparent 28%),
+    linear-gradient(180deg, var(--color-bg-void) 0%, var(--background) 100%);
   color: var(--foreground);
   font-family: var(--font-sans);
 }
+
+/* In light mode, Tailwind's white/* utilities become dark/* so overlays invert correctly */
+[data-theme="light"] {
+  --tw-bg-opacity: 1;
+}
+[data-theme="light"] .bg-white\/5 { background-color: rgb(0 0 0 / 0.05); }
+[data-theme="light"] .bg-white\/8 { background-color: rgb(0 0 0 / 0.08); }
+[data-theme="light"] .bg-white\/10 { background-color: rgb(0 0 0 / 0.10); }
+[data-theme="light"] .border-white\/10 { border-color: rgb(0 0 0 / 0.10); }
+[data-theme="light"] .border-white\/8 { border-color: rgb(0 0 0 / 0.08); }
 
 h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-display);
@@ -195,7 +257,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 ::selection {
-  background: rgb(124 58 237 / 0.28);
+  background: color-mix(in srgb, var(--color-primary) 28%, transparent);
   color: var(--foreground);
 }
 
@@ -222,7 +284,7 @@ h1, h2, h3, h4, h5, h6 {
 @keyframes hero-chat-preview-cursor {
   0%,
   50% {
-    border-color: rgba(124, 58, 237, 0.95);
+    border-color: color-mix(in srgb, var(--color-primary) 95%, transparent);
   }
 
   51%,
@@ -240,8 +302,8 @@ h1, h2, h3, h4, h5, h6 {
 @media (max-width: 640px) {
   .hero-chat-preview__running-border {
     box-shadow:
-      inset 0 0 0 1px rgba(196, 181, 253, 0.08),
-      0 0 0 1px rgba(124, 58, 237, 0.06);
+      inset 0 0 0 1px color-mix(in srgb, var(--color-text-accent) 8%, transparent),
+      0 0 0 1px color-mix(in srgb, var(--color-primary) 6%, transparent);
   }
 
   .hero-chat-preview__running-border::before {

@@ -532,11 +532,12 @@ export function HeroChatPreview({
   return (
     <section
       ref={sectionRef}
-      className="section-shell relative min-h-[100svh] bg-[color:var(--color-bg-dark)] pt-18 pb-12 sm:pt-22 sm:pb-18 md:pt-24 md:pb-20"
+      className="section-shell relative min-h-[calc(100svh-50px)] pt-28 pb-12 sm:min-h-[calc(100svh-50px)] sm:pb-18 md:min-h-[calc(100svh-100px)] md:pb-20"
+      style={{ backgroundColor: "var(--background)" }}
     >
-      <ParticleNetwork className="opacity-80" count={94} interactive={false} maxDistance={190} />
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(124,58,237,0.18),transparent_34%)]" />
-      <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,rgba(10,10,15,0.22),rgba(10,10,15,0.9))]" />
+      <ParticleNetwork className="opacity-45" count={94} interactive={false} maxDistance={190} />
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_82%_40%_at_50%_0%,color-mix(in_srgb,var(--color-primary)_14%,transparent),transparent)]" />
+      <div className="pointer-events-none absolute inset-0 bg-[rgba(91,33,182,0)]" />
 
       <div className="relative z-10 mx-auto max-w-7xl px-3 sm:px-4 md:px-6">
         <div className="mx-auto flex min-h-[calc(100svh-5rem)] max-w-4xl items-start md:min-h-[calc(100svh-6rem)]">
@@ -602,7 +603,7 @@ export function HeroChatPreview({
                 radius="2.15rem"
                 duration="6.75s"
                 className="shadow-[0_36px_120px_rgba(124,58,237,0.14)]"
-                innerClassName="bg-[rgba(17,17,24,0.82)] p-3 backdrop-blur-2xl sm:p-4 md:p-6"
+                innerClassName="bg-[color:var(--color-bg-elevated)]/92 p-3 backdrop-blur-sm sm:p-4 md:p-6"
               >
                 <div
                   className={cn(
@@ -625,7 +626,7 @@ export function HeroChatPreview({
                           radius="1.35rem"
                           duration="7.8s"
                           className="mb-5"
-                          innerClassName="min-h-[96px] bg-[rgba(10,10,15,0.72)] px-4 py-5 sm:min-h-[112px] sm:px-5 sm:py-6"
+                          innerClassName="min-h-[96px] bg-[color:var(--color-bg-card)]/90 px-4 py-5 sm:min-h-[112px] sm:px-5 sm:py-6"
                         >
                           <div className="flex min-h-[54px] items-center text-sm italic leading-6 text-[color:var(--color-text-secondary)] sm:min-h-[64px] sm:text-lg">
                             <span className="max-w-[28ch] sm:max-w-none">{typewriterText}</span>
@@ -644,7 +645,12 @@ export function HeroChatPreview({
                         className="mb-4 max-h-[245px] space-y-2.5 overflow-y-auto pr-1 sm:mb-5 sm:max-h-[300px] sm:space-y-3"
                       >
                         {messages.length === 0 ? (
-                          <div className="rounded-2xl border border-dashed border-white/10 bg-white/3 px-4 py-5 text-xs text-[color:var(--color-text-secondary)] sm:text-sm">
+                          <div
+                            className={cn(
+                              "rounded-2xl border border-dashed px-4 py-5 text-xs sm:text-sm",
+                              "border-[color:var(--color-border)] bg-[color:var(--color-bg-card)] text-[color:var(--color-text-secondary)]"
+                            )}
+                          >
                             {heroCopy.startTyping}
                           </div>
                         ) : null}
@@ -655,7 +661,7 @@ export function HeroChatPreview({
                               key={message.id}
                               initial={{ opacity: 0, y: 10 }}
                               animate={{ opacity: 1, y: 0 }}
-                              className="ml-auto max-w-[92%] rounded-2xl rounded-br-md bg-[color:var(--color-primary)]/15 px-3.5 py-2.5 text-[13px] leading-6 text-[color:var(--color-text-primary)] sm:max-w-[80%] sm:px-4 sm:py-3 sm:text-sm"
+                              className="ml-auto max-w-[92%] rounded-2xl rounded-br-md bg-[color:var(--color-primary)] px-3.5 py-2.5 text-[13px] leading-6 text-white sm:max-w-[80%] sm:px-4 sm:py-3 sm:text-sm"
                             >
                               {message.text}
                             </motion.div>
@@ -664,9 +670,12 @@ export function HeroChatPreview({
                               key={message.id}
                               initial={{ opacity: 0, y: 10 }}
                               animate={{ opacity: 1, y: 0 }}
-                              className="max-w-[92%] rounded-2xl rounded-bl-md bg-[color:var(--color-bg-elevated)] px-3.5 py-2.5 text-[13px] leading-6 text-[color:var(--color-text-primary)] sm:max-w-[80%] sm:px-4 sm:py-3 sm:text-sm"
+                              className={cn(
+                                "max-w-[92%] rounded-2xl rounded-bl-md px-3.5 py-2.5 text-[13px] leading-6 sm:max-w-[80%] sm:px-4 sm:py-3 sm:text-sm",
+                                "bg-[color:var(--color-bg-card)] text-[color:var(--color-text-primary)] shadow-sm"
+                              )}
                             >
-                              <span className="mr-2 inline-flex rounded bg-[color:var(--color-primary)]/20 px-1.5 py-0.5 font-mono text-xs text-[color:var(--color-text-accent)]">
+                              <span className="mr-2 inline-flex rounded bg-[color:var(--color-primary)]/15 px-1.5 py-0.5 font-mono text-xs text-[color:var(--color-primary)]">
                                 EZ
                               </span>
                               {message.text}
@@ -679,26 +688,26 @@ export function HeroChatPreview({
                   )}
 
                   {chatState === "report_sent" ? (
-                    <div className="w-full max-w-xl space-y-3 rounded-2xl border border-emerald-500/25 bg-emerald-500/10 px-4.5 py-4.5 text-emerald-200 sm:px-6 sm:py-6">
+                    <div className="w-full max-w-xl space-y-3 rounded-2xl border border-emerald-600/30 bg-emerald-50 px-4.5 py-4.5 text-emerald-800 sm:px-6 sm:py-6">
                       <div className="flex items-center justify-center gap-2 text-sm font-semibold sm:text-base">
                         <CheckCircle2 className="h-4 w-4" />
                         {heroCopy.captured}
                       </div>
-                      <p className="text-center text-[13px] leading-6 text-emerald-100 sm:text-sm">
+                      <p className="text-center text-[13px] leading-6 text-emerald-700 sm:text-sm">
                         {heroCopy.reportSentWarmMessage}
                       </p>
-                      <p className="text-center text-[13px] leading-6 text-emerald-100 sm:text-sm">
+                      <p className="text-center text-[13px] leading-6 text-emerald-700 sm:text-sm">
                         {heroCopy.reportSentEta}
                       </p>
-                      <p className="break-words text-center text-[13px] leading-6 text-emerald-100 sm:text-sm">
+                      <p className="break-words text-center text-[13px] leading-6 text-emerald-700 sm:text-sm">
                         {heroCopy.reportSentOnEmail} {capturedEmail ?? heroCopy.placeholderEmail}
                       </p>
-                      <p className="text-center text-[13px] leading-6 text-emerald-100 sm:text-sm">
+                      <p className="text-center text-[13px] leading-6 text-emerald-600 sm:text-sm">
                         {heroCopy.reportSentSpamHint}
                       </p>
                     </div>
                   ) : chatState === "locked" ? (
-                    <div className="w-full max-w-xl space-y-4 rounded-2xl border border-[color:var(--color-primary)]/30 bg-[rgba(124,58,237,0.09)] px-4.5 py-4.5 text-center sm:px-6 sm:py-6">
+                    <div className="w-full max-w-xl space-y-4 rounded-2xl border border-[color:var(--color-primary)]/20 bg-[color:var(--color-bg-elevated)] px-4.5 py-4.5 text-center sm:px-6 sm:py-6">
                       <p className="text-center text-sm font-semibold text-[color:var(--color-text-primary)] sm:text-base">
                         {heroCopy.trialUsedTitle}
                       </p>
@@ -738,7 +747,10 @@ export function HeroChatPreview({
                               : heroCopy.placeholderChat
                           }
                           disabled={isStreaming || isSessionLoading}
-                          className="min-h-14 rounded-2xl border border-white/10 bg-[rgba(10,10,15,0.84)] px-4 text-base text-[color:var(--color-text-primary)] placeholder:text-[color:var(--color-text-secondary)]/80 outline-none transition focus:border-[color:var(--color-primary)]/60"
+                          className={cn(
+                            "min-h-14 rounded-2xl border px-4 text-base outline-none transition",
+                            "border-[color:var(--color-border)] bg-[color:var(--color-bg-card)] text-[color:var(--color-text-primary)] placeholder:text-[color:var(--color-text-secondary)] focus:border-[color:var(--color-primary)]/45"
+                          )}
                         />
 
                         <Button
@@ -753,7 +765,7 @@ export function HeroChatPreview({
                       </form>
 
                       {emailError ? (
-                        <p className="mt-3 text-sm text-rose-300">{emailError}</p>
+                        <p className="mt-3 text-sm text-rose-600">{emailError}</p>
                       ) : null}
 
                       {messagesRemaining ? (

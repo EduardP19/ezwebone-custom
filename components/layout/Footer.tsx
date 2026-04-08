@@ -1,8 +1,10 @@
 "use client";
 
-import { BrandLogo } from "@/components/layout/BrandLogo";
+import * as React from "react";
+import Image from "next/image";
 import { LocalizedLink } from "@/components/i18n/LocalizedLink";
 import { useI18n } from "@/components/i18n/LocaleProvider";
+import { BRAND_LOGO_MARK_DARK_SRC } from "@/lib/brand";
 
 const FOOTER_LINKS = [
   { key: "home", href: "/" },
@@ -57,16 +59,22 @@ export function Footer() {
   ];
 
   return (
-    <footer className="mt-auto border-t border-[color:var(--color-border)] bg-[color:var(--color-bg-dark)] text-[color:var(--color-text-primary)]">
+    <footer className="mt-auto bg-[#08080d] text-white">
       <div className="mx-auto max-w-7xl px-4 pb-14 pt-12 md:px-6 md:pb-16 md:pt-14">
         <div className="grid grid-cols-1 gap-12 md:grid-cols-3">
           <div>
             <LocalizedLink href="/" className="inline-flex items-center">
               <span className="inline-flex items-center gap-3">
-                <BrandLogo variant="mark" size={116} className="h-28 w-28" />
+                <Image
+                  src={BRAND_LOGO_MARK_DARK_SRC}
+                  alt="EZWebOne logo"
+                  width={116}
+                  height={116}
+                  className="h-28 w-28"
+                />
               </span>
             </LocalizedLink>
-            <p className="mt-5 max-w-sm text-sm leading-7 text-[color:var(--color-text-secondary)]">
+            <p className="mt-5 max-w-sm text-sm leading-7 text-white/70">
               {dictionary.footer.strapline}
             </p>
 
@@ -75,14 +83,14 @@ export function Footer() {
                 <a
                   href="#"
                   aria-label="EZWebOne on LinkedIn"
-                  className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-[color:var(--color-border)] bg-white/5 text-[color:var(--color-text-secondary)] transition hover:border-[color:var(--color-primary-light)] hover:text-white"
+                  className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-white/20 bg-white/5 text-white/70 transition hover:border-[color:var(--color-primary-light)] hover:text-white/100"
                 >
                   <LinkedInIcon size={18} />
                 </a>
                 <a
                   href="#"
                   aria-label="EZWebOne on Instagram"
-                  className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-[color:var(--color-border)] bg-white/5 text-[color:var(--color-text-secondary)] transition hover:border-[color:var(--color-primary-light)] hover:text-white"
+                  className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-white/20 bg-white/5 text-white/70 transition hover:border-[color:var(--color-primary-light)] hover:text-white/100"
                 >
                   <InstagramIcon size={18} />
                 </a>
@@ -93,7 +101,7 @@ export function Footer() {
           <div>
             <div className="grid grid-cols-1 gap-8 sm:grid-cols-2">
               <div>
-                <h4 className="mono-label mb-6 text-xs text-[color:var(--color-text-secondary)]">
+                <h4 className="mono-label mb-6 text-xs text-white/70">
                   {dictionary.footer.quickLinksTitle}
                 </h4>
                 <ul className="space-y-4">
@@ -101,7 +109,7 @@ export function Footer() {
                     <li key={link.key}>
                       <LocalizedLink
                         href={link.href}
-                        className="text-sm text-[color:var(--color-text-secondary)] transition-colors hover:text-white"
+                        className="text-sm text-white/70 transition-colors hover:text-white/100"
                       >
                         {dictionary.footer.quickLinks[link.key]}
                       </LocalizedLink>
@@ -111,7 +119,7 @@ export function Footer() {
               </div>
 
               <div>
-                <h4 className="mono-label mb-6 text-xs text-[color:var(--color-text-secondary)]">
+                <h4 className="mono-label mb-6 text-xs text-white/70">
                   {dictionary.footer.usefulLinksTitle}
                 </h4>
                 <ul className="space-y-4">
@@ -119,7 +127,7 @@ export function Footer() {
                     <li key={link.key}>
                       <LocalizedLink
                         href={link.href}
-                        className="text-sm text-[color:var(--color-text-secondary)] transition-colors hover:text-white"
+                        className="text-sm text-white/70 transition-colors hover:text-white/100"
                       >
                         {dictionary.footer.quickLinks[link.key]}
                       </LocalizedLink>
@@ -131,7 +139,7 @@ export function Footer() {
           </div>
 
           <div>
-            <h4 className="mono-label mb-6 text-xs text-[color:var(--color-text-secondary)]">
+            <h4 className="mono-label mb-6 text-xs text-white/70">
               {dictionary.footer.contactTitle}
             </h4>
             <ul className="space-y-4">
@@ -140,12 +148,12 @@ export function Footer() {
                   {link.href ? (
                     <a
                       href={link.href}
-                      className="text-sm leading-7 text-[color:var(--color-text-secondary)] transition-colors hover:text-white"
+                      className="text-sm leading-7 text-white/70 transition-colors hover:text-white/100"
                     >
                       {link.label}
                     </a>
                   ) : (
-                    <span className="text-sm leading-7 text-[color:var(--color-text-secondary)]">
+                    <span className="text-sm leading-7 text-white/70">
                       {link.label}
                     </span>
                   )}
@@ -155,8 +163,8 @@ export function Footer() {
           </div>
         </div>
 
-        <div className="mt-14 border-t border-[color:var(--color-border)] pt-8">
-          <p className="text-xs leading-6 text-[color:var(--color-text-secondary)]">
+        <div className="mt-14 border-t border-white/20 pt-8">
+          <p className="text-xs leading-6 text-white/70">
             {dictionary.footer.companyStatement}
           </p>
         </div>

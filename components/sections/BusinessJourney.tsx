@@ -26,9 +26,9 @@ export function BusinessJourney() {
               key={stage.title}
               whileHover={{ x: 4 }}
               transition={{ duration: 0.22, ease: "easeOut" }}
-              className="relative rounded-[1.5rem] border border-white/10 bg-[rgba(17,17,24,0.9)] p-5 pl-12 shadow-[0_18px_50px_rgba(0,0,0,0.22)]"
+              className="relative rounded-[1.5rem] border border-[color:var(--color-border)] bg-[color:var(--color-bg-card)] p-5 pl-12 shadow-[0_18px_50px_rgba(0,0,0,0.12)]"
             >
-              <div className="absolute left-3 top-6 flex h-7 w-7 items-center justify-center rounded-full border border-[rgba(124,58,237,0.5)] bg-[color:var(--color-bg-elevated)] text-[color:var(--color-text-accent)]">
+              <div className="absolute left-3 top-6 flex h-7 w-7 items-center justify-center rounded-full border border-[color:var(--color-primary)]/50 bg-[color:var(--color-bg-elevated)] text-[color:var(--color-text-accent)]">
                 <stage.icon size={14} />
               </div>
 

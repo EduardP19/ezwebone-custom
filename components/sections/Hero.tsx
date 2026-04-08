@@ -38,9 +38,9 @@ const TRUST_IMAGES = [
 export function Hero() {
   return (
     <section className="section-shell relative min-h-[100svh] bg-[color:var(--color-bg-dark)] pt-28 md:pt-32">
-      <ParticleNetwork className="opacity-90" count={80} maxDistance={150} interactive />
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(124,58,237,0.22),transparent_34%)]" />
-      <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,rgba(10,10,15,0.14),rgba(10,10,15,0.9))]" />
+      <ParticleNetwork className="opacity-50" count={80} maxDistance={150} interactive />
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_80%_60%_at_50%_0%,color-mix(in_srgb,var(--color-primary)_10%,transparent),transparent)]" />
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_60%_50%_at_80%_80%,color-mix(in_srgb,var(--color-accent)_8%,transparent),transparent)]" />
 
       <div className="relative z-10 mx-auto flex min-h-[100svh] max-w-7xl items-center px-4 pb-20 md:px-6">
         <motion.div
@@ -95,7 +95,7 @@ export function Hero() {
 
             <motion.div
               variants={itemVariants}
-              className="mt-10 inline-flex flex-wrap items-center gap-4 rounded-full border border-white/10 bg-white/5 px-4 py-3 backdrop-blur-xl"
+              className="mt-10 inline-flex flex-wrap items-center gap-4 rounded-full border border-[color:var(--color-border)] bg-[color:var(--color-bg-card)]/70 px-4 py-3 backdrop-blur-xl"
             >
               <div className="flex items-center">
                 {TRUST_IMAGES.map((image, index) => (

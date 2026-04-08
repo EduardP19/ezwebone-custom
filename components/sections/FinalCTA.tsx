@@ -17,7 +17,7 @@ export function FinalCTA({ variant = "black" }: FinalCTAProps) {
   return (
     <section className="section-shell bg-[color:var(--color-bg-dark)] pt-20 pb-14 md:pt-24 md:pb-18">
       <ParticleNetwork count={46} maxDistance={130} interactive={false} className="opacity-50" />
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(124,58,237,0.22),transparent_30%)]" />
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,color-mix(in_srgb,var(--color-primary)_22%,transparent),transparent_30%)]" />
 
       <div className="relative mx-auto max-w-5xl px-4 text-center md:px-6">
         <motion.div

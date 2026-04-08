@@ -90,7 +90,8 @@ export function ParticleNetwork({
           context.beginPath();
           context.moveTo(particle.x, particle.y);
           context.lineTo(neighbor.x, neighbor.y);
-          context.strokeStyle = `rgba(196, 181, 253, ${opacity * 0.34})`;
+          const lineColor = getComputedStyle(document.documentElement).getPropertyValue("--particle-line").trim() || "196, 181, 253";
+          context.strokeStyle = `rgba(${lineColor}, ${opacity * 0.34})`;
           context.lineWidth = 1.15;
           context.stroke();
         }
@@ -109,7 +110,8 @@ export function ParticleNetwork({
             context.beginPath();
             context.moveTo(particle.x, particle.y);
             context.lineTo(pointer.x, pointer.y);
-            context.strokeStyle = `rgba(167, 139, 250, ${interactionOpacity * 0.42})`;
+            const hoverColor = getComputedStyle(document.documentElement).getPropertyValue("--particle-hover-line").trim() || "167, 139, 250";
+            context.strokeStyle = `rgba(${hoverColor}, ${interactionOpacity * 0.42})`;
             context.lineWidth = 1.25;
             context.stroke();
           }
@@ -117,9 +119,11 @@ export function ParticleNetwork({
 
         context.beginPath();
         context.arc(particle.x, particle.y, particle.radius, 0, Math.PI * 2);
-        context.fillStyle = `rgba(245, 245, 247, ${dotOpacity})`;
+        const dotColor = getComputedStyle(document.documentElement).getPropertyValue("--particle-dot").trim() || "245, 245, 247";
+        const shadowColor = getComputedStyle(document.documentElement).getPropertyValue("--particle-line").trim() || "196, 181, 253";
+        context.fillStyle = `rgba(${dotColor}, ${dotOpacity})`;
         context.shadowBlur = glowStrength ? 20 : 10;
-        context.shadowColor = "rgba(196, 181, 253, 0.88)";
+        context.shadowColor = `rgba(${shadowColor}, 0.88)`;
         context.fill();
         context.shadowBlur = 0;
       }

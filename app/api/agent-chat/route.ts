@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { type AgentHistoryItem, type ChatAgentKey, parseAgentChatPayload, runPrequalifyChat } from "@/lib/agent-chat";
+import { newLead } from "@/lib/leadProcessing";
 import { supabase } from "@/lib/supabase";
 
 const TRIAL_LIMIT = 2;
@@ -35,6 +36,12 @@ function normalizeSessionId(value: unknown) {
 function normalizeEmail(value: unknown) {
   if (typeof value !== "string") return "";
   return value.trim().toLowerCase();
+}
+
+function inferNameFromEmail(email: string) {
+  const localPart = email.split("@")[0] ?? "";
+  const token = localPart.split(/[._-]+/).find(Boolean) ?? "Lead";
+  return token.charAt(0).toUpperCase() + token.slice(1).toLowerCase();
 }
 
 function parseTranscript(value: unknown): TranscriptItem[] {
@@ -193,6 +200,38 @@ export async function POST(request: Request) {
           { error: updateError?.message ?? "Failed to save email." },
           { status: 500 }
         );
+      }
+
+      try {
+        const transcriptPreview = nextTranscript
+          .filter((item) => item.kind === "chat")
+          .slice(-8)
+          .map((item) => `${item.role}: ${item.text}`)
+          .join("\n")
+          .slice(0, 3500);
+
+        await newLead({
+          firstName: inferNameFromEmail(email),
+          email,
+          sourcePage: agentKey === "prequalifyNewBusiness" ? "AI Chat - New Business" : "AI Chat - Homepage",
+          source: "chat_widget",
+          campaign: agentKey === "prequalifyNewBusiness" ? "first_letter_ro_director" : "prequalify_homepage",
+          medium: "ai_chat",
+          sessionId,
+          userAgent: request.headers.get("user-agent"),
+          agentKey,
+          transcriptSessionId: sessionId,
+          message: transcriptPreview,
+          metadata: {
+            transcript_id: sessionId,
+            transcript_messages_used: updatedSession.messages_used,
+            transcript_trial_completed_at: updatedSession.trial_completed_at,
+            transcript_report_sent_at: updatedSession.report_sent_at,
+            locale: updatedSession.locale,
+          },
+        });
+      } catch (leadError) {
+        console.error("Failed to sync captured email into leads:", leadError);
       }
 
       return NextResponse.json({

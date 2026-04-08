@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
+import { cookies } from "next/headers";
 import { Inter, JetBrains_Mono, Space_Grotesk } from "next/font/google";
 import "./globals.css";
 
@@ -79,6 +80,9 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const cookieStore = await cookies();
+  const themeCookie = cookieStore.get("theme")?.value;
+  const initialTheme = themeCookie === "dark" ? "dark" : "light";
   const locale = await getRequestLocale();
   const dictionary = getDictionary(locale);
 
@@ -86,8 +90,11 @@ export default async function RootLayout({
     <>
       <html
         lang={locale}
+        data-theme={initialTheme}
+        suppressHydrationWarning
         className={`${inter.variable} ${spaceGrotesk.variable} ${jetbrainsMono.variable} h-full antialiased`}
       >
+        <head />
         <body className="min-h-full flex flex-col">
           <LocaleProvider locale={locale} dictionary={dictionary}>
             <Suspense fallback={null}>

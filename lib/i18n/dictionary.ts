@@ -89,7 +89,7 @@ const dictionaries = {
         emailConfirmationPrompt:
           "You're all set. Check your inbox within 24 hours and we'll send over a personalised recommendation. Is there anything else you'd like this preview to reflect later?",
         emailError: "That doesn't look like an email - try again?",
-        startTyping: "Start typing below to begin the conversation.",
+        startTyping: "Your messages will appear here. Start typing to begin the conversation.",
         remainingMessages: {
           singular: "message remaining",
           plural: "messages remaining",
@@ -461,7 +461,7 @@ const dictionaries = {
         emailConfirmationPrompt:
           "Totul este pregatit. Verifica-ti inbox-ul in urmatoarele 24 de ore si iti vom trimite o recomandare personalizata. Mai este ceva ce ai vrea sa luam in calcul mai tarziu?",
         emailError: "Aceasta nu pare sa fie o adresa de email valida.",
-        startTyping: "Scrie mai jos ca sa incepi conversatia.",
+        startTyping: "Mesajele tale vor aparea aici. Scrie mai jos ca sa incepi conversatia.",
         remainingMessages: {
           singular: "mesaj ramas",
           plural: "mesaje ramase",

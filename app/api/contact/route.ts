@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { supabase } from "@/lib/supabase";
+import { newLead } from "@/lib/leadProcessing";
 
 function asRequiredString(value: unknown) {
   return typeof value === "string" ? value.trim() : "";
@@ -12,13 +12,6 @@ function asOptionalString(value: unknown) {
 
 export async function POST(req: Request) {
   try {
-    if (!supabase) {
-      return NextResponse.json(
-        { error: "Lead capture is not configured on this deployment." },
-        { status: 503 }
-      );
-    }
-
     const body = await req.json();
     const firstName = asRequiredString(body.firstName);
     const lastName = asOptionalString(body.lastName);
@@ -36,27 +29,30 @@ export async function POST(req: Request) {
       );
     }
 
-    const { error: dbError } = await supabase
-      .from("leads")
-      .insert([
-        {
-          first_name: firstName,
-          last_name: lastName,
-          email,
-          phone,
-          business_name: businessName,
-          service_interest: serviceInterest,
-          message,
-          source_page: sourcePage,
-        },
-      ]);
+    const result = await newLead({
+      name: `${firstName} ${lastName ?? ""}`.trim(),
+      firstName,
+      lastName,
+      email,
+      phone,
+      companyName: businessName,
+      message,
+      sourcePage,
+      source: asOptionalString(body.source),
+      campaign: asOptionalString(body.campaign),
+      medium: asOptionalString(body.medium),
+      sessionId: asOptionalString(body.sessionId),
+      country: asOptionalString(body.country),
+      userAgent: req.headers.get("user-agent"),
+      niche: asOptionalString(body.niche),
+      companyNumber: asOptionalString(body.companyNumber),
+      discount: asOptionalString(body.discount),
+      metadata: {
+        service_interest: serviceInterest,
+      },
+    });
 
-    if (dbError) {
-      console.error("Database error:", dbError);
-      return NextResponse.json({ error: "Failed to save lead" }, { status: 500 });
-    }
-
-    return NextResponse.json({ success: true });
+    return NextResponse.json({ success: true, leadStatus: result.status });
   } catch (error) {
     console.error("API error:", error);
     return NextResponse.json({ error: "Internal server error" }, { status: 500 });
