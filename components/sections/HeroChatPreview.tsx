@@ -536,8 +536,6 @@ export function HeroChatPreview({
       style={{ backgroundColor: "var(--background)" }}
     >
       <ParticleNetwork className="opacity-45" count={94} interactive={false} maxDistance={190} />
-      <div className="pointer-events-none absolute inset-0 bg-transparent" />
-
       <div className="relative z-10 mx-auto max-w-7xl px-3 sm:px-4 md:px-6">
         <div className="mx-auto flex min-h-[calc(100svh-5rem)] max-w-4xl items-start md:min-h-[calc(100svh-6rem)]">
           <motion.div
