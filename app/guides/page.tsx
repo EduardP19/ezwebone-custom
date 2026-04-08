@@ -558,6 +558,9 @@ export default function GuidesPage() {
                   <Image src={item.image} alt={item.name} width={42} height={42} className="rounded-full" />
                   <p className="text-sm font-semibold text-[color:var(--color-text-primary)]">{item.name}</p>
                 </div>
+                <p className="mt-3 tracking-[0.08em] text-[#f59e0b] drop-shadow-[0_1px_8px_rgba(245,158,11,0.35)]">
+                  ★★★★★
+                </p>
                 <p className="mt-3 text-sm leading-7 text-[color:var(--color-text-secondary)]">"{item.quote}"</p>
               </article>
             ))}
