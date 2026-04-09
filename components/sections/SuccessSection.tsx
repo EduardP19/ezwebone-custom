@@ -2,9 +2,12 @@
 
 import { Check } from "lucide-react";
 import { Button } from "@/components/ui/Button";
+import { useRouter } from "next/navigation";
 import { CALENDLY_BOOKING_URL } from "@/lib/links";
 
 export function SuccessSection() {
+  const router = useRouter();
+
   return (
     <section className="section-shell relative min-h-[100svh] bg-[color:var(--color-bg-dark)] pt-28 md:pt-32">
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_80%_60%_at_50%_0%,color-mix(in_srgb,var(--color-accent)_10%,transparent),transparent)]" />
@@ -18,7 +21,7 @@ export function SuccessSection() {
             Please check your spam folder if you don’t see it in your inbox.
           </p>
           <Button
-            href={CALENDLY_BOOKING_URL}
+            onClick={() => router.push(CALENDLY_BOOKING_URL)}
             className="mt-6 bg-[color:var(--color-accent)] text-white hover:bg-[color:var(--color-accent-light)]"
           >
             Book a Call
