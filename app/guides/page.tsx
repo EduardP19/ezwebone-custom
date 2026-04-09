@@ -273,6 +273,12 @@ export default function GuidesPage() {
   React.useEffect(() => {
     if (typeof window === "undefined") return;
     const params = new URLSearchParams(window.location.search);
+
+    // Check for 'sent=1' parameter
+    if (params.get("sent") === "1") {
+      setIsSubmitted(true);
+    }
+
     const queryCode = params.get("code");
     if (queryCode) {
       setCode(queryCode.toUpperCase());
@@ -384,8 +390,15 @@ export default function GuidesPage() {
       {isSubmitted ? (
         <SuccessSection />
       ) : (
-        <section className="section-shell border-b border-[color:var(--color-border)] bg-[linear-gradient(180deg,rgba(124,58,237,0.20),rgba(124,58,237,0.10))] py-20 md:py-24">
-          <div className="mx-auto max-w-5xl px-4 text-center md:px-6">
+        <section className="section-shell relative overflow-hidden bg-[linear-gradient(180deg,rgba(124,58,237,0.22)_0%,rgba(124,58,237,0.10)_60%,transparent_100%)] pb-28 pt-20 md:pb-36 md:pt-24">
+          {/* Radial glow top-centre */}
+          <div className="pointer-events-none absolute -top-16 left-1/2 h-96 w-96 -translate-x-1/2 rounded-full bg-violet-500/20 blur-3xl" />
+          {/* Fade-out mask — clear visual end of section */}
+          <div className="pointer-events-none absolute bottom-0 left-0 right-0 h-28 bg-[linear-gradient(to_bottom,transparent,var(--background))]" />
+          {/* 1px divider line */}
+          <div className="pointer-events-none absolute bottom-0 left-0 right-0 h-px bg-[color:var(--color-border)]" />
+
+          <div className="relative mx-auto max-w-5xl px-4 text-center md:px-6">
             <h1 className="text-4xl font-semibold tracking-tight text-[color:var(--color-text-primary)] md:text-6xl">
               {copy.title}
             </h1>
@@ -408,13 +421,13 @@ export default function GuidesPage() {
                 onChange={(event) => setCode(event.target.value.toUpperCase())}
                 placeholder={copy.codePlaceholder}
                 data-track-label="stampuser:guides-code-input"
-                className="min-h-12 rounded-xl border border-[color:var(--color-border)] bg-white px-4 text-center text-base font-medium tracking-[0.12em] text-[#1C2A44] placeholder:text-[#1C2A44]/65 outline-none focus:border-[color:var(--color-primary)]/60"
+                className="min-h-12 rounded-xl border border-[color:var(--color-border)] bg-white px-4 text-center text-base font-medium tracking-[0.12em] text-[#1C2A44] placeholder:text-[#1C2A44]/65 outline-none focus:border-orange-400/60"
               />
               <button
                 type="submit"
                 disabled={isChecking || code.trim().length === 0}
                 data-track-label="stampuser:guides-code-submit"
-                className="min-h-12 rounded-xl bg-[color:var(--color-primary)] px-5 text-sm font-semibold text-white shadow-[0_12px_34px_rgba(124,58,237,0.28)] transition hover:bg-[color:var(--color-primary-light)] disabled:cursor-not-allowed disabled:opacity-60"
+                className="min-h-12 rounded-xl bg-orange-500 px-5 text-sm font-semibold text-white shadow-[0_12px_34px_rgba(249,115,22,0.32)] transition hover:bg-orange-400 disabled:cursor-not-allowed disabled:opacity-60"
               >
                 {isChecking ? copy.checkButtonLoading : copy.checkButtonIdle}
               </button>
