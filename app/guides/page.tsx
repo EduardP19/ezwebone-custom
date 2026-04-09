@@ -6,6 +6,7 @@ import { useI18n } from "@/components/i18n/LocaleProvider";
 import { FaqSection } from "@/components/guides/FaqSection";
 import { CALENDLY_BOOKING_URL } from "@/lib/links";
 import { Check, CircleAlert, Search, Mail, CalendarCheck, ArrowRight } from "lucide-react";
+import { SuccessSection } from "@/components/sections/SuccessSection";
 
 type ResolveResponse = {
   ok: boolean;
@@ -245,6 +246,7 @@ export default function GuidesPage() {
   const [checkError, setCheckError] = React.useState<string | null>(null);
   const [resolvedCompany, setResolvedCompany] = React.useState<string | null>(null);
   const [isLeadModalOpen, setIsLeadModalOpen] = React.useState(false);
+  const [isSubmitted, setIsSubmitted] = React.useState(false);
 
   const [firstName, setFirstName] = React.useState("");
   const [email, setEmail] = React.useState("");
@@ -379,51 +381,55 @@ export default function GuidesPage() {
 
   return (
     <main className="min-h-[calc(100svh-80px)] bg-[color:var(--background)]">
-      <section className="section-shell border-b border-[color:var(--color-border)] bg-[linear-gradient(180deg,rgba(124,58,237,0.20),rgba(124,58,237,0.10))] py-20 md:py-24">
-        <div className="mx-auto max-w-5xl px-4 text-center md:px-6">
-          <h1 className="text-4xl font-semibold tracking-tight text-[color:var(--color-text-primary)] md:text-6xl">
-            {copy.title}
-          </h1>
-          <p className="mx-auto mt-4 max-w-3xl text-base leading-7 text-[color:var(--color-text-secondary)] md:text-lg">
-            {copy.subtitle}
-          </p>
-
-          <div className="mx-auto mt-6 grid max-w-3xl gap-2 text-left sm:grid-cols-2">
-            {copy.bullets.map((item) => (
-              <p key={item} className="flex items-start gap-2 text-sm text-[color:var(--color-text-primary)]">
-                <Check className="mt-0.5 h-4 w-4 text-[color:var(--color-primary)]" />
-                <span>{item}</span>
-              </p>
-            ))}
-          </div>
-
-          <form onSubmit={handleCodeCheck} className="mx-auto mt-8 flex w-full max-w-md flex-col gap-3">
-            <input
-              value={code}
-              onChange={(event) => setCode(event.target.value.toUpperCase())}
-              placeholder={copy.codePlaceholder}
-              data-track-label="stampuser:guides-code-input"
-              className="min-h-12 rounded-xl border border-[color:var(--color-border)] bg-white px-4 text-center text-base font-medium tracking-[0.12em] text-[#1C2A44] placeholder:text-[#1C2A44]/65 outline-none focus:border-[color:var(--color-primary)]/60"
-            />
-            <button
-              type="submit"
-              disabled={isChecking || code.trim().length === 0}
-              data-track-label="stampuser:guides-code-submit"
-              className="min-h-12 rounded-xl bg-[color:var(--color-primary)] px-5 text-sm font-semibold text-white shadow-[0_12px_34px_rgba(124,58,237,0.28)] transition hover:bg-[color:var(--color-primary-light)] disabled:cursor-not-allowed disabled:opacity-60"
-            >
-              {isChecking ? copy.checkButtonLoading : copy.checkButtonIdle}
-            </button>
-            <p className="text-xs text-[color:var(--color-text-secondary)]">{copy.helper}</p>
-          </form>
-
-          {checkError ? <p className="mt-4 text-sm text-rose-600">{checkError}</p> : null}
-          {resolvedCompany ? (
-            <p className="mt-4 text-sm text-emerald-700">
-              {copy.validPrefix} <span className="font-semibold">{resolvedCompany}</span>.
+      {isSubmitted ? (
+        <SuccessSection />
+      ) : (
+        <section className="section-shell border-b border-[color:var(--color-border)] bg-[linear-gradient(180deg,rgba(124,58,237,0.20),rgba(124,58,237,0.10))] py-20 md:py-24">
+          <div className="mx-auto max-w-5xl px-4 text-center md:px-6">
+            <h1 className="text-4xl font-semibold tracking-tight text-[color:var(--color-text-primary)] md:text-6xl">
+              {copy.title}
+            </h1>
+            <p className="mx-auto mt-4 max-w-3xl text-base leading-7 text-[color:var(--color-text-secondary)] md:text-lg">
+              {copy.subtitle}
             </p>
-          ) : null}
-        </div>
-      </section>
+
+            <div className="mx-auto mt-6 grid max-w-3xl gap-2 text-left sm:grid-cols-2">
+              {copy.bullets.map((item) => (
+                <p key={item} className="flex items-start gap-2 text-sm text-[color:var(--color-text-primary)]">
+                  <Check className="mt-0.5 h-4 w-4 text-[color:var(--color-primary)]" />
+                  <span>{item}</span>
+                </p>
+              ))}
+            </div>
+
+            <form onSubmit={handleCodeCheck} className="mx-auto mt-8 flex w-full max-w-md flex-col gap-3">
+              <input
+                value={code}
+                onChange={(event) => setCode(event.target.value.toUpperCase())}
+                placeholder={copy.codePlaceholder}
+                data-track-label="stampuser:guides-code-input"
+                className="min-h-12 rounded-xl border border-[color:var(--color-border)] bg-white px-4 text-center text-base font-medium tracking-[0.12em] text-[#1C2A44] placeholder:text-[#1C2A44]/65 outline-none focus:border-[color:var(--color-primary)]/60"
+              />
+              <button
+                type="submit"
+                disabled={isChecking || code.trim().length === 0}
+                data-track-label="stampuser:guides-code-submit"
+                className="min-h-12 rounded-xl bg-[color:var(--color-primary)] px-5 text-sm font-semibold text-white shadow-[0_12px_34px_rgba(124,58,237,0.28)] transition hover:bg-[color:var(--color-primary-light)] disabled:cursor-not-allowed disabled:opacity-60"
+              >
+                {isChecking ? copy.checkButtonLoading : copy.checkButtonIdle}
+              </button>
+              <p className="text-xs text-[color:var(--color-text-secondary)]">{copy.helper}</p>
+            </form>
+
+            {checkError ? <p className="mt-4 text-sm text-rose-600">{checkError}</p> : null}
+            {resolvedCompany ? (
+              <p className="mt-4 text-sm text-emerald-700">
+                {copy.validPrefix} <span className="font-semibold">{resolvedCompany}</span>.
+              </p>
+            ) : null}
+          </div>
+        </section>
+      )}
 
       <section className="section-shell py-16">
         <div className="mx-auto max-w-6xl px-4 md:px-6">
