@@ -90,7 +90,7 @@ export function ProjectCard({
           }
         }}
         className={cn(
-          "group cursor-pointer overflow-hidden rounded-[1.6rem] bg-[color:var(--color-bg-card)] text-left shadow-[0_0_32px_rgba(28,42,68,0.20)] transition duration-300 hover:scale-[1.01] hover:shadow-[0_0_40px_rgba(28,42,68,0.24)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--color-primary-light)] focus-visible:ring-offset-2 focus-visible:ring-offset-[color:var(--color-bg-dark)]",
+          "project-card-shell group cursor-pointer overflow-hidden rounded-[1.6rem] text-left transition duration-300 hover:scale-[1.01] hover:shadow-[0_0_40px_rgba(28,42,68,0.24)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--color-primary-light)] focus-visible:ring-offset-2 focus-visible:ring-offset-[color:var(--color-bg-dark)]",
           className
         )}
         aria-haspopup="dialog"
