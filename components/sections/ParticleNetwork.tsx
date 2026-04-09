@@ -40,6 +40,11 @@ export function ParticleNetwork({
     let animationFrame = 0;
     let particles: Particle[] = [];
 
+    const particleCount = parseInt(
+      getComputedStyle(document.documentElement).getPropertyValue("--particle-count") || "38",
+      10
+    );
+
     const setCanvasSize = () => {
       const rect = canvas.getBoundingClientRect();
       const dpr = window.devicePixelRatio || 1;
@@ -61,7 +66,7 @@ export function ParticleNetwork({
     });
 
     const buildParticles = () => {
-      particles = Array.from({ length: count }, createParticle);
+      particles = Array.from({ length: particleCount }, createParticle);
     };
 
     const draw = () => {

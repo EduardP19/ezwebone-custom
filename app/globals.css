@@ -531,3 +531,9 @@ h1, h2, h3, h4, h5, h6 {
     filter: blur(18px);
   }
 }
+
+@media (max-width: 768px) {
+  :root {
+    --particle-count: 38; /* Further reduce particle count by 30% */
+  }
+}

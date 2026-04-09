@@ -159,7 +159,7 @@ const dictionaries = {
       },
       process: {
         badge: "Process",
-        title: "From Idea to Live in 5 Days",
+        title: "From Idea to Live in 7 Days",
       },
       finalCta: {
         title: "Ready to Build Something That Actually Works?",
