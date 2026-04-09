@@ -8,6 +8,7 @@ type GuideDirectorRow = {
   company_name: string;
   full_name: string;
   download_code: string | null;
+  campaign_status: string | null;
 };
 
 export type ResolvedGuideCode = {
@@ -36,7 +37,7 @@ export async function resolveGuideCode(codeRaw: string): Promise<ResolvedGuideCo
     return null;
   }
 
-  const selectColumns = "id, company_number, company_name, full_name, download_code";
+  const selectColumns = "id, company_number, company_name, full_name, download_code, campaign_status";
 
   const { data: nonRo, error: nonRoError } = await supabaseAdmin
     .from("ch_directors_non_ro")
@@ -77,4 +78,27 @@ export async function resolveGuideCode(codeRaw: string): Promise<ResolvedGuideCo
     sourceTable: "ch_directors_ro",
     row: ro,
   };
+}
+
+export async function markGuideDownloadStarted(resolved: ResolvedGuideCode) {
+  if (!supabaseAdmin) {
+    throw new Error("Supabase admin client is not configured.");
+  }
+
+  const currentStatus = (resolved.row.campaign_status ?? "").trim().toLowerCase();
+  if (currentStatus === "lead_captured") {
+    return;
+  }
+
+  const { error } = await supabaseAdmin
+    .from(resolved.sourceTable)
+    .update({
+      campaign_status: "download_started",
+      updated_at: new Date().toISOString(),
+    })
+    .eq("id", resolved.row.id);
+
+  if (error) {
+    throw new Error(`Failed to set download_started: ${error.message}`);
+  }
 }

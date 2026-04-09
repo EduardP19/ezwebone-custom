@@ -42,7 +42,7 @@ export default function CompaniesHouseDevPage() {
   const [incorporatedTo, setIncorporatedTo] = useState(defaultToDate());
   const [sicCode, setSicCode] = useState("");
   const [size, setSize] = useState("micro-entity");
-  const [maxCompanies, setMaxCompanies] = useState("2000");
+  const [maxCompanies, setMaxCompanies] = useState("250");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [result, setResult] = useState<ImportResponse | null>(null);

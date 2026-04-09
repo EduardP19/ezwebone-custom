@@ -27,7 +27,6 @@ type DirectorBase = {
   campaign_status: string;
   industry: string | null;
   nationality_raw: string;
-  letter_template: string | null;
   correspondence_address: Record<string, unknown>;
 };
 
@@ -92,6 +91,22 @@ export function normalizeNationality(raw: string | null | undefined): string {
 function toDateOrNull(value: string | undefined) {
   if (!value) return null;
   return /^\d{4}-\d{2}-\d{2}$/.test(value) ? value : null;
+}
+
+function asString(value: unknown, fallback = "") {
+  if (typeof value !== "string") return fallback;
+  const nextValue = value.trim();
+  return nextValue.length > 0 ? nextValue : fallback;
+}
+
+function normalizeIndustryFromSic(rawSic: string) {
+  const value = asString(rawSic).toLowerCase();
+  if (!value) return null;
+  if (value.includes("96020")) return "beauty";
+  if (value.includes("96021")) return "hairdressing";
+  if (value.includes("96040")) return "wellness";
+  if (value.includes("86220")) return "medical";
+  return asString(rawSic);
 }
 
 function chunk<T>(items: T[], size: number) {
@@ -179,9 +194,8 @@ export async function runCompaniesHouseImport(input: ImportParams): Promise<Impo
     incorporatedTo: input.incorporatedTo,
     sicCode: input.sicCode,
     size: input.size,
-    maxCompanies: Math.max(1, Math.min(input.maxCompanies ?? 2000, 10000)),
+    maxCompanies: Math.max(1, Math.min(input.maxCompanies ?? 250, 10000)),
   };
-  const defaultLetterTemplate = process.env.DEFAULT_LETTER_TEMPLATE ?? null;
 
   const runId = await createRun(params);
   const pages: unknown[] = [];
@@ -263,9 +277,8 @@ export async function runCompaniesHouseImport(input: ImportParams): Promise<Impo
           full_name: directorFullName,
           director_full_name: directorFullName,
           campaign_status: "to_send",
-          industry: params.sicCode,
+          industry: normalizeIndustryFromSic(params.sicCode),
           nationality_raw: nationalityRaw,
-          letter_template: defaultLetterTemplate,
           correspondence_address:
             director.address && typeof director.address === "object"
               ? (director.address as Record<string, unknown>)

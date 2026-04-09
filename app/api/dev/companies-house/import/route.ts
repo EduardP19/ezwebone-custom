@@ -39,7 +39,7 @@ export async function POST(request: Request) {
   const incorporatedTo = asRequiredString(payload.incorporatedTo);
   const sicCode = asRequiredString(payload.sicCode);
   const size = asRequiredString(payload.size);
-  const maxCompanies = asOptionalNumber(payload.maxCompanies) ?? 2000;
+  const maxCompanies = asOptionalNumber(payload.maxCompanies) ?? 250;
 
   if (!incorporatedFrom || !incorporatedTo || !sicCode || !size) {
     return NextResponse.json(

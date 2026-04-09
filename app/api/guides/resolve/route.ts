@@ -1,5 +1,10 @@
 import { NextResponse } from "next/server";
-import { resolveGuideCode, normalizeGuideCode, isValidGuideCode } from "@/lib/guides";
+import {
+  resolveGuideCode,
+  normalizeGuideCode,
+  isValidGuideCode,
+  markGuideDownloadStarted,
+} from "@/lib/guides";
 
 type ResolveBody = {
   code?: string;
@@ -24,6 +29,8 @@ export async function POST(req: Request) {
         { status: 404 }
       );
     }
+
+    await markGuideDownloadStarted(resolved);
 
     return NextResponse.json({
       ok: true,

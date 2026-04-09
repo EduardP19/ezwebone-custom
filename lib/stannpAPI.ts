@@ -54,24 +54,42 @@ function asString(value: unknown, fallback = "") {
   return nextValue.length > 0 ? nextValue : fallback;
 }
 
+function normalizeLetterFullName(rawName: string) {
+  const cleanName = asString(rawName).replace(/\s+/g, " ");
+  if (!cleanName) return "";
+
+  const parts = cleanName.split(" ");
+  const isPrefix = (value: string) => /^(mr|mrs|dr|ms|miss)[\.,]*$/i.test(value);
+
+  let index = 0;
+  while (index < parts.length && isPrefix(parts[index] ?? "")) {
+    index += 1;
+  }
+
+  return parts.slice(index).join(" ").trim();
+}
+
 const SIC_LABELS: Record<string, string> = {
-  "96020": "beauty si tratamente de infrumusetare",
-  "96021": "hairdressing si frizerie",
-  "96040": "wellness si intretinere corporala",
-  "86220": "servicii medicale specializate",
+  "96020": "beauty",
+  "96021": "hairdressing",
+  "96040": "wellness",
+  "86220": "medical",
 };
 
 function resolveIndustryLabel(rawIndustry: string | null) {
   const value = asString(rawIndustry, "servicii");
-  const sicOnly = value.match(/^\d{5}$/)?.[0];
-  if (sicOnly && SIC_LABELS[sicOnly]) {
-    return SIC_LABELS[sicOnly];
+  const normalized = value.toLowerCase();
+  for (const [sic, label] of Object.entries(SIC_LABELS)) {
+    if (normalized.includes(sic)) {
+      return label;
+    }
   }
   return value;
 }
 
 function resolveBodyTemplate(item: DirectorRow) {
-  const firstName = asString(item.full_name).split(/\s+/)[0] || "antreprenor";
+  const normalizedName = normalizeLetterFullName(item.full_name);
+  const firstName = asString(normalizedName).split(/\s+/)[0] || "antreprenor";
   const niche = resolveIndustryLabel(item.industry);
   const downloadCode = asString(item.download_code, "");
   const customBody = asString(item.letter_template);
@@ -81,16 +99,12 @@ function resolveBodyTemplate(item: DirectorRow) {
     body:
       customBody ||
       `Salut ${firstName},\n\nIn ${niche}, primul client vine greu, iar urmatorii vin doar daca prezenta ta online inspira incredere.\n\nCand pornesti un business nou, website-ul este primul filtru prin care clientii decid daca te aleg sau merg mai departe.\n\nLa EZWebOne construim website-uri si prezenta digitala pentru firme aflate la inceput de drum, cu accent pe imagine, claritate si incredere.\n\nDaca un client te-ar descoperi astazi online, ar intelege clar ce oferi si de ce sa te aleaga? Raspunsul incepe cu o prezenta online corecta.\n\nCu stima,\nEduard Proca\nCEO & Fondator EZWebOne`,
-    highlightText: downloadCode ? `Codul tau ${downloadCode}` : "Ghidul tau practic",
+    highlightText: `Ghid gratuit: www.ezwebone.co.uk/ro/guides sau scaneaza QR si introdu codul.`,
     qrContentDescription: [
       "Acest ghid iti arata:",
       "• ce ai nevoie cu adevarat la inceput",
       "• cum sa atragi primii clienti fara bugete mari",
-      "• cum sa eviti dependenta de platforme",
-      "",
-      downloadCode
-        ? `Acceseaza ghidul la www.ezwebone.co.uk/guides utilizand codul ${downloadCode}`
-        : "Acceseaza ghidul la www.ezwebone.co.uk/guides",
+      "• cum sa eviti dependenta de platforme ca treatwell",
     ].join("\n"),
     footer: "EZWebOne este numele de trading al companiei EMAGF LTD (UK), inregistrata cu numarul 12437054.",
     privacyNotice: "Datele de contact provin din registre publice UK Companies House.",
@@ -153,13 +167,15 @@ function buildPayload(item: DirectorRow, source: SendSource, templateId: number,
   const address3 = asString(address.address_line_3);
   const city = asString(address.locality);
   const postcode = asString(address.postal_code);
+  const downloadCode = asString(item.download_code);
   const copy = resolveBodyTemplate(item);
+  const normalizedFullName = normalizeLetterFullName(item.full_name) || asString(item.full_name);
 
   const payload: PostLetterPayload = {
     test,
     template: templateId,
     recipient: {
-      full_name: item.full_name,
+      full_name: normalizedFullName,
       company: item.company_name,
       address1,
       address2,
@@ -167,6 +183,7 @@ function buildPayload(item: DirectorRow, source: SendSource, templateId: number,
       city,
       postcode,
       headline: copy.headline,
+      code: downloadCode ? `Codul tau este: ${downloadCode}` : "Codul tau este:",
       body: copy.body,
       highlight_text: copy.highlightText,
       purl: asString(item.qr_code_link),
