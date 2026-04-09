@@ -34,16 +34,16 @@ export function ParticleNetwork({
     if (!context) return;
 
     const mediaQuery = window.matchMedia("(pointer: fine)");
+    const desktopQuery = window.matchMedia("(min-width: 1024px)");
+    const tabletQuery = window.matchMedia("(min-width: 768px)");
     const pointer = { x: -9999, y: -9999, active: false };
     let width = 0;
     let height = 0;
     let animationFrame = 0;
     let particles: Particle[] = [];
-
-    const particleCount = parseInt(
-      getComputedStyle(document.documentElement).getPropertyValue("--particle-count") || "38",
-      10
-    );
+    let particleCount = count;
+    let connectionDistance = maxDistance;
+    let baseLineOpacity = 0.34;
 
     const setCanvasSize = () => {
       const rect = canvas.getBoundingClientRect();
@@ -55,6 +55,29 @@ export function ParticleNetwork({
       canvas.width = Math.floor(width * dpr);
       canvas.height = Math.floor(height * dpr);
       context.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+      const cssParticleCount = Number.parseInt(
+        getComputedStyle(document.documentElement).getPropertyValue("--particle-count").trim(),
+        10
+      );
+      const baseCount = Number.isFinite(cssParticleCount) ? cssParticleCount : count;
+
+      if (desktopQuery.matches) {
+        const referenceArea = 390 * 844;
+        const areaScale = Math.sqrt(Math.max((width * height) / referenceArea, 1));
+        const desktopScale = Math.min(2.15, Math.max(1.35, areaScale));
+        particleCount = Math.max(1, Math.round(baseCount * desktopScale));
+        connectionDistance = maxDistance * 1.32;
+        baseLineOpacity = 0.48;
+      } else if (tabletQuery.matches) {
+        particleCount = Math.max(1, Math.round(baseCount * 1.1));
+        connectionDistance = maxDistance * 1.12;
+        baseLineOpacity = 0.4;
+      } else {
+        particleCount = Math.max(1, baseCount);
+        connectionDistance = maxDistance;
+        baseLineOpacity = 0.34;
+      }
     };
 
     const createParticle = (): Particle => ({
@@ -89,14 +112,14 @@ export function ParticleNetwork({
           const dy = neighbor.y - particle.y;
           const distance = Math.hypot(dx, dy);
 
-          if (distance > maxDistance) continue;
+          if (distance > connectionDistance) continue;
 
-          const opacity = 1 - distance / maxDistance;
+          const opacity = 1 - distance / connectionDistance;
           context.beginPath();
           context.moveTo(particle.x, particle.y);
           context.lineTo(neighbor.x, neighbor.y);
           const lineColor = getComputedStyle(document.documentElement).getPropertyValue("--particle-line").trim() || "196, 181, 253";
-          context.strokeStyle = `rgba(${lineColor}, ${opacity * 0.34})`;
+          context.strokeStyle = `rgba(${lineColor}, ${opacity * baseLineOpacity})`;
           context.lineWidth = 1.15;
           context.stroke();
         }
@@ -153,7 +176,12 @@ export function ParticleNetwork({
     buildParticles();
     draw();
 
-    window.addEventListener("resize", setCanvasSize);
+    const handleResize = () => {
+      setCanvasSize();
+      buildParticles();
+    };
+
+    window.addEventListener("resize", handleResize);
 
     if (interactive && mediaQuery.matches) {
       canvas.addEventListener("pointermove", handlePointerMove);
@@ -162,7 +190,7 @@ export function ParticleNetwork({
 
     return () => {
       window.cancelAnimationFrame(animationFrame);
-      window.removeEventListener("resize", setCanvasSize);
+      window.removeEventListener("resize", handleResize);
       canvas.removeEventListener("pointermove", handlePointerMove);
       canvas.removeEventListener("pointerleave", handlePointerLeave);
     };
