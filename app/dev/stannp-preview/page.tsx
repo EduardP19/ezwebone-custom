@@ -5,6 +5,8 @@ import { FormEvent, useState } from "react";
 type PreviewResult = {
   ok?: boolean;
   error?: string;
+  mode?: "preview_test" | "preview_live";
+  test?: boolean;
   source?: "ro" | "non_ro";
   sourceTable?: string;
   sourceRowId?: string;
@@ -29,6 +31,7 @@ type PreviewResult = {
 export default function StannpPreviewPage() {
   const [companyNumber, setCompanyNumber] = useState("");
   const [source, setSource] = useState<"non_ro" | "ro">("non_ro");
+  const [isTestMode, setIsTestMode] = useState(true);
   const [templateId, setTemplateId] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -47,6 +50,7 @@ export default function StannpPreviewPage() {
         body: JSON.stringify({
           companyNumber,
           source,
+          test: isTestMode,
           templateId: templateId.trim() ? Number(templateId) : undefined,
         }),
       });
@@ -70,13 +74,48 @@ export default function StannpPreviewPage() {
     <main className="mx-auto max-w-4xl px-4 py-10 sm:px-6 lg:px-8">
       <section className="rounded-3xl border border-[color:var(--color-border)] bg-[color:var(--color-bg-elevated)] p-6 sm:p-8">
         <h1 className="text-3xl font-semibold tracking-tight text-[color:var(--color-text-primary)]">
-          Stannp Test Preview
+          Stannp Preview Sender
         </h1>
         <p className="mt-3 text-sm text-[color:var(--color-text-secondary)]">
-          Send one company row to Stannp in test mode and inspect the generated PDF.
+          Choose Test or Live mode, send one company row, then inspect the generated result.
         </p>
 
         <form onSubmit={onSubmit} className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-2">
+          <div className="flex flex-col gap-2 sm:col-span-2">
+            <span className="text-xs font-semibold uppercase tracking-wide text-[color:var(--color-text-secondary)]">
+              Send Mode
+            </span>
+            <div className="inline-flex w-fit rounded-xl border border-[color:var(--color-border)] bg-[color:var(--color-bg)] p-1">
+              <button
+                type="button"
+                onClick={() => setIsTestMode(true)}
+                className={`rounded-lg px-3 py-1.5 text-sm font-semibold transition ${
+                  isTestMode
+                    ? "bg-emerald-600 text-white"
+                    : "text-[color:var(--color-text-secondary)] hover:text-[color:var(--color-text-primary)]"
+                }`}
+              >
+                Test
+              </button>
+              <button
+                type="button"
+                onClick={() => setIsTestMode(false)}
+                className={`rounded-lg px-3 py-1.5 text-sm font-semibold transition ${
+                  !isTestMode
+                    ? "bg-amber-600 text-white"
+                    : "text-[color:var(--color-text-secondary)] hover:text-[color:var(--color-text-primary)]"
+                }`}
+              >
+                Live
+              </button>
+            </div>
+            <p className="text-xs text-[color:var(--color-text-secondary)]">
+              {isTestMode
+                ? "Test mode creates a preview letter only."
+                : "Live mode creates a real send. Use with care."}
+            </p>
+          </div>
+
           <label className="flex flex-col gap-2 sm:col-span-2">
             <span className="text-xs font-semibold uppercase tracking-wide text-[color:var(--color-text-secondary)]">
               Company Number
@@ -124,7 +163,7 @@ export default function StannpPreviewPage() {
               disabled={loading}
               className="inline-flex items-center rounded-xl bg-[color:var(--color-primary)] px-4 py-2 text-sm font-semibold text-white disabled:cursor-not-allowed disabled:opacity-60"
             >
-              {loading ? "Generating..." : "Generate Test PDF"}
+              {loading ? "Sending..." : isTestMode ? "Generate Test PDF" : "Send Live Letter"}
             </button>
           </div>
         </form>
@@ -138,6 +177,12 @@ export default function StannpPreviewPage() {
         {result ? (
           <div className="mt-6 rounded-2xl border border-[color:var(--color-border)] bg-[color:var(--color-bg)] p-4">
             <p className="text-sm text-[color:var(--color-text-secondary)]">
+              Mode:{" "}
+              <span className="font-semibold text-[color:var(--color-text-primary)]">
+                {result.test ? "Test" : "Live"}
+              </span>
+            </p>
+            <p className="mt-1 text-sm text-[color:var(--color-text-secondary)]">
               Source: <span className="font-semibold text-[color:var(--color-text-primary)]">{result.sourceTable}</span>
             </p>
             <p className="mt-1 text-sm text-[color:var(--color-text-secondary)]">

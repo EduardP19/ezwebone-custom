@@ -184,12 +184,14 @@ export async function sendTestLetterPreviewByCompany(params: {
   companyNumber: string;
   source?: SendSource;
   templateId?: number;
+  test?: boolean;
 }) {
   if (!supabaseAdmin) {
     throw new Error("SUPABASE_SERVICE_ROLE_KEY or SUPABASE_SECRET_KEY is required for Stannp operations.");
   }
 
   const source = params.source ?? "non_ro";
+  const test = params.test ?? true;
   const sourceTable = getSourceTable(source);
   const companyNumber = params.companyNumber.trim();
   if (!companyNumber) {
@@ -219,11 +221,12 @@ export async function sendTestLetterPreviewByCompany(params: {
     throw new Error(`No ${source} row found for company number ${companyNumber}.`);
   }
 
-  const payload = buildPayload(row, source, templateId, true);
+  const payload = buildPayload(row, source, templateId, test);
   const response = await postLetter(payload);
 
   return {
-    mode: "preview",
+    mode: test ? "preview_test" : "preview_live",
+    test,
     source,
     sourceTable,
     sourceRowId: row.id,

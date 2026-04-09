@@ -4,7 +4,12 @@ import * as React from "react";
 import { Sun, Moon } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-export function ThemeToggle({ className }: { className?: string }) {
+type ThemeToggleProps = {
+  className?: string;
+  trackingLabel?: string;
+};
+
+export function ThemeToggle({ className, trackingLabel = "stampuser:theme-toggle" }: ThemeToggleProps) {
   const [theme, setTheme] = React.useState<"light" | "dark">("light");
 
   React.useEffect(() => {
@@ -32,6 +37,7 @@ export function ThemeToggle({ className }: { className?: string }) {
   return (
     <button
       onClick={toggle}
+      data-track-label={trackingLabel}
       aria-label={theme === "light" ? "Switch to dark mode" : "Switch to light mode"}
       className={cn(
         "flex h-9 w-9 items-center justify-center rounded-full border transition-colors",

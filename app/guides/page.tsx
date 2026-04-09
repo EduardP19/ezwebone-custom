@@ -402,11 +402,13 @@ export default function GuidesPage() {
               value={code}
               onChange={(event) => setCode(event.target.value.toUpperCase())}
               placeholder={copy.codePlaceholder}
+              data-track-label="stampuser:guides-code-input"
               className="min-h-12 rounded-xl border border-[color:var(--color-border)] bg-white px-4 text-center text-base font-medium tracking-[0.12em] text-[#1C2A44] placeholder:text-[#1C2A44]/65 outline-none focus:border-[color:var(--color-primary)]/60"
             />
             <button
               type="submit"
               disabled={isChecking || code.trim().length === 0}
+              data-track-label="stampuser:guides-code-submit"
               className="min-h-12 rounded-xl bg-[color:var(--color-primary)] px-5 text-sm font-semibold text-white shadow-[0_12px_34px_rgba(124,58,237,0.28)] transition hover:bg-[color:var(--color-primary-light)] disabled:cursor-not-allowed disabled:opacity-60"
             >
               {isChecking ? copy.checkButtonLoading : copy.checkButtonIdle}
@@ -459,6 +461,7 @@ export default function GuidesPage() {
               href={CALENDLY_BOOKING_URL}
               target="_blank"
               rel="noreferrer"
+              data-track-label="stampuser:guides-clarity-cta"
               className="mt-3 inline-flex min-h-11 items-center justify-center rounded-xl bg-[color:var(--color-primary)] px-5 text-sm font-semibold text-white transition hover:bg-[color:var(--color-primary-light)]"
             >
               {copy.callBtn}
@@ -580,6 +583,7 @@ export default function GuidesPage() {
             href={CALENDLY_BOOKING_URL}
             target="_blank"
             rel="noreferrer"
+            data-track-label="stampuser:guides-final-cta"
             className="mt-6 inline-flex min-h-11 items-center justify-center gap-2 rounded-xl bg-[color:var(--color-primary)] px-5 text-sm font-semibold text-white transition hover:bg-[color:var(--color-primary-light)]"
           >
             {copy.callBtn}
@@ -633,6 +637,7 @@ export default function GuidesPage() {
                 <button
                   type="button"
                   onClick={() => setIsLeadModalOpen(false)}
+                  data-track-label="stampuser:guides-modal-cancel"
                   className="min-h-11 flex-1 rounded-xl border border-[color:var(--color-border)] text-sm font-medium text-[color:var(--color-text-secondary)]"
                 >
                   {copy.cancel}
@@ -640,6 +645,7 @@ export default function GuidesPage() {
                 <button
                   type="submit"
                   disabled={isSubmitting}
+                  data-track-label="stampuser:guides-modal-submit"
                   className="min-h-11 flex-1 rounded-xl bg-[color:var(--color-primary)] px-4 text-sm font-semibold text-white transition hover:bg-[color:var(--color-primary-light)] disabled:cursor-not-allowed disabled:opacity-60"
                 >
                   {isSubmitting ? copy.sending : copy.sendGuide}

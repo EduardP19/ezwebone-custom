@@ -55,13 +55,13 @@ export function Navbar() {
       className={cn(
         "fixed left-0 right-0 top-0 z-[80] transition-all duration-300",
         isHome && !isScrolled && !isMenuOpen && isDark
-          ? "bg-transparent py-3"
-          : "border-b border-[color:var(--color-border)] bg-[color:var(--color-bg-card)]/90 py-2 backdrop-blur-xl"
+          ? "bg-transparent py-0 md:py-3"
+          : "border-b border-[color:var(--color-border)] bg-[color:var(--color-bg-card)]/90 py-0.5 md:py-2 backdrop-blur-xl"
       )}
     >
       <div className="mx-auto w-full max-w-7xl px-4 md:px-6">
         <div className="flex items-center justify-between gap-6">
-          <LocalizedLink href="/" className="relative z-40 flex items-center">
+          <LocalizedLink href="/" className="relative z-40 flex items-center" data-track-label="stampuser:navbar-logo">
             <span className="inline-flex items-center gap-3">
               <Image
                 src={isDark ? BRAND_LOGO_MARK_DARK_SRC : BRAND_LOGO_MARK_LIGHT_SRC}
@@ -69,7 +69,7 @@ export function Navbar() {
                 width={96}
                 height={96}
                 priority
-                className="h-24 w-24"
+                className="h-24 w-24 -my-4 md:my-0"
               />
             </span>
           </LocalizedLink>
@@ -79,6 +79,7 @@ export function Navbar() {
               <LocalizedLink
                 key={link.href}
                 href={link.href}
+                data-track-label={`stampuser:navbar-link-desktop:${link.key}`}
                 className={cn(
                   "text-sm font-medium uppercase tracking-[0.16em] transition-colors",
                   pathname === localizePath(locale, link.href)
@@ -94,7 +95,7 @@ export function Navbar() {
           </div>
 
           <div className="hidden md:flex items-center gap-3">
-            <ThemeToggle />
+            <ThemeToggle trackingLabel="stampuser:theme-toggle:desktop" />
             <a href={CALENDLY_BOOKING_URL} target="_blank" rel="noreferrer">
               <Button size="md" className="px-6 py-3 text-sm">
                 {dictionary.common.bookFreeCall}
@@ -102,18 +103,22 @@ export function Navbar() {
             </a>
           </div>
 
-          <button
-            className={cn(
-              "relative z-[100] p-2 md:hidden",
-              isHome && !isScrolled && !isMenuOpen && isDark ? "text-white" : "text-[color:var(--color-text-primary)]"
-            )}
-            onClick={() => setIsMenuOpen(!isMenuOpen)}
-            aria-label={isMenuOpen ? dictionary.nav.closeMenu : dictionary.nav.openMenu}
-            aria-expanded={isMenuOpen}
-            aria-controls="mobile-navigation"
-          >
-            {isMenuOpen ? <X size={28} /> : <Menu size={28} />}
-          </button>
+          <div className="relative z-[100] flex items-center gap-2 md:hidden">
+            <ThemeToggle trackingLabel="stampuser:theme-toggle:mobile" />
+            <button
+              className={cn(
+                "p-1.5",
+                isHome && !isScrolled && !isMenuOpen && isDark ? "text-white" : "text-[color:var(--color-text-primary)]"
+              )}
+              onClick={() => setIsMenuOpen(!isMenuOpen)}
+              data-track-label="stampuser:navbar-hamburger"
+              aria-label={isMenuOpen ? dictionary.nav.closeMenu : dictionary.nav.openMenu}
+              aria-expanded={isMenuOpen}
+              aria-controls="mobile-navigation"
+            >
+              {isMenuOpen ? <X size={26} /> : <Menu size={26} />}
+            </button>
+          </div>
         </div>
       </div>
 
@@ -135,37 +140,22 @@ export function Navbar() {
         <div
           id="mobile-navigation"
           className={cn(
-            "relative flex min-h-screen flex-col bg-[color:var(--color-bg-card)] px-6 pb-10 pt-28 shadow-[0_0_80px_rgba(0,0,0,0.18)] transition-all duration-500 sm:px-8",
+            "relative flex min-h-screen flex-col bg-[color:var(--color-bg-card)] px-6 pb-10 pt-20 shadow-[0_0_80px_rgba(0,0,0,0.18)] transition-all duration-500 sm:px-8",
             isMenuOpen ? "translate-y-0 opacity-100" : "-translate-y-3 opacity-0"
           )}
         >
-          <div className="space-y-6">
+          <div className="mx-auto w-full max-w-md space-y-3 pt-1">
             {NAV_LINKS.map((link) => (
               <LocalizedLink
                 key={link.href}
                 href={link.href}
                 onClick={() => setIsMenuOpen(false)}
-                className="block text-2xl font-display font-semibold tracking-tight text-white"
+                data-track-label={`stampuser:navbar-link-mobile:${link.key}`}
+                className="block rounded-xl px-1 py-1 text-[2.1rem] leading-[1.02] font-display font-semibold tracking-[-0.01em] text-white/95 transition-colors hover:text-white"
               >
                 {dictionary.nav.links[link.key]}
               </LocalizedLink>
             ))}
-          </div>
-
-          <div className="mt-10 space-y-4">
-            <p className="mono-label text-xs text-[color:var(--color-text-secondary)]">
-              {dictionary.nav.mobileTagline}
-            </p>
-            <a
-              href={CALENDLY_BOOKING_URL}
-              target="_blank"
-              rel="noreferrer"
-              onClick={() => setIsMenuOpen(false)}
-            >
-              <Button size="lg" className="w-full">
-                {dictionary.common.bookFreeCall}
-              </Button>
-            </a>
           </div>
         </div>
       </div>
