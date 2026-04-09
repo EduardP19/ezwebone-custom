@@ -28,13 +28,12 @@ export function Navbar() {
   const isDark = useIsDark();
   const pathname = usePathname();
   const { locale, dictionary } = useI18n();
-  const homePath = localizePath(locale, "/");
-  const isHome = pathname === homePath;
 
   React.useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 48);
     };
+    handleScroll();
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
@@ -53,14 +52,14 @@ export function Navbar() {
   return (
     <nav
       className={cn(
-        "fixed left-0 right-0 top-0 z-[80] transition-all duration-300",
-        isHome && !isScrolled && !isMenuOpen && isDark
-          ? "bg-transparent py-0 md:py-3"
-          : "border-b border-[color:var(--color-border)] bg-[color:var(--color-bg-card)]/90 py-0.5 md:py-2 backdrop-blur-xl"
+        "fixed left-0 right-0 top-0 z-[120] transition-all duration-300",
+        isScrolled || isMenuOpen
+          ? "border-b border-[color:var(--color-border)] bg-[color:var(--color-bg-card)]/90 py-0.5 md:py-2 backdrop-blur-xl"
+          : "bg-transparent py-0 md:py-3"
       )}
     >
       <div className="mx-auto w-full max-w-7xl px-4 md:px-6">
-        <div className="flex items-center justify-between gap-6">
+        <div className="flex min-h-[92px] items-center justify-between gap-6 md:min-h-[96px]">
           <LocalizedLink href="/" className="relative z-40 flex items-center" data-track-label="stampuser:navbar-logo">
             <span className="inline-flex items-center gap-3">
               <Image
@@ -69,7 +68,7 @@ export function Navbar() {
                 width={96}
                 height={96}
                 priority
-                className="h-24 w-24 -my-4 md:my-0"
+                className="h-24 w-24 my-0"
               />
             </span>
           </LocalizedLink>
@@ -84,9 +83,7 @@ export function Navbar() {
                   "text-sm font-medium uppercase tracking-[0.16em] transition-colors",
                   pathname === localizePath(locale, link.href)
                     ? "text-[color:var(--color-text-primary)]"
-                    : isHome && !isScrolled
-                      ? "text-[color:var(--color-text-secondary)] hover:text-[color:var(--color-text-primary)]"
-                      : "text-[color:var(--color-text-secondary)] hover:text-[color:var(--color-text-primary)]"
+                    : "text-[color:var(--color-text-secondary)] hover:text-[color:var(--color-text-primary)]"
                 )}
               >
                 {dictionary.nav.links[link.key]}
@@ -106,10 +103,7 @@ export function Navbar() {
           <div className="relative z-[100] flex items-center gap-2 md:hidden">
             <ThemeToggle trackingLabel="stampuser:theme-toggle:mobile" />
             <button
-              className={cn(
-                "p-1.5",
-                isHome && !isScrolled && !isMenuOpen && isDark ? "text-white" : "text-[color:var(--color-text-primary)]"
-              )}
+              className="p-1.5 text-[color:var(--color-text-primary)]"
               onClick={() => setIsMenuOpen(!isMenuOpen)}
               data-track-label="stampuser:navbar-hamburger"
               aria-label={isMenuOpen ? dictionary.nav.closeMenu : dictionary.nav.openMenu}
@@ -151,7 +145,7 @@ export function Navbar() {
                 href={link.href}
                 onClick={() => setIsMenuOpen(false)}
                 data-track-label={`stampuser:navbar-link-mobile:${link.key}`}
-                className="block rounded-xl px-1 py-1 text-[2.1rem] leading-[1.02] font-display font-semibold tracking-[-0.01em] text-white/95 transition-colors hover:text-white"
+                className="block rounded-xl px-3 py-2 text-[2.1rem] leading-[1.02] font-display font-semibold tracking-[-0.01em] text-[color:var(--color-text-primary)] transition-colors hover:text-[color:var(--foreground)]"
               >
                 {dictionary.nav.links[link.key]}
               </LocalizedLink>

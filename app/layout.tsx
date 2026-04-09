@@ -5,7 +5,7 @@ import { Inter, JetBrains_Mono, Space_Grotesk } from "next/font/google";
 import "./globals.css";
 
 import { LocaleProvider } from "@/components/i18n/LocaleProvider";
-import { Navbar } from "@/components/layout/Navbar";
+import { NavbarClient } from "@/components/layout/NavbarClient";
 import { Footer } from "@/components/layout/Footer";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { TrackingProvider } from "@/components/analytics/TrackingProvider";
@@ -124,8 +124,8 @@ export default async function RootLayout({
                 sameAs: ["https://resevia.co.uk"],
               }}
             />
-            <Navbar />
-            <main className="flex-grow pt-20">{children}</main>
+            <NavbarClient />
+            <main className="flex-grow pt-24 md:pt-28">{children}</main>
             <Footer />
           </LocaleProvider>
         </body>
