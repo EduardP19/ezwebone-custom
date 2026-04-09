@@ -3,16 +3,14 @@
 import * as React from "react";
 import Image from "next/image";
 import { AnimatePresence, motion } from "framer-motion";
-import { ArrowRight, CheckCircle2, MessageCircle } from "lucide-react";
+import { ArrowRight, MessageCircle } from "lucide-react";
 import { useI18n } from "@/components/i18n/LocaleProvider";
 import { ParticleNetwork } from "@/components/sections/ParticleNetwork";
-import { CALENDLY_BOOKING_URL } from "@/lib/links";
 import { cn } from "@/lib/utils";
 
-type ChatState = "idle" | "active" | "awaiting_email" | "report_sent" | "locked";
+type ChatState = "idle" | "active" | "locked";
 type ChatRole = "user" | "assistant";
 type ChatKind = "chat" | "email";
-type ChatAgentKey = "prequalify" | "prequalifyNewBusiness";
 
 type ChatMessage = {
   id: string;
@@ -28,15 +26,14 @@ const TRUST_IMAGES = [
 ];
 const COMMAND_TAGS = ["Websites", "Automations", "AI Agents", "Marketing", "SEO", "Lead Gen"];
 
-const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-const SESSION_COOKIE = "ezw_prequalify_session";
-const TRIAL_LOCK_COOKIE = "ezw_prequalify_locked";
-const TRIAL_MESSAGE_LIMIT = 2;
-const REPORT_SENT_DURATION_MS = 7000;
+const TRAINING_REPLY_EN =
+  "Thank you for your message. Our AI agent is being trained at the moment and will be available soon.";
+const TRAINING_REPLY_RO =
+  "Iti multumim pentru mesaj. Agentul nostru AI este in training momentan si va fi disponibil in curand.";
 
 type HeroChatPreviewProps = {
   apiPath?: string;
-  agentKey?: ChatAgentKey;
+  agentKey?: string;
 };
 
 function useTypewriter(prompts: readonly string[], enabled: boolean) {
@@ -45,33 +42,33 @@ function useTypewriter(prompts: readonly string[], enabled: boolean) {
   const [isDeleting, setIsDeleting] = React.useState(false);
 
   React.useEffect(() => {
-    if (!enabled) {
+    if (!enabled || prompts.length === 0) {
       setDisplayText("");
       setPromptIndex(0);
       setIsDeleting(false);
       return;
     }
 
-    const currentPrompt = prompts[promptIndex];
+    const currentPrompt = prompts[promptIndex] ?? "";
     let timeoutId: number;
 
     if (!isDeleting && displayText.length < currentPrompt.length) {
       timeoutId = window.setTimeout(() => {
         setDisplayText(currentPrompt.slice(0, displayText.length + 1));
-      }, 50);
+      }, 45);
     } else if (!isDeleting && displayText.length === currentPrompt.length) {
       timeoutId = window.setTimeout(() => {
         setIsDeleting(true);
-      }, 3000);
+      }, 1800);
     } else if (isDeleting && displayText.length > 0) {
       timeoutId = window.setTimeout(() => {
         setDisplayText(currentPrompt.slice(0, displayText.length - 1));
-      }, 30);
+      }, 24);
     } else {
       timeoutId = window.setTimeout(() => {
         setIsDeleting(false);
         setPromptIndex((current) => (current + 1) % prompts.length);
-      }, 500);
+      }, 250);
     }
 
     return () => {
@@ -81,97 +78,6 @@ function useTypewriter(prompts: readonly string[], enabled: boolean) {
 
   return displayText;
 }
-
-function getMockAssistantResponse(
-  input: string,
-  responses: {
-    salon: string;
-    seo: string;
-    leadGen: string;
-    automation: string;
-    ai: string;
-    fallback: string;
-  }
-) {
-  const normalized = input.toLowerCase();
-
-  if (
-    normalized.includes("salon") ||
-    normalized.includes("beauty") ||
-    normalized.includes("missed calls") ||
-    normalized.includes("booking")
-  ) {
-    return responses.salon;
-  }
-
-  if (normalized.includes("seo") || normalized.includes("google") || normalized.includes("rank")) {
-    return responses.seo;
-  }
-
-  if (normalized.includes("lead") || normalized.includes("ads") || normalized.includes("marketing")) {
-    return responses.leadGen;
-  }
-
-  if (normalized.includes("autom") || normalized.includes("workflow") || normalized.includes("follow-up")) {
-    return responses.automation;
-  }
-
-  if (normalized.includes("ai") || normalized.includes("agent")) {
-    return responses.ai;
-  }
-
-  return responses.fallback;
-}
-
-function readCookie(name: string) {
-  if (typeof document === "undefined") {
-    return null;
-  }
-
-  const prefix = `${name}=`;
-  const item = document.cookie
-    .split(";")
-    .map((part) => part.trim())
-    .find((part) => part.startsWith(prefix));
-
-  if (!item) {
-    return null;
-  }
-
-  return decodeURIComponent(item.slice(prefix.length));
-}
-
-function ensureSessionIdCookie() {
-  const existing = readCookie(SESSION_COOKIE);
-  if (existing) {
-    return existing;
-  }
-
-  const nextValue = crypto.randomUUID();
-  const oneYear = 60 * 60 * 24 * 365;
-  document.cookie = `${SESSION_COOKIE}=${encodeURIComponent(nextValue)}; Max-Age=${oneYear}; Path=/; SameSite=Lax`;
-  return nextValue;
-}
-
-function setTrialLockedCookie() {
-  if (typeof document === "undefined") {
-    return;
-  }
-
-  const oneYear = 60 * 60 * 24 * 365;
-  document.cookie = `${TRIAL_LOCK_COOKIE}=1; Max-Age=${oneYear}; Path=/; SameSite=Lax`;
-}
-
-type AgentSessionResponse = {
-  sessionId: string;
-  messagesUsed: number;
-  trialLimit: number;
-  limitReached: boolean;
-  trialComplete: boolean;
-  emailCaptured: boolean;
-  email: string | null;
-  reportSent: boolean;
-};
 
 function RunningBorder({
   children,
@@ -202,39 +108,35 @@ function RunningBorder({
   );
 }
 
-export function HeroChatPreview({
-  apiPath = "/api/agent-chat",
-  agentKey = "prequalify",
-}: HeroChatPreviewProps) {
+export function HeroChatPreview({ apiPath: _apiPath, agentKey: _agentKey }: HeroChatPreviewProps) {
   const sectionRef = React.useRef<HTMLElement>(null);
   const inputRef = React.useRef<HTMLInputElement>(null);
   const historyRef = React.useRef<HTMLDivElement>(null);
   const timersRef = React.useRef<number[]>([]);
   const { dictionary, locale } = useI18n();
   const heroCopy = dictionary.home.hero;
+  const trainingReply = locale === "ro" ? TRAINING_REPLY_RO : TRAINING_REPLY_EN;
+  const trainingLockedTitle = locale === "ro" ? "Agentul AI este in training" : "AI agent is in training";
+  const trainingLockedBody =
+    locale === "ro"
+      ? "Momentan raspunde o singura data in modul de training. Revino curand pentru versiunea completa."
+      : "For now it replies once in training mode. Please check back soon for the full version.";
 
   const [chatState, setChatState] = React.useState<ChatState>("idle");
   const [inputValue, setInputValue] = React.useState("");
   const [messages, setMessages] = React.useState<ChatMessage[]>([]);
   const [isStreaming, setIsStreaming] = React.useState(false);
-  const [isSessionLoading, setIsSessionLoading] = React.useState(true);
-  const [sessionId, setSessionId] = React.useState<string | null>(null);
-  const [capturedEmail, setCapturedEmail] = React.useState<string | null>(null);
-  const [emailError, setEmailError] = React.useState<string | null>(null);
-
-  const typewriterText = useTypewriter(heroCopy.typewriterPrompts, chatState === "idle");
+  const [hasMounted, setHasMounted] = React.useState(false);
 
   const userMessageCount = messages.filter(
     (message) => message.role === "user" && message.kind === "chat"
   ).length;
-
-  const remainingHintStart = Math.max(1, TRIAL_MESSAGE_LIMIT - 2);
-  const messagesRemaining =
-    chatState === "active" &&
-    userMessageCount >= remainingHintStart &&
-    userMessageCount < TRIAL_MESSAGE_LIMIT
-      ? TRIAL_MESSAGE_LIMIT - userMessageCount
-      : null;
+  const typewriterText = useTypewriter(
+    heroCopy.typewriterPrompts,
+    hasMounted && chatState !== "locked" && userMessageCount === 0 && inputValue.length === 0
+  );
+  const showInputOverlay =
+    hasMounted && chatState !== "locked" && userMessageCount === 0 && inputValue.length === 0;
 
   const queueTimeout = React.useCallback((callback: () => void, delay: number) => {
     const timeoutId = window.setTimeout(callback, delay);
@@ -277,6 +179,10 @@ export function HeroChatPreview({
   );
 
   React.useEffect(() => {
+    setHasMounted(true);
+  }, []);
+
+  React.useEffect(() => {
     const history = historyRef.current;
     if (!history) return;
 
@@ -293,61 +199,6 @@ export function HeroChatPreview({
     };
   }, []);
 
-  React.useEffect(() => {
-    let isCancelled = false;
-
-    const bootstrapSession = async () => {
-      const nextSessionId = ensureSessionIdCookie();
-      setSessionId(nextSessionId);
-      const localTrialLocked = readCookie(TRIAL_LOCK_COOKIE) === "1";
-
-      if (localTrialLocked) {
-        setChatState("locked");
-      }
-
-      try {
-        const response = await fetch(
-          `${apiPath}?sessionId=${encodeURIComponent(nextSessionId)}&locale=${locale}`,
-          {
-            method: "GET",
-            cache: "no-store",
-          }
-        );
-
-        if (!response.ok) {
-          return;
-        }
-
-        const payload = (await response.json()) as AgentSessionResponse;
-        if (isCancelled) {
-          return;
-        }
-
-        setCapturedEmail(payload.email ?? null);
-
-        if (payload.limitReached) {
-          setTrialLockedCookie();
-          setChatState("locked");
-          return;
-        }
-
-        if (payload.messagesUsed > 0) {
-          setChatState("active");
-        }
-      } finally {
-        if (!isCancelled) {
-          setIsSessionLoading(false);
-        }
-      }
-    };
-
-    void bootstrapSession();
-
-    return () => {
-      isCancelled = true;
-    };
-  }, [locale]);
-
   const activateChat = React.useCallback(() => {
     setChatState((current) => (current === "idle" ? "active" : current));
   }, []);
@@ -360,88 +211,17 @@ export function HeroChatPreview({
     }, 220);
   }, [activateChat]);
 
-  const startReportAndLockFlow = React.useCallback(
-    (email: string | null) => {
-      setCapturedEmail(email);
-      setTrialLockedCookie();
-      setChatState("report_sent");
-      queueTimeout(() => {
-        setChatState("locked");
-      }, REPORT_SENT_DURATION_MS);
-    },
-    [queueTimeout]
-  );
-
   const handleSendMessage = React.useCallback(() => {
     const nextValue = inputValue.trim();
     if (
       !nextValue ||
       isStreaming ||
-      isSessionLoading ||
-      !sessionId ||
-      chatState === "locked" ||
-      chatState === "report_sent"
+      chatState === "locked"
     ) {
       return;
     }
 
-    if (chatState === "awaiting_email") {
-      if (!EMAIL_REGEX.test(nextValue)) {
-        setEmailError(heroCopy.emailError);
-        return;
-      }
-
-      setEmailError(null);
-      setMessages((current) => [
-        ...current,
-        {
-          id: crypto.randomUUID(),
-          kind: "email",
-          role: "user",
-          text: nextValue,
-        },
-      ]);
-      setInputValue("");
-      setIsStreaming(true);
-
-      void fetch(apiPath, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          action: "capture_email",
-          sessionId,
-          email: nextValue,
-        }),
-      })
-        .then(async (response) => {
-          const payload = (await response.json()) as Partial<AgentSessionResponse> & { error?: string };
-          if (!response.ok) {
-            throw new Error(payload.error ?? "Failed to save email.");
-          }
-
-          startReportAndLockFlow(typeof payload.email === "string" ? payload.email : nextValue);
-        })
-        .catch(() => {
-          setEmailError(heroCopy.emailError);
-        })
-        .finally(() => {
-          setIsStreaming(false);
-        });
-
-      return;
-    }
-
     activateChat();
-    setEmailError(null);
-    const nextUserCount = userMessageCount + 1;
-    const history = messages
-      .filter((message) => message.kind === "chat")
-      .map((message) => ({
-        role: message.role,
-        text: message.text,
-      }));
 
     setMessages((current) => [
       ...current,
@@ -453,80 +233,16 @@ export function HeroChatPreview({
       },
     ]);
     setInputValue("");
-    setIsStreaming(true);
-
-    void fetch(apiPath, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        action: "chat",
-        sessionId,
-        agentKey,
-        locale,
-        message: nextValue,
-        history,
-      }),
-    })
-      .then(async (response) => {
-        const payload = (await response.json()) as {
-          reply?: string;
-          error?: string;
-          limitReached?: boolean;
-          needsEmail?: boolean;
-          email?: string | null;
-        };
-
-        if (!response.ok) {
-          if (response.status === 429) {
-            setIsStreaming(false);
-            setTrialLockedCookie();
-            setChatState("locked");
-            return;
-          }
-
-          throw new Error(payload.error ?? "Failed to process message.");
-        }
-
-        const reply =
-          typeof payload.reply === "string" && payload.reply.trim().length > 0
-            ? payload.reply.trim()
-            : getMockAssistantResponse(nextValue, heroCopy.assistantResponses);
-
-        streamAssistantMessage(reply, () => {
-          const hitLimit = payload.limitReached === true || nextUserCount >= TRIAL_MESSAGE_LIMIT;
-          if (!hitLimit) {
-            return;
-          }
-
-          startReportAndLockFlow(typeof payload.email === "string" ? payload.email : null);
-        });
-      })
-      .catch(() => {
-        setIsStreaming(false);
-        streamAssistantMessage(getMockAssistantResponse(nextValue, heroCopy.assistantResponses), () => {
-          if (nextUserCount >= TRIAL_MESSAGE_LIMIT) {
-            startReportAndLockFlow(null);
-          }
-        });
-      });
+    streamAssistantMessage(trainingReply, () => {
+      setChatState("locked");
+    });
   }, [
     activateChat,
     chatState,
-    heroCopy,
     inputValue,
-    isSessionLoading,
     isStreaming,
-    locale,
-    messages,
-    queueTimeout,
-    apiPath,
-    agentKey,
-    startReportAndLockFlow,
-    sessionId,
-    userMessageCount,
     streamAssistantMessage,
+    trainingReply,
   ]);
 
   return (
@@ -604,11 +320,11 @@ export function HeroChatPreview({
                 <div
                   className={cn(
                     "text-left",
-                    (chatState === "report_sent" || chatState === "locked") &&
+                    chatState === "locked" &&
                       "flex items-center justify-center text-center"
                   )}
                 >
-                  {chatState === "report_sent" || chatState === "locked" ? null : (
+                  {chatState === "locked" ? null : (
                     <AnimatePresence mode="wait">
                       {chatState === "idle" ? (
                       <motion.div
@@ -619,7 +335,9 @@ export function HeroChatPreview({
                         transition={{ duration: 0.3 }}
                       >
                         <div className="mb-5 flex min-h-[64px] items-center px-1 text-base italic leading-7 tracking-[0.01em] text-white/92 sm:min-h-[72px] sm:text-lg">
-                          <span className="max-w-[28ch] sm:max-w-none">{heroCopy.placeholderChat}</span>
+                          <span suppressHydrationWarning className="max-w-[28ch] sm:max-w-none">
+                            {heroCopy.placeholderChat}
+                          </span>
                         </div>
                       </motion.div>
                       ) : (
@@ -634,7 +352,9 @@ export function HeroChatPreview({
                       >
                         {messages.length === 0 ? (
                           <div className="mb-5 flex min-h-[64px] items-center px-1 text-base italic leading-7 tracking-[0.01em] text-white/92 sm:min-h-[72px] sm:text-lg">
-                            <span className="max-w-[28ch] sm:max-w-none">{heroCopy.placeholderChat}</span>
+                            <span suppressHydrationWarning className="max-w-[28ch] sm:max-w-none">
+                              {heroCopy.placeholderChat}
+                            </span>
                           </div>
                         ) : null}
 
@@ -670,41 +390,14 @@ export function HeroChatPreview({
                     </AnimatePresence>
                   )}
 
-                  {chatState === "report_sent" ? (
-                    <div className="w-full max-w-xl space-y-3 rounded-2xl border border-emerald-600/30 bg-emerald-50 px-4.5 py-4.5 text-emerald-800 sm:px-6 sm:py-6">
-                      <div className="flex items-center justify-center gap-2 text-sm font-semibold sm:text-base">
-                        <CheckCircle2 className="h-4 w-4" />
-                        {heroCopy.captured}
-                      </div>
-                      <p className="text-center text-[13px] leading-6 text-emerald-700 sm:text-sm">
-                        {heroCopy.reportSentWarmMessage}
-                      </p>
-                      <p className="text-center text-[13px] leading-6 text-emerald-700 sm:text-sm">
-                        {heroCopy.reportSentEta}
-                      </p>
-                      <p className="break-words text-center text-[13px] leading-6 text-emerald-700 sm:text-sm">
-                        {heroCopy.reportSentOnEmail} {capturedEmail ?? heroCopy.placeholderEmail}
-                      </p>
-                      <p className="text-center text-[13px] leading-6 text-emerald-600 sm:text-sm">
-                        {heroCopy.reportSentSpamHint}
-                      </p>
-                    </div>
-                  ) : chatState === "locked" ? (
+                  {chatState === "locked" ? (
                     <div className="w-full max-w-xl space-y-4 rounded-2xl border border-[color:var(--color-primary)]/20 bg-[color:var(--color-bg-elevated)] px-4.5 py-4.5 text-center sm:px-6 sm:py-6">
                       <p className="text-center text-sm font-semibold text-[color:var(--color-text-primary)] sm:text-base">
-                        {heroCopy.trialUsedTitle}
+                        {trainingLockedTitle}
                       </p>
                       <p className="text-center text-[13px] leading-6 text-[color:var(--color-text-secondary)] sm:text-sm">
-                        {heroCopy.trialUsedBody}
+                        {trainingLockedBody}
                       </p>
-                      <a
-                        href={CALENDLY_BOOKING_URL}
-                        target="_blank"
-                        rel="noreferrer"
-                        className="inline-flex min-h-12 w-full items-center justify-center rounded-full border border-[color:var(--color-primary)] bg-[color:var(--color-primary)] px-6 py-3 text-sm font-semibold text-white shadow-[0_12px_36px_rgba(124,58,237,0.32)] transition hover:border-[color:var(--color-primary-light)] hover:bg-[color:var(--color-primary-light)] sm:w-auto"
-                      >
-                        {heroCopy.trialUsedCta}
-                      </a>
                     </div>
                   ) : (
                     <>
@@ -715,50 +408,38 @@ export function HeroChatPreview({
                           handleSendMessage();
                         }}
                       >
-                        <input
-                          ref={inputRef}
-                          value={inputValue}
-                          onFocus={activateChat}
-                          onChange={(event) => {
-                            activateChat();
-                            setInputValue(event.target.value);
-                            setEmailError(null);
-                          }}
-                          placeholder={
-                            chatState === "awaiting_email"
-                              ? heroCopy.placeholderEmail
-                              : userMessageCount > 0
-                                ? ""
-                                : chatState === "idle"
-                                ? typewriterText
-                                : "Describe your business and what you'd like AI to solve..."
-                          }
-                          disabled={isStreaming || isSessionLoading}
-                          className="min-h-14 rounded-[1.05rem] border border-[color:var(--color-border)]/70 bg-white px-4 text-base tracking-[0.01em] text-[color:#111827] outline-none transition placeholder:text-[color:#4b5563]/75 focus:border-[color:var(--color-primary-light)]/70"
-                        />
+                        <div className="relative">
+                          {showInputOverlay ? (
+                            <span
+                              aria-hidden="true"
+                              className="pointer-events-none absolute inset-y-0 left-4 right-4 flex items-center overflow-hidden text-base tracking-[0.01em] text-[color:#4b5563]/75"
+                            >
+                              {typewriterText}
+                            </span>
+                          ) : null}
+                          <input
+                            ref={inputRef}
+                            value={inputValue}
+                            onFocus={activateChat}
+                            onChange={(event) => {
+                              activateChat();
+                              setInputValue(event.target.value);
+                            }}
+                            aria-label={heroCopy.placeholderChat}
+                            disabled={isStreaming}
+                            className="min-h-14 w-full rounded-[1.05rem] border border-[color:var(--color-border)]/70 bg-white px-4 text-base tracking-[0.01em] text-[color:#111827] outline-none transition focus:border-[color:var(--color-primary-light)]/70"
+                          />
+                        </div>
 
                         <button
                           type="submit"
                           className="ai-command-send-button inline-flex min-h-14 w-full min-w-[132px] items-center justify-center gap-2 rounded-[1.05rem] px-6 text-sm font-semibold tracking-[0.02em] text-white sm:w-auto"
-                          disabled={isStreaming || isSessionLoading || inputValue.trim().length === 0}
+                          disabled={isStreaming || inputValue.trim().length === 0}
                         >
                           Send
                           <ArrowRight className="h-4 w-4" />
                         </button>
                       </form>
-
-                      {emailError ? (
-                        <p className="mt-3 text-sm text-rose-600">{emailError}</p>
-                      ) : null}
-
-                      {messagesRemaining ? (
-                        <p className="mt-3 text-center text-xs text-white">
-                          {messagesRemaining}{" "}
-                          {messagesRemaining === 1
-                            ? heroCopy.remainingMessages.singular
-                            : heroCopy.remainingMessages.plural}
-                        </p>
-                      ) : null}
                     </>
                   )}
                 </div>
