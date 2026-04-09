@@ -486,7 +486,7 @@ export default function GuidesPage() {
               <ul className="mt-4 space-y-2">
                 {copy.healthyItems.map((item) => (
                   <li key={item} className="flex items-start gap-2 text-sm text-[color:var(--color-text-secondary)]">
-                    <Check className="mt-0.5 h-4 w-4 text-cyan-500" />
+                    <Check className="mt-0.5 h-4 w-4 text-[#F97316]" />
                     <span>{item}</span>
                   </li>
                 ))}

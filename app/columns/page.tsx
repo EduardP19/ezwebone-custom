@@ -5,6 +5,7 @@ import { ColumnCard } from "@/components/ui/ColumnCard";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { FinalCTA } from "@/components/sections/FinalCTA";
 import { getPublishedColumns } from "@/lib/columns";
+import { getColumnViewsBySlug } from "@/lib/contentViews";
 import { localizePath } from "@/lib/i18n/config";
 import { getDictionary } from "@/lib/i18n/dictionary";
 import { getRequestLocale } from "@/lib/i18n/request";
@@ -28,6 +29,14 @@ export default async function ColumnsPage() {
   const locale = await getRequestLocale();
   const dictionary = getDictionary(locale);
   const columns = await getPublishedColumns(locale);
+  const viewsBySlug = await getColumnViewsBySlug(columns.map((column) => column.slug));
+
+  function estimateReadTime(content: string | null) {
+    if (!content) return 1;
+    const withoutTags = content.replace(/<[^>]*>/g, " ");
+    const words = withoutTags.trim().split(/\s+/).filter(Boolean).length;
+    return Math.max(1, Math.ceil(words / 220));
+  }
 
   return (
     <div className="bg-[#fafafa]">
@@ -64,6 +73,8 @@ export default async function ColumnsPage() {
                 subtitle={column.subtitle ?? undefined}
                 coverImage={column.coverImage ?? undefined}
                 publishedAt={column.createdAt}
+                readTime={estimateReadTime(column.content)}
+                views={viewsBySlug[column.slug] ?? 0}
               />
             ))}
           </div>

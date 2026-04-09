@@ -9,6 +9,7 @@ import { localizePath } from "@/lib/i18n/config";
 import { getDictionary } from "@/lib/i18n/dictionary";
 import { getRequestLocale } from "@/lib/i18n/request";
 import { estimateReadTime, formatPostDate, getPublishedBlogPosts } from "@/lib/blog";
+import { getBlogViewsBySlug } from "@/lib/contentViews";
 import { createMetadata } from "@/lib/seo";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -31,6 +32,7 @@ export default async function BlogPage() {
   const locale = await getRequestLocale();
   const dictionary = getDictionary(locale);
   const posts = await getPublishedBlogPosts(locale);
+  const viewsBySlug = await getBlogViewsBySlug(posts.map((post) => post.slug));
 
   return (
     <div className="section-shell bg-[color:var(--color-bg-dark)]">
@@ -56,27 +58,31 @@ export default async function BlogPage() {
               >
                 <Card
                   padding="sm"
-                  className="h-full border-[color:var(--color-border)] bg-[color:var(--color-bg-card)] shadow-[0_20px_60px_rgba(0,0,0,0.18)] transition-all group hover:border-[rgba(124,58,237,0.4)]"
+                  className="h-full border-[color:var(--color-border)] bg-[color:var(--color-bg-card)] shadow-[0_16px_36px_rgba(28,42,68,0.12)] transition-all group hover:border-[rgba(124,58,237,0.35)]"
                 >
-                  <div className="aspect-[16/9] bg-[color:var(--color-bg-elevated)] rounded-xl mb-5 overflow-hidden relative">
+                  <div className="aspect-[16/10] bg-[color:var(--color-bg-elevated)] rounded-xl mb-5 overflow-hidden relative">
                     <Image
                       src={post.cover_image || FALLBACK_IMAGE}
                       alt={post.title}
                       fill
+                      sizes="(max-width: 768px) 100vw, 50vw"
                       className="object-cover group-hover:scale-105 transition-transform duration-500"
                     />
                   </div>
-                  <div className="flex items-center gap-3 text-[10px] font-bold text-[color:var(--color-text-secondary)] uppercase tracking-widest mb-3">
+                  <div className="mb-1 text-sm text-[color:var(--color-text-secondary)]">Eduard Proca</div>
+                  <div className="mb-4 flex items-center gap-2 text-sm text-[color:var(--color-text-secondary)]">
                     <span>{formatPostDate(post.created_at, locale)}</span>
-                    <span className="w-1 h-1 rounded-full bg-[color:var(--color-text-secondary)]/60" />
+                    <span>·</span>
                     <span>
                       {estimateReadTime(post.content)} {dictionary.common.minRead}
                     </span>
+                    <span>·</span>
+                    <span>{viewsBySlug[post.slug] ?? 0} views</span>
                   </div>
-                  <h2 className="text-xl font-bold text-[color:var(--color-text-primary)] mb-2 group-hover:text-[color:var(--color-primary-light)] transition-colors leading-snug">
+                  <h2 className="text-[2rem] font-semibold text-[color:var(--color-text-primary)] mb-3 leading-[1.15] tracking-tight group-hover:text-[color:var(--color-primary-light)] transition-colors">
                     {post.title}
                   </h2>
-                  <p className="text-[color:var(--color-text-secondary)] text-sm leading-relaxed line-clamp-3">
+                  <p className="text-[color:var(--color-text-secondary)] text-base leading-relaxed line-clamp-3">
                     {post.excerpt || dictionary.pages.blog.fallbackExcerpt}
                   </p>
                 </Card>

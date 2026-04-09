@@ -62,6 +62,7 @@ export function Footer() {
 
   return (
     <footer className={`mt-auto text-white ${isDark ? "bg-[#08080d]" : "bg-[#1C2A44]"}`}>
+      <div className="h-[5px] w-full bg-[#F97316]" />
       <div className="mx-auto max-w-7xl px-4 pb-14 pt-12 md:px-6 md:pb-16 md:pt-14">
         <div className="grid grid-cols-1 gap-12 md:grid-cols-3">
           <div>
