@@ -1,6 +1,8 @@
 import { NextResponse } from "next/server";
+import { Resend } from "resend";
 import { supabaseAdmin } from "@/lib/supabase-admin";
 import { resolveGuideCode, normalizeGuideCode, isValidGuideCode } from "@/lib/guides";
+import { GuideEmail } from "@/emails/GuideEmail";
 
 type ClaimBody = {
   code?: string;
@@ -96,6 +98,16 @@ export async function POST(req: Request) {
       process.env.GUIDES_DOWNLOAD_URL ??
       process.env.GUIDE_DOWNLOAD_URL ??
       "https://www.ezwebone.co.uk/guides?sent=1";
+
+    if (process.env.RESEND_API_KEY && process.env.RESEND_API_KEY !== "re_123456789") {
+      const resend = new Resend(process.env.RESEND_API_KEY);
+      await resend.emails.send({
+        from: process.env.RESEND_FROM ?? "EzwebOne <hello@ezwebone.co.uk>",
+        to: email,
+        subject: "Your free guide is ready 🎉",
+        react: GuideEmail({ firstName, guideUrl }),
+      });
+    }
 
     return NextResponse.json({
       ok: true,
