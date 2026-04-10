@@ -93,12 +93,12 @@ export const prequalifyNewBusinessAgent = {
       throw new Error("Prequalify new-business agent requires a non-empty message.");
     }
 
-    const apiKey = process.env.OPENAI_API_KEY;
+    const apiKey = process.env.GEMINI_API_KEY;
     if (!apiKey) {
-      throw new Error("OPENAI_API_KEY is missing.");
+      throw new Error("GEMINI_API_KEY is missing.");
     }
 
-    const model = process.env.OPENAI_MODEL ?? "gpt-4.1-mini";
+    const model = "gemini-2.5-flash";
     const systemPrompt = await loadSystemPrompt();
     const languageInstruction =
       locale === "ro"

@@ -27,7 +27,7 @@ type OpenAIResponsesOutput = {
   }>;
 };
 
-const PROMPT_PATH = path.join(process.cwd(), "agents", "prequalify", "prompt.md");
+const PROMPT_PATH = path.join(process.cwd(), "agents", "prequalify", "prequalify.md");
 let cachedSystemPrompt: string | null = null;
 
 function normalizeInput(input: unknown): Required<Pick<PrequalifyInput, "message">> & {
@@ -93,12 +93,12 @@ export const prequalifyAgent = {
       throw new Error("Prequalify agent requires a non-empty message.");
     }
 
-    const apiKey = process.env.OPENAI_API_KEY;
+    const apiKey = process.env.GEMINI_API_KEY;
     if (!apiKey) {
-      throw new Error("OPENAI_API_KEY is missing.");
+      throw new Error("GEMINI_API_KEY is missing.");
     }
 
-    const model = process.env.OPENAI_MODEL ?? "gpt-4.1-mini";
+    const model = "gemini-2.5-flash";
     const systemPrompt = await loadSystemPrompt();
     const languageInstruction =
       locale === "ro"

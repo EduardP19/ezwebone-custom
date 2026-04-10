@@ -3,8 +3,9 @@ import { type AgentHistoryItem, type ChatAgentKey, parseAgentChatPayload, runPre
 import { newLead } from "@/lib/leadProcessing";
 import { supabase } from "@/lib/supabase";
 
-const TRIAL_LIMIT = 2;
+const TRIAL_LIMIT = 5;
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const EMAIL_CAPTURE_REGEX = /[^\s@]+@[^\s@]+\.[^\s@]+/i;
 const CHAT_AGENT_KEYS: ChatAgentKey[] = ["prequalify", "prequalifyNewBusiness"];
 
 type TranscriptItemRole = "user" | "assistant" | "system";
@@ -27,6 +28,12 @@ type SessionRow = {
   transcript: unknown;
 };
 
+type CapturedContact = {
+  email: string;
+  name: string;
+  complete: boolean;
+};
+
 function normalizeSessionId(value: unknown) {
   if (typeof value !== "string") return "";
   const nextValue = value.trim();
@@ -38,10 +45,125 @@ function normalizeEmail(value: unknown) {
   return value.trim().toLowerCase();
 }
 
+function capitalizeNameToken(value: string) {
+  return value.charAt(0).toUpperCase() + value.slice(1).toLowerCase();
+}
+
+function sanitizeNameCandidate(value: string) {
+  if (typeof value !== "string") return "";
+
+  const stopwords = new Set([
+    "and",
+    "e",
+    "email",
+    "este",
+    "is",
+    "mail",
+    "meu",
+    "my",
+    "name",
+    "numele",
+    "si",
+  ]);
+
+  const tokens =
+    value
+      .replace(EMAIL_CAPTURE_REGEX, " ")
+      .replace(/[_|/\\]+/g, " ")
+      .match(/\p{L}+(?:['’-]\p{L}+)*/gu) ?? [];
+
+  const filtered = tokens.filter((token) => !stopwords.has(token.toLowerCase()));
+
+  if (filtered.length === 0 || filtered.length > 4) {
+    return "";
+  }
+
+  return filtered.map(capitalizeNameToken).join(" ");
+}
+
+function extractEmailFromText(value: string) {
+  const match = value.match(EMAIL_CAPTURE_REGEX);
+  return match?.[0]?.trim().toLowerCase() ?? "";
+}
+
+function extractNameFromText(value: string) {
+  if (typeof value !== "string" || value.trim().length === 0) {
+    return "";
+  }
+
+  const explicitNameMatch = value.match(
+    /(?:my name is|name is|name\s*[:=-]|numele meu este|ma numesc)\s*([^\n,;|]+)/iu
+  );
+
+  if (explicitNameMatch?.[1]) {
+    const explicitName = sanitizeNameCandidate(explicitNameMatch[1]);
+    if (explicitName) {
+      return explicitName;
+    }
+  }
+
+  const emailMatch = value.match(EMAIL_CAPTURE_REGEX);
+  if (!emailMatch || typeof emailMatch.index !== "number") {
+    return "";
+  }
+
+  const prefix = value.slice(0, emailMatch.index).trim();
+  if (!prefix) {
+    return "";
+  }
+
+  const segments = prefix
+    .split(/[\n,;|]+/)
+    .map((segment) => segment.trim())
+    .filter(Boolean);
+
+  for (let index = segments.length - 1; index >= 0; index -= 1) {
+    const candidate = sanitizeNameCandidate(segments[index] ?? "");
+    if (candidate) {
+      return candidate;
+    }
+  }
+
+  return sanitizeNameCandidate(prefix);
+}
+
 function inferNameFromEmail(email: string) {
   const localPart = email.split("@")[0] ?? "";
   const token = localPart.split(/[._-]+/).find(Boolean) ?? "Lead";
   return token.charAt(0).toUpperCase() + token.slice(1).toLowerCase();
+}
+
+function extractCapturedContact(transcript: TranscriptItem[], fallbackEmail?: string | null): CapturedContact {
+  let email = normalizeEmail(fallbackEmail);
+  let name = "";
+
+  for (let index = transcript.length - 1; index >= 0; index -= 1) {
+    const item = transcript[index];
+    if (!item || item.role !== "user") {
+      continue;
+    }
+
+    if (!email) {
+      email =
+        item.kind === "email"
+          ? normalizeEmail(item.text)
+          : extractEmailFromText(item.text);
+    }
+
+    if (!name && item.kind === "chat") {
+      name = extractNameFromText(item.text);
+    }
+
+    if (email && name) {
+      break;
+    }
+  }
+
+  return {
+    email,
+    name,
+    complete: Boolean(email && name),
+  };
 }
 
 function parseTranscript(value: unknown): TranscriptItem[] {
@@ -100,15 +222,26 @@ async function getOrCreateSession(sessionId: string, locale: string) {
 }
 
 function toSessionResponse(session: SessionRow) {
+  const transcript = parseTranscript(session.transcript);
+  const contact = extractCapturedContact(transcript, session.user_email);
+  const contactCollectionOnly =
+    session.messages_used >= TRIAL_LIMIT && !contact.complete && !session.trial_completed_at;
+
   return {
     sessionId: session.session_id,
     locale: session.locale,
     messagesUsed: session.messages_used,
     trialLimit: TRIAL_LIMIT,
-    limitReached: session.messages_used >= TRIAL_LIMIT || Boolean(session.trial_completed_at),
+    limitReached: Boolean(session.trial_completed_at),
     trialComplete: Boolean(session.trial_completed_at),
-    emailCaptured: Boolean(session.user_email),
-    email: session.user_email,
+    contactCollectionOnly,
+    emailCaptured: Boolean(contact.email),
+    nameCaptured: Boolean(contact.name),
+    contactCaptured: contact.complete,
+    needsEmail: !contact.email,
+    needsName: !contact.name,
+    needsContact: !contact.complete,
+    email: contact.email || session.user_email,
     reportSent: Boolean(session.report_sent_at),
   };
 }
@@ -244,12 +377,17 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Message is required." }, { status: 400 });
     }
 
-    if (session.messages_used >= TRIAL_LIMIT || Boolean(session.trial_completed_at)) {
+    const currentContact = extractCapturedContact(transcript, session.user_email);
+    const canContinue =
+      !session.trial_completed_at &&
+      (session.messages_used < TRIAL_LIMIT || !currentContact.complete);
+
+    if (!canContinue) {
       return NextResponse.json(
         {
           ...toSessionResponse(session),
           error: "Trial message limit reached.",
-          needsEmail: !session.user_email,
+          needsContact: !currentContact.complete,
         },
         { status: 429 }
       );
@@ -279,14 +417,17 @@ export async function POST(request: Request) {
         createdAt: now,
       } satisfies TranscriptItem,
     ];
+    const nextContact = extractCapturedContact(nextTranscript, session.user_email);
+    const shouldComplete = nextMessagesUsed >= TRIAL_LIMIT && nextContact.complete;
 
     const { data: updatedSession, error: updateError } = await supabase!
       .from("prequalify_transcripts")
       .update({
         locale: payload.locale,
         messages_used: nextMessagesUsed,
+        user_email: nextContact.email || session.user_email,
         trial_completed_at:
-          nextMessagesUsed >= TRIAL_LIMIT
+          shouldComplete
             ? session.trial_completed_at ?? now
             : session.trial_completed_at,
         transcript: nextTranscript,
@@ -301,6 +442,40 @@ export async function POST(request: Request) {
         { error: updateError?.message ?? "Failed to save transcript." },
         { status: 500 }
       );
+    }
+
+    if (!currentContact.complete && nextContact.complete) {
+      try {
+        const transcriptPreview = nextTranscript
+          .filter((item) => item.kind === "chat")
+          .slice(-10)
+          .map((item) => `${item.role}: ${item.text}`)
+          .join("\n")
+          .slice(0, 3500);
+
+        await newLead({
+          name: nextContact.name,
+          email: nextContact.email,
+          sourcePage: agentKey === "prequalifyNewBusiness" ? "AI Chat - New Business" : "AI Chat - Homepage",
+          source: "chat_widget",
+          campaign: agentKey === "prequalifyNewBusiness" ? "first_letter_ro_director" : "prequalify_homepage",
+          medium: "ai_chat",
+          sessionId,
+          userAgent: request.headers.get("user-agent"),
+          agentKey,
+          transcriptSessionId: sessionId,
+          message: transcriptPreview,
+          metadata: {
+            transcript_id: sessionId,
+            transcript_messages_used: updatedSession.messages_used,
+            transcript_trial_completed_at: updatedSession.trial_completed_at,
+            transcript_report_sent_at: updatedSession.report_sent_at,
+            locale: updatedSession.locale,
+          },
+        });
+      } catch (leadError) {
+        console.error("Failed to sync chat contact into leads:", leadError);
+      }
     }
 
     return NextResponse.json({

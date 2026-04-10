@@ -19,17 +19,20 @@ type ChatMessage = {
   text: string;
 };
 
+type AgentChatReply = {
+  reply?: string;
+  error?: string;
+  limitReached?: boolean;
+  trialComplete?: boolean;
+  needsContact?: boolean;
+};
+
 const TRUST_IMAGES = [
   "/clients/client1.png",
   "/clients/client2.png",
   "/clients/client3.png",
 ];
 const COMMAND_TAGS = ["Websites", "Automations", "AI Agents", "Marketing", "SEO", "Lead Gen"];
-
-const TRAINING_REPLY_EN =
-  "Thank you for your message. Our AI agent is being trained at the moment and will be available soon.";
-const TRAINING_REPLY_RO =
-  "Iti multumim pentru mesaj. Agentul nostru AI este in training momentan si va fi disponibil in curand.";
 
 type HeroChatPreviewProps = {
   apiPath?: string;
@@ -112,19 +115,29 @@ export function HeroChatPreview({ apiPath: _apiPath, agentKey: _agentKey }: Hero
   const sectionRef = React.useRef<HTMLElement>(null);
   const inputRef = React.useRef<HTMLInputElement>(null);
   const historyRef = React.useRef<HTMLDivElement>(null);
+  const sessionIdRef = React.useRef("");
+  const messagesRef = React.useRef<ChatMessage[]>([]);
   const timersRef = React.useRef<number[]>([]);
   const { dictionary, locale } = useI18n();
   const heroCopy = dictionary.home.hero;
-  const trainingReply = locale === "ro" ? TRAINING_REPLY_RO : TRAINING_REPLY_EN;
-  const trainingLockedTitle = locale === "ro" ? "Agentul AI este in training" : "AI agent is in training";
-  const trainingLockedBody =
+  const apiPath = _apiPath ?? "/api/agent-chat";
+  const agentKey = _agentKey ?? "prequalify";
+  const completionLockedTitle = locale === "ro" ? "Detalii capturate" : "Details captured";
+  const completionLockedBody =
     locale === "ro"
-      ? "Momentan raspunde o singura data in modul de training. Revino curand pentru versiunea completa."
-      : "For now it replies once in training mode. Please check back soon for the full version.";
+      ? "Chatul are suficiente informatii pentru moment. Daca vrei sa il rulezi din nou, reincarca pagina."
+      : "The chat has everything it needs for now. If you want to run it again, refresh the page.";
+  const fallbackErrorReply =
+    locale === "ro"
+      ? "A aparut o problema la procesarea mesajului. Te rog incearca din nou."
+      : "There was a problem processing that message. Please try again.";
+  const sendLabel = locale === "ro" ? "Trimite" : "Send";
+  const sendingLabel = locale === "ro" ? "Se trimite..." : "Sending...";
 
   const [chatState, setChatState] = React.useState<ChatState>("idle");
   const [inputValue, setInputValue] = React.useState("");
   const [messages, setMessages] = React.useState<ChatMessage[]>([]);
+  const [isSending, setIsSending] = React.useState(false);
   const [isStreaming, setIsStreaming] = React.useState(false);
   const [hasMounted, setHasMounted] = React.useState(false);
 
@@ -183,6 +196,10 @@ export function HeroChatPreview({ apiPath: _apiPath, agentKey: _agentKey }: Hero
   }, []);
 
   React.useEffect(() => {
+    messagesRef.current = messages;
+  }, [messages]);
+
+  React.useEffect(() => {
     const history = historyRef.current;
     if (!history) return;
 
@@ -203,6 +220,14 @@ export function HeroChatPreview({ apiPath: _apiPath, agentKey: _agentKey }: Hero
     setChatState((current) => (current === "idle" ? "active" : current));
   }, []);
 
+  const ensureSessionId = React.useCallback(() => {
+    if (!sessionIdRef.current) {
+      sessionIdRef.current = crypto.randomUUID();
+    }
+
+    return sessionIdRef.current;
+  }, []);
+
   const openChatWindow = React.useCallback(() => {
     activateChat();
     sectionRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
@@ -211,10 +236,11 @@ export function HeroChatPreview({ apiPath: _apiPath, agentKey: _agentKey }: Hero
     }, 220);
   }, [activateChat]);
 
-  const handleSendMessage = React.useCallback(() => {
+  const handleSendMessage = React.useCallback(async () => {
     const nextValue = inputValue.trim();
     if (
       !nextValue ||
+      isSending ||
       isStreaming ||
       chatState === "locked"
     ) {
@@ -222,6 +248,13 @@ export function HeroChatPreview({ apiPath: _apiPath, agentKey: _agentKey }: Hero
     }
 
     activateChat();
+
+    const history = messagesRef.current
+      .filter((message) => message.kind === "chat")
+      .map((message) => ({
+        role: message.role,
+        text: message.text,
+      }));
 
     setMessages((current) => [
       ...current,
@@ -233,16 +266,69 @@ export function HeroChatPreview({ apiPath: _apiPath, agentKey: _agentKey }: Hero
       },
     ]);
     setInputValue("");
-    streamAssistantMessage(trainingReply, () => {
-      setChatState("locked");
-    });
+    setIsSending(true);
+
+    try {
+      const response = await fetch(apiPath, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          sessionId: ensureSessionId(),
+          message: nextValue,
+          history,
+          locale,
+          agentKey,
+        }),
+      });
+
+      const payload = (await response.json().catch(() => ({}))) as AgentChatReply;
+
+      if (!response.ok) {
+        if (response.status === 429 && payload.needsContact !== true) {
+          setChatState("locked");
+          return;
+        }
+
+        throw new Error(
+          typeof payload.error === "string" && payload.error.trim().length > 0
+            ? payload.error
+            : fallbackErrorReply
+        );
+      }
+
+      const reply =
+        typeof payload.reply === "string" && payload.reply.trim().length > 0
+          ? payload.reply.trim()
+          : fallbackErrorReply;
+
+      streamAssistantMessage(reply, () => {
+        if (payload.trialComplete || payload.limitReached) {
+          setChatState("locked");
+        }
+      });
+    } catch (error) {
+      const message = error instanceof Error && error.message.trim().length > 0
+        ? error.message
+        : fallbackErrorReply;
+
+      streamAssistantMessage(message);
+    } finally {
+      setIsSending(false);
+    }
   }, [
     activateChat,
+    agentKey,
+    apiPath,
     chatState,
+    ensureSessionId,
+    fallbackErrorReply,
     inputValue,
+    isSending,
     isStreaming,
+    locale,
     streamAssistantMessage,
-    trainingReply,
   ]);
 
   return (
@@ -333,6 +419,7 @@ export function HeroChatPreview({ apiPath: _apiPath, agentKey: _agentKey }: Hero
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
                         transition={{ duration: 0.3 }}
+                        className="mb-4 sm:mb-5"
                       >
                         <div className="mb-5 flex min-h-[64px] items-center px-1 text-base italic leading-7 tracking-[0.01em] text-white/92 sm:min-h-[72px] sm:text-lg">
                           <span suppressHydrationWarning className="max-w-[28ch] sm:max-w-none">
@@ -393,10 +480,10 @@ export function HeroChatPreview({ apiPath: _apiPath, agentKey: _agentKey }: Hero
                   {chatState === "locked" ? (
                     <div className="w-full max-w-xl space-y-4 rounded-2xl border border-[color:var(--color-primary)]/20 bg-[color:var(--color-bg-elevated)] px-4.5 py-4.5 text-center sm:px-6 sm:py-6">
                       <p className="text-center text-sm font-semibold text-[color:var(--color-text-primary)] sm:text-base">
-                        {trainingLockedTitle}
+                        {completionLockedTitle}
                       </p>
                       <p className="text-center text-[13px] leading-6 text-[color:var(--color-text-secondary)] sm:text-sm">
-                        {trainingLockedBody}
+                        {completionLockedBody}
                       </p>
                     </div>
                   ) : (
@@ -405,7 +492,7 @@ export function HeroChatPreview({ apiPath: _apiPath, agentKey: _agentKey }: Hero
                         className="ai-command-bar grid items-center gap-2.5 rounded-[1.4rem] border border-[color:var(--color-border)]/70 bg-[#e5e7eb] p-2.5 sm:grid-cols-[minmax(0,1fr)_auto]"
                         onSubmit={(event) => {
                           event.preventDefault();
-                          handleSendMessage();
+                          void handleSendMessage();
                         }}
                       >
                         <div className="relative">
@@ -426,7 +513,7 @@ export function HeroChatPreview({ apiPath: _apiPath, agentKey: _agentKey }: Hero
                               setInputValue(event.target.value);
                             }}
                             aria-label={heroCopy.placeholderChat}
-                            disabled={isStreaming}
+                            disabled={isSending || isStreaming}
                             className="min-h-14 w-full rounded-[1.05rem] border border-[color:var(--color-border)]/70 bg-white px-4 text-base tracking-[0.01em] text-[color:#111827] outline-none transition focus:border-[color:var(--color-primary-light)]/70"
                           />
                         </div>
@@ -434,9 +521,9 @@ export function HeroChatPreview({ apiPath: _apiPath, agentKey: _agentKey }: Hero
                         <button
                           type="submit"
                           className="ai-command-send-button inline-flex min-h-14 w-full min-w-[132px] items-center justify-center gap-2 rounded-[1.05rem] px-6 text-sm font-semibold tracking-[0.02em] text-white sm:w-auto"
-                          disabled={isStreaming || inputValue.trim().length === 0}
+                          disabled={isSending || isStreaming || inputValue.trim().length === 0}
                         >
-                          Send
+                          {isSending || isStreaming ? sendingLabel : sendLabel}
                           <ArrowRight className="h-4 w-4" />
                         </button>
                       </form>
