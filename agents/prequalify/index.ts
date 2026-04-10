@@ -17,17 +17,19 @@ type PrequalifyInput = {
   locale?: Locale | string;
 };
 
-type OpenAIResponsesOutput = {
-  output_text?: string;
-  output?: Array<{
-    content?: Array<{
-      type?: string;
-      text?: string;
-    }>;
+type GeminiGenerateContentResponse = {
+  candidates?: Array<{
+    content?: {
+      parts?: Array<{
+        text?: string;
+      }>;
+    };
   }>;
 };
 
 const PROMPT_PATH = path.join(process.cwd(), "agents", "prequalify", "prequalify.md");
+const GEMINI_MAX_ATTEMPTS = 4;
+const GEMINI_RETRY_STATUS = new Set([429, 500, 503, 504]);
 let cachedSystemPrompt: string | null = null;
 
 function normalizeInput(input: unknown): Required<Pick<PrequalifyInput, "message">> & {
@@ -70,19 +72,18 @@ async function loadSystemPrompt() {
   return cachedSystemPrompt;
 }
 
-function extractResponseText(payload: OpenAIResponsesOutput): string {
-  if (typeof payload.output_text === "string" && payload.output_text.trim().length > 0) {
-    return payload.output_text.trim();
-  }
-
+function extractResponseText(payload: GeminiGenerateContentResponse): string {
   const parts =
-    payload.output
-      ?.flatMap((item) => item.content ?? [])
-      .filter((item) => item.type === "output_text" || typeof item.text === "string")
+    payload.candidates
+      ?.flatMap((candidate) => candidate.content?.parts ?? [])
       .map((item) => item.text?.trim() ?? "")
       .filter(Boolean) ?? [];
 
   return parts.join("\n").trim();
+}
+
+function sleep(ms: number) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
 export const prequalifyAgent = {
@@ -105,48 +106,68 @@ export const prequalifyAgent = {
         ? "Reply in Romanian. Keep the tone clear, practical, and natural."
         : "Reply in English. Keep the tone clear, practical, and natural.";
 
-    const openAiInput = [
-      {
-        role: "system",
-        content: [{ type: "input_text", text: systemPrompt }],
-      },
-      {
-        role: "system",
-        content: [{ type: "input_text", text: languageInstruction }],
-      },
+    const geminiContents = [
       ...history.map((item) => ({
-        role: item.role,
-        content: [{ type: "input_text", text: item.text }],
+        role: item.role === "assistant" ? "model" : "user",
+        parts: [{ text: item.text }],
       })),
       {
         role: "user",
-        content: [{ type: "input_text", text: message }],
+        parts: [{ text: message }],
       },
     ];
 
-    const response = await fetch("https://api.openai.com/v1/responses", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${apiKey}`,
-      },
-      body: JSON.stringify({
-        model,
-        input: openAiInput,
-      }),
-      cache: "no-store",
-    });
+    let payload: GeminiGenerateContentResponse | null = null;
+    let lastError = "";
 
-    if (!response.ok) {
+    for (let attempt = 1; attempt <= GEMINI_MAX_ATTEMPTS; attempt += 1) {
+      const response = await fetch(
+        `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${encodeURIComponent(apiKey)}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            systemInstruction: {
+              parts: [{ text: `${systemPrompt}\n\n${languageInstruction}` }],
+            },
+            contents: geminiContents,
+          }),
+          cache: "no-store",
+        }
+      );
+
+      if (response.ok) {
+        payload = (await response.json()) as GeminiGenerateContentResponse;
+        break;
+      }
+
       const details = await response.text();
-      throw new Error(`OpenAI request failed (${response.status}): ${details}`);
+      lastError = `Gemini request failed (${response.status}): ${details}`;
+      const canRetry = GEMINI_RETRY_STATUS.has(response.status) && attempt < GEMINI_MAX_ATTEMPTS;
+
+      if (!canRetry) {
+        throw new Error(lastError);
+      }
+
+      const retryAfterRaw = response.headers.get("retry-after");
+      const retryAfterSeconds = retryAfterRaw ? Number.parseFloat(retryAfterRaw) : Number.NaN;
+      const delay = Number.isFinite(retryAfterSeconds) && retryAfterSeconds > 0
+        ? Math.round(retryAfterSeconds * 1000)
+        : 300 * 2 ** (attempt - 1);
+
+      await sleep(delay);
     }
 
-    const payload = (await response.json()) as OpenAIResponsesOutput;
+    if (!payload) {
+      throw new Error(lastError || "Gemini request failed after retries.");
+    }
+
     const reply = extractResponseText(payload);
 
     if (!reply) {
-      throw new Error("OpenAI returned an empty reply.");
+      throw new Error("Gemini returned an empty reply.");
     }
 
     return {

@@ -4,6 +4,7 @@ import { newLead } from "@/lib/leadProcessing";
 import { supabase } from "@/lib/supabase";
 
 const TRIAL_LIMIT = 5;
+const CONTACT_FOLLOWUP_LIMIT = 3;
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const EMAIL_CAPTURE_REGEX = /[^\s@]+@[^\s@]+\.[^\s@]+/i;
 const CHAT_AGENT_KEYS: ChatAgentKey[] = ["prequalify", "prequalifyNewBusiness"];
@@ -166,6 +167,60 @@ function extractCapturedContact(transcript: TranscriptItem[], fallbackEmail?: st
   };
 }
 
+function applyContactFromUserEntry(contact: CapturedContact, item: Pick<TranscriptItem, "kind" | "text">): CapturedContact {
+  let email = contact.email;
+  let name = contact.name;
+
+  if (!email) {
+    email = item.kind === "email" ? normalizeEmail(item.text) : extractEmailFromText(item.text);
+  }
+
+  if (!name && item.kind === "chat") {
+    name = extractNameFromText(item.text);
+  }
+
+  return {
+    email,
+    name,
+    complete: Boolean(email && name),
+  };
+}
+
+function countContactFollowupAttempts(transcript: TranscriptItem[], fallbackEmail?: string | null) {
+  let qualifyingUserMessages = 0;
+  let followupAttempts = 0;
+  let contact: CapturedContact = {
+    email: normalizeEmail(fallbackEmail),
+    name: "",
+    complete: false,
+  };
+
+  for (const item of transcript) {
+    if (!item || item.role !== "user" || (item.kind !== "chat" && item.kind !== "email")) {
+      continue;
+    }
+
+    contact = applyContactFromUserEntry(contact, item);
+
+    if (item.kind === "chat") {
+      if (qualifyingUserMessages >= TRIAL_LIMIT && !contact.complete) {
+        followupAttempts += 1;
+      }
+      qualifyingUserMessages += 1;
+    }
+  }
+
+  return followupAttempts;
+}
+
+function getContactLimitMessage(locale: string) {
+  if (locale === "ro") {
+    return "Multumesc. Cel mai bun pas acum este un apel strategic scurt ca sa iti oferim direct prioritatile pentru afacerea ta.";
+  }
+
+  return "Thanks. The best next step now is a short strategy call so we can map your exact business priorities.";
+}
+
 function parseTranscript(value: unknown): TranscriptItem[] {
   if (!Array.isArray(value)) return [];
 
@@ -224,8 +279,13 @@ async function getOrCreateSession(sessionId: string, locale: string) {
 function toSessionResponse(session: SessionRow) {
   const transcript = parseTranscript(session.transcript);
   const contact = extractCapturedContact(transcript, session.user_email);
+  const contactFollowupAttempts = countContactFollowupAttempts(transcript, session.user_email);
   const contactCollectionOnly =
     session.messages_used >= TRIAL_LIMIT && !contact.complete && !session.trial_completed_at;
+  const contactFollowupLimitReached =
+    session.messages_used >= TRIAL_LIMIT &&
+    !contact.complete &&
+    contactFollowupAttempts >= CONTACT_FOLLOWUP_LIMIT;
 
   return {
     sessionId: session.session_id,
@@ -235,6 +295,9 @@ function toSessionResponse(session: SessionRow) {
     limitReached: Boolean(session.trial_completed_at),
     trialComplete: Boolean(session.trial_completed_at),
     contactCollectionOnly,
+    handoffRequired: contactFollowupLimitReached || Boolean(session.trial_completed_at && !contact.complete),
+    contactFollowupAttempts,
+    contactFollowupLimit: CONTACT_FOLLOWUP_LIMIT,
     emailCaptured: Boolean(contact.email),
     nameCaptured: Boolean(contact.name),
     contactCaptured: contact.complete,
@@ -378,6 +441,91 @@ export async function POST(request: Request) {
     }
 
     const currentContact = extractCapturedContact(transcript, session.user_email);
+    const contactFollowupAttempts = countContactFollowupAttempts(transcript, session.user_email);
+    const contactCollectionPhase = session.messages_used >= TRIAL_LIMIT && !currentContact.complete;
+    const contactLimitAlreadyReached = contactCollectionPhase && contactFollowupAttempts >= CONTACT_FOLLOWUP_LIMIT;
+
+    if (contactLimitAlreadyReached) {
+      return NextResponse.json(
+        {
+          ...toSessionResponse(session),
+          error: "Contact collection limit reached.",
+          handoffRequired: true,
+        },
+        { status: 429 }
+      );
+    }
+
+    const projectedContact = applyContactFromUserEntry(currentContact, {
+      kind: "chat",
+      text: payload.message,
+    });
+    const projectedFollowupAttempts =
+      contactCollectionPhase && !projectedContact.complete
+        ? contactFollowupAttempts + 1
+        : contactFollowupAttempts;
+    const shouldHandoffNow =
+      contactCollectionPhase &&
+      !projectedContact.complete &&
+      projectedFollowupAttempts >= CONTACT_FOLLOWUP_LIMIT;
+
+    if (shouldHandoffNow) {
+      const handoffReply = getContactLimitMessage(payload.locale);
+      const nextMessagesUsed = session.messages_used + 1;
+      const nextTranscript = [
+        ...transcript,
+        {
+          role: "user",
+          kind: "chat",
+          text: payload.message,
+          createdAt: now,
+        } satisfies TranscriptItem,
+        {
+          role: "assistant",
+          kind: "chat",
+          text: handoffReply,
+          createdAt: now,
+        } satisfies TranscriptItem,
+        {
+          role: "system",
+          kind: "status",
+          text: "Contact follow-up limit reached. Handoff to strategy call.",
+          createdAt: now,
+        } satisfies TranscriptItem,
+      ];
+
+      const { data: updatedSession, error: handoffUpdateError } = await supabase!
+        .from("prequalify_transcripts")
+        .update({
+          locale: payload.locale,
+          messages_used: nextMessagesUsed,
+          user_email: projectedContact.email || session.user_email,
+          trial_completed_at: session.trial_completed_at ?? now,
+          transcript: nextTranscript,
+          updated_at: now,
+        })
+        .eq("session_id", sessionId)
+        .select("session_id, locale, user_email, messages_used, trial_completed_at, report_sent_at, transcript")
+        .single<SessionRow>();
+
+      if (handoffUpdateError || !updatedSession) {
+        return NextResponse.json(
+          { error: handoffUpdateError?.message ?? "Failed to save transcript." },
+          { status: 500 }
+        );
+      }
+
+      return NextResponse.json({
+        agent: agentKey,
+        status: "ok",
+        reply: handoffReply,
+        model: "system",
+        delivery: "standard",
+        bypassReview: payload.bypassReview,
+        ...toSessionResponse(updatedSession),
+      });
+    }
+
     const canContinue =
       !session.trial_completed_at &&
       (session.messages_used < TRIAL_LIMIT || !currentContact.complete);

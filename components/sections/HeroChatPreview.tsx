@@ -6,6 +6,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { ArrowRight, MessageCircle } from "lucide-react";
 import { useI18n } from "@/components/i18n/LocaleProvider";
 import { ParticleNetwork } from "@/components/sections/ParticleNetwork";
+import { CALENDLY_BOOKING_URL } from "@/lib/links";
 import { cn } from "@/lib/utils";
 
 type ChatState = "idle" | "active" | "locked";
@@ -17,6 +18,8 @@ type ChatMessage = {
   kind: ChatKind;
   role: ChatRole;
   text: string;
+  ctaHref?: string;
+  ctaLabel?: string;
 };
 
 type AgentChatReply = {
@@ -25,6 +28,7 @@ type AgentChatReply = {
   limitReached?: boolean;
   trialComplete?: boolean;
   needsContact?: boolean;
+  handoffRequired?: boolean;
 };
 
 const TRUST_IMAGES = [
@@ -133,8 +137,14 @@ export function HeroChatPreview({ apiPath: _apiPath, agentKey: _agentKey }: Hero
       : "There was a problem processing that message. Please try again.";
   const sendLabel = locale === "ro" ? "Trimite" : "Send";
   const sendingLabel = locale === "ro" ? "Se trimite..." : "Sending...";
+  const bookCallCta = heroCopy.trialUsedCta;
+  const handoffFallbackMessage =
+    locale === "ro"
+      ? "Iti pot oferi cele mai utile recomandari intr-un apel scurt. Programeaza un apel si iti arat exact ce sa faci mai departe."
+      : "The best next step is a short strategy call where we can map your exact next actions. Book a call below.";
 
   const [chatState, setChatState] = React.useState<ChatState>("idle");
+  const [handoffRequired, setHandoffRequired] = React.useState(false);
   const [inputValue, setInputValue] = React.useState("");
   const [messages, setMessages] = React.useState<ChatMessage[]>([]);
   const [isSending, setIsSending] = React.useState(false);
@@ -146,10 +156,10 @@ export function HeroChatPreview({ apiPath: _apiPath, agentKey: _agentKey }: Hero
   ).length;
   const typewriterText = useTypewriter(
     heroCopy.typewriterPrompts,
-    hasMounted && chatState !== "locked" && userMessageCount === 0 && inputValue.length === 0
+    hasMounted && chatState !== "locked" && !handoffRequired && userMessageCount === 0 && inputValue.length === 0
   );
   const showInputOverlay =
-    hasMounted && chatState !== "locked" && userMessageCount === 0 && inputValue.length === 0;
+    hasMounted && chatState !== "locked" && !handoffRequired && userMessageCount === 0 && inputValue.length === 0;
 
   const queueTimeout = React.useCallback((callback: () => void, delay: number) => {
     const timeoutId = window.setTimeout(callback, delay);
@@ -158,14 +168,27 @@ export function HeroChatPreview({ apiPath: _apiPath, agentKey: _agentKey }: Hero
   }, []);
 
   const streamAssistantMessage = React.useCallback(
-    (text: string, after?: () => void) => {
+    (
+      text: string,
+      after?: () => void,
+      options?: {
+        addBookCallCta?: boolean;
+      }
+    ) => {
       const id = crypto.randomUUID();
       let cursor = 0;
 
       setIsStreaming(true);
       setMessages((current) => [
         ...current,
-        { id, kind: "chat", role: "assistant", text: "" },
+        {
+          id,
+          kind: "chat",
+          role: "assistant",
+          text: "",
+          ctaHref: options?.addBookCallCta ? CALENDLY_BOOKING_URL : undefined,
+          ctaLabel: options?.addBookCallCta ? bookCallCta : undefined,
+        },
       ]);
 
       const step = () => {
@@ -188,7 +211,7 @@ export function HeroChatPreview({ apiPath: _apiPath, agentKey: _agentKey }: Hero
 
       queueTimeout(step, 140);
     },
-    [queueTimeout]
+    [bookCallCta, queueTimeout]
   );
 
   React.useEffect(() => {
@@ -242,6 +265,7 @@ export function HeroChatPreview({ apiPath: _apiPath, agentKey: _agentKey }: Hero
       !nextValue ||
       isSending ||
       isStreaming ||
+      handoffRequired ||
       chatState === "locked"
     ) {
       return;
@@ -286,6 +310,14 @@ export function HeroChatPreview({ apiPath: _apiPath, agentKey: _agentKey }: Hero
       const payload = (await response.json().catch(() => ({}))) as AgentChatReply;
 
       if (!response.ok) {
+        if (response.status === 429 && payload.handoffRequired) {
+          setHandoffRequired(true);
+          if (messagesRef.current.at(-1)?.role !== "assistant") {
+            streamAssistantMessage(handoffFallbackMessage, undefined, { addBookCallCta: true });
+          }
+          return;
+        }
+
         if (response.status === 429 && payload.needsContact !== true) {
           setChatState("locked");
           return;
@@ -304,10 +336,15 @@ export function HeroChatPreview({ apiPath: _apiPath, agentKey: _agentKey }: Hero
           : fallbackErrorReply;
 
       streamAssistantMessage(reply, () => {
+        if (payload.handoffRequired) {
+          setHandoffRequired(true);
+          return;
+        }
+
         if (payload.trialComplete || payload.limitReached) {
           setChatState("locked");
         }
-      });
+      }, { addBookCallCta: payload.handoffRequired });
     } catch (error) {
       const message = error instanceof Error && error.message.trim().length > 0
         ? error.message
@@ -324,6 +361,8 @@ export function HeroChatPreview({ apiPath: _apiPath, agentKey: _agentKey }: Hero
     chatState,
     ensureSessionId,
     fallbackErrorReply,
+    handoffFallbackMessage,
+    handoffRequired,
     inputValue,
     isSending,
     isStreaming,
@@ -469,9 +508,43 @@ export function HeroChatPreview({ apiPath: _apiPath, agentKey: _agentKey }: Hero
                                 EZ
                               </span>
                               {message.text}
+                              {message.ctaHref && message.ctaLabel && message.text.trim().length > 0 ? (
+                                <div className="mt-3">
+                                  <a
+                                    href={message.ctaHref}
+                                    target="_blank"
+                                    rel="noreferrer"
+                                    className="ai-command-send-button inline-flex min-h-10 items-center justify-center rounded-[0.9rem] px-4 text-xs font-semibold tracking-[0.02em] text-white sm:text-sm"
+                                  >
+                                    {message.ctaLabel}
+                                  </a>
+                                </div>
+                              ) : null}
                             </motion.div>
                           )
                         )}
+
+                        {isSending && !isStreaming ? (
+                          <motion.div
+                            key="assistant-thinking"
+                            initial={{ opacity: 0, y: 10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            className={cn(
+                              "max-w-[92%] rounded-2xl rounded-bl-md px-3.5 py-2.5 text-[13px] leading-6 sm:max-w-[80%] sm:px-4 sm:py-3 sm:text-sm",
+                              "bg-[color:var(--color-bg-card)] text-[color:var(--color-text-primary)] shadow-sm"
+                            )}
+                            aria-label="Agent is thinking"
+                          >
+                            <span className="mr-2 inline-flex rounded bg-[color:var(--color-primary)]/15 px-1.5 py-0.5 font-mono text-xs text-[color:var(--color-primary)]">
+                              EZ
+                            </span>
+                            <span className="ai-thinking-dots" aria-hidden="true">
+                              <span className="ai-thinking-dot" />
+                              <span className="ai-thinking-dot" />
+                              <span className="ai-thinking-dot" />
+                            </span>
+                          </motion.div>
+                        ) : null}
                       </motion.div>
                       )}
                     </AnimatePresence>
@@ -513,7 +586,7 @@ export function HeroChatPreview({ apiPath: _apiPath, agentKey: _agentKey }: Hero
                               setInputValue(event.target.value);
                             }}
                             aria-label={heroCopy.placeholderChat}
-                            disabled={isSending || isStreaming}
+                            disabled={handoffRequired || isSending || isStreaming}
                             className="min-h-14 w-full rounded-[1.05rem] border border-[color:var(--color-border)]/70 bg-white px-4 text-base tracking-[0.01em] text-[color:#111827] outline-none transition focus:border-[color:var(--color-primary-light)]/70"
                           />
                         </div>
@@ -521,7 +594,7 @@ export function HeroChatPreview({ apiPath: _apiPath, agentKey: _agentKey }: Hero
                         <button
                           type="submit"
                           className="ai-command-send-button inline-flex min-h-14 w-full min-w-[132px] items-center justify-center gap-2 rounded-[1.05rem] px-6 text-sm font-semibold tracking-[0.02em] text-white sm:w-auto"
-                          disabled={isSending || isStreaming || inputValue.trim().length === 0}
+                          disabled={handoffRequired || isSending || isStreaming || inputValue.trim().length === 0}
                         >
                           {isSending || isStreaming ? sendingLabel : sendLabel}
                           <ArrowRight className="h-4 w-4" />
