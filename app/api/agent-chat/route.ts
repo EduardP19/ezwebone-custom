@@ -5,6 +5,7 @@ import { supabase } from "@/lib/supabase";
 
 const TRIAL_LIMIT = 5;
 const CONTACT_FOLLOWUP_LIMIT = 3;
+const OFFTOPIC_STRIKE_LIMIT = 3;
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const EMAIL_CAPTURE_REGEX = /[^\s@]+@[^\s@]+\.[^\s@]+/i;
 const CHAT_AGENT_KEYS: ChatAgentKey[] = ["prequalify", "prequalifyNewBusiness"];
@@ -213,12 +214,78 @@ function countContactFollowupAttempts(transcript: TranscriptItem[], fallbackEmai
   return followupAttempts;
 }
 
+function countUserChatMessages(transcript: TranscriptItem[]) {
+  return transcript.filter((item) => item.role === "user" && item.kind === "chat").length;
+}
+
+function countOffTopicStrikes(transcript: TranscriptItem[]) {
+  return transcript.filter(
+    (item) =>
+      item.role === "system" &&
+      item.kind === "status" &&
+      item.text.startsWith("off_topic_strike:")
+  ).length;
+}
+
+function isSeverelyAbusiveMessage(text: string) {
+  const normalized = text.toLowerCase();
+  return /\b(fuck|f\*+k|shit|bitch|asshole|idiot|moron|stupid)\b/.test(normalized);
+}
+
+function hasBusinessKeyword(text: string) {
+  const normalized = text.toLowerCase();
+  return /\b(business|company|store|shop|e-?commerce|website|seo|traffic|lead|marketing|sales|booking|service|services|clients?|customer|team|employee|automations?|ai|agent)\b/.test(
+    normalized
+  );
+}
+
+function isLikelyRelevantMessage(text: string) {
+  if (EMAIL_CAPTURE_REGEX.test(text)) return true;
+  if (hasBusinessKeyword(text)) return true;
+
+  const normalized = text.trim().toLowerCase();
+  if (/(^|\s)(yes|no|maybe|not sure)(\s|$)/.test(normalized) && normalized.length <= 20) {
+    return false;
+  }
+
+  const words = normalized.match(/[a-zA-Z]+/g) ?? [];
+  return words.length >= 5;
+}
+
+function isReallyOffTopicMessage(text: string) {
+  const normalized = text.trim();
+  if (!normalized) return true;
+  if (/^[\d\W_]+$/.test(normalized)) return true;
+  const words = normalized.match(/[a-zA-Z]+/g) ?? [];
+  return words.length <= 1;
+}
+
+function shouldCountOffTopicStrike(text: string, priorUserChatCount: number) {
+  if (isLikelyRelevantMessage(text)) {
+    return false;
+  }
+
+  if (priorUserChatCount === 0) {
+    return isReallyOffTopicMessage(text);
+  }
+
+  return true;
+}
+
 function getContactLimitMessage(locale: string) {
   if (locale === "ro") {
     return "Multumesc. Cel mai bun pas acum este un apel strategic scurt ca sa iti oferim direct prioritatile pentru afacerea ta.";
   }
 
   return "Thanks. The best next step now is a short strategy call so we can map your exact business priorities.";
+}
+
+function getAbuseLimitMessage(locale: string) {
+  if (locale === "ro") {
+    return "Nu putem continua chatul cu limbaj abuziv. Daca vrei ajutor real pentru afacerea ta, programeaza un apel.";
+  }
+
+  return "We can’t continue this chat with abusive language. If you want practical help for your business, please book a call.";
 }
 
 function parseTranscript(value: unknown): TranscriptItem[] {
@@ -280,6 +347,7 @@ function toSessionResponse(session: SessionRow) {
   const transcript = parseTranscript(session.transcript);
   const contact = extractCapturedContact(transcript, session.user_email);
   const contactFollowupAttempts = countContactFollowupAttempts(transcript, session.user_email);
+  const offTopicStrikes = countOffTopicStrikes(transcript);
   const contactCollectionOnly =
     session.messages_used >= TRIAL_LIMIT && !contact.complete && !session.trial_completed_at;
   const contactFollowupLimitReached =
@@ -296,6 +364,8 @@ function toSessionResponse(session: SessionRow) {
     trialComplete: Boolean(session.trial_completed_at),
     contactCollectionOnly,
     handoffRequired: contactFollowupLimitReached || Boolean(session.trial_completed_at && !contact.complete),
+    offTopicStrikes,
+    offTopicStrikeLimit: OFFTOPIC_STRIKE_LIMIT,
     contactFollowupAttempts,
     contactFollowupLimit: CONTACT_FOLLOWUP_LIMIT,
     emailCaptured: Boolean(contact.email),
@@ -440,6 +510,80 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Message is required." }, { status: 400 });
     }
 
+    const priorUserChatCount = countUserChatMessages(transcript);
+    const existingOffTopicStrikes = countOffTopicStrikes(transcript);
+    const severeAbuse = isSeverelyAbusiveMessage(payload.message);
+    const addOffTopicStrike = shouldCountOffTopicStrike(payload.message, priorUserChatCount);
+    const projectedOffTopicStrikes = existingOffTopicStrikes + (addOffTopicStrike ? 1 : 0);
+
+    if (severeAbuse || projectedOffTopicStrikes >= OFFTOPIC_STRIKE_LIMIT) {
+      const handoffReply = severeAbuse
+        ? getAbuseLimitMessage(payload.locale)
+        : getContactLimitMessage(payload.locale);
+      const nextMessagesUsed = session.messages_used + 1;
+      const nextTranscript = [
+        ...transcript,
+        {
+          role: "user",
+          kind: "chat",
+          text: payload.message,
+          createdAt: now,
+        } satisfies TranscriptItem,
+        {
+          role: "assistant",
+          kind: "chat",
+          text: handoffReply,
+          createdAt: now,
+        } satisfies TranscriptItem,
+        {
+          role: "system",
+          kind: "status",
+          text: severeAbuse
+            ? "chat_ban:abusive_language"
+            : `off_topic_strike:${projectedOffTopicStrikes}`,
+          createdAt: now,
+        } satisfies TranscriptItem,
+        {
+          role: "system",
+          kind: "status",
+          text: severeAbuse
+            ? "Chat ended due to abusive language."
+            : "Off-topic strike limit reached. Handoff to strategy call.",
+          createdAt: now,
+        } satisfies TranscriptItem,
+      ];
+
+      const { data: updatedSession, error: banUpdateError } = await supabase!
+        .from("prequalify_transcripts")
+        .update({
+          locale: payload.locale,
+          messages_used: nextMessagesUsed,
+          trial_completed_at: session.trial_completed_at ?? now,
+          transcript: nextTranscript,
+          updated_at: now,
+        })
+        .eq("session_id", sessionId)
+        .select("session_id, locale, user_email, messages_used, trial_completed_at, report_sent_at, transcript")
+        .single<SessionRow>();
+
+      if (banUpdateError || !updatedSession) {
+        return NextResponse.json(
+          { error: banUpdateError?.message ?? "Failed to save transcript." },
+          { status: 500 }
+        );
+      }
+
+      return NextResponse.json({
+        agent: agentKey,
+        status: "ok",
+        reply: handoffReply,
+        model: "system",
+        delivery: "standard",
+        bypassReview: payload.bypassReview,
+        ...toSessionResponse(updatedSession),
+      });
+    }
+
     const currentContact = extractCapturedContact(transcript, session.user_email);
     const contactFollowupAttempts = countContactFollowupAttempts(transcript, session.user_email);
     const contactCollectionPhase = session.messages_used >= TRIAL_LIMIT && !currentContact.complete;
@@ -564,6 +708,16 @@ export async function POST(request: Request) {
         text: response.reply,
         createdAt: now,
       } satisfies TranscriptItem,
+      ...(addOffTopicStrike
+        ? [
+            {
+              role: "system" as const,
+              kind: "status" as const,
+              text: `off_topic_strike:${projectedOffTopicStrikes}`,
+              createdAt: now,
+            },
+          ]
+        : []),
     ];
     const nextContact = extractCapturedContact(nextTranscript, session.user_email);
     const shouldComplete = nextMessagesUsed >= TRIAL_LIMIT && nextContact.complete;

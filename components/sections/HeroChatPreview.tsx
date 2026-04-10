@@ -12,6 +12,7 @@ import { cn } from "@/lib/utils";
 type ChatState = "idle" | "active" | "locked";
 type ChatRole = "user" | "assistant";
 type ChatKind = "chat" | "email";
+type ChatLockReason = "complete" | "book_call";
 
 type ChatMessage = {
   id: string;
@@ -138,12 +139,17 @@ export function HeroChatPreview({ apiPath: _apiPath, agentKey: _agentKey }: Hero
   const sendLabel = locale === "ro" ? "Trimite" : "Send";
   const sendingLabel = locale === "ro" ? "Se trimite..." : "Sending...";
   const bookCallCta = heroCopy.trialUsedCta;
+  const bookCallLockedTitle = heroCopy.trialUsedTitle;
+  const bookCallLockedBody = heroCopy.trialUsedBody;
   const handoffFallbackMessage =
     locale === "ro"
       ? "Iti pot oferi cele mai utile recomandari intr-un apel scurt. Programeaza un apel si iti arat exact ce sa faci mai departe."
       : "The best next step is a short strategy call where we can map your exact next actions. Book a call below.";
+  const localStorageSessionKey = `ezwebone-chat-session-${agentKey}`;
+  const localStorageHandoffKey = `ezwebone-chat-handoff-${agentKey}`;
 
   const [chatState, setChatState] = React.useState<ChatState>("idle");
+  const [lockReason, setLockReason] = React.useState<ChatLockReason>("complete");
   const [handoffRequired, setHandoffRequired] = React.useState(false);
   const [inputValue, setInputValue] = React.useState("");
   const [messages, setMessages] = React.useState<ChatMessage[]>([]);
@@ -219,6 +225,19 @@ export function HeroChatPreview({ apiPath: _apiPath, agentKey: _agentKey }: Hero
   }, []);
 
   React.useEffect(() => {
+    const storedSessionId = window.localStorage.getItem(localStorageSessionKey);
+    if (storedSessionId) {
+      sessionIdRef.current = storedSessionId;
+    }
+
+    if (window.localStorage.getItem(localStorageHandoffKey) === "1") {
+      setLockReason("book_call");
+      setHandoffRequired(true);
+      setChatState("locked");
+    }
+  }, [localStorageHandoffKey, localStorageSessionKey]);
+
+  React.useEffect(() => {
     messagesRef.current = messages;
   }, [messages]);
 
@@ -245,11 +264,13 @@ export function HeroChatPreview({ apiPath: _apiPath, agentKey: _agentKey }: Hero
 
   const ensureSessionId = React.useCallback(() => {
     if (!sessionIdRef.current) {
-      sessionIdRef.current = crypto.randomUUID();
+      const stored = window.localStorage.getItem(localStorageSessionKey);
+      sessionIdRef.current = stored || crypto.randomUUID();
+      window.localStorage.setItem(localStorageSessionKey, sessionIdRef.current);
     }
 
     return sessionIdRef.current;
-  }, []);
+  }, [localStorageSessionKey]);
 
   const openChatWindow = React.useCallback(() => {
     activateChat();
@@ -311,7 +332,9 @@ export function HeroChatPreview({ apiPath: _apiPath, agentKey: _agentKey }: Hero
 
       if (!response.ok) {
         if (response.status === 429 && payload.handoffRequired) {
+          window.localStorage.setItem(localStorageHandoffKey, "1");
           setHandoffRequired(true);
+          setLockReason("book_call");
           if (messagesRef.current.at(-1)?.role !== "assistant") {
             streamAssistantMessage(handoffFallbackMessage, undefined, { addBookCallCta: true });
           }
@@ -319,6 +342,7 @@ export function HeroChatPreview({ apiPath: _apiPath, agentKey: _agentKey }: Hero
         }
 
         if (response.status === 429 && payload.needsContact !== true) {
+          setLockReason("complete");
           setChatState("locked");
           return;
         }
@@ -337,11 +361,14 @@ export function HeroChatPreview({ apiPath: _apiPath, agentKey: _agentKey }: Hero
 
       streamAssistantMessage(reply, () => {
         if (payload.handoffRequired) {
+          window.localStorage.setItem(localStorageHandoffKey, "1");
           setHandoffRequired(true);
+          setLockReason("book_call");
           return;
         }
 
         if (payload.trialComplete || payload.limitReached) {
+          setLockReason("complete");
           setChatState("locked");
         }
       }, { addBookCallCta: payload.handoffRequired });
@@ -364,6 +391,7 @@ export function HeroChatPreview({ apiPath: _apiPath, agentKey: _agentKey }: Hero
     handoffFallbackMessage,
     handoffRequired,
     inputValue,
+    localStorageHandoffKey,
     isSending,
     isStreaming,
     locale,
@@ -553,11 +581,21 @@ export function HeroChatPreview({ apiPath: _apiPath, agentKey: _agentKey }: Hero
                   {chatState === "locked" ? (
                     <div className="w-full max-w-xl space-y-4 rounded-2xl border border-[color:var(--color-primary)]/20 bg-[color:var(--color-bg-elevated)] px-4.5 py-4.5 text-center sm:px-6 sm:py-6">
                       <p className="text-center text-sm font-semibold text-[color:var(--color-text-primary)] sm:text-base">
-                        {completionLockedTitle}
+                        {lockReason === "book_call" ? bookCallLockedTitle : completionLockedTitle}
                       </p>
                       <p className="text-center text-[13px] leading-6 text-[color:var(--color-text-secondary)] sm:text-sm">
-                        {completionLockedBody}
+                        {lockReason === "book_call" ? bookCallLockedBody : completionLockedBody}
                       </p>
+                      {lockReason === "book_call" ? (
+                        <a
+                          href={CALENDLY_BOOKING_URL}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="ai-command-send-button mx-auto inline-flex min-h-12 items-center justify-center rounded-[1.05rem] px-5 text-sm font-semibold tracking-[0.02em] text-white"
+                        >
+                          {bookCallCta}
+                        </a>
+                      ) : null}
                     </div>
                   ) : (
                     <>
