@@ -336,6 +336,20 @@ async function getOrCreateSession(sessionId: string, locale: string) {
     .select("session_id, locale, user_email, messages_used, trial_completed_at, report_sent_at, transcript")
     .single<SessionRow>();
 
+  if (insertError?.code === "23505") {
+    const { data: existing, error: existingError } = await supabase
+      .from("prequalify_transcripts")
+      .select("session_id, locale, user_email, messages_used, trial_completed_at, report_sent_at, transcript")
+      .eq("session_id", sessionId)
+      .single<SessionRow>();
+
+    if (existingError || !existing) {
+      throw new Error(existingError?.message ?? "Failed to fetch session after conflict.");
+    }
+
+    return existing;
+  }
+
   if (insertError || !inserted) {
     throw new Error(insertError?.message ?? "Failed to create session.");
   }
