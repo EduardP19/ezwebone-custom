@@ -1,6 +1,3 @@
--- Logs table for first-party analytics and attribution tracking
--- Run in Supabase SQL Editor or via a DB client.
-
 create extension if not exists pgcrypto;
 
 create table if not exists public.logs (
@@ -44,7 +41,6 @@ create table if not exists public.logs (
   metadata jsonb not null default '{}'::jsonb
 );
 
--- Optional relation: keep nullable so we can backfill later.
 do $$
 begin
   if exists (
@@ -75,7 +71,6 @@ create index if not exists idx_logs_lead_id on public.logs (lead_id);
 create index if not exists idx_logs_utm_source on public.logs (utm_source);
 create index if not exists idx_logs_utm_campaign on public.logs (utm_campaign);
 create index if not exists idx_logs_page_path on public.logs (page_path);
-
 create index if not exists idx_logs_metadata_gin on public.logs using gin (metadata);
 
 create or replace function public.set_logs_updated_at()

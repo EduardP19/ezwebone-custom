@@ -19,8 +19,9 @@ async function countViewsForPaths(paths: string[]) {
   }
 
   const { count, error } = await supabaseAdmin
-    .from("logs-eduarddev")
+    .from("logs")
     .select("*", { head: true, count: "exact" })
+    .eq("source_site", "ezwebone")
     .eq("event_name", "page_view")
     .or(filters.join(","));
 
