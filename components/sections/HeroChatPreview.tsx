@@ -542,6 +542,7 @@ export function HeroChatPreview({ apiPath: _apiPath, agentKey: _agentKey }: Hero
                                     href={message.ctaHref}
                                     target="_blank"
                                     rel="noreferrer"
+                                    data-track-label="stampuser:chat-window-book-call"
                                     className="ai-command-send-button inline-flex min-h-10 items-center justify-center rounded-[0.9rem] px-4 text-xs font-semibold tracking-[0.02em] text-white sm:text-sm"
                                   >
                                     {message.ctaLabel}
@@ -591,6 +592,7 @@ export function HeroChatPreview({ apiPath: _apiPath, agentKey: _agentKey }: Hero
                           href={CALENDLY_BOOKING_URL}
                           target="_blank"
                           rel="noreferrer"
+                          data-track-label="stampuser:chat-window-book-call"
                           className="ai-command-send-button mx-auto inline-flex min-h-12 items-center justify-center rounded-[1.05rem] px-5 text-sm font-semibold tracking-[0.02em] text-white"
                         >
                           {bookCallCta}
@@ -631,6 +633,7 @@ export function HeroChatPreview({ apiPath: _apiPath, agentKey: _agentKey }: Hero
 
                         <button
                           type="submit"
+                          data-track-label="stampuser:chat-window-send"
                           className="ai-command-send-button inline-flex min-h-14 w-full min-w-[132px] items-center justify-center gap-2 rounded-[1.05rem] px-6 text-sm font-semibold tracking-[0.02em] text-white sm:w-auto"
                           disabled={handoffRequired || isSending || isStreaming || inputValue.trim().length === 0}
                         >
@@ -650,6 +653,7 @@ export function HeroChatPreview({ apiPath: _apiPath, agentKey: _agentKey }: Hero
       <button
         type="button"
         onClick={openChatWindow}
+        data-track-label="stampuser:chat-window-open-fab"
         className="fixed right-3 bottom-[max(0.75rem,env(safe-area-inset-bottom))] z-[120] inline-flex min-h-11 items-center gap-2 rounded-full border border-[color:var(--color-text-accent)]/45 bg-[color:var(--color-primary)] px-3.5 py-2.5 text-[13px] font-semibold text-white shadow-[0_16px_36px_rgba(124,58,237,0.42)] transition hover:bg-[color:var(--color-text-accent)] hover:text-[color:var(--color-bg-dark)] sm:bottom-6 sm:right-6 sm:min-h-0 sm:px-4 sm:py-3 sm:text-sm"
         aria-label="Open AI chat"
       >

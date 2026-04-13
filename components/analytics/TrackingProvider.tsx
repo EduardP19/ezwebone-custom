@@ -151,6 +151,67 @@ function sectionFromElement(el: HTMLElement): string {
   return "unknown";
 }
 
+function toEventToken(value: string): string {
+  const tokens = value
+    .replace(/stampuser:/gi, "")
+    .split(/[^a-zA-Z0-9]+/)
+    .filter(Boolean)
+    .map((token) => token.charAt(0).toUpperCase() + token.slice(1));
+
+  if (tokens.length === 0) return "Unknown";
+  return tokens.join("_").slice(0, 120);
+}
+
+function resolveClickEventType(clickTarget: HTMLElement): string {
+  const dataTrackLabel = clickTarget.getAttribute("data-track-label")?.trim() ?? "";
+  const ariaLabel = clickTarget.getAttribute("aria-label")?.trim() ?? "";
+  const textLabel = textFromElement(clickTarget) ?? "";
+
+  if (dataTrackLabel.includes("theme-toggle")) {
+    const targetTheme = ariaLabel.toLowerCase().includes("dark")
+      ? "DarkTheme"
+      : ariaLabel.toLowerCase().includes("light")
+        ? "LightTheme"
+        : "UnknownTheme";
+    const surface = dataTrackLabel.includes(":desktop")
+      ? "Desktop"
+      : dataTrackLabel.includes(":mobile")
+        ? "Mobile"
+        : "UnknownSurface";
+    return `ThemeToggle_${surface}_${targetTheme}`;
+  }
+
+  if (dataTrackLabel.includes("chat-window-send")) {
+    return "ChatWindow_Send";
+  }
+
+  if (dataTrackLabel.includes("chat-window-open-fab")) {
+    return "ChatWindow_Open";
+  }
+
+  if (dataTrackLabel.includes("chat-window-book-call")) {
+    return "ChatWindow_BookCall";
+  }
+
+  if (dataTrackLabel) {
+    return `Click_${toEventToken(dataTrackLabel)}`;
+  }
+
+  if (ariaLabel) {
+    return `Click_${toEventToken(ariaLabel)}`;
+  }
+
+  if (textLabel) {
+    return `Click_${toEventToken(textLabel)}`;
+  }
+
+  if (clickTarget.id) {
+    return `Click_${toEventToken(clickTarget.id)}`;
+  }
+
+  return "Click_Unknown";
+}
+
 function getPagePath(pathname: string, searchParams: URLSearchParams): string {
   const query = searchParams.toString();
   return query ? `${pathname}?${query}` : pathname;
@@ -240,13 +301,14 @@ export function TrackingProvider() {
       const isBackdropClick = Boolean(
         clickTarget.getAttribute("data-track-label")?.includes("backdrop")
       );
+      const resolvedEventType = resolveClickEventType(clickTarget);
 
       void insertLog({
         session_id: sessionId,
         source_site: "ezwebone",
         lead_id: null,
         event_name: "click_any",
-        event_type: "click",
+        event_type: resolvedEventType,
         occurred_at: new Date().toISOString(),
         page_url: window.location.href,
         page_path: `${window.location.pathname}${window.location.search}`,
