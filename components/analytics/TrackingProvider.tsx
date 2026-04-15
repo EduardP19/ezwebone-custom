@@ -48,10 +48,10 @@ type LogPayload = {
 };
 
 function getOrCreateSessionId(): string {
-  const existing = window.localStorage.getItem(TRACKING_SESSION_KEY);
+  const existing = window.sessionStorage.getItem(TRACKING_SESSION_KEY);
   if (existing) return existing;
   const id = crypto.randomUUID();
-  window.localStorage.setItem(TRACKING_SESSION_KEY, id);
+  window.sessionStorage.setItem(TRACKING_SESSION_KEY, id);
   return id;
 }
 

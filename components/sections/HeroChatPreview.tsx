@@ -145,8 +145,8 @@ export function HeroChatPreview({ apiPath: _apiPath, agentKey: _agentKey }: Hero
     locale === "ro"
       ? "Iti pot oferi cele mai utile recomandari intr-un apel scurt. Programeaza un apel si iti arat exact ce sa faci mai departe."
       : "The best next step is a short strategy call where we can map your exact next actions. Book a call below.";
-  const localStorageSessionKey = `ezwebone-chat-session-${agentKey}`;
-  const localStorageHandoffKey = `ezwebone-chat-handoff-${agentKey}`;
+  const sessionStorageSessionKey = `ezwebone-chat-session-${agentKey}`;
+  const sessionStorageHandoffKey = `ezwebone-chat-handoff-${agentKey}`;
 
   const [chatState, setChatState] = React.useState<ChatState>("idle");
   const [lockReason, setLockReason] = React.useState<ChatLockReason>("complete");
@@ -225,17 +225,17 @@ export function HeroChatPreview({ apiPath: _apiPath, agentKey: _agentKey }: Hero
   }, []);
 
   React.useEffect(() => {
-    const storedSessionId = window.localStorage.getItem(localStorageSessionKey);
+    const storedSessionId = window.sessionStorage.getItem(sessionStorageSessionKey);
     if (storedSessionId) {
       sessionIdRef.current = storedSessionId;
     }
 
-    if (window.localStorage.getItem(localStorageHandoffKey) === "1") {
+    if (window.sessionStorage.getItem(sessionStorageHandoffKey) === "1") {
       setLockReason("book_call");
       setHandoffRequired(true);
       setChatState("locked");
     }
-  }, [localStorageHandoffKey, localStorageSessionKey]);
+  }, [sessionStorageHandoffKey, sessionStorageSessionKey]);
 
   React.useEffect(() => {
     messagesRef.current = messages;
@@ -264,13 +264,13 @@ export function HeroChatPreview({ apiPath: _apiPath, agentKey: _agentKey }: Hero
 
   const ensureSessionId = React.useCallback(() => {
     if (!sessionIdRef.current) {
-      const stored = window.localStorage.getItem(localStorageSessionKey);
+      const stored = window.sessionStorage.getItem(sessionStorageSessionKey);
       sessionIdRef.current = stored || crypto.randomUUID();
-      window.localStorage.setItem(localStorageSessionKey, sessionIdRef.current);
+      window.sessionStorage.setItem(sessionStorageSessionKey, sessionIdRef.current);
     }
 
     return sessionIdRef.current;
-  }, [localStorageSessionKey]);
+  }, [sessionStorageSessionKey]);
 
   const openChatWindow = React.useCallback(() => {
     activateChat();
@@ -332,7 +332,7 @@ export function HeroChatPreview({ apiPath: _apiPath, agentKey: _agentKey }: Hero
 
       if (!response.ok) {
         if (response.status === 429 && payload.handoffRequired) {
-          window.localStorage.setItem(localStorageHandoffKey, "1");
+          window.sessionStorage.setItem(sessionStorageHandoffKey, "1");
           setHandoffRequired(true);
           setLockReason("book_call");
           if (messagesRef.current.at(-1)?.role !== "assistant") {
@@ -361,7 +361,7 @@ export function HeroChatPreview({ apiPath: _apiPath, agentKey: _agentKey }: Hero
 
       streamAssistantMessage(reply, () => {
         if (payload.handoffRequired) {
-          window.localStorage.setItem(localStorageHandoffKey, "1");
+          window.sessionStorage.setItem(sessionStorageHandoffKey, "1");
           setHandoffRequired(true);
           setLockReason("book_call");
           return;
@@ -391,7 +391,7 @@ export function HeroChatPreview({ apiPath: _apiPath, agentKey: _agentKey }: Hero
     handoffFallbackMessage,
     handoffRequired,
     inputValue,
-    localStorageHandoffKey,
+    sessionStorageHandoffKey,
     isSending,
     isStreaming,
     locale,

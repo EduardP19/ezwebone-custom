@@ -38,7 +38,7 @@ export default async function CookiesPage() {
           name: "ezw_session_id",
           purpose:
             "Creeaza un identificator de sesiune pentru logurile de analytics dupa ce accepti analytics.",
-          duration: "Persistent pana la stergere",
+          duration: "Session storage (tab-ul curent)",
           required: "Nu",
         },
         {
@@ -61,7 +61,7 @@ export default async function CookiesPage() {
           name: "ezw_session_id",
           purpose:
             "Creates a session identifier for analytics logs after you accept analytics.",
-          duration: "Persistent until cleared",
+          duration: "Session storage (current tab)",
           required: "No",
         },
         {

@@ -29,7 +29,7 @@ export function readTrackingConsent(): TrackingConsentState | null {
 
 export function clearTrackingStorage() {
   if (typeof window === "undefined") return;
-  window.localStorage.removeItem(TRACKING_SESSION_KEY);
+  window.sessionStorage.removeItem(TRACKING_SESSION_KEY);
   window.sessionStorage.removeItem(TRACKING_UTM_KEY);
 }
 
