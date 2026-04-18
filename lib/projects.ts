@@ -1,6 +1,8 @@
 import type { Locale } from "@/lib/i18n/config";
 import { getLocalizedProjectFields } from "@/lib/project-content";
 import { supabase } from "@/lib/supabase";
+import { readdir } from "node:fs/promises";
+import path from "node:path";
 
 export interface Project {
   id: string;
@@ -27,8 +29,6 @@ type ProjectRow = {
   title: string;
   category: string;
   industry: string;
-  image: string;
-  before_image: string | null;
   description: string;
   summary: string;
   highlights: string[] | null;
@@ -47,7 +47,7 @@ const FALLBACK_PROJECTS: Project[] = [
     title: "Say I Do Weddings",
     category: "Wedding · Web Design",
     industry: "Luxury Events",
-    image: "/portfolio/project1.png",
+    image: "/portfolio/SayIDoWeddings - Home.webp",
     beforeImage: null,
     description:
       "A romantic, conversion-focused site for a UK wedding planner. Designed to feel premium quickly and support higher-value enquiries.",
@@ -68,7 +68,7 @@ const FALLBACK_PROJECTS: Project[] = [
     title: "The Memory Corners",
     category: "Events · Booking Site",
     industry: "Experiential Brand",
-    image: "/portfolio/project2.png",
+    image: "/portfolio/TheMemoryCorner - Home.webp",
     beforeImage: null,
     description:
       "A polished site for a photo booth company with online booking flows, event galleries, and a layout built to convert busy visitors fast.",
@@ -89,7 +89,7 @@ const FALLBACK_PROJECTS: Project[] = [
     title: "Txengo",
     category: "Creative · Portfolio",
     industry: "Creative Consultant",
-    image: "/portfolio/project3.png",
+    image: "/portfolio/Txengo - Home.webp",
     beforeImage: null,
     description:
       "A bold creative portfolio with punchy visuals, structured storytelling, and smooth motion that keeps the work front and centre.",
@@ -110,8 +110,8 @@ const FALLBACK_PROJECTS: Project[] = [
     title: "ProveIt",
     category: "Community · Platform",
     industry: "Community Platform",
-    image: "/portfolio/project4.png",
-    beforeImage: null,
+    image: "/portfolio/ProvieIt - CF1.webp",
+    beforeImage: "/portfolio/Before - Proveit.webp",
     description:
       "A trust-focused platform for the Romanian community in the UK with stronger content structure, blog integration, and a clearer membership journey.",
     summary:
@@ -131,7 +131,7 @@ const FALLBACK_PROJECTS: Project[] = [
     title: "Study and Succeed",
     category: "Education · Agency",
     industry: "Education Brand",
-    image: "/portfolio/project5.png",
+    image: "/portfolio/StudyAndSucceed - Home.webp",
     beforeImage: null,
     description:
       "A bilingual language travel site with clearer programme filtering, student-first navigation, and a cleaner path from discovery to enquiry.",
@@ -149,7 +149,129 @@ const FALLBACK_PROJECTS: Project[] = [
 ];
 
 const projectSelect =
-  "id, slug, title, category, industry, image, before_image, description, summary, highlights, live_url, case_study, featured, published, sort_order, created_at";
+  "id, slug, title, category, industry, description, summary, highlights, live_url, case_study, featured, published, sort_order, created_at";
+
+const IMAGE_EXTENSIONS = new Set([".png", ".jpg", ".jpeg", ".webp", ".avif"]);
+const BEFORE_PREFIX = /^before\s*-\s*/i;
+
+type PortfolioImageEntry = {
+  src: string;
+  kind: "before" | "after";
+  key: string;
+};
+
+const compactAlphaNumeric = (value: string): string =>
+  value.toLowerCase().replace(/[^a-z0-9]/g, "");
+
+const singularize = (value: string): string => (value.endsWith("s") ? value.slice(0, -1) : value);
+
+const toKey = (value: string): string => compactAlphaNumeric(value);
+
+function levenshtein(a: string, b: string): number {
+  if (a === b) return 0;
+  if (a.length === 0) return b.length;
+  if (b.length === 0) return a.length;
+
+  const previous = Array.from({ length: b.length + 1 }, (_, index) => index);
+  const current = new Array<number>(b.length + 1);
+
+  for (let i = 1; i <= a.length; i += 1) {
+    current[0] = i;
+    for (let j = 1; j <= b.length; j += 1) {
+      const substitutionCost = a[i - 1] === b[j - 1] ? 0 : 1;
+      current[j] = Math.min(
+        previous[j] + 1,
+        current[j - 1] + 1,
+        previous[j - 1] + substitutionCost
+      );
+    }
+    for (let j = 0; j <= b.length; j += 1) {
+      previous[j] = current[j];
+    }
+  }
+
+  return previous[b.length];
+}
+
+function extractImageKey(filename: string): { kind: "before" | "after"; key: string } {
+  const extension = path.extname(filename).toLowerCase();
+  const stem = filename.slice(0, filename.length - extension.length).trim();
+  const kind: "before" | "after" = BEFORE_PREFIX.test(stem) ? "before" : "after";
+  const withoutPrefix = kind === "before" ? stem.replace(BEFORE_PREFIX, "") : stem;
+  const [base] = withoutPrefix.split(/\s*-\s*/, 1);
+  return { kind, key: toKey(base) };
+}
+
+async function getPortfolioImageEntries(): Promise<PortfolioImageEntry[]> {
+  const portfolioDir = path.join(process.cwd(), "public", "portfolio");
+  const files = await readdir(portfolioDir, { withFileTypes: true });
+
+  return files
+    .filter((file) => file.isFile())
+    .filter((file) => IMAGE_EXTENSIONS.has(path.extname(file.name).toLowerCase()))
+    .map((file) => {
+      const { kind, key } = extractImageKey(file.name);
+      return {
+        src: `/portfolio/${file.name}`,
+        kind,
+        key,
+      };
+    });
+}
+
+let portfolioImageEntriesPromise: Promise<PortfolioImageEntry[]> | null = null;
+
+function getPortfolioImageEntriesCached(): Promise<PortfolioImageEntry[]> {
+  portfolioImageEntriesPromise ??= getPortfolioImageEntries();
+  return portfolioImageEntriesPromise;
+}
+
+async function resolvePortfolioImagesBySlug(
+  projects: Array<Pick<Project, "slug" | "title">>
+): Promise<Map<string, { image: string | null; beforeImage: string | null }>> {
+  try {
+    const entries = await getPortfolioImageEntriesCached();
+    const result = new Map<string, { image: string | null; beforeImage: string | null }>();
+
+    for (const { slug, title } of projects) {
+      const slugKey = toKey(slug);
+      const slugKeySingular = singularize(slugKey);
+      const titleKey = toKey(title);
+      const titleKeySingular = singularize(titleKey);
+
+      const scoreEntry = (entry: PortfolioImageEntry): number => {
+        if (entry.key === titleKey) return -1;
+        if (entry.key === titleKeySingular || singularize(entry.key) === titleKey) return 0;
+        if (entry.key === slugKey) return 0;
+        if (entry.key === slugKeySingular || singularize(entry.key) === slugKey) return 1;
+        if (slugKey.includes(entry.key) || entry.key.includes(slugKey)) return 2;
+
+        const distance = levenshtein(entry.key, slugKey);
+        if (distance <= 2) return 3 + distance;
+        return Number.POSITIVE_INFINITY;
+      };
+
+      const pick = (kind: "before" | "after"): string | null => {
+        const candidates = entries
+          .filter((entry) => entry.kind === kind)
+          .map((entry) => ({ entry, score: scoreEntry(entry) }))
+          .filter(({ score }) => Number.isFinite(score))
+          .sort((a, b) => (a.score === b.score ? a.entry.src.localeCompare(b.entry.src) : a.score - b.score));
+
+        return candidates[0]?.entry.src ?? null;
+      };
+
+      result.set(slug, {
+        image: pick("after"),
+        beforeImage: pick("before"),
+      });
+    }
+
+    return result;
+  } catch {
+    return new Map();
+  }
+}
 
 function normalizeProject(project: ProjectRow): Project {
   return {
@@ -158,8 +280,8 @@ function normalizeProject(project: ProjectRow): Project {
     title: project.title,
     category: project.category,
     industry: project.industry,
-    image: project.image,
-    beforeImage: project.before_image,
+    image: "/window.svg",
+    beforeImage: null,
     description: project.description,
     summary: project.summary,
     highlights: project.highlights ?? [],
@@ -192,8 +314,27 @@ function localizeProject(project: Project, locale: Locale): Project {
 }
 
 export async function getPublishedProjects(locale: Locale = "en"): Promise<Project[]> {
+  const applyLocalizedImages = async (source: Project[]): Promise<Project[]> => {
+    const imageMap = await resolvePortfolioImagesBySlug(
+      source.map((project) => ({ slug: project.slug, title: project.title }))
+    );
+
+    return source.map((project) => {
+      const resolved = imageMap.get(project.slug);
+
+      return localizeProject(
+        {
+          ...project,
+          image: resolved?.image ?? project.image,
+          beforeImage: resolved?.beforeImage ?? project.beforeImage,
+        },
+        locale
+      );
+    });
+  };
+
   if (!supabase) {
-    return FALLBACK_PROJECTS.map((project) => localizeProject(project, locale));
+    return applyLocalizedImages(FALLBACK_PROJECTS);
   }
 
   const { data, error } = await supabase
@@ -207,11 +348,11 @@ export async function getPublishedProjects(locale: Locale = "en"): Promise<Proje
     if (process.env.NODE_ENV !== "production") {
       console.warn("Projects query failed, using fallback data:", error.message);
     }
-    return FALLBACK_PROJECTS.map((project) => localizeProject(project, locale));
+    return applyLocalizedImages(FALLBACK_PROJECTS);
   }
 
   const projects = ((data ?? []) as ProjectRow[]).map(normalizeProject);
   const result = projects.length > 0 ? projects : FALLBACK_PROJECTS;
 
-  return result.map((project) => localizeProject(project, locale));
+  return applyLocalizedImages(result);
 }
