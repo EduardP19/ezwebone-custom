@@ -20,18 +20,18 @@ The brand was never meant to scale. It was designed to:
 
 ## Tech Stack
 
-| Layer | Technology |
-|---|---|
-| Framework | Next.js 16 (App Router) |
-| Language | TypeScript |
-| Styling | Tailwind CSS v4 |
-| Animation | Framer Motion |
-| Database | Supabase (Postgres) |
-| Email | Resend + React Email |
-| AI | Claude API (Anthropic) via streaming |
-| Direct Mail | Stannp API |
-| Company Data | Companies House API (UK Gov) |
-| Deployment | Vercel |
+| Layer        | Technology                           |
+| ------------ | ------------------------------------ |
+| Framework    | Next.js 16 (App Router)              |
+| Language     | TypeScript                           |
+| Styling      | Tailwind CSS v4                      |
+| Animation    | Framer Motion                        |
+| Database     | Supabase (Postgres)                  |
+| Email        | Resend + React Email                 |
+| AI           | Claude API (Anthropic) via streaming |
+| Direct Mail  | Stannp API                           |
+| Company Data | Companies House API (UK Gov)         |
+| Deployment   | Vercel                               |
 
 ---
 
@@ -63,7 +63,7 @@ This means Claude Code has persistent context about the project across sessions 
 Physical letters sent to businesses include a unique alphanumeric code. Recipients visit the site, enter their code, and unlock a personalised web strategy guide. The codes and recipient records are seeded from the Companies House pipeline — the same API that sources company names and director addresses for the Stannp campaign also generates the guide assignments, so each letter maps to a specific business in the database. The flow:
 
 - Code is validated and looked up in Supabase ([lib/guides.ts](lib/guides.ts))
-- A personalised guide is emailed via Resend ([emails/GuideEmail.tsx](emails/GuideEmail.tsx))
+- A personalised guide is emailed via Resend ([emails/beauty_init.tsx](emails/beauty_init.tsx))
 - The claim event is recorded with tracking params for attribution
 
 Route: [app/api/guides/claim/route.ts](app/api/guides/claim/route.ts)
@@ -101,18 +101,18 @@ The integration required building a typed wrapper around the Stannp REST API ([l
 
 ## Pages
 
-| Route | Purpose |
-|---|---|
-| `/` | Homepage |
-| `/about` | About the studio |
-| `/services` | Service offerings |
-| `/portfolio` | Past work showcase |
-| `/blog` | Content marketing |
-| `/guides` | QR code guide claim flow |
-| `/contact` | Contact form (Resend) |
-| `/new-business` | Landing page for direct mail campaign traffic |
-| `/dev` | Internal tooling (protected) |
-| `/privacy`, `/terms`, `/cookies` | Legal pages |
+| Route                            | Purpose                                       |
+| -------------------------------- | --------------------------------------------- |
+| `/`                              | Homepage                                      |
+| `/about`                         | About the studio                              |
+| `/services`                      | Service offerings                             |
+| `/portfolio`                     | Past work showcase                            |
+| `/blog`                          | Content marketing                             |
+| `/guides`                        | QR code guide claim flow                      |
+| `/contact`                       | Contact form (Resend)                         |
+| `/new-business`                  | Landing page for direct mail campaign traffic |
+| `/dev`                           | Internal tooling (protected)                  |
+| `/privacy`, `/terms`, `/cookies` | Legal pages                                   |
 
 ---
 

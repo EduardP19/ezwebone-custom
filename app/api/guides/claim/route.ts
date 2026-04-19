@@ -1,8 +1,9 @@
 import { NextResponse } from "next/server";
 import { Resend } from "resend";
+import { readFile } from "node:fs/promises";
+import path from "node:path";
 import { supabaseAdmin } from "@/lib/supabase-admin";
 import { resolveGuideCode, normalizeGuideCode, isValidGuideCode } from "@/lib/guides";
-import { GuideEmail } from "@/emails/GuideEmail";
 
 type ClaimBody = {
   code?: string;
@@ -13,6 +14,23 @@ type ClaimBody = {
 };
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const GUIDE_EMAIL_TEMPLATE_PATH = path.join(process.cwd(), "emails", "ro_beauty_init.html");
+
+function escapeHtml(value: string): string {
+  return value
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
+}
+
+async function renderGuideEmailHtml(firstName: string, guideUrl: string): Promise<string> {
+  const template = await readFile(GUIDE_EMAIL_TEMPLATE_PATH, "utf8");
+  return template
+    .replaceAll("{{firstName}}", escapeHtml(firstName))
+    .replaceAll("{{guideUrl}}", escapeHtml(guideUrl));
+}
 
 export async function POST(req: Request) {
   try {
@@ -101,11 +119,13 @@ export async function POST(req: Request) {
 
     if (process.env.RESEND_API_KEY && process.env.RESEND_API_KEY !== "re_123456789") {
       const resend = new Resend(process.env.RESEND_API_KEY);
+      const html = await renderGuideEmailHtml(firstName, guideUrl);
+
       await resend.emails.send({
         from: process.env.RESEND_FROM ?? "EzwebOne <hello@ezwebone.co.uk>",
         to: email,
-        subject: "Your free guide is ready 🎉",
-        react: GuideEmail({ firstName, guideUrl }),
+        subject: "Ghidul tau este aici 🎉",
+        html,
       });
     }
 

@@ -33,8 +33,8 @@ export default function GuidesPage() {
 
   const copy = {
     title: isRo
-      ? "Cum sa iti cresti un business in UK, chiar daca pornesti de la zero"
-      : "How to grow a UK business, even if you're starting from zero",
+      ? "Cum sa iti cresti business-ul in beauty, chiar daca pornesti de la zero"
+      : "How to grow your beauty business, even if you're starting from zero",
     subtitle: isRo
       ? "Un ghid practic pentru o prezenta online corecta si atragere de clienti, fara dependente."
       : "A practical guide to build the right online presence and attract clients without dependency.",
@@ -550,7 +550,7 @@ export default function GuidesPage() {
 
             <div className="relative min-h-72 border-t border-[color:var(--color-border)] md:min-h-full md:border-l md:border-t-0">
               <Image
-                src="/sections/workstation.png"
+                src="/sections/workstation.jpeg"
                 alt="Workstation setup"
                 fill
                 className="object-cover"
