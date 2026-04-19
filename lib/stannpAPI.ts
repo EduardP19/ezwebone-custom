@@ -8,6 +8,7 @@ type DirectorAddress = {
   address_line_2?: string;
   address_line_3?: string;
   locality?: string;
+  country?: string;
   postal_code?: string;
 };
 
@@ -17,6 +18,7 @@ type DirectorRow = {
   company_name: string;
   full_name: string;
   correspondence_address: DirectorAddress | null;
+  registered_address: DirectorAddress | null;
   company_status: string | null;
   campaign_status: string;
   industry: string | null;
@@ -91,7 +93,6 @@ function resolveBodyTemplate(item: DirectorRow) {
   const normalizedName = normalizeLetterFullName(item.full_name);
   const firstName = asString(normalizedName).split(/\s+/)[0] || "antreprenor";
   const niche = resolveIndustryLabel(item.industry);
-  const downloadCode = asString(item.download_code, "");
   const customBody = asString(item.letter_template);
 
   return {
@@ -161,7 +162,7 @@ function getSourceTable(source: SendSource) {
 }
 
 function buildPayload(item: DirectorRow, source: SendSource, templateId: number, test: boolean) {
-  const address = (item.correspondence_address ?? {}) as DirectorAddress;
+  const address = resolvePostalAddress(item);
   const address1 = `${asString(address.premises)} ${asString(address.address_line_1)}`.trim();
   const address2 = asString(address.address_line_2);
   const address3 = asString(address.address_line_3);
@@ -197,6 +198,63 @@ function buildPayload(item: DirectorRow, source: SendSource, templateId: number,
   return payload;
 }
 
+function hasMeaningfulAddress(address: DirectorAddress | null | undefined) {
+  if (!address) return false;
+
+  return [
+    address.premises,
+    address.address_line_1,
+    address.address_line_2,
+    address.address_line_3,
+    address.locality,
+    address.country,
+    address.postal_code,
+  ].some((value) => asString(value).length > 0);
+}
+
+function isLikelyUkCountry(value: string) {
+  const normalized = asString(value).toLowerCase();
+  if (!normalized) return false;
+
+  return [
+    "united kingdom",
+    "uk",
+    "great britain",
+    "gb",
+    "england",
+    "scotland",
+    "wales",
+    "northern ireland",
+  ].includes(normalized);
+}
+
+function isLikelyUkPostcode(value: string) {
+  const normalized = asString(value).toUpperCase();
+  if (!normalized) return false;
+  return /^[A-Z]{1,2}\d[A-Z\d]?\s*\d[A-Z]{2}$/.test(normalized);
+}
+
+function isUkAddress(address: DirectorAddress | null | undefined) {
+  if (!address) return false;
+  if (isLikelyUkCountry(asString(address.country))) return true;
+  return isLikelyUkPostcode(asString(address.postal_code));
+}
+
+function resolvePostalAddress(item: DirectorRow): DirectorAddress {
+  const correspondenceAddress = (item.correspondence_address ?? {}) as DirectorAddress;
+  const registeredAddress = (item.registered_address ?? {}) as DirectorAddress;
+
+  if (hasMeaningfulAddress(correspondenceAddress) && isUkAddress(correspondenceAddress)) {
+    return correspondenceAddress;
+  }
+
+  if (hasMeaningfulAddress(registeredAddress)) {
+    return registeredAddress;
+  }
+
+  return correspondenceAddress;
+}
+
 export async function sendTestLetterPreviewByCompany(params: {
   companyNumber: string;
   source?: SendSource;
@@ -223,7 +281,7 @@ export async function sendTestLetterPreviewByCompany(params: {
   const { data: row, error } = await supabaseAdmin
     .from(sourceTable)
     .select(
-      "id, company_number, company_name, full_name, correspondence_address, company_status, campaign_status, industry, qr_code_link, download_code, letter_template"
+      "id, company_number, company_name, full_name, correspondence_address, registered_address, company_status, campaign_status, industry, qr_code_link, download_code, letter_template"
     )
     .eq("company_number", companyNumber)
     .order("created_at", { ascending: false })
@@ -276,7 +334,7 @@ export async function sendDueLetters(params?: {
   const { data: rows, error } = await supabaseAdmin
     .from(sourceTable)
     .select(
-      "id, company_number, company_name, full_name, correspondence_address, company_status, campaign_status, industry, qr_code_link, download_code, letter_template"
+      "id, company_number, company_name, full_name, correspondence_address, registered_address, company_status, campaign_status, industry, qr_code_link, download_code, letter_template"
     )
     .eq("campaign_status", "to_send")
     .order("created_at", { ascending: true })

@@ -58,7 +58,8 @@ create table if not exists public.ch_directors_non_ro (
   director_first_name text null,
   nationality_raw text not null default 'unknown',
   nationality_normalized text not null,
-  correspondence_address jsonb not null default '{}'::jsonb
+  correspondence_address jsonb not null default '{}'::jsonb,
+  registered_address jsonb not null default '{}'::jsonb
 );
 
 drop trigger if exists trg_ch_directors_non_ro_updated_at on public.ch_directors_non_ro;
@@ -89,7 +90,8 @@ create table if not exists public.ch_directors_ro (
   director_full_name text not null,
   director_first_name text null,
   nationality_raw text not null default 'unknown',
-  correspondence_address jsonb not null default '{}'::jsonb
+  correspondence_address jsonb not null default '{}'::jsonb,
+  registered_address jsonb not null default '{}'::jsonb
 );
 
 drop trigger if exists trg_ch_directors_ro_updated_at on public.ch_directors_ro;

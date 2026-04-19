@@ -20,11 +20,19 @@ export type CompaniesHouseCompany = {
   sic_codes?: string[];
 };
 
+export type CompaniesHouseAddress = Record<string, unknown>;
+
 export type AdvancedCompaniesPageResult = {
   items: CompaniesHouseCompany[];
   totalResults: number;
   itemsPerPage: number;
   startIndex: number;
+  raw: unknown;
+};
+
+export type CompaniesHouseProfileResult = {
+  companyNumber: string;
+  registeredOfficeAddress: CompaniesHouseAddress;
   raw: unknown;
 };
 
@@ -83,6 +91,41 @@ export async function fetchAdvancedCompaniesPage(
       typeof data.items_per_page === "number" ? data.items_per_page : filters.itemsPerPage,
     startIndex:
       typeof data.start_index === "number" ? data.start_index : filters.startIndex,
+    raw: data,
+  };
+}
+
+export async function fetchCompanyProfile(
+  companyNumber: string
+): Promise<CompaniesHouseProfileResult> {
+  const url = `${BASE_URL}/company/${encodeURIComponent(companyNumber)}`;
+  const response = await fetch(url, {
+    method: "GET",
+    headers: {
+      Authorization: basicAuthHeader(apiKey),
+      Accept: "application/json",
+    },
+    cache: "no-store",
+  });
+
+  const text = await response.text();
+  let data: Record<string, unknown> = {};
+  try {
+    data = text ? (JSON.parse(text) as Record<string, unknown>) : {};
+  } catch {
+    data = { raw: text };
+  }
+
+  if (!response.ok) {
+    throw new Error(`Companies House company-profile error ${response.status}: ${text}`);
+  }
+
+  return {
+    companyNumber,
+    registeredOfficeAddress:
+      data.registered_office_address && typeof data.registered_office_address === "object"
+        ? (data.registered_office_address as CompaniesHouseAddress)
+        : {},
     raw: data,
   };
 }

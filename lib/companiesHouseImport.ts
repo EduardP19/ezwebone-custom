@@ -1,4 +1,8 @@
-import { fetchAdvancedCompaniesPage, type CompaniesHouseCompany } from "@/lib/companiesHouseAPI";
+import {
+  fetchAdvancedCompaniesPage,
+  fetchCompanyProfile,
+  type CompaniesHouseCompany,
+} from "@/lib/companiesHouseAPI";
 import { fetchCompanyPSC } from "@/lib/companiesHousePSC";
 import { supabaseAdmin } from "@/lib/supabase-admin";
 
@@ -28,6 +32,7 @@ type DirectorBase = {
   industry: string | null;
   nationality_raw: string;
   correspondence_address: Record<string, unknown>;
+  registered_address: Record<string, unknown>;
 };
 
 type DirectorNonRo = DirectorBase & {
@@ -259,6 +264,7 @@ export async function runCompaniesHouseImport(input: ImportParams): Promise<Impo
 
     try {
       const psc = await fetchCompanyPSC(company.company_number);
+      const companyProfile = await fetchCompanyProfile(company.company_number);
       pscOk += 1;
 
       for (const director of psc.items) {
@@ -283,6 +289,7 @@ export async function runCompaniesHouseImport(input: ImportParams): Promise<Impo
             director.address && typeof director.address === "object"
               ? (director.address as Record<string, unknown>)
               : {},
+          registered_address: companyProfile.registeredOfficeAddress,
         };
 
         if (nationalityNormalized.includes("romanian")) {

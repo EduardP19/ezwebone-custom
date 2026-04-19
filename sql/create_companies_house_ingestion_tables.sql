@@ -104,7 +104,8 @@ create table if not exists public.ch_directors_non_ro (
   download_code text null,
   letter_template text null,
   qr_code_link text null,
-  correspondence_address jsonb not null default '{}'::jsonb
+  correspondence_address jsonb not null default '{}'::jsonb,
+  registered_address jsonb not null default '{}'::jsonb
 );
 
 create table if not exists public.ch_directors_ro (
@@ -125,7 +126,8 @@ create table if not exists public.ch_directors_ro (
   download_code text null,
   letter_template text null,
   qr_code_link text null,
-  correspondence_address jsonb not null default '{}'::jsonb
+  correspondence_address jsonb not null default '{}'::jsonb,
+  registered_address jsonb not null default '{}'::jsonb
 );
 
 create unique index if not exists idx_ch_directors_non_ro_unique
