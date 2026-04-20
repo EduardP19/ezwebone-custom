@@ -342,9 +342,20 @@ function Preloader({ onComplete }: { onComplete: () => void }) {
       animate={exiting ? { opacity: 0, scale: 30 } : { opacity: 1, scale: 1 }}
       transition={{ duration: 0.8, ease: "easeIn" }}
     >
-      <div className="flex flex-col items-center gap-1">
+      <div className="flex flex-col items-center justify-center gap-2">
+        <motion.div
+          animate={{ opacity: complete ? 1 : 0.7 }}
+          className="text-white text-center uppercase tracking-[0.2em] font-bold text-sm md:text-xl transition-all duration-1000"
+          style={{ 
+            fontFamily: SG,
+            textShadow: complete ? `0 0 15px ${NEON}80` : 'none',
+          }}
+        >
+          LOADING <br className="block md:hidden" /> ONLINE PRESENCE...
+        </motion.div>
+
         <motion.div 
-          className="text-7xl md:text-8xl font-black transition-all duration-1000 select-none pb-2"
+          className="text-8xl md:text-9xl font-black transition-all duration-1000 select-none"
           style={{ 
             fontFamily: SG,
             color: colorInterpolated,
@@ -353,20 +364,6 @@ function Preloader({ onComplete }: { onComplete: () => void }) {
         >
           <motion.span>{rounded}</motion.span>%
         </motion.div>
-        <div className="h-10 md:h-12 relative w-full text-center">
-          <AnimatePresence>
-            {complete && (
-              <motion.div
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                className="absolute inset-0 text-white text-xl md:text-3xl uppercase tracking-[0.25em] font-black"
-                style={{ fontFamily: SG, textShadow: `0 0 20px ${NEON}80` }}
-              >
-                Online Presence
-              </motion.div>
-            )}
-          </AnimatePresence>
-        </div>
       </div>
     </motion.div>
   );
