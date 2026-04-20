@@ -457,7 +457,7 @@ function Services() {
             className="text-4xl md:text-5xl text-black"
             style={{ fontFamily: SG, fontWeight: 800, lineHeight: 1.12 }}
           >
-            Everything your wellness business<br />needs — in one place.
+            Everything your business<br />needs — in one place.
           </h2>
         </motion.div>
 
@@ -651,12 +651,12 @@ function Automations() {
           >
             <div className="bg-[#111] border border-white/5 rounded-3xl p-8 md:p-12 shadow-2xl relative">
               <div className="absolute -top-4 -right-4 w-24 h-24 bg-neon opacity-20 blur-2xl" style={{ backgroundColor: NEON }} />
-                <div className="space-y-10">
-                  {[
-                    { label: 'Booking Automation', val: 100, delay: 0.2 },
-                    { label: 'Email Marketing', val: 100, delay: 1.2 },
-                    { label: 'Sales Funnel', val: 100, delay: 2.2 }
-                  ].map((item, i) => (
+              <div className="space-y-10">
+                {[
+                  { label: 'Booking Automation', val: 100, delay: 0.2 },
+                  { label: 'Email Marketing', val: 100, delay: 1.2 },
+                  { label: 'Sales Funnel', val: 100, delay: 2.2 }
+                ].map((item, i) => (
                   <div key={i} className="space-y-3">
                     <div className="flex justify-between items-end">
                       <span className="text-[10px] uppercase tracking-[0.2em] font-bold text-gray-400" style={{ fontFamily: SG }}>
@@ -667,12 +667,12 @@ function Automations() {
                       </div>
                     </div>
                     <div className="h-2 bg-white/5 rounded-full overflow-hidden relative border border-white/5">
-                      <motion.div 
-                        className="h-full rounded-full" 
-                        style={{ 
+                      <motion.div
+                        className="h-full rounded-full"
+                        style={{
                           background: NEON,
                           boxShadow: `0 0 15px ${NEON}44`
-                        }} 
+                        }}
                         initial={{ width: '0%' }}
                         animate={inView ? { width: `${item.val}%` } : {}}
                         transition={{ duration: 3.5, delay: item.delay, ease: "easeInOut" }}
