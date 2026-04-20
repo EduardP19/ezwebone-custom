@@ -224,10 +224,7 @@ function Hero() {
           </div>
         </motion.div>
 
-        {/* Online Presence Counter (Above Headline) */}
-        <div className="mb-6">
-          <PresenceCounter />
-        </div>
+
 
         {/* Headline */}
         <motion.h1
@@ -303,37 +300,75 @@ function Hero() {
   );
 }
 
-function PresenceCounter() {
+function Preloader({ onComplete }: { onComplete: () => void }) {
   const count = useMotionValue(0);
   const rounded = useTransform(count, (latest) => Math.round(latest));
   const [complete, setComplete] = useState(false);
+  const [exiting, setExiting] = useState(false);
+  const colorInterpolated = useTransform(count, [0, 100], ['#061a06', NEON]);
 
   useEffect(() => {
+    document.body.style.overflow = 'hidden'; // Lock scroll on mount
     const controls = animate(count, 100, {
-      duration: 4,
-      ease: "easeOut",
-      delay: 1.5,
+      duration: 3,
+      ease: "easeInOut",
+      delay: 0.5,
       onUpdate: (latest) => {
-        if (latest >= 100) setComplete(true);
+        if (latest >= 100 && !complete) {
+          setComplete(true);
+        }
       }
     });
-    return controls.stop;
-  }, [count]);
+
+    return () => {
+      controls.stop();
+      document.body.style.overflow = '';
+    };
+  }, [count, complete]);
+
+  useEffect(() => {
+    if (complete) {
+      const timer = setTimeout(() => {
+        setExiting(true);
+        setTimeout(onComplete, 800); 
+      }, 2000);
+      return () => clearTimeout(timer);
+    }
+  }, [complete, onComplete]);
 
   return (
-    <div className="flex flex-col items-center gap-1">
-      <motion.div 
-        className="text-5xl md:text-6xl font-black transition-all duration-1000"
-        style={{ 
-          fontFamily: SG,
-          color: NEON,
-          textShadow: complete ? `0 0 30px ${NEON}` : 'none'
-        }}
-      >
-        <motion.span>{rounded}</motion.span>%
-      </motion.div>
-      <div className="text-white/30 text-[9px] uppercase tracking-[0.3em] font-bold">Online Presence</div>
-    </div>
+    <motion.div
+      className="fixed inset-0 z-50 flex items-center justify-center bg-[#0a0a0a]"
+      animate={exiting ? { opacity: 0, scale: 30 } : { opacity: 1, scale: 1 }}
+      transition={{ duration: 0.8, ease: "easeIn" }}
+    >
+      <div className="flex flex-col items-center gap-1">
+        <motion.div 
+          className="text-7xl md:text-8xl font-black transition-all duration-1000 select-none pb-2"
+          style={{ 
+            fontFamily: SG,
+            color: colorInterpolated,
+            textShadow: complete ? `0 0 40px ${NEON}` : 'none'
+          }}
+        >
+          <motion.span>{rounded}</motion.span>%
+        </motion.div>
+        <div className="h-4 relative w-full text-center">
+          <AnimatePresence>
+            {complete && (
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="absolute inset-0 text-white text-xs md:text-sm uppercase tracking-[0.4em] font-bold"
+                style={{ fontFamily: SG, textShadow: `0 0 15px ${NEON}66` }}
+              >
+                Online Presence
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
+      </div>
+    </motion.div>
   );
 }
 
@@ -1345,8 +1380,13 @@ function Footer() {
 
 // ─── App ──────────────────────────────────────────────────────────────────────
 export default function App() {
+  const [loading, setLoading] = useState(true);
+
   return (
     <div style={{ fontFamily: SG, overflowX: 'hidden' }}>
+      <AnimatePresence>
+        {loading && <Preloader onComplete={() => setLoading(false)} />}
+      </AnimatePresence>
       <Nav />
       <Hero />
       <TrustBar />
