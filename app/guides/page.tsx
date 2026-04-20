@@ -608,7 +608,9 @@ export default function GuidesPage() {
                 <p className="mt-3 tracking-[0.08em] text-[#f59e0b] drop-shadow-[0_1px_8px_rgba(245,158,11,0.35)]">
                   ★★★★★
                 </p>
-                <p className="mt-3 text-sm leading-7 text-[color:var(--color-text-secondary)]">"{item.quote}"</p>
+                <p className="mt-3 text-sm leading-7 text-[color:var(--color-text-secondary)]">
+                  &ldquo;{item.quote}&rdquo;
+                </p>
               </article>
             ))}
           </div>

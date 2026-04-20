@@ -63,8 +63,8 @@ This means Claude Code has persistent context about the project across sessions 
 Physical letters sent to businesses include a unique alphanumeric code. Recipients visit the site, enter their code, and unlock a personalised web strategy guide. The codes and recipient records are seeded from the Companies House pipeline — the same API that sources company names and director addresses for the Stannp campaign also generates the guide assignments, so each letter maps to a specific business in the database. The flow:
 
 - Code is validated and looked up in Supabase ([lib/guides.ts](lib/guides.ts))
-- A personalised guide is emailed via Resend ([emails/beauty_init.tsx](emails/beauty_init.tsx))
-- The claim event is recorded with tracking params for attribution
+- A personalised guide is emailed via Resend (HTML templates live under [emails/](emails/))
+- The claim event is stored as a row in `public.leads` (with tracking params inside `metadata` for attribution)
 
 Route: [app/api/guides/claim/route.ts](app/api/guides/claim/route.ts)
 

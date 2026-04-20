@@ -30,6 +30,11 @@ const dictionaries = {
       noPublishedPosts: "No published posts yet.",
       noPublishedColumns: "No published columns yet.",
       founder: "Founder",
+      guideEmailOnTheWayTitle: "Email on the way!",
+      guideEmailBodyPrefix: "Your guide is heading to your inbox now. If you don&apos;t see it within a few minutes,",
+      guideEmailSpamFolder: "check your spam folder",
+      guideEmailCtaQuestion: "In the meantime, want to talk through your situation?",
+      guideEmailCtaFootnote: "No pressure, no obligation",
     },
     nav: {
       links: {
@@ -403,6 +408,11 @@ const dictionaries = {
       noPublishedPosts: "Nu exista articole publicate inca.",
       noPublishedColumns: "Nu exista coloane publicate inca.",
       founder: "Fondator",
+      guideEmailOnTheWayTitle: "Emailul este pe drum!",
+      guideEmailBodyPrefix: "Ghidul tau ajunge acum in inbox. Daca nu il vezi in cateva minute,",
+      guideEmailSpamFolder: "verifica folderul spam",
+      guideEmailCtaQuestion: "Intre timp, vrei sa discutam situatia ta?",
+      guideEmailCtaFootnote: "Fara presiune, fara obligatii",
     },
     nav: {
       links: {

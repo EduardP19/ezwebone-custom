@@ -259,6 +259,7 @@ export async function newLead(input: NewLeadInput): Promise<LeadProcessingResult
   const { data: updated, error: updateError } = await db
     .from("leads")
     .update({
+      lead_id: existing.lead_id ?? generateLeadId(),
       submissions,
       last_submitted_at: now,
       updated_at: now,

@@ -166,7 +166,7 @@ export function Footer() {
           </div>
         </div>
 
-        <div className="mt-14 border-t border-white/20 pt-8">
+        <div className="mt-14 border-t border-white/20 pt-8" style={{ textAlign: 'center' }}>
           <p className="text-xs leading-6 text-white/70">
             {dictionary.footer.companyStatement}
           </p>

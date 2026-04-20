@@ -1,10 +1,13 @@
 "use client";
 
 import { Check } from "lucide-react";
+import { useI18n } from "@/components/i18n/LocaleProvider";
 import { Button } from "@/components/ui/Button";
 import { CALENDLY_BOOKING_URL } from "@/lib/links";
 
 export function SuccessSection() {
+  const { dictionary } = useI18n();
+
   return (
     <section className="section-shell relative overflow-hidden pb-28 pt-20 md:pb-36 md:pt-24">
       {/* Orange gradient background — slightly reduced intensity */}
@@ -22,17 +25,20 @@ export function SuccessSection() {
         </span>
 
         <h1 className="mt-6 text-3xl font-bold tracking-tight text-[color:var(--color-text-primary)] md:text-4xl">
-          Email on the way!
+          {dictionary.common.guideEmailOnTheWayTitle}
         </h1>
 
         <p className="mt-4 text-base leading-7 text-[color:var(--color-text-secondary)]">
-          Your guide is heading to your inbox now. If you don&apos;t see it within a few minutes,{" "}
-          <span className="font-medium text-[color:var(--color-text-primary)]">check your spam folder</span>.
+          {dictionary.common.guideEmailBodyPrefix}{" "}
+          <span className="font-medium text-[color:var(--color-text-primary)]">
+            {dictionary.common.guideEmailSpamFolder}
+          </span>
+          .
         </p>
 
         <div className="mt-8 rounded-2xl border border-[color:var(--color-border)] bg-[color:var(--color-bg-card)] p-6">
           <p className="text-sm font-medium text-[color:var(--color-text-secondary)]">
-            In the meantime, want to talk through your situation?
+            {dictionary.common.guideEmailCtaQuestion}
           </p>
           <a
             href={CALENDLY_BOOKING_URL}
@@ -42,10 +48,12 @@ export function SuccessSection() {
             className="mt-4 inline-block w-full"
           >
             <Button size="md" className="w-full">
-              Book a Free Call
+              {dictionary.common.bookFreeCall}
             </Button>
           </a>
-          <p className="mt-2 text-xs text-[color:var(--color-text-secondary)]">No pressure, no obligation</p>
+          <p className="mt-2 text-xs text-[color:var(--color-text-secondary)]">
+            {dictionary.common.guideEmailCtaFootnote}
+          </p>
         </div>
       </div>
     </section>

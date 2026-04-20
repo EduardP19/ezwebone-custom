@@ -1,11 +1,9 @@
 import Link from "next/link";
 import { getRequestLocale } from "@/lib/i18n/request";
-import { getDictionary } from "@/lib/i18n/dictionary";
 import { localizePath } from "@/lib/i18n/config";
 
 export default async function NotFoundPage() {
   const locale = await getRequestLocale();
-  const dictionary = getDictionary(locale);
   const isRo = locale === "ro";
 
   return (

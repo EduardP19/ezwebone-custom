@@ -4,6 +4,7 @@ import { readFile } from "node:fs/promises";
 import path from "node:path";
 import { supabaseAdmin } from "@/lib/supabase-admin";
 import { resolveGuideCode, normalizeGuideCode, isValidGuideCode } from "@/lib/guides";
+import { newLead } from "@/lib/leadProcessing";
 
 type ClaimBody = {
   code?: string;
@@ -15,6 +16,11 @@ type ClaimBody = {
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const GUIDE_EMAIL_TEMPLATE_PATH = path.join(process.cwd(), "emails", "ro_beauty_init.html");
+
+function readTrackingParam(params: Record<string, string>, key: string) {
+  // QR params sometimes arrive as UPPERCASE (UTM_SOURCE) depending on who created the link.
+  return (params[key] ?? params[key.toUpperCase()] ?? params[key.toLowerCase()] ?? "").trim();
+}
 
 function escapeHtml(value: string): string {
   return value
@@ -83,25 +89,32 @@ export async function POST(req: Request) {
       );
     }
 
-    const { error: insertError } = await supabaseAdmin
-      .from("guide_leads")
-      .insert({
-        code,
-        first_name: firstName,
-        email,
-        source: resolved.source,
-        source_table: resolved.sourceTable,
-        source_row_id: resolved.row.id,
-        company_number: resolved.row.company_number,
-        company_name: resolved.row.company_name,
+    const leadResult = await newLead({
+      firstName,
+      email,
+      sourcePage: landingUrl || "/guides",
+      source: readTrackingParam(trackingParams, "utm_source") || "guide_qr",
+      campaign:
+        readTrackingParam(trackingParams, "utm_campaign") ||
+        readTrackingParam(trackingParams, "UTM_CAMPAIGN") ||
+        null,
+      medium: readTrackingParam(trackingParams, "utm_medium") || "email",
+      sessionId: readTrackingParam(trackingParams, "session_id") || null,
+      country: null,
+      userAgent: req.headers.get("user-agent"),
+      niche: readTrackingParam(trackingParams, "utm_niche") || null,
+      companyName: resolved.row.company_name,
+      companyNumber: resolved.row.company_number,
+      metadata: {
+        guide_code: code,
+        guides_source: resolved.source,
+        guides_source_table: resolved.sourceTable,
+        guides_source_row_id: resolved.row.id,
         director_full_name: resolved.row.full_name,
         landing_url: landingUrl || null,
         qr_params: trackingParams,
-      });
-
-    if (insertError) {
-      throw new Error(`Failed to save lead capture: ${insertError.message}`);
-    }
+      },
+    });
 
     const { error: statusError } = await supabaseAdmin
       .from(resolved.sourceTable)
@@ -145,6 +158,7 @@ export async function POST(req: Request) {
       guideUrl,
       firstName,
       companyName: resolved.row.company_name,
+      leadId: leadResult.lead?.lead_id ?? null,
     });
   } catch (error) {
     const message = error instanceof Error ? error.message : "Unexpected error.";
