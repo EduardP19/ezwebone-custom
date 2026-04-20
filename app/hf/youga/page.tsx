@@ -17,7 +17,8 @@ export default function YogaPage() {
         const style = doc.createElement('style');
         style.id = 'ez-preview-lock';
         style.innerText = `
-          a, button, input, select, textarea, [role="button"] { 
+          a, button, input, select, textarea, [role="button"],
+          .hamburger, .mobile-menu-close, [class*="burger"], [id*="hamburger"], label, summary { 
             pointer-events: none !important; 
             cursor: default !important;
           }
@@ -35,7 +36,7 @@ export default function YogaPage() {
   return createPortal(
     <div className="fixed inset-0 z-[99999] bg-white flex flex-col overflow-hidden">
       {/* Agency Toolbar */}
-      <nav className="demo-toolbar h-16 bg-white border-b border-gray-100 px-6 flex items-center justify-between z-[2000] shadow-sm">
+      <nav className="demo-toolbar min-h-[64px] py-2 bg-white border-b border-gray-100 px-6 flex items-center justify-between z-[2000] shadow-sm">
         <div className="flex items-center gap-3">
           <Link 
             href="/hf#ecosystem" 
@@ -51,8 +52,8 @@ export default function YogaPage() {
             <span className="text-xs font-bold text-black">Wellness & Mindfulness</span>
           </div>
           <div className="h-4 w-px bg-gray-200 hidden md:block" />
-          <Link href="/hf" className="hover:opacity-60 transition-opacity">
-            <img src="/brand/HF_EZ-Navy-Tear.png" alt="EZWebOne" className="h-8 w-auto" />
+          <Link href="/hf" className="hover:opacity-60 transition-opacity block">
+            <img src="/brand/HF_EZ-Navy-Tear.png" alt="EZWebOne" className="h-[6rem] md:h-24 w-auto object-contain" />
           </Link>
         </div>
       </nav>

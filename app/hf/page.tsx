@@ -109,11 +109,13 @@ function Nav() {
 
         {/* Center: Logo (Global) */}
         <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
-          <img
-            src="/brand/HF_EZ-Navy-Tear.png"
-            alt="EZWebOne"
-            className="h-28 md:h-40 w-auto block"
-          />
+          <a href="/hf" className="block hover:opacity-80 transition-opacity">
+            <img
+              src="/brand/HF_EZ-Navy-Tear.png"
+              alt="EZWebOne"
+              className="h-28 md:h-40 w-auto block"
+            />
+          </a>
         </div>
 
         <div className="flex-1 flex justify-end">
