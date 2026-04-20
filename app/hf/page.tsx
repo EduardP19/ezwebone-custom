@@ -1,6 +1,5 @@
-"use client";
-
 import { useState, useEffect, useRef } from 'react';
+import { supabase } from '@/lib/supabase';
 import { motion, useInView, AnimatePresence, useMotionValue, useTransform, animate } from 'framer-motion';
 import {
   Monitor, Calendar, CreditCard, Mail, Search, Bot,
@@ -1373,6 +1372,179 @@ function Footer() {
   );
 }
 
+// ─── Contact Form ─────────────────────────────────────────────────────────────
+function ContactForm() {
+  const [formData, setFormData] = useState({
+    full_name: '',
+    email: '',
+    business_name: '',
+    message: ''
+  });
+  const [loading, setLoading] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+    setError(null);
+
+    try {
+      if (!supabase) throw new Error('Supabase not configured');
+      
+      const { error: submitError } = await supabase
+        .from('forms')
+        .insert([{
+          full_name: formData.full_name,
+          email: formData.email,
+          business_name: formData.business_name,
+          message: formData.message,
+          source: 'Health & Wellness Landing Page'
+        }]);
+
+      if (submitError) throw submitError;
+
+      setSubmitted(true);
+      setFormData({ full_name: '', email: '', business_name: '', message: '' });
+    } catch (err: any) {
+      console.error('Submission error:', err);
+      setError(err.message || 'Something went wrong. Please try again.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <section id="contact" className="py-24 px-6 relative overflow-hidden" style={{ background: '#0a0a0a' }}>
+      {/* Background circles */}
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-neon opacity-[0.03] rounded-full blur-[120px] pointer-events-none" />
+
+      <div className="max-w-4xl mx-auto relative z-10">
+        <div className="text-center mb-16">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="inline-block px-4 py-1 rounded-full bg-neon/10 border border-neon/20 mb-6"
+          >
+            <span className="text-neon text-xs font-bold uppercase tracking-widest" style={{ fontFamily: SG }}>Let's Build It</span>
+          </motion.div>
+          <motion.h2
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.1 }}
+            className="text-4xl md:text-6xl font-black text-white mb-6"
+            style={{ fontFamily: SG }}
+          >
+            Ready to Dominate <br/> The Market?
+          </motion.h2>
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.2 }}
+            className="text-white/60 max-w-xl mx-auto text-lg"
+          >
+            Fill in the details below and we'll get back to you with a direct battle-plan for your business growth.
+          </motion.p>
+        </div>
+
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ delay: 0.3 }}
+          className="bg-[#111] border border-white/10 rounded-3xl p-8 md:p-12 shadow-2xl relative"
+        >
+          {submitted ? (
+            <motion.div 
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              className="text-center py-12"
+            >
+              <div className="w-20 h-20 bg-neon/20 rounded-full flex items-center justify-center mx-auto mb-8 border border-neon/30">
+                <CheckCircle size={40} className="text-neon" />
+              </div>
+              <h3 className="text-3xl font-bold text-white mb-4" style={{ fontFamily: SG }}>Mission Accepted!</h3>
+              <p className="text-white/60 mb-8">We've received your transmission. Our team will review your project and contact you within 24 hours.</p>
+              <button 
+                onClick={() => setSubmitted(false)}
+                className="text-neon font-bold text-sm uppercase tracking-widest hover:opacity-80 transition-all underline underline-offset-8"
+              >
+                Send Another Message
+              </button>
+            </motion.div>
+          ) : (
+            <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="space-y-2">
+                <label className="text-xs uppercase tracking-widest text-white/40 font-bold ml-1">Full Name</label>
+                <input
+                  required
+                  type="text"
+                  placeholder="John Doe"
+                  value={formData.full_name}
+                  onChange={(e) => setFormData({...formData, full_name: e.target.value})}
+                  className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-4 text-white focus:outline-none focus:border-neon/50 transition-all"
+                />
+              </div>
+              <div className="space-y-2">
+                <label className="text-xs uppercase tracking-widest text-white/40 font-bold ml-1">Work Email</label>
+                <input
+                  required
+                  type="email"
+                  placeholder="john@wellness.com"
+                  value={formData.email}
+                  onChange={(e) => setFormData({...formData, email: e.target.value})}
+                  className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-4 text-white focus:outline-none focus:border-neon/50 transition-all"
+                />
+              </div>
+              <div className="space-y-2 md:col-span-2">
+                <label className="text-xs uppercase tracking-widest text-white/40 font-bold ml-1">Business Name</label>
+                <input
+                  type="text"
+                  placeholder="The Wellness Collective"
+                  value={formData.business_name}
+                  onChange={(e) => setFormData({...formData, business_name: e.target.value})}
+                  className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-4 text-white focus:outline-none focus:border-neon/50 transition-all"
+                />
+              </div>
+              <div className="space-y-2 md:col-span-2">
+                <label className="text-xs uppercase tracking-widest text-white/40 font-bold ml-1">Project Details</label>
+                <textarea
+                  required
+                  rows={4}
+                  placeholder="Tell us about your goals..."
+                  value={formData.message}
+                  onChange={(e) => setFormData({...formData, message: e.target.value})}
+                  className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-4 text-white focus:outline-none focus:border-neon/50 transition-all resize-none"
+                />
+              </div>
+              
+              {error && (
+                <div className="md:col-span-2 text-red-500 text-sm font-medium bg-red-500/10 p-4 rounded-xl border border-red-500/20">
+                  {error}
+                </div>
+              )}
+
+              <div className="md:col-span-2 pt-4">
+                <button
+                  type="submit"
+                  disabled={loading}
+                  className="w-full bg-neon py-5 rounded-xl text-black font-black uppercase tracking-widest text-lg hover:scale-[1.02] active:scale-[0.98] transition-all disabled:opacity-50 disabled:scale-100 shadow-[0_0_40px_rgba(57,255,20,0.3)]"
+                  style={{ fontFamily: SG, fontWeight: 900 }}
+                >
+                  {loading ? 'Transmitting...' : 'Launch Strategy Session'}
+                </button>
+              </div>
+            </form>
+          )}
+        </motion.div>
+      </div>
+    </section>
+  );
+}
+
 // ─── App ──────────────────────────────────────────────────────────────────────
 export default function App() {
   const [loading, setLoading] = useState(true);
@@ -1393,6 +1565,7 @@ export default function App() {
       <WhyUs />
       <HowItWorks />
       <Testimonials />
+      <ContactForm />
       <FinalCTA />
       <Footer />
     </div>
