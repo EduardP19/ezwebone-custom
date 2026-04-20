@@ -566,8 +566,8 @@ function SocialMedia() {
           >
             <div className="aspect-[4/5] bg-gray-900 rounded-3xl overflow-hidden relative shadow-2xl group">
               <img
-                src="https://images.unsplash.com/photo-1611605698335-8b1569810432?q=80&w=1074&auto=format&fit=crop"
-                alt="Social Media Management"
+                src="https://images.unsplash.com/photo-1611162617213-7d7a39e9b1d7?q=80&w=1074&auto=format&fit=crop"
+                alt="Instagram Social Media Management"
                 className="w-full h-full object-cover opacity-60 group-hover:scale-105 transition-transform duration-700"
               />
               <div className="absolute inset-0 flex items-center justify-center p-8">
