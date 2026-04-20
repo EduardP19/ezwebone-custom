@@ -141,6 +141,7 @@ function Nav() {
           >
             {[
               ['#services', 'Growth'],
+              ['#ecosystem', 'Expertise'],
               ['#why-us', 'Flexibility'],
               ['#how-it-works', 'Process'],
               ['#testimonials', 'Reviews']
@@ -854,6 +855,97 @@ function WhyUs() {
   );
 }
 
+// ─── Projects (Holistic Ecosystem) ──────────────────────────────────────────
+function Projects() {
+  const ref = useRef<HTMLElement>(null);
+  const inView = useInView(ref, { once: true, margin: '-80px' });
+
+  const ecosystems = [
+    {
+      title: 'High-Performance Gyms',
+      desc: 'Digital engines for strength communities. We build high-conversion funnels that turn local residents into dedicated lifters.',
+      image: 'https://images.unsplash.com/photo-1540497077202-7c8a3999166f?q=80&w=1200&auto=format&fit=crop',
+      tag: 'Strength'
+    },
+    {
+      title: 'Wellness & Mindfulness',
+      desc: 'Serene, beautiful platforms for yoga studios and mindfulness practitioners. Designed to calm the mind and fill the mat.',
+      image: 'https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?q=80&w=1200&auto=format&fit=crop',
+      tag: 'Balance'
+    },
+    {
+      title: 'Nutrition & Dietetics',
+      desc: 'Precision systems for clinical experts. We automate bookings and consultations so you can focus on health outcomes.',
+      image: 'https://images.unsplash.com/photo-1490645935967-10de6ba17061?q=80&w=1200&auto=format&fit=crop',
+      tag: 'Fuel'
+    }
+  ];
+
+  return (
+    <section id="ecosystem" ref={ref} className="py-24 px-6 bg-[#F5F2ED]">
+      <div className="max-w-6xl mx-auto">
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={inView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.7 }}
+          className="text-center mb-16"
+        >
+          <span
+            className="inline-block text-xs px-4 py-1.5 rounded-full mb-4 uppercase tracking-[0.2em] font-bold"
+            style={{ fontFamily: SG, background: '#6BAF6B20', color: '#6BAF6B' }}
+          >
+            Diversity
+          </span>
+          <h2
+            className="text-4xl md:text-5xl text-black mb-6"
+            style={{ fontFamily: SG, fontWeight: 800, lineHeight: 1.12 }}
+          >
+            One agency. <span style={{ color: '#6BAF6B' }}>Three worlds</span>.
+          </h2>
+          <p className="text-gray-500 text-lg max-w-2xl mx-auto" style={{ fontFamily: SG }}>
+            We specialize in bridging the gap between high-intensity training, mindful wellness, and clinical nutrition.
+          </p>
+        </motion.div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          {ecosystems.map((item, i) => (
+            <motion.div
+              key={i}
+              initial={{ opacity: 0, y: 30 }}
+              animate={inView ? { opacity: 1, y: 0 } : {}}
+              transition={{ duration: 0.5, delay: i * 0.15 }}
+              className="group relative rounded-3xl overflow-hidden bg-white shadow-sm hover:shadow-xl transition-all duration-500 flex flex-col"
+            >
+              <div className="aspect-[4/3] overflow-hidden">
+                <img
+                  src={item.image}
+                  alt={item.title}
+                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                />
+                <div className="absolute top-4 left-4">
+                  <span className="px-3 py-1 bg-black/40 backdrop-blur-md rounded-full text-[10px] text-white uppercase tracking-widest font-bold" style={{ fontFamily: SG }}>
+                    {item.tag}
+                  </span>
+                </div>
+              </div>
+              <div className="p-8 flex-grow">
+                <h3 className="text-xl font-bold mb-3 text-black" style={{ fontFamily: SG }}>{item.title}</h3>
+                <p className="text-gray-500 text-sm leading-relaxed" style={{ fontFamily: SG }}>{item.desc}</p>
+              </div>
+              <div className="px-8 pb-8">
+                <div className="h-px bg-gray-100 mb-6" />
+                <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest transition-colors duration-300 group-hover:text-[#6BAF6B]" style={{ fontFamily: SG }}>
+                  View Expertise <ArrowRight size={14} className="transition-transform group-hover:translate-x-1" />
+                </div>
+              </div>
+            </motion.div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
 // ─── How It Works ─────────────────────────────────────────────────────────────
 function HowItWorks() {
   const ref = useRef<HTMLElement>(null);
@@ -1192,6 +1284,7 @@ export default function App() {
       <TrustBar />
       <Problem />
       <Services />
+      <Projects />
       <SocialMedia />
       <Automations />
       <WhyUs />
