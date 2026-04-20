@@ -4,6 +4,7 @@ import {
   getLocaleFromPathname,
   LOCALE_COOKIE,
   LOCALE_HEADER,
+  resolvePreferredLocale,
   stripLocaleFromPathname,
 } from "@/lib/i18n/config";
 
@@ -26,10 +27,14 @@ export function proxy(request: NextRequest) {
   }
 
   const localeFromPath = getLocaleFromPathname(pathname);
+  const preferredLocale = resolvePreferredLocale(
+    request.cookies.get(LOCALE_COOKIE)?.value,
+    request.headers.get("accept-language")
+  );
 
   if (!localeFromPath) {
     const requestHeaders = new Headers(request.headers);
-    requestHeaders.set(LOCALE_HEADER, defaultLocale);
+    requestHeaders.set(LOCALE_HEADER, preferredLocale);
 
     const response = NextResponse.next({
       request: {
@@ -37,7 +42,7 @@ export function proxy(request: NextRequest) {
       },
     });
 
-    response.cookies.set(LOCALE_COOKIE, defaultLocale, {
+    response.cookies.set(LOCALE_COOKIE, preferredLocale, {
       path: "/",
       maxAge: 60 * 60 * 24 * 365,
       sameSite: "lax",

@@ -121,12 +121,23 @@ export async function POST(req: Request) {
       const resend = new Resend(process.env.RESEND_API_KEY);
       const html = await renderGuideEmailHtml(firstName, guideUrl);
 
-      await resend.emails.send({
+      const { data, error: sendError } = await resend.emails.send({
         from: process.env.RESEND_FROM ?? "EzwebOne <hello@ezwebone.co.uk>",
         to: email,
         subject: "Ghidul tau este aici 🎉",
         html,
       });
+
+      if (sendError) {
+        throw new Error(`Resend send failed: ${sendError.message}`);
+      }
+
+      if (process.env.NODE_ENV !== "production") {
+        console.info("Guide email sent via Resend", {
+          to: email,
+          emailId: data?.id ?? null,
+        });
+      }
     }
 
     return NextResponse.json({

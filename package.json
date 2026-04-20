@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@react-email/components": "^1.0.12",
+    "@sentry/nextjs": "^10.49.0",
     "@supabase/supabase-js": "^2.100.1",
     "@tailwindcss/typography": "^0.5.19",
     "clsx": "^2.1.1",

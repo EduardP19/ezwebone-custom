@@ -1,15 +1,10 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { usePathname, useSearchParams } from "next/navigation";
-import { CookieConsentBanner } from "@/components/analytics/CookieConsentBanner";
 import {
-  TRACKING_CONSENT_UPDATED_EVENT,
   TRACKING_SESSION_KEY,
   TRACKING_UTM_KEY,
-  type TrackingConsentState,
-  readTrackingConsent,
-  updateTrackingConsent,
 } from "@/lib/consent";
 import { supabase } from "@/lib/supabase";
 
@@ -218,37 +213,32 @@ function getPagePath(pathname: string, searchParams: URLSearchParams): string {
 }
 
 async function insertLog(payload: LogPayload) {
-  if (!supabase) return;
+  if (!supabase) {
+    console.error("Tracking insert skipped: Supabase client is not configured.");
+    return;
+  }
 
   const { error } = await supabase.from("logs").insert([payload]);
 
-  if (error && process.env.NODE_ENV !== "production") {
-    console.warn("Tracking insert failed:", error.message);
+  if (error) {
+    console.error("Tracking insert failed:", {
+      message: error.message,
+      code: error.code ?? null,
+      details: error.details ?? null,
+      hint: error.hint ?? null,
+      event_type: payload.event_type,
+      page_path: payload.page_path,
+      source_site: payload.source_site,
+    });
   }
 }
 
 export function TrackingProvider() {
   const pathname = usePathname();
   const searchParams = useSearchParams();
-  const [consent, setConsent] = useState<TrackingConsentState | null | undefined>(undefined);
 
   useEffect(() => {
-    const syncConsent = () => {
-      setConsent(readTrackingConsent());
-    };
-
-    syncConsent();
-    window.addEventListener(TRACKING_CONSENT_UPDATED_EVENT, syncConsent);
-    window.addEventListener("storage", syncConsent);
-
-    return () => {
-      window.removeEventListener(TRACKING_CONSENT_UPDATED_EVENT, syncConsent);
-      window.removeEventListener("storage", syncConsent);
-    };
-  }, []);
-
-  useEffect(() => {
-    if (!pathname || consent !== "accepted") return;
+    if (!pathname) return;
 
     const sessionId = getOrCreateSessionId();
     const utms = mergeAndStoreUtms(searchParams);
@@ -278,11 +268,9 @@ export function TrackingProvider() {
         title: document.title || null,
       },
     });
-  }, [pathname, searchParams, consent]);
+  }, [pathname, searchParams]);
 
   useEffect(() => {
-    if (consent !== "accepted") return;
-
     const onClick = (event: MouseEvent) => {
       const target = event.target as HTMLElement | null;
       if (!target) return;
@@ -342,22 +330,7 @@ export function TrackingProvider() {
 
     document.addEventListener("click", onClick, true);
     return () => document.removeEventListener("click", onClick, true);
-  }, [consent]);
+  }, []);
 
-  if (consent !== null) {
-    return null;
-  }
-
-  return (
-    <CookieConsentBanner
-      onAccept={() => {
-        updateTrackingConsent("accepted");
-        setConsent("accepted");
-      }}
-      onReject={() => {
-        updateTrackingConsent("rejected");
-        setConsent("rejected");
-      }}
-    />
-  );
+  return null;
 }

@@ -5,6 +5,7 @@ import Image from "next/image";
 import { useI18n } from "@/components/i18n/LocaleProvider";
 import { FaqSection } from "@/components/guides/FaqSection";
 import { CALENDLY_BOOKING_URL } from "@/lib/links";
+import { getLocaleFromPathname, localizePath } from "@/lib/i18n/config";
 import { Check, CircleAlert, Search, Mail, CalendarCheck, ArrowRight } from "lucide-react";
 import { SuccessSection } from "@/components/sections/SuccessSection";
 
@@ -253,6 +254,30 @@ export default function GuidesPage() {
   const [isSubmitting, setIsSubmitting] = React.useState(false);
   const [submitError, setSubmitError] = React.useState<string | null>(null);
 
+  const localizeDestination = React.useCallback(
+    (destination: string) => {
+      if (typeof window === "undefined" || !destination) {
+        return destination;
+      }
+
+      try {
+        const url = new URL(destination, window.location.origin);
+        if (url.origin !== window.location.origin) {
+          return destination;
+        }
+
+        if (!getLocaleFromPathname(url.pathname)) {
+          url.pathname = localizePath(locale, url.pathname);
+        }
+
+        return `${url.pathname}${url.search}${url.hash}`;
+      } catch {
+        return destination;
+      }
+    },
+    [locale]
+  );
+
   const getTrackingPayload = React.useCallback(() => {
     if (typeof window === "undefined") {
       return {
@@ -377,7 +402,7 @@ export default function GuidesPage() {
       }
 
       const destination = payload.guideUrl ?? "/guides?sent=1";
-      window.location.assign(destination);
+      window.location.assign(localizeDestination(destination));
     } catch {
       setSubmitError(copy.networkError);
     } finally {
