@@ -10,8 +10,7 @@ import {
 } from 'lucide-react';
 
 // ─── Constants ───────────────────────────────────────────────────────────────
-const NEON = '#22c55e;';
-const dullNEON = '#6BAF6B';
+const NEON = '#39FF14';
 const HERO_BG =
   'https://images.unsplash.com/photo-1758521958525-eedaa20ffdb7?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxneW0lMjBmaXRuZXNzJTIwYXRobGV0ZSUyMHRyYWluaW5nJTIwYWN0aW9ufGVufDF8fHx8MTc3NjY5NDg2N3ww&ixlib=rb-4.1.0&q=80&w=1920';
 const AVATAR_FEMALE =
@@ -81,7 +80,7 @@ function Nav() {
 
   return (
     <motion.nav
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 bg-[#F5F2ED] shadow-lg`}
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 bg-white shadow-lg`}
       animate={{
         filter: [
           `drop-shadow(0 0 2px ${NEON}44)`,
@@ -137,7 +136,7 @@ function Nav() {
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
-            className="bg-[#F5F2ED] border-t border-gray-100 px-6 py-8 flex flex-col gap-6"
+            className="bg-white border-t border-gray-100 px-6 py-8 flex flex-col gap-6"
             style={{ fontFamily: SG }}
           >
             {[
@@ -161,7 +160,7 @@ function Nav() {
         >
           <path
             d="M0 0 L600 120 L1200 0 Z"
-            fill="#F5F2ED"
+            fill="white"
           />
           {/* Neon line at the point edge */}
           <path
@@ -251,7 +250,7 @@ function Hero() {
           </a>
           <a
             href="#services"
-            className="px-8 py-4 rounded-full text-white border-2 border-white transition-all hover:bg-[#F5F2ED] hover:text-black flex items-center justify-center gap-2 font-bold"
+            className="px-8 py-4 rounded-full text-white border-2 border-white transition-all hover:bg-white hover:text-black flex items-center justify-center gap-2 font-bold"
             style={{ fontFamily: SG }}
           >
             See What We Do
@@ -294,7 +293,7 @@ function TrustBar() {
   ];
 
   return (
-    <section className="relative bg-[#F5F2ED] py-5 overflow-hidden">
+    <section className="relative bg-white py-5 overflow-hidden">
       <div className="absolute top-0 left-0 right-0 h-0.5" style={{ background: `linear-gradient(90deg, transparent, ${NEON}, transparent)` }} />
       <div className="absolute bottom-0 left-0 right-0 h-0.5" style={{ background: `linear-gradient(90deg, transparent, ${NEON}, transparent)` }} />
 
@@ -349,7 +348,7 @@ function Problem() {
   ];
 
   return (
-    <section ref={ref} className="bg-[#F5F2ED] py-24 px-6">
+    <section ref={ref} className="bg-white py-24 px-6">
       <div className="max-w-6xl mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 32 }}
@@ -523,7 +522,7 @@ function SocialMedia() {
   ];
 
   return (
-    <section id="social-media" ref={ref} className="py-24 px-6 bg-[#F5F2ED] border-b border-gray-100">
+    <section id="social-media" ref={ref} className="py-24 px-6 bg-white border-b border-gray-100">
       <div className="max-w-6xl mx-auto">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
           <motion.div
@@ -879,7 +878,7 @@ function HowItWorks() {
   ];
 
   return (
-    <section id="how-it-works" ref={ref} className="bg-[#F5F2ED] py-24 px-6">
+    <section id="how-it-works" ref={ref} className="bg-white py-24 px-6">
       <div className="max-w-5xl mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
@@ -987,7 +986,7 @@ function Testimonials() {
   ];
 
   return (
-    <section id="testimonials" ref={ref} className="py-24 px-6" style={{ background: '#F5F2ED' }}>
+    <section id="testimonials" ref={ref} className="py-24 px-6" style={{ background: '#f4f5f7' }}>
       <div className="max-w-6xl mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 30 }}

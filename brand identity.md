@@ -3,7 +3,6 @@
 ## Typography
 
 ### Primary Typefaces (live site)
-
 - **Inter** (`--font-inter`)
   - Usage: core body/UI sans (`--font-sans`)
   - Source: `next/font/google` in `app/layout.tsx`
@@ -20,7 +19,6 @@
   - Source: `next/font/google` in `app/layout.tsx`
 
 ### Font Token Mapping (from `app/globals.css`)
-
 - `--font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif`
 - `--font-display: var(--font-space-grotesk), ui-sans-serif, system-ui, sans-serif`
 - `--font-mono: var(--font-jetbrains-mono), ui-monospace, SFMono-Regular, monospace`
@@ -30,7 +28,6 @@
 ## Color System
 
 ### Core Brand Tokens
-
 - `--color-primary`: `#7c3aed`
 - `--color-primary-light`: `#a78bfa` (dark theme token set)
 - `--color-primary-dark`: `#5b21b6`
@@ -38,7 +35,6 @@
 - `--color-accent-light`: `#fb923c` (dark theme token set)
 
 ### Brand Alias Tokens
-
 - `--color-brand-black`: `#1c2a44`
 - `--color-brand-blue`: `#7c3aed`
 - `--color-brand-purple`: `#a78bfa`
@@ -53,7 +49,6 @@
 ## Theme Palette
 
 ### Dark Theme (`:root`, `[data-theme="dark"]`)
-
 - `--background`: `#0a0a0f`
 - `--foreground`: `#f5f5f7`
 - `--color-bg-dark`: `#0a0a0f`
@@ -73,23 +68,22 @@
 - `--particle-hover-line`: `167, 139, 250`
 
 ### Light Theme (`[data-theme="light"]`)
-
-- `--background`: `#F5F2ED`
+- `--background`: `#ffffff`
 - `--foreground`: `#1c2a44`
 - `--color-primary`: `#7c3aed`
 - `--color-primary-light`: `#9333ea`
 - `--color-primary-dark`: `#5b21b6`
 - `--color-accent`: `#f97316`
 - `--color-accent-light`: `#ea580c`
-- `--color-bg-dark`: `#F5F2ED`
-- `--color-bg-card`: `#F5F2ED`
+- `--color-bg-dark`: `#ffffff`
+- `--color-bg-card`: `#ffffff`
 - `--color-bg-elevated`: `#eef0f5`
 - `--color-bg-void`: `#e8eaf0`
 - `--color-border`: `#d1d5e0`
 - `--color-text-primary`: `#1c2a44`
 - `--color-text-secondary`: `#4b5563`
 - `--color-text-accent`: `#7c3aed`
-- `--color-live`: `#22c55e`
+- `--color-live`: `#16a34a`
 - `--color-mesh-teal`: `#1c2a44`
 - `--color-mesh-blue`: `#1c2a44`
 - `--color-mesh-gold`: `#1c2a44`
@@ -102,7 +96,6 @@
 ## Logo Assets In Use
 
 From `lib/brand.ts`:
-
 - Light mark: `/brand/EZ-Black - Tear.png`
 - Dark mark: `/brand/EZ-White - Tear.png`
 - Current default mark token (`BRAND_LOGO_MARK_SRC`): dark mark
@@ -111,7 +104,6 @@ From `lib/brand.ts`:
 ---
 
 ## Source of Truth
-
 - `app/globals.css`
 - `app/layout.tsx`
 - `lib/brand.ts`

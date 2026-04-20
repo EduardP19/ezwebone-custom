@@ -28,21 +28,21 @@
 }
 
 [data-theme="light"] {
-  --background: #F5F2ED;
+  --background: #ffffff;
   --foreground: #1c2a44;
   --color-primary: #7c3aed;
   --color-primary-light: #9333ea;
   --color-primary-dark: #5b21b6;
   --color-accent: #f97316;
   --color-accent-light: #ea580c;
-  --color-bg-dark: #F5F2ED;
-  --color-bg-card: #F5F2ED;
+  --color-bg-dark: #ffffff;
+  --color-bg-card: #ffffff;
   --color-bg-elevated: #eef0f5;
   --color-border: #d1d5e0;
   --color-text-primary: #1c2a44;
   --color-text-secondary: #4b5563;
   --color-text-accent: #7c3aed;
-  --color-live: #22c55e;
+  --color-live: #16a34a;
   --color-bg-void: #e8eaf0;
   --color-mesh-teal: #1c2a44;
   --color-mesh-blue: #1c2a44;
