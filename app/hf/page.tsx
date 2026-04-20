@@ -1418,6 +1418,26 @@ function ContactForm() {
 
   return (
     <section id="contact" className="py-24 px-6 relative overflow-hidden" style={{ background: '#0a0a0a' }}>
+      {/* Pointy Neon Divider */}
+      <div className="absolute top-0 left-0 w-full pointer-events-none" style={{ zIndex: 20 }}>
+        <svg
+          viewBox="0 0 1200 120"
+          className="w-full h-10 block"
+          preserveAspectRatio="none"
+        >
+          <path
+            d="M0 0 L600 120 L1200 0 Z"
+            fill="#F5F2ED"
+          />
+          <path
+            d="M0 0 L600 120 L1200 0"
+            fill="none"
+            stroke={NEON}
+            strokeWidth="4"
+          />
+        </svg>
+      </div>
+
       {/* Background circles */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-neon opacity-[0.03] rounded-full blur-[120px] pointer-events-none" />
 
@@ -1427,7 +1447,7 @@ function ContactForm() {
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="inline-block px-4 py-1 rounded-full bg-neon/10 border border-neon/20 mb-6"
+            className="inline-block px-4 py-1 rounded-full bg-neon/20 border border-neon/40 mb-6 shadow-[0_0_15px_rgba(57,255,20,0.1)]"
           >
             <span className="text-neon text-xs font-bold uppercase tracking-widest" style={{ fontFamily: SG }}>Let's Build It</span>
           </motion.div>
@@ -1481,7 +1501,7 @@ function ContactForm() {
             <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-8">
               <div className="space-y-3">
                 <div className="flex items-center gap-2 ml-1">
-                  <Users size={14} className="text-neon/70" />
+                  <Users size={14} className="text-neon" />
                   <label className="text-xs uppercase tracking-widest text-white/70 font-bold">Full Name</label>
                 </div>
                 <input
@@ -1495,7 +1515,7 @@ function ContactForm() {
               </div>
               <div className="space-y-3">
                 <div className="flex items-center gap-2 ml-1">
-                  <Mail size={14} className="text-neon/70" />
+                  <Mail size={14} className="text-neon" />
                   <label className="text-xs uppercase tracking-widest text-white/70 font-bold">Work Email</label>
                 </div>
                 <input
@@ -1509,7 +1529,7 @@ function ContactForm() {
               </div>
               <div className="space-y-3 md:col-span-2">
                 <div className="flex items-center gap-2 ml-1">
-                  <Target size={14} className="text-neon/70" />
+                  <Target size={14} className="text-neon" />
                   <label className="text-xs uppercase tracking-widest text-white/70 font-bold">Business Name</label>
                 </div>
                 <input
@@ -1522,7 +1542,7 @@ function ContactForm() {
               </div>
               <div className="space-y-3 md:col-span-2">
                 <div className="flex items-center gap-2 ml-1">
-                  <Bot size={14} className="text-neon/70" />
+                  <Bot size={14} className="text-neon" />
                   <label className="text-xs uppercase tracking-widest text-white/70 font-bold">Project Details</label>
                 </div>
                 <textarea
@@ -1545,7 +1565,7 @@ function ContactForm() {
                 <button
                   type="submit"
                   disabled={loading}
-                  className="w-full bg-neon py-5 rounded-xl text-black font-black uppercase tracking-widest text-lg hover:scale-[1.02] active:scale-[0.98] transition-all disabled:opacity-50 disabled:scale-100 shadow-[0_0_40px_rgba(57,255,20,0.3)]"
+                  className="w-full bg-[#050505] border-2 border-neon py-5 rounded-xl text-neon font-black uppercase tracking-widest text-lg hover:bg-neon hover:text-black active:scale-[0.98] transition-all disabled:opacity-50 disabled:scale-100 shadow-[0_0_30px_rgba(57,255,20,0.15)]"
                   style={{ fontFamily: SG, fontWeight: 900 }}
                 >
                   {loading ? 'Transmitting...' : 'Launch Strategy Session'}
