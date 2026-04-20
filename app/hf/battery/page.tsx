@@ -55,8 +55,8 @@ export default function BatteryPage() {
           <div className="hidden lg:flex items-center gap-2 px-3 py-1.5 bg-green-50 rounded-full text-[10px] font-bold text-green-700 uppercase tracking-widest">
             <ShieldCheck size={12} /> Interactions Disabled
           </div>
-          <Link 
-            href="/hf#ecosystem" 
+          <Link
+            href="/hf#ecosystem"
             className="flex items-center gap-2 px-5 py-2.5 bg-black text-white rounded-full text-xs font-bold hover:bg-gray-800 transition-all shadow-lg"
           >
             <ArrowLeft size={16} /> <span className="hidden sm:inline">Exit Preview</span>
@@ -67,7 +67,7 @@ export default function BatteryPage() {
       {/* Preview Container */}
       <div className="flex-grow p-0 md:p-4 bg-[#F5F2ED] relative overflow-hidden">
         <div className="w-full h-full bg-white rounded-none md:rounded-2xl overflow-hidden shadow-2xl border border-gray-100 flex flex-col">
-          <iframe 
+          <iframe
             ref={iframeRef}
             src="/demos/battery/index.html"
             className="w-full h-full border-none"
