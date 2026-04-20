@@ -1,0 +1,50 @@
+{
+  "project_id": "balancedbite",
+  "created_at": "2026-04-20",
+  "business": {
+    "name": "BalancedBite",
+    "type": "Nutrition",
+    "location": "London",
+    "target_audience": "B2C",
+    "email": "nothungry@balancedbit.co.uk",
+    "phone": "",
+    "social": {}
+  },
+  "website": {
+    "purpose": "booking",
+    "primary_action": "book",
+    "pages": [
+      "home"
+    ],
+    "tone_of_voice": "modern",
+    "brand_colors": [
+      "#4CAF7D",
+      "#FF9F6E",
+      "heading #1F2D2A",
+      "body #5F6F6B",
+      "borders #E3EEE7",
+      "bg #F6FBF7",
+      "surface #FFFFFF",
+      "#FF9F6E"
+    ],
+    "font_preference_headings": "PPlayfair Display",
+    "font_preference_body": "Lato",
+    "design_reference_notes": "healthy, holistic, refreshed"
+  },
+  "seo": {
+    "primary_keyword": "",
+    "secondary_keywords": [],
+    "meta_description_hint": ""
+  },
+  "content": {
+    "tagline": "Why not eat healty?",
+    "services": [],
+    "usp": "Tasty healthy foods",
+    "about_us_ticks": []
+  },
+  "contact": {
+    "form_endpoint": "",
+    "form_provider": "formspree",
+    "notify_email": "nothungry@balancedbit.co.uk"
+  }
+}

@@ -1,34 +1,12 @@
 "use client";
 
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import { createPortal } from 'react-dom';
 import Link from 'next/link';
 import { ArrowLeft, ShieldCheck } from 'lucide-react';
 
 export default function YogaPage() {
   const iframeRef = useRef<HTMLIFrameElement>(null);
-
-  useEffect(() => {
-    // We force the parent main container to lose its top padding and hide global layout parts
-    const main = document.querySelector('main');
-    const nav = document.querySelector('nav:not(.demo-toolbar)');
-    const footer = document.querySelector('footer');
-
-    if (main) {
-      main.classList.remove('pt-24', 'md:pt-28');
-      main.style.paddingTop = '0';
-    }
-    if (nav instanceof HTMLElement) nav.style.display = 'none';
-    if (footer instanceof HTMLElement) footer.style.display = 'none';
-
-    return () => {
-      if (main) {
-        main.classList.add('pt-24', 'md:pt-28');
-        main.style.paddingTop = '';
-      }
-      if (nav instanceof HTMLElement) nav.style.display = '';
-      if (footer instanceof HTMLElement) footer.style.display = '';
-    };
-  }, []);
 
   useEffect(() => {
     const iframe = iframeRef.current;
@@ -39,27 +17,17 @@ export default function YogaPage() {
           if (doc) {
             const style = doc.createElement('style');
             style.innerText = `
-              /* Nuclear Read-Only: Disable interaction on EVERYTHING */
               * { 
                 pointer-events: none !important; 
                 user-select: none !important;
                 -webkit-user-drag: none !important;
               }
-              
-              /* Except the root, to allow scrolling */
               html, body {
                 pointer-events: auto !important;
                 overflow-x: hidden !important;
               }
-
-              /* Hide scrollbars for a cleaner look if desired, but keep scrolling */
-              body::-webkit-scrollbar {
-                display: none;
-              }
-              body {
-                -ms-overflow-style: none;
-                scrollbar-width: none;
-              }
+              body::-webkit-scrollbar { display: none; }
+              body { -ms-overflow-style: none; scrollbar-width: none; }
             `;
             doc.head.appendChild(style);
           }
@@ -69,15 +37,18 @@ export default function YogaPage() {
       };
 
       iframe.addEventListener('load', lockInteractions);
-      // Fallback for fast loads
       lockInteractions();
-      
       return () => iframe.removeEventListener('load', lockInteractions);
     }
   }, []);
 
-  return (
-    <div className="fixed inset-0 z-[5000] bg-white flex flex-col overflow-hidden">
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
+
+  if (!mounted || typeof document === 'undefined') return null;
+
+  return createPortal(
+    <div className="fixed inset-0 z-[99999] bg-white flex flex-col overflow-hidden">
       {/* Agency Toolbar */}
       <nav className="demo-toolbar h-16 bg-white border-b border-gray-100 px-6 flex items-center justify-between z-[2000] shadow-sm">
         <div className="flex items-center gap-4">
@@ -115,6 +86,7 @@ export default function YogaPage() {
           />
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 }
