@@ -1,0 +1,10 @@
+{
+  "project_id": "youga",
+  "status": "new",
+  "current_agent": null,
+  "outputs": {},
+  "checkpoints": {},
+  "supervisor": {
+    "observations": []
+  }
+}

@@ -1,0 +1,54 @@
+{
+  "project_id": "battery",
+  "created_at": "2026-04-20",
+  "business": {
+    "name": "Battery",
+    "type": "Fitness",
+    "location": "London",
+    "target_audience": "B2C",
+    "email": "hello@ezwebone.co.uk",
+    "phone": "-",
+    "social": {}
+  },
+  "website": {
+    "purpose": "presentation",
+    "primary_action": "book",
+    "pages": [
+      "home only"
+    ],
+    "tone_of_voice": "bold",
+    "brand_colors": [
+      "#1a1a1a",
+      "#05f509",
+      "#edf505",
+      "#f6f7d7"
+    ],
+    "font_preference_headings": "Montserrat (ExtraBold/Black)",
+    "font_preference_body": "Inter",
+    "design_reference_notes": "energy, vibe, mtivation"
+  },
+  "seo": {
+    "primary_keyword": "Fitness",
+    "secondary_keywords": [],
+    "meta_description_hint": ""
+  },
+  "content": {
+    "tagline": "Work today, enjoy tomorro",
+    "services": [
+      "Online Classes",
+      "PT",
+      "Yog",
+      "Pilates",
+      "Nutrition"
+    ],
+    "usp": "",
+    "about_us_ticks": [
+      "strong Social proof please"
+    ]
+  },
+  "contact": {
+    "form_endpoint": "",
+    "form_provider": "none",
+    "notify_email": "hello@ezwebone.co.uk"
+  }
+}

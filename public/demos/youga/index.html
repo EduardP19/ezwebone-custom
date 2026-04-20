@@ -1,0 +1,1545 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>YouGa — Move Well. Feel Good. Live Fully.</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&family=Playfair+Display:ital@1&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --cream: #F7F3EE;
+    --ivory: #FFFDF9;
+    --sage: #7A9E8E;
+    --terracotta: #C88C6A;
+    --sand: #D8BFA9;
+    --body-text: #5B645F;
+    --border: #E6DED5;
+    --dark: #3A3F3C;
+    --hero-overlay: rgba(247,243,238,0.18);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background-color: var(--ivory);
+    color: var(--body-text);
+    overflow-x: hidden;
+  }
+
+  /* ─── NAV ─────────────────────────────────────────────── */
+  #nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    padding: 1.4rem 5%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    transition: background 0.45s ease, box-shadow 0.45s ease, padding 0.35s ease;
+  }
+
+  #nav.scrolled {
+    background: rgba(255,253,249,0.96);
+    backdrop-filter: blur(12px);
+    box-shadow: 0 1px 0 var(--border);
+    padding: 1rem 5%;
+  }
+
+  .nav-logo {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.85rem;
+    font-weight: 600;
+    color: var(--sage);
+    letter-spacing: 0.04em;
+    text-decoration: none;
+  }
+
+  .nav-logo span {
+    color: var(--terracotta);
+    font-style: italic;
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 2.2rem;
+    list-style: none;
+    align-items: center;
+  }
+
+  .nav-links a {
+    text-decoration: none;
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: var(--body-text);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    transition: color 0.25s;
+  }
+
+  .nav-links a:hover { color: var(--sage); }
+
+  .nav-cta {
+    background: var(--sage) !important;
+    color: var(--ivory) !important;
+    padding: 0.6rem 1.4rem !important;
+    border-radius: 50px !important;
+    letter-spacing: 0.06em !important;
+    transition: background 0.25s !important;
+  }
+
+  .nav-cta:hover { background: var(--terracotta) !important; }
+
+  .nav-hamburger {
+    display: none;
+    flex-direction: column;
+    gap: 5px;
+    cursor: pointer;
+    background: none;
+    border: none;
+    padding: 4px;
+  }
+
+  .nav-hamburger span {
+    display: block;
+    width: 24px;
+    height: 2px;
+    background: var(--body-text);
+    border-radius: 2px;
+    transition: all 0.3s;
+  }
+
+  .mobile-menu {
+    display: none;
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: var(--ivory);
+    z-index: 99;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2.5rem;
+  }
+
+  .mobile-menu.open { display: flex; }
+
+  .mobile-menu a {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2.2rem;
+    font-weight: 300;
+    color: var(--body-text);
+    text-decoration: none;
+    transition: color 0.25s;
+  }
+
+  .mobile-menu a:hover { color: var(--sage); }
+
+  .mobile-close {
+    position: absolute;
+    top: 1.8rem; right: 5%;
+    background: none;
+    border: none;
+    font-size: 1.8rem;
+    color: var(--body-text);
+    cursor: pointer;
+  }
+
+  /* ─── HERO ────────────────────────────────────────────── */
+  #hero {
+    min-height: 100vh;
+    position: relative;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    overflow: hidden;
+  }
+
+  .hero-left {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 10rem 5% 6rem 8%;
+    background: var(--cream);
+  }
+
+  .hero-eyebrow {
+    font-size: 0.75rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    color: var(--terracotta);
+    margin-bottom: 1.6rem;
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+  }
+
+  .hero-eyebrow::before {
+    content: '';
+    display: inline-block;
+    width: 30px;
+    height: 1px;
+    background: var(--terracotta);
+  }
+
+  .hero-headline {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(3.2rem, 6vw, 5.5rem);
+    font-weight: 300;
+    line-height: 1.08;
+    color: var(--dark);
+    margin-bottom: 0.4rem;
+  }
+
+  .hero-headline .italic-word {
+    font-style: italic;
+    color: var(--sage);
+  }
+
+  .hero-headline .accent-word {
+    color: var(--terracotta);
+  }
+
+  .hero-sub {
+    font-size: 1.05rem;
+    font-weight: 300;
+    line-height: 1.7;
+    color: var(--body-text);
+    max-width: 420px;
+    margin: 1.8rem 0 2.8rem;
+  }
+
+  .hero-actions {
+    display: flex;
+    gap: 1.2rem;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+
+  .btn-primary {
+    background: var(--sage);
+    color: var(--ivory);
+    padding: 0.9rem 2.2rem;
+    border-radius: 50px;
+    font-size: 0.88rem;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-decoration: none;
+    text-transform: uppercase;
+    transition: background 0.3s, transform 0.2s;
+    border: none;
+    cursor: pointer;
+  }
+
+  .btn-primary:hover {
+    background: var(--terracotta);
+    transform: translateY(-1px);
+  }
+
+  .btn-ghost {
+    background: transparent;
+    color: var(--body-text);
+    padding: 0.9rem 2.2rem;
+    border-radius: 50px;
+    font-size: 0.88rem;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-decoration: none;
+    text-transform: uppercase;
+    border: 1.5px solid var(--border);
+    transition: border-color 0.3s, color 0.3s;
+  }
+
+  .btn-ghost:hover {
+    border-color: var(--sage);
+    color: var(--sage);
+  }
+
+  .hero-scroll-hint {
+    position: absolute;
+    bottom: 2.5rem;
+    left: 8%;
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    font-size: 0.72rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--sand);
+  }
+
+  .scroll-line {
+    width: 1px;
+    height: 50px;
+    background: linear-gradient(to bottom, var(--sand), transparent);
+    animation: scrollPulse 2.5s ease infinite;
+  }
+
+  @keyframes scrollPulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
+  }
+
+  .hero-right {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero-right img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center top;
+    transform: scale(1.04);
+    transition: transform 8s ease;
+  }
+
+  #hero:hover .hero-right img { transform: scale(1); }
+
+  .hero-right-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to right, var(--cream) 0%, transparent 18%);
+    z-index: 1;
+  }
+
+  .hero-floating-pill {
+    position: absolute;
+    bottom: 8%;
+    right: 8%;
+    z-index: 3;
+    background: rgba(255,253,249,0.92);
+    backdrop-filter: blur(10px);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 1.2rem 1.6rem;
+    text-align: center;
+    animation: floatPill 4s ease-in-out infinite;
+  }
+
+  @keyframes floatPill {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-8px); }
+  }
+
+  .pill-number {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2.2rem;
+    font-weight: 300;
+    color: var(--sage);
+    line-height: 1;
+  }
+
+  .pill-label {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--body-text);
+    margin-top: 0.3rem;
+  }
+
+  /* ─── MARQUEE ─────────────────────────────────────────── */
+  .marquee-strip {
+    background: var(--sage);
+    overflow: hidden;
+    padding: 0.9rem 0;
+    position: relative;
+  }
+
+  .marquee-track {
+    display: flex;
+    gap: 0;
+    animation: marqueeScroll 28s linear infinite;
+    white-space: nowrap;
+  }
+
+  .marquee-track:hover { animation-play-state: paused; }
+
+  @keyframes marqueeScroll {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+
+  .marquee-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 1.4rem;
+    padding: 0 2.5rem;
+    font-size: 0.8rem;
+    font-weight: 500;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: rgba(255,253,249,0.88);
+  }
+
+  .marquee-dot {
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: var(--terracotta);
+    flex-shrink: 0;
+  }
+
+  /* ─── PHILOSOPHY ──────────────────────────────────────── */
+  #philosophy {
+    background: var(--ivory);
+    padding: 7rem 8%;
+    display: grid;
+    grid-template-columns: 1fr 1.2fr;
+    gap: 6rem;
+    align-items: center;
+  }
+
+  .section-label {
+    font-size: 0.72rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    color: var(--terracotta);
+    margin-bottom: 1.4rem;
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+  }
+
+  .section-label::after {
+    content: '';
+    flex: 1;
+    max-width: 40px;
+    height: 1px;
+    background: var(--terracotta);
+  }
+
+  .section-heading {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(2.2rem, 4vw, 3.6rem);
+    font-weight: 300;
+    line-height: 1.15;
+    color: var(--dark);
+  }
+
+  .section-heading em {
+    font-style: italic;
+    color: var(--sage);
+  }
+
+  .phil-text {
+    font-size: 1rem;
+    line-height: 1.8;
+    color: var(--body-text);
+    margin-top: 1.6rem;
+    font-weight: 300;
+  }
+
+  .phil-values {
+    display: flex;
+    flex-direction: column;
+    gap: 1.4rem;
+    margin-top: 2.8rem;
+  }
+
+  .phil-value {
+    display: flex;
+    align-items: flex-start;
+    gap: 1.2rem;
+    padding-bottom: 1.4rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .phil-value:last-child { border-bottom: none; }
+
+  .phil-value-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    background: var(--cream);
+    border: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    font-size: 1.1rem;
+  }
+
+  .phil-value-text h4 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.15rem;
+    font-weight: 600;
+    color: var(--dark);
+    margin-bottom: 0.3rem;
+  }
+
+  .phil-value-text p {
+    font-size: 0.88rem;
+    line-height: 1.6;
+    color: var(--body-text);
+    font-weight: 300;
+  }
+
+  .phil-image-wrap {
+    position: relative;
+  }
+
+  .phil-image-main {
+    width: 100%;
+    height: 560px;
+    object-fit: cover;
+    border-radius: 24px 24px 120px 24px;
+  }
+
+  .phil-image-accent {
+    position: absolute;
+    bottom: -2.5rem;
+    left: -2.5rem;
+    width: 55%;
+    height: 220px;
+    object-fit: cover;
+    border-radius: 20px;
+    border: 5px solid var(--ivory);
+    box-shadow: 0 12px 40px rgba(0,0,0,0.08);
+  }
+
+  .phil-badge {
+    position: absolute;
+    top: 2rem;
+    right: -1.5rem;
+    width: 100px;
+    height: 100px;
+    background: var(--terracotta);
+    border-radius: 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: var(--ivory);
+    box-shadow: 0 8px 24px rgba(200,140,106,0.35);
+  }
+
+  .phil-badge-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.8rem;
+    font-weight: 300;
+    line-height: 1;
+  }
+
+  .phil-badge-txt {
+    font-size: 0.6rem;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    opacity: 0.85;
+    text-align: center;
+    line-height: 1.3;
+  }
+
+  /* ─── OFFERINGS ───────────────────────────────────────── */
+  #offerings {
+    background: var(--cream);
+    padding: 7rem 8%;
+  }
+
+  .offerings-header {
+    text-align: center;
+    margin-bottom: 4rem;
+    max-width: 560px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .offerings-header .section-label {
+    justify-content: center;
+  }
+
+  .offerings-header .section-label::after { display: none; }
+  .offerings-header .section-label::before {
+    content: '';
+    flex: 1;
+    max-width: 40px;
+    height: 1px;
+    background: var(--terracotta);
+  }
+
+  .offerings-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+  }
+
+  .offering-card {
+    background: var(--ivory);
+    border-radius: 20px;
+    overflow: hidden;
+    border: 1px solid var(--border);
+    transition: transform 0.35s ease, box-shadow 0.35s ease;
+    cursor: pointer;
+  }
+
+  .offering-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 20px 50px rgba(90,100,95,0.1);
+  }
+
+  .offering-card.featured {
+    grid-row: span 2;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .offering-img {
+    width: 100%;
+    height: 220px;
+    object-fit: cover;
+  }
+
+  .offering-card.featured .offering-img { height: 320px; }
+
+  .offering-body {
+    padding: 1.8rem;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .offering-tag {
+    display: inline-block;
+    font-size: 0.65rem;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--terracotta);
+    background: rgba(200,140,106,0.1);
+    border-radius: 50px;
+    padding: 0.25rem 0.8rem;
+    margin-bottom: 0.9rem;
+  }
+
+  .offering-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.5rem;
+    font-weight: 400;
+    color: var(--dark);
+    margin-bottom: 0.6rem;
+    line-height: 1.2;
+  }
+
+  .offering-desc {
+    font-size: 0.88rem;
+    line-height: 1.7;
+    color: var(--body-text);
+    font-weight: 300;
+    flex: 1;
+  }
+
+  .offering-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 1.4rem;
+    font-size: 0.8rem;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--sage);
+    text-decoration: none;
+    transition: gap 0.25s;
+  }
+
+  .offering-link:hover { gap: 0.9rem; }
+
+  .offering-arrow {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: var(--sage);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.7rem;
+  }
+
+  /* ─── EXPERIENCE ──────────────────────────────────────── */
+  #experience {
+    background: var(--dark);
+    padding: 7rem 8%;
+    position: relative;
+    overflow: hidden;
+  }
+
+  #experience::before {
+    content: 'YouGa';
+    position: absolute;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 22vw;
+    font-weight: 600;
+    color: rgba(255,255,255,0.025);
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+    white-space: nowrap;
+    letter-spacing: -0.02em;
+  }
+
+  .experience-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: 4rem;
+    gap: 2rem;
+    flex-wrap: wrap;
+  }
+
+  .experience-heading {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(2.4rem, 5vw, 4rem);
+    font-weight: 300;
+    color: var(--cream);
+    line-height: 1.1;
+    max-width: 500px;
+  }
+
+  .experience-heading em {
+    font-style: italic;
+    color: var(--sand);
+  }
+
+  .experience-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.5rem;
+  }
+
+  .exp-card {
+    background: rgba(255,253,249,0.04);
+    border: 1px solid rgba(255,253,249,0.08);
+    border-radius: 18px;
+    padding: 2rem 1.6rem;
+    transition: background 0.3s, border-color 0.3s;
+  }
+
+  .exp-card:hover {
+    background: rgba(122,158,142,0.1);
+    border-color: rgba(122,158,142,0.25);
+  }
+
+  .exp-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 3rem;
+    font-weight: 300;
+    color: var(--sage);
+    line-height: 1;
+    margin-bottom: 0.5rem;
+  }
+
+  .exp-title {
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: var(--cream);
+    margin-bottom: 0.7rem;
+    letter-spacing: 0.02em;
+  }
+
+  .exp-desc {
+    font-size: 0.84rem;
+    line-height: 1.65;
+    color: rgba(247,243,238,0.55);
+    font-weight: 300;
+  }
+
+  /* ─── TESTIMONIALS ────────────────────────────────────── */
+  #testimonials {
+    background: var(--ivory);
+    padding: 7rem 8%;
+  }
+
+  .testimonials-header {
+    text-align: center;
+    margin-bottom: 4rem;
+  }
+
+  .testimonials-grid {
+    display: grid;
+    grid-template-columns: 1.3fr 1fr 1fr;
+    gap: 1.5rem;
+    align-items: start;
+  }
+
+  .testi-card {
+    background: var(--cream);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 2.2rem;
+    position: relative;
+    transition: transform 0.3s;
+  }
+
+  .testi-card:hover { transform: translateY(-4px); }
+
+  .testi-card.large { padding: 2.8rem; }
+
+  .testi-quote-mark {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 5rem;
+    font-weight: 300;
+    color: var(--sand);
+    line-height: 0.6;
+    margin-bottom: 1.2rem;
+    display: block;
+  }
+
+  .testi-text {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.18rem;
+    font-weight: 300;
+    font-style: italic;
+    line-height: 1.7;
+    color: var(--dark);
+    margin-bottom: 1.6rem;
+  }
+
+  .testi-card.large .testi-text { font-size: 1.35rem; }
+
+  .testi-author {
+    display: flex;
+    align-items: center;
+    gap: 0.9rem;
+  }
+
+  .testi-avatar {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+
+  .testi-name {
+    font-size: 0.88rem;
+    font-weight: 500;
+    color: var(--dark);
+  }
+
+  .testi-role {
+    font-size: 0.75rem;
+    color: var(--sand);
+    letter-spacing: 0.04em;
+  }
+
+  .testi-stars {
+    color: var(--terracotta);
+    font-size: 0.8rem;
+    margin-bottom: 1rem;
+    letter-spacing: 0.1em;
+  }
+
+  /* ─── CTA BAND ────────────────────────────────────────── */
+  #cta-band {
+    background: var(--sage);
+    padding: 5.5rem 8%;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 3rem;
+    align-items: center;
+  }
+
+  .cta-band-headline {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(2rem, 4.5vw, 3.5rem);
+    font-weight: 300;
+    color: var(--ivory);
+    line-height: 1.15;
+  }
+
+  .cta-band-headline em {
+    font-style: italic;
+    color: var(--sand);
+  }
+
+  .cta-band-sub {
+    font-size: 1rem;
+    color: rgba(255,253,249,0.75);
+    margin-top: 0.8rem;
+    font-weight: 300;
+    line-height: 1.6;
+  }
+
+  .cta-band-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    align-items: flex-end;
+  }
+
+  .btn-light {
+    background: var(--ivory);
+    color: var(--sage);
+    padding: 1rem 2.4rem;
+    border-radius: 50px;
+    font-size: 0.88rem;
+    font-weight: 500;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+    transition: background 0.3s, transform 0.2s;
+    white-space: nowrap;
+  }
+
+  .btn-light:hover {
+    background: var(--cream);
+    transform: translateY(-1px);
+  }
+
+  .cta-contact {
+    font-size: 0.8rem;
+    color: rgba(255,253,249,0.6);
+    text-decoration: none;
+    letter-spacing: 0.04em;
+    transition: color 0.25s;
+  }
+
+  .cta-contact:hover { color: var(--ivory); }
+
+  /* ─── FOOTER ──────────────────────────────────────────── */
+  footer {
+    background: var(--dark);
+    padding: 5rem 8% 3rem;
+  }
+
+  .footer-top {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr 1fr 1fr;
+    gap: 3rem;
+    padding-bottom: 3.5rem;
+    border-bottom: 1px solid rgba(255,253,249,0.08);
+    margin-bottom: 2.5rem;
+  }
+
+  .footer-brand-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2rem;
+    font-weight: 600;
+    color: var(--cream);
+    text-decoration: none;
+    letter-spacing: 0.04em;
+    display: inline-block;
+    margin-bottom: 1.2rem;
+  }
+
+  .footer-brand-name span {
+    color: var(--terracotta);
+    font-style: italic;
+  }
+
+  .footer-brand-desc {
+    font-size: 0.88rem;
+    line-height: 1.7;
+    color: rgba(247,243,238,0.45);
+    font-weight: 300;
+    margin-bottom: 1.8rem;
+  }
+
+  .footer-email {
+    color: var(--sand);
+    font-size: 0.85rem;
+    text-decoration: none;
+    transition: color 0.25s;
+    letter-spacing: 0.03em;
+  }
+
+  .footer-email:hover { color: var(--terracotta); }
+
+  .footer-col h5 {
+    font-size: 0.72rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    color: rgba(247,243,238,0.35);
+    margin-bottom: 1.4rem;
+  }
+
+  .footer-col ul { list-style: none; }
+
+  .footer-col ul li { margin-bottom: 0.8rem; }
+
+  .footer-col ul a {
+    text-decoration: none;
+    font-size: 0.88rem;
+    color: rgba(247,243,238,0.55);
+    font-weight: 300;
+    transition: color 0.25s;
+  }
+
+  .footer-col ul a:hover { color: var(--sand); }
+
+  .footer-bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+
+  .footer-copy {
+    font-size: 0.78rem;
+    color: rgba(247,243,238,0.3);
+    font-weight: 300;
+  }
+
+  .footer-tagline {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 0.9rem;
+    font-style: italic;
+    color: rgba(247,243,238,0.35);
+  }
+
+  /* ─── SCROLL ANIMATIONS ───────────────────────────────── */
+  .fade-up {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+
+  .fade-up.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .fade-up-delay-1 { transition-delay: 0.1s; }
+  .fade-up-delay-2 { transition-delay: 0.2s; }
+  .fade-up-delay-3 { transition-delay: 0.3s; }
+  .fade-up-delay-4 { transition-delay: 0.4s; }
+
+  /* ─── RESPONSIVE 900px ────────────────────────────────── */
+  @media (max-width: 900px) {
+    #hero {
+      grid-template-columns: 1fr;
+      min-height: auto;
+    }
+
+    .hero-left {
+      padding: 8rem 6% 4rem;
+      order: 1;
+    }
+
+    .hero-right {
+      height: 55vw;
+      min-height: 320px;
+      order: 0;
+    }
+
+    .hero-right-overlay {
+      background: linear-gradient(to bottom, transparent 60%, var(--cream) 100%);
+    }
+
+    .hero-floating-pill { display: none; }
+
+    #philosophy {
+      grid-template-columns: 1fr;
+      gap: 3.5rem;
+      padding: 5rem 6%;
+    }
+
+    .phil-image-wrap {
+      order: -1;
+    }
+
+    .phil-image-main { height: 380px; }
+
+    .phil-image-accent {
+      left: -1.5rem;
+      bottom: -1.5rem;
+      height: 160px;
+    }
+
+    .phil-badge {
+      right: -1rem;
+      width: 80px;
+      height: 80px;
+    }
+
+    .phil-badge-num { font-size: 1.4rem; }
+
+    .offerings-grid {
+      grid-template-columns: 1fr 1fr;
+    }
+
+    .offering-card.featured { grid-row: auto; }
+
+    .experience-grid { grid-template-columns: repeat(2, 1fr); }
+
+    .testimonials-grid { grid-template-columns: 1fr; }
+
+    .footer-top { grid-template-columns: 1fr 1fr; }
+
+    #cta-band {
+      grid-template-columns: 1fr;
+      gap: 2rem;
+    }
+
+    .cta-band-actions { align-items: flex-start; }
+
+    .nav-links { display: none; }
+    .nav-hamburger { display: flex; }
+  }
+
+  /* ─── RESPONSIVE 600px ────────────────────────────────── */
+  @media (max-width: 600px) {
+    .hero-left { padding: 7rem 5% 3.5rem; }
+
+    #philosophy,
+    #offerings,
+    #experience,
+    #testimonials,
+    footer { padding-left: 5%; padding-right: 5%; }
+
+    #cta-band { padding: 4rem 5%; }
+
+    .offerings-grid { grid-template-columns: 1fr; }
+
+    .experience-grid { grid-template-columns: 1fr; }
+
+    .footer-top { grid-template-columns: 1fr; gap: 2rem; }
+
+    .footer-bottom { flex-direction: column; text-align: center; gap: 0.6rem; }
+
+    .hero-actions { flex-direction: column; align-items: flex-start; }
+
+    .btn-primary, .btn-ghost { width: 100%; text-align: center; }
+  }
+</style>
+</head>
+
+<body>
+
+<!-- ─── MOBILE MENU ─────────────────────────────────────────── -->
+<div class="mobile-menu" id="mobileMenu" role="dialog" aria-label="Navigation menu">
+  <button class="mobile-close" id="menuClose" aria-label="Close menu">✕</button>
+  <a href="#hero">Home</a>
+  <a href="#philosophy">Our Way</a>
+  <a href="#offerings">Classes</a>
+  <a href="#experience">Why YouGa</a>
+  <a href="#testimonials">Stories</a>
+  <a href="#cta-band" style="color: var(--terracotta);">Get Started</a>
+</div>
+
+<!-- ─── NAV ────────────────────────────────────────────────── -->
+<nav id="nav" role="navigation" aria-label="Main navigation">
+  <a href="#hero" class="nav-logo">You<span>Ga</span></a>
+  <ul class="nav-links">
+    <li><a href="#philosophy">Our Way</a></li>
+    <li><a href="#offerings">Classes</a></li>
+    <li><a href="#experience">Why YouGa</a></li>
+    <li><a href="#testimonials">Stories</a></li>
+    <li><a href="#cta-band" class="nav-cta">Get Started</a></li>
+  </ul>
+  <button class="nav-hamburger" id="menuOpen" aria-label="Open navigation menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- ─── HERO ────────────────────────────────────────────────── -->
+<section id="hero" aria-label="Hero">
+  <div class="hero-left">
+    <p class="hero-eyebrow">Los Angeles, California</p>
+    <h1 class="hero-headline">
+      Move <span class="italic-word">freely.</span><br>
+      Breathe <span class="accent-word">deeply.</span><br>
+      Live fully.
+    </h1>
+    <p class="hero-sub">YouGa is your sanctuary for yoga, fitness, and mindful wellbeing — where every class, every breath, and every step forward is designed just for you.</p>
+    <div class="hero-actions">
+      <a href="#offerings" class="btn-primary">Explore Classes</a>
+      <a href="#philosophy" class="btn-ghost">Our Philosophy</a>
+    </div>
+    <div class="hero-scroll-hint" aria-hidden="true">
+      <div class="scroll-line"></div>
+      Scroll to discover
+    </div>
+  </div>
+  <div class="hero-right">
+    <img
+      src="https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=1200&q=80"
+      alt="Woman in peaceful yoga pose outdoors in morning light"
+      loading="eager"
+    >
+    <div class="hero-right-overlay" aria-hidden="true"></div>
+    <div class="hero-floating-pill" aria-label="500 community members">
+      <div class="pill-number">500+</div>
+      <div class="pill-label">Happy members</div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── MARQUEE ─────────────────────────────────────────────── -->
+<div class="marquee-strip" aria-hidden="true">
+  <div class="marquee-track">
+    <span class="marquee-item"><span class="marquee-dot"></span>Hatha Yoga</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>Vinyasa Flow</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>Yin &amp; Restore</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>Breathwork</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>Strength &amp; Conditioning</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>Mindful Meditation</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>Prenatal Yoga</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>Yoga Nidra</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>Hatha Yoga</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>Vinyasa Flow</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>Yin &amp; Restore</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>Breathwork</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>Strength &amp; Conditioning</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>Mindful Meditation</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>Prenatal Yoga</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>Yoga Nidra</span>
+  </div>
+</div>
+
+<!-- ─── PHILOSOPHY ──────────────────────────────────────────── -->
+<section id="philosophy" aria-labelledby="phil-heading">
+  <div class="fade-up">
+    <p class="section-label">Our Philosophy</p>
+    <h2 class="section-heading" id="phil-heading">
+      Wellness that <em>feels like</em><br>coming home
+    </h2>
+    <p class="phil-text">At YouGa, we believe movement is medicine and stillness is power. We've built a warm, judgment-free space here in Los Angeles where every body is welcome — from your very first downward dog to your thousandth sunrise flow.</p>
+
+    <div class="phil-values">
+      <div class="phil-value fade-up fade-up-delay-1">
+        <div class="phil-value-icon" aria-hidden="true">🌿</div>
+        <div class="phil-value-text">
+          <h4>Inclusive by Design</h4>
+          <p>All levels, all bodies, all backgrounds. YouGa is a community built on belonging — not performance.</p>
+        </div>
+      </div>
+      <div class="phil-value fade-up fade-up-delay-2">
+        <div class="phil-value-icon" aria-hidden="true">✨</div>
+        <div class="phil-value-text">
+          <h4>Intentional Practice</h4>
+          <p>Every class is thoughtfully sequenced to honour the full spectrum of mind, body, and breath.</p>
+        </div>
+      </div>
+      <div class="phil-value fade-up fade-up-delay-3">
+        <div class="phil-value-icon" aria-hidden="true">🌅</div>
+        <div class="phil-value-text">
+          <h4>Real, Lasting Wellbeing</h4>
+          <p>We're not chasing trends. We teach sustainable habits that nourish your health for the long run.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="phil-image-wrap fade-up fade-up-delay-1">
+    <img
+      class="phil-image-main"
+      src="https://images.unsplash.com/photo-1506126613408-eca07ce68773?w=1200&q=80"
+      alt="Yoga class in a serene, naturally lit studio"
+    >
+    <img
+      class="phil-image-accent"
+      src="https://images.unsplash.com/photo-1599901860904-17e6ed7083a0?w=800&q=80"
+      alt="Close-up of hands in meditation mudra"
+    >
+    <div class="phil-badge" aria-label="5 years serving LA">
+      <span class="phil-badge-num">5+</span>
+      <span class="phil-badge-txt">Years serving LA</span>
+    </div>
+  </div>
+</section>
+
+<!-- ─── OFFERINGS ───────────────────────────────────────────── -->
+<section id="offerings" aria-labelledby="offerings-heading">
+  <div class="offerings-header fade-up">
+    <p class="section-label">What We Offer</p>
+    <h2 class="section-heading" id="offerings-heading">A class for <em>every you</em></h2>
+    <p style="font-size:1rem; line-height:1.7; color:var(--body-text); font-weight:300; margin-top:1rem;">Whether you're unwinding after a long week or building genuine strength, we have a practice ready for you.</p>
+  </div>
+
+  <div class="offerings-grid">
+    <div class="offering-card featured fade-up">
+      <img
+        class="offering-img"
+        src="https://images.unsplash.com/photo-1588286840104-8957b019727f?w=900&q=80"
+        alt="Woman flowing through vinyasa yoga sequence in warm studio light"
+      >
+      <div class="offering-body">
+        <span class="offering-tag">Most popular</span>
+        <h3 class="offering-name">Vinyasa Flow</h3>
+        <p class="offering-desc">A dynamic, breath-led practice that links movement and mindfulness. Expect creative sequences, energising music, and a warm glow when you leave.</p>
+        <a href="#cta-band" class="offering-link">Explore class <span class="offering-arrow">→</span></a>
+      </div>
+    </div>
+
+    <div class="offering-card fade-up fade-up-delay-1">
+      <img
+        class="offering-img"
+        src="https://images.unsplash.com/photo-1575052814086-f385e2e2ad1b?w=900&q=80"
+        alt="Gentle yin yoga pose on mat with soft candlelight"
+      >
+      <div class="offering-body">
+        <span class="offering-tag">Wind Down</span>
+        <h3 class="offering-name">Yin &amp; Restore</h3>
+        <p class="offering-desc">Slow, supported holds that melt tension and release deep fascia. Perfect for recovery, stress relief, and anyone who needs to just breathe.</p>
+        <a href="#cta-band" class="offering-link">Explore class <span class="offering-arrow">→</span></a>
+      </div>
+    </div>
+
+    <div class="offering-card fade-up fade-up-delay-2">
+      <img
+        class="offering-img"
+        src="https://images.unsplash.com/photo-1518611012118-696072aa579a?w=900&q=80"
+        alt="Fitness class in bright airy studio with weights"
+      >
+      <div class="offering-body">
+        <span class="offering-tag">Strength</span>
+        <h3 class="offering-name">Yoga Sculpt</h3>
+        <p class="offering-desc">Yoga meets functional fitness. Build real-world strength while staying grounded in breath and body awareness. No ego, just effort.</p>
+        <a href="#cta-band" class="offering-link">Explore class <span class="offering-arrow">→</span></a>
+      </div>
+    </div>
+
+    <div class="offering-card fade-up fade-up-delay-3">
+      <img
+        class="offering-img"
+        src="https://images.unsplash.com/photo-1602192509154-0b900ee1f851?w=900&q=80"
+        alt="Person meditating peacefully at golden hour"
+      >
+      <div class="offering-body">
+        <span class="offering-tag">Mind</span>
+        <h3 class="offering-name">Meditation &amp; Breathwork</h3>
+        <p class="offering-desc">Guided sessions that quieten the mental noise and rebuild your relationship with the present moment. Come as you are.</p>
+        <a href="#cta-band" class="offering-link">Explore class <span class="offering-arrow">→</span></a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── EXPERIENCE ──────────────────────────────────────────── -->
+<section id="experience" aria-labelledby="exp-heading">
+  <div class="experience-top">
+    <div>
+      <p class="section-label" style="color:var(--sand);">Why YouGa</p>
+      <h2 class="experience-heading" id="exp-heading">
+        The YouGa<br>
+        <em>difference</em>
+      </h2>
+    </div>
+    <a href="#cta-band" class="btn-primary" style="flex-shrink:0;">Start Your Journey</a>
+  </div>
+
+  <div class="experience-grid">
+    <div class="exp-card fade-up">
+      <div class="exp-num">15+</div>
+      <h3 class="exp-title">Expert Instructors</h3>
+      <p class="exp-desc">Every teacher at YouGa is deeply trained, endlessly curious, and genuinely excited to guide your practice forward.</p>
+    </div>
+    <div class="exp-card fade-up fade-up-delay-1">
+      <div class="exp-num">30+</div>
+      <h3 class="exp-title">Weekly Classes</h3>
+      <p class="exp-desc">Morning, midday, evening — our schedule bends to your life so your practice never has to pause.</p>
+    </div>
+    <div class="exp-card fade-up fade-up-delay-2">
+      <div class="exp-num">1:1</div>
+      <h3 class="exp-title">Personal Attention</h3>
+      <p class="exp-desc">Small class sizes mean your teacher actually sees you — your alignment, your progress, your potential.</p>
+    </div>
+    <div class="exp-card fade-up fade-up-delay-3">
+      <div class="exp-num">∞</div>
+      <h3 class="exp-title">On-Demand Library</h3>
+      <p class="exp-desc">Can't make it in? Stream from our growing library of recorded classes — anytime, anywhere, always yours.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ─── TESTIMONIALS ────────────────────────────────────────── -->
+<section id="testimonials" aria-labelledby="testi-heading">
+  <div class="testimonials-header fade-up">
+    <p class="section-label" style="justify-content:center;">Community Stories</p>
+    <h2 class="section-heading" id="testi-heading">Words from our <em>people</em></h2>
+  </div>
+
+  <div class="testimonials-grid">
+    <div class="testi-card large fade-up">
+      <span class="testi-quote-mark" aria-hidden="true">"</span>
+      <div class="testi-stars" aria-label="5 out of 5 stars">★★★★★</div>
+      <p class="testi-text">I walked in as a complete beginner, terrified I'd be the least flexible person in the room. Three months later I'm attending four classes a week and I genuinely look forward to every single one. YouGa changed my relationship with my body.</p>
+      <div class="testi-author">
+        <img
+          class="testi-avatar"
+          src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=200&q=80"
+          alt="Portrait of Maya, YouGa member"
+        >
+        <div>
+          <div class="testi-name">Maya Reeves</div>
+          <div class="testi-role">Member since 2022 · Silver Lake</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="testi-card fade-up fade-up-delay-1">
+      <span class="testi-quote-mark" aria-hidden="true">"</span>
+      <div class="testi-stars" aria-label="5 out of 5 stars">★★★★★</div>
+      <p class="testi-text">The Yin classes here are a genuine antidote to LA life. Quiet, warm, and completely non-judgmental. I leave feeling 10 years lighter.</p>
+      <div class="testi-author">
+        <img
+          class="testi-avatar"
+          src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=200&q=80"
+          alt="Portrait of Daniel, YouGa member"
+        >
+        <div>
+          <div class="testi-name">Daniel Park</div>
+          <div class="testi-role">Member since 2023 · Echo Park</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="testi-card fade-up fade-up-delay-2">
+      <span class="testi-quote-mark" aria-hidden="true">"</span>
+      <div class="testi-stars" aria-label="5 out of 5 stars">★★★★★</div>
+      <p class="testi-text">Finally a studio that actually sees you. The instructors remember your name, your injuries, your goals. That's rare — and it matters.</p>
+      <div class="testi-author">
+        <img
+          class="testi-avatar"
+          src="https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=200&q=80"
+          alt="Portrait of Sofia, YouGa member"
+        >
+        <div>
+          <div class="testi-name">Sofia Morales</div>
+          <div class="testi-role">Member since 2021 · Los Feliz</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── CTA BAND ─────────────────────────────────────────────── -->
+<section id="cta-band" aria-label="Call to action">
+  <div>
+    <h2 class="cta-band-headline">Your first class is <em>on us.</em><br>Come see what all the warmth is about.</h2>
+    <p class="cta-band-sub">No commitment. No pressure. Just a really good class in a really welcoming space — right here in Los Angeles.</p>
+  </div>
+  <div class="cta-band-actions">
+    <a href="mailto:hello@youga.com" class="btn-light">Claim Free Class</a>
+    <a href="mailto:hello@youga.com" class="cta-contact">Or email us at hello@youga.com →</a>
+  </div>
+</section>
+
+<!-- ─── FOOTER ───────────────────────────────────────────────── -->
+<footer>
+  <div class="footer-top">
+    <div>
+      <a href="#hero" class="footer-brand-name">You<span>Ga</span></a>
+      <p class="footer-brand-desc">A welcoming home for yoga, fitness, and genuine wellbeing in the heart of Los Angeles, California. Move well. Feel good. Live fully.</p>
+      <a href="mailto:hello@youga.com" class="footer-email">hello@youga.com</a>
+    </div>
+
+    <div class="footer-col">
+      <h5>Navigate</h5>
+      <ul>
+        <li><a href="#hero">Home</a></li>
+        <li><a href="#philosophy">Our Philosophy</a></li>
+        <li><a href="#offerings">Classes</a></li>
+        <li><a href="#experience">Why YouGa</a></li>
+        <li><a href="#testimonials">Community</a></li>
+      </ul>
+    </div>
+
+    <div class="footer-col">
+      <h5>Classes</h5>
+      <ul>
+        <li><a href="#offerings">Vinyasa Flow</a></li>
+        <li><a href="#offerings">Yin &amp; Restore</a></li>
+        <li><a href="#offerings">Yoga Sculpt</a></li>
+        <li><a href="#offerings">Meditation</a></li>
+        <li><a href="#offerings">Breathwork</a></li>
+      </ul>
+    </div>
+
+    <div class="footer-col">
+      <h5>Connect</h5>
+      <ul>
+        <li><a href="mailto:hello@youga.com">Email Us</a></li>
+        <li><a href="#cta-band">Free First Class</a></li>
+        <li><a href="#cta-band">Private Sessions</a></li>
+        <li><a href="#cta-band">Corporate Wellness</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="footer-bottom">
+    <p class="footer-copy">© 2024 YouGa, Los Angeles, California. All rights reserved.</p>
+    <p class="footer-tagline">Move well. Feel good. Live fully.</p>
+  </div>
+</footer>
+
+<!-- ─── JAVASCRIPT ────────────────────────────────────────────── -->
+<script>
+  // Nav scroll behaviour
+  const nav = document.getElementById('nav');
+  window.addEventListener('scroll', () => {
+    if (window.scrollY > 60) {
+      nav.classList.add('scrolled');
+    } else {
+      nav.classList.remove('scrolled');
+    }
+  });
+
+  // Mobile menu
+  const menuOpen = document.getElementById('menuOpen');
+  const menuClose = document.getElementById('menuClose');
+  const mobileMenu = document.getElementById('mobileMenu');
+
+  menuOpen.addEventListener('click', () => {
+    mobileMenu.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  });
+
+  menuClose.addEventListener('click', () => {
+    mobileMenu.classList.remove('open');
+    document.body.style.overflow = '';
+  });
+
+  mobileMenu.querySelectorAll('a').forEach(link => {
+    link.addEventListener('click', () => {
+      mobileMenu.classList.remove('open');
+      document.body.style.overflow = '';
+    });
+  });
+
+  // Scroll-triggered fade-up animations
+  const fadeEls = document.querySelectorAll('.fade-up');
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, {
+    threshold: 0.12,
+    rootMargin: '0px 0px -40px 0px'
+  });
+
+  fadeEls.forEach(el => observer.observe(el));
+
+  // Smooth anchor links
+  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function(e) {
+      const target = document.querySelector(this.getAttribute('href'));
+      if (target) {
+        e.preventDefault();
+        const offset = 80;
+        const top = target.getBoundingClientRect().top + window.pageYOffset - offset;
+        window.scrollTo({ top, behavior: 'smooth' });
+      }
+    });
+  });
+</script>
+
+</body>
+</html>

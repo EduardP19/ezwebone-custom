@@ -865,24 +865,27 @@ function Projects() {
       title: 'High-Performance Gyms',
       desc: 'Digital engines for strength communities. We build high-conversion funnels that turn local residents into dedicated lifters.',
       image: 'https://images.unsplash.com/photo-1540497077202-7c8a3999166f?q=80&w=1200&auto=format&fit=crop',
-      tag: 'Strength'
+      tag: 'Strength',
+      href: '/hf/battery'
     },
     {
       title: 'Wellness & Mindfulness',
       desc: 'Serene, beautiful platforms for yoga studios and mindfulness practitioners. Designed to calm the mind and fill the mat.',
       image: 'https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?q=80&w=1200&auto=format&fit=crop',
-      tag: 'Balance'
+      tag: 'Balance',
+      href: '/hf/youga'
     },
     {
       title: 'Nutrition & Dietetics',
       desc: 'Precision systems for clinical experts. We automate bookings and consultations so you can focus on health outcomes.',
       image: 'https://images.unsplash.com/photo-1490645935967-10de6ba17061?q=80&w=1200&auto=format&fit=crop',
-      tag: 'Fuel'
+      tag: 'Fuel',
+      href: '#'
     }
   ];
 
   return (
-    <section id="ecosystem" ref={ref} className="py-24 px-6 bg-[#F5F2ED]">
+    <section id="ecosystem" ref={ref} className="py-24 md:py-32 px-6 bg-[#F5F2ED] overflow-hidden">
       <div className="max-w-6xl mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
@@ -907,14 +910,19 @@ function Projects() {
           </p>
         </motion.div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        {/* Mobile Slider / Desktop Grid */}
+        <div 
+          className="flex md:grid md:grid-cols-3 gap-6 md:gap-8 overflow-x-auto md:overflow-x-visible pb-8 md:pb-0 snap-x snap-mandatory hide-scrollbar"
+          style={{ width: 'calc(100% + 3rem)', margin: '0 -1.5rem', padding: '0 1.5rem' }}
+        >
           {ecosystems.map((item, i) => (
-            <motion.div
+            <motion.a
               key={i}
+              href={item.href}
               initial={{ opacity: 0, y: 30 }}
               animate={inView ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.5, delay: i * 0.15 }}
-              className="group relative rounded-3xl overflow-hidden bg-white shadow-sm hover:shadow-xl transition-all duration-500 flex flex-col"
+              className="group relative rounded-3xl overflow-hidden bg-white shadow-sm hover:shadow-xl transition-all duration-500 flex flex-col min-w-[85vw] md:min-w-0 snap-center"
             >
               <div className="aspect-[4/3] overflow-hidden">
                 <img
@@ -938,7 +946,7 @@ function Projects() {
                   View Expertise <ArrowRight size={14} className="transition-transform group-hover:translate-x-1" />
                 </div>
               </div>
-            </motion.div>
+            </motion.a>
           ))}
         </div>
       </div>

@@ -1,0 +1,1220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Battery | Work Today, Enjoy Tomorrow</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;800;900&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --black: #1a1a1a;
+    --green: #05f509;
+    --yellow: #edf505;
+    --cream: #f6f7d7;
+    --white: #ffffff;
+    --font-display: 'Montserrat', sans-serif;
+    --font-body: 'Inter', sans-serif;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: var(--font-body);
+    background: var(--black);
+    color: var(--cream);
+    overflow-x: hidden;
+  }
+
+  /* ─── NAV ─── */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 1000;
+    padding: 1.25rem 3rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    transition: background 0.35s ease, padding 0.35s ease;
+  }
+  nav.scrolled {
+    background: var(--black);
+    padding: 0.85rem 3rem;
+    border-bottom: 1px solid rgba(5,245,9,0.15);
+  }
+  .nav-logo {
+    font-family: var(--font-display);
+    font-weight: 900;
+    font-size: 1.6rem;
+    letter-spacing: -0.02em;
+    color: var(--green);
+    text-decoration: none;
+  }
+  .nav-logo span { color: var(--yellow); }
+  .nav-cta {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 0.8rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--black);
+    background: var(--green);
+    padding: 0.6rem 1.5rem;
+    text-decoration: none;
+    transition: background 0.2s, color 0.2s;
+  }
+  .nav-cta:hover { background: var(--yellow); }
+
+  /* ─── HERO ─── */
+  #hero {
+    min-height: 100vh;
+    position: relative;
+    display: flex;
+    align-items: flex-end;
+    overflow: hidden;
+  }
+  .hero-bg {
+    position: absolute;
+    inset: 0;
+    background-image: url('https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=1600&q=85');
+    background-size: cover;
+    background-position: center 30%;
+    transform: scale(1.05);
+    transition: transform 8s ease;
+  }
+  .hero-bg::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, var(--black) 0%, rgba(26,26,26,0.6) 50%, rgba(26,26,26,0.2) 100%);
+  }
+  #hero.loaded .hero-bg { transform: scale(1); }
+  .hero-content {
+    position: relative;
+    z-index: 2;
+    padding: 0 3rem 5rem;
+    max-width: 1100px;
+  }
+  .hero-eyebrow {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 0.75rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--green);
+    margin-bottom: 1.25rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+  .hero-eyebrow::before {
+    content: '';
+    display: inline-block;
+    width: 2rem;
+    height: 2px;
+    background: var(--green);
+  }
+  .hero-headline {
+    font-family: var(--font-display);
+    font-weight: 900;
+    font-size: clamp(3.2rem, 12vw, 8rem);
+    line-height: 0.95;
+    letter-spacing: -0.04em;
+    text-transform: uppercase;
+    color: var(--cream);
+    margin-bottom: 2rem;
+  }
+  .hero-headline br {
+    display: block;
+  }
+  .hero-headline .accent { color: var(--green); }
+  .hero-headline .accent-y { color: var(--yellow); }
+  .hero-sub {
+    font-size: 1.05rem;
+    font-weight: 400;
+    color: rgba(246,247,215,0.7);
+    max-width: 440px;
+    line-height: 1.65;
+    margin-bottom: 2.5rem;
+  }
+  .hero-actions {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+  .btn-primary {
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: 0.8rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--black);
+    background: var(--green);
+    padding: 1rem 2.25rem;
+    text-decoration: none;
+    display: inline-block;
+    transition: background 0.2s, transform 0.15s;
+  }
+  .btn-primary:hover { background: var(--yellow); transform: translateY(-2px); }
+  .btn-ghost {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 0.8rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--cream);
+    border: 1px solid rgba(246,247,215,0.3);
+    padding: 1rem 2.25rem;
+    text-decoration: none;
+    display: inline-block;
+    transition: border-color 0.2s, color 0.2s;
+  }
+  .btn-ghost:hover { border-color: var(--green); color: var(--green); }
+
+  /* Hero stat row */
+  .hero-stats {
+    position: absolute;
+    right: 3rem;
+    bottom: 5rem;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+  .stat-item {
+    text-align: right;
+  }
+  .stat-num {
+    font-family: var(--font-display);
+    font-weight: 900;
+    font-size: 2.2rem;
+    line-height: 1;
+    color: var(--green);
+  }
+  .stat-label {
+    font-size: 0.7rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: rgba(246,247,215,0.5);
+    margin-top: 0.2rem;
+  }
+
+  /* ─── MARQUEE ─── */
+  .marquee-strip {
+    background: var(--green);
+    overflow: hidden;
+    white-space: nowrap;
+    padding: 0.85rem 0;
+  }
+  .marquee-track {
+    display: inline-flex;
+    animation: marquee 22s linear infinite;
+  }
+  .marquee-item {
+    font-family: var(--font-display);
+    font-weight: 900;
+    font-size: 0.75rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--black);
+    padding: 0 2.5rem;
+  }
+  .marquee-dot {
+    color: var(--yellow);
+    font-size: 1.1rem;
+  }
+  @keyframes marquee {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+
+  /* Improved Touch Targets */
+  a, button, .service-card, .class-card {
+    touch-action: manipulation;
+  }
+
+  /* ─── SERVICES ─── */
+  #services {
+    padding: 7rem 3rem;
+    background: var(--black);
+  }
+  .section-label {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 0.7rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--green);
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+  .section-label::before {
+    content: '';
+    display: inline-block;
+    width: 1.5rem;
+    height: 2px;
+    background: var(--green);
+  }
+  .section-title {
+    font-family: var(--font-display);
+    font-weight: 900;
+    font-size: clamp(2.2rem, 5vw, 4rem);
+    line-height: 1.0;
+    letter-spacing: -0.02em;
+    text-transform: uppercase;
+    color: var(--cream);
+    margin-bottom: 4rem;
+    max-width: 650px;
+  }
+  .section-title em { font-style: normal; color: var(--yellow); }
+
+  .services-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 0;
+    border: 1px solid rgba(246,247,215,0.08);
+  }
+  .service-card {
+    border-right: 1px solid rgba(246,247,215,0.08);
+    padding: 2.5rem 2rem;
+    position: relative;
+    overflow: hidden;
+    transition: background 0.3s;
+    cursor: pointer;
+  }
+  .service-card:last-child { border-right: none; }
+  .service-card::before {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0;
+    width: 100%; height: 3px;
+    background: var(--green);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.35s ease;
+  }
+  .service-card:hover { background: rgba(5,245,9,0.04); }
+  .service-card:hover::before { transform: scaleX(1); }
+  .service-num {
+    font-family: var(--font-display);
+    font-weight: 900;
+    font-size: 0.65rem;
+    letter-spacing: 0.15em;
+    color: var(--green);
+    margin-bottom: 2rem;
+    opacity: 0.6;
+  }
+  .service-icon {
+    font-size: 2rem;
+    margin-bottom: 1.5rem;
+    display: block;
+  }
+  .service-name {
+    font-family: var(--font-display);
+    font-weight: 900;
+    font-size: 1.1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    color: var(--cream);
+    margin-bottom: 0.75rem;
+  }
+  .service-desc {
+    font-size: 0.8rem;
+    line-height: 1.6;
+    color: rgba(246,247,215,0.5);
+  }
+  .service-arrow {
+    font-size: 1.2rem;
+    color: var(--green);
+    margin-top: 1.5rem;
+    display: block;
+    transform: translateX(0);
+    transition: transform 0.2s;
+  }
+  .service-card:hover .service-arrow { transform: translateX(5px); }
+
+  /* ─── SPLIT ABOUT ─── */
+  #about {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    min-height: 80vh;
+  }
+  .about-image {
+    position: relative;
+    overflow: hidden;
+  }
+  .about-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.6s ease;
+  }
+  .about-image:hover img { transform: scale(1.04); }
+  .about-image-badge {
+    position: absolute;
+    bottom: 2rem;
+    right: -1px;
+    background: var(--yellow);
+    color: var(--black);
+    font-family: var(--font-display);
+    font-weight: 900;
+    font-size: 0.7rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    padding: 0.75rem 1.5rem;
+  }
+  .about-content {
+    background: var(--cream);
+    padding: 6rem 5rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  .about-content .section-label { color: var(--black); }
+  .about-content .section-label::before { background: var(--black); }
+  .about-content .section-title { color: var(--black); max-width: none; margin-bottom: 1.5rem; }
+  .about-content .section-title em { color: var(--black); text-decoration: underline; text-decoration-color: var(--green); text-underline-offset: 4px; }
+  .about-body {
+    font-size: 1rem;
+    line-height: 1.8;
+    color: rgba(26,26,26,0.7);
+    margin-bottom: 2.5rem;
+    max-width: 440px;
+  }
+  .about-features {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    margin-bottom: 2.5rem;
+  }
+  .feature-row {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 0.82rem;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--black);
+  }
+  .feature-row::before {
+    content: '✓';
+    width: 1.4rem;
+    height: 1.4rem;
+    background: var(--green);
+    color: var(--black);
+    font-size: 0.7rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 900;
+    flex-shrink: 0;
+  }
+  .about-cta {
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: 0.8rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--black);
+    background: var(--green);
+    padding: 1rem 2.25rem;
+    text-decoration: none;
+    display: inline-block;
+    align-self: flex-start;
+    transition: background 0.2s, transform 0.15s;
+  }
+  .about-cta:hover { background: var(--yellow); transform: translateY(-2px); }
+
+  /* ─── SOCIAL PROOF ─── */
+  #proof {
+    background: var(--black);
+    padding: 7rem 3rem;
+  }
+  .proof-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: 4rem;
+  }
+  .proof-header .section-title { margin-bottom: 0; }
+  .rating-block {
+    text-align: right;
+    flex-shrink: 0;
+  }
+  .rating-num {
+    font-family: var(--font-display);
+    font-weight: 900;
+    font-size: 3.5rem;
+    line-height: 1;
+    color: var(--green);
+  }
+  .stars {
+    font-size: 1rem;
+    color: var(--yellow);
+    letter-spacing: 0.1em;
+    margin: 0.25rem 0;
+  }
+  .rating-sub {
+    font-size: 0.7rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgba(246,247,215,0.4);
+  }
+  .reviews-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5px;
+    background: rgba(246,247,215,0.06);
+  }
+  .review-card {
+    background: var(--black);
+    padding: 2.5rem;
+    position: relative;
+    border: 1px solid rgba(246,247,215,0.07);
+    transition: border-color 0.3s;
+  }
+  .review-card:hover { border-color: rgba(5,245,9,0.25); }
+  .review-quote {
+    font-size: 2rem;
+    color: var(--green);
+    font-family: var(--font-display);
+    font-weight: 900;
+    line-height: 1;
+    margin-bottom: 1rem;
+    opacity: 0.6;
+  }
+  .review-text {
+    font-size: 0.95rem;
+    line-height: 1.75;
+    color: rgba(246,247,215,0.75);
+    margin-bottom: 1.75rem;
+  }
+  .review-author {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+  }
+  .author-avatar {
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid var(--green);
+  }
+  .author-name {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 0.82rem;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--cream);
+  }
+  .author-service {
+    font-size: 0.72rem;
+    color: var(--green);
+    margin-top: 0.15rem;
+  }
+  .review-stars {
+    position: absolute;
+    top: 2.5rem;
+    right: 2.5rem;
+    font-size: 0.75rem;
+    color: var(--yellow);
+    letter-spacing: 0.05em;
+  }
+
+  /* Proof bar */
+  .proof-bar {
+    display: flex;
+    gap: 0;
+    margin-top: 3rem;
+    border: 1px solid rgba(246,247,215,0.08);
+    overflow: hidden;
+  }
+  .proof-bar-item {
+    flex: 1;
+    padding: 2rem;
+    text-align: center;
+    border-right: 1px solid rgba(246,247,215,0.08);
+  }
+  .proof-bar-item:last-child { border-right: none; }
+  .proof-bar-num {
+    font-family: var(--font-display);
+    font-weight: 900;
+    font-size: 2.5rem;
+    color: var(--yellow);
+    line-height: 1;
+  }
+  .proof-bar-label {
+    font-size: 0.72rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: rgba(246,247,215,0.45);
+    margin-top: 0.4rem;
+  }
+
+  /* ─── CLASS GRID ─── */
+  #classes {
+    background: var(--cream);
+    padding: 7rem 3rem;
+  }
+  #classes .section-label { color: var(--black); }
+  #classes .section-label::before { background: var(--black); }
+  #classes .section-title { color: var(--black); }
+  #classes .section-title em { color: var(--black); }
+  .classes-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+  }
+  .class-card {
+    position: relative;
+    overflow: hidden;
+    aspect-ratio: 4/5;
+  }
+  .class-card img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.5s ease;
+  }
+  .class-card:hover img { transform: scale(1.06); }
+  .class-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(26,26,26,0.92) 0%, rgba(26,26,26,0) 55%);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 1.75rem;
+  }
+  .class-tag {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--green);
+    margin-bottom: 0.4rem;
+  }
+  .class-name {
+    font-family: var(--font-display);
+    font-weight: 900;
+    font-size: 1.4rem;
+    text-transform: uppercase;
+    letter-spacing: -0.01em;
+    color: var(--cream);
+    margin-bottom: 0.4rem;
+  }
+  .class-detail {
+    font-size: 0.78rem;
+    color: rgba(246,247,215,0.55);
+  }
+
+  /* ─── CTA BAND ─── */
+  #cta-band {
+    background: var(--green);
+    padding: 6rem 3rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  #cta-band::before {
+    content: 'BATTERY';
+    position: absolute;
+    font-family: var(--font-display);
+    font-weight: 900;
+    font-size: 18vw;
+    color: rgba(26,26,26,0.07);
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    white-space: nowrap;
+    pointer-events: none;
+    letter-spacing: -0.04em;
+  }
+  .cta-band-label {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 0.7rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: rgba(26,26,26,0.5);
+    margin-bottom: 1rem;
+  }
+  .cta-band-title {
+    font-family: var(--font-display);
+    font-weight: 900;
+    font-size: clamp(2.5rem, 6vw, 5rem);
+    line-height: 1;
+    letter-spacing: -0.03em;
+    text-transform: uppercase;
+    color: var(--black);
+    margin-bottom: 1.25rem;
+  }
+  .cta-band-sub {
+    font-size: 1rem;
+    color: rgba(26,26,26,0.65);
+    max-width: 400px;
+    margin: 0 auto 2.5rem;
+    line-height: 1.65;
+  }
+  .btn-dark {
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: 0.8rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--green);
+    background: var(--black);
+    padding: 1.1rem 2.5rem;
+    text-decoration: none;
+    display: inline-block;
+    transition: background 0.2s, color 0.2s, transform 0.15s;
+  }
+  .btn-dark:hover { background: var(--yellow); color: var(--black); transform: translateY(-2px); }
+
+  /* ─── FOOTER ─── */
+  footer {
+    background: #111111;
+    padding: 4rem 3rem 2rem;
+    border-top: 1px solid rgba(246,247,215,0.06);
+  }
+  .footer-top {
+    display: grid;
+    grid-template-columns: 1.5fr 1fr 1fr;
+    gap: 3rem;
+    margin-bottom: 3rem;
+  }
+  .footer-brand .nav-logo {
+    display: inline-block;
+    margin-bottom: 1rem;
+    font-size: 1.8rem;
+  }
+  .footer-tagline {
+    font-size: 0.9rem;
+    color: rgba(246,247,215,0.45);
+    line-height: 1.7;
+    max-width: 260px;
+    margin-bottom: 1.5rem;
+  }
+  .footer-email {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 0.8rem;
+    letter-spacing: 0.05em;
+    color: var(--green);
+    text-decoration: none;
+  }
+  .footer-email:hover { color: var(--yellow); }
+  .footer-col-title {
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: 0.7rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--cream);
+    margin-bottom: 1.25rem;
+  }
+  .footer-links {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+  .footer-links li a {
+    font-size: 0.88rem;
+    color: rgba(246,247,215,0.45);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .footer-links li a:hover { color: var(--green); }
+  .footer-bottom {
+    border-top: 1px solid rgba(246,247,215,0.06);
+    padding-top: 1.75rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+  }
+  .footer-copy {
+    font-size: 0.75rem;
+    color: rgba(246,247,215,0.25);
+  }
+  .footer-location {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 0.7rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: rgba(246,247,215,0.25);
+  }
+
+  /* ─── SCROLL ANIMATION ─── */
+  .reveal {
+    opacity: 0;
+    transform: translateY(28px);
+    transition: opacity 0.65s ease, transform 0.65s ease;
+  }
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* ─── RESPONSIVE 900px ─── */
+  @media (max-width: 900px) {
+    nav { padding: 1rem 1.5rem; }
+    nav.scrolled { padding: 0.75rem 1.5rem; }
+    .hero-content { padding: 0 1.5rem 4rem; }
+    .hero-stats { right: 1.5rem; bottom: 4rem; }
+    .stat-num { font-size: 1.6rem; }
+    #services { padding: 5rem 1.5rem; }
+    .services-grid {
+      grid-template-columns: repeat(2, 1fr);
+      border-bottom: 1px solid rgba(246,247,215,0.08);
+    }
+    .service-card { border-bottom: 1px solid rgba(246,247,215,0.08); }
+    .service-card:nth-child(even) { border-right: none; }
+    #about { grid-template-columns: 1fr; }
+    .about-image { min-height: 50vh; }
+    .about-content { padding: 4rem 2rem; }
+    .proof-header { flex-direction: column; align-items: flex-start; gap: 1.5rem; }
+    .rating-block { text-align: left; }
+    #proof { padding: 5rem 1.5rem; }
+    .reviews-grid { grid-template-columns: 1fr 1fr; }
+    #classes { padding: 5rem 1.5rem; }
+    .classes-grid { grid-template-columns: 1fr 1fr; }
+    .footer-top { grid-template-columns: 1fr 1fr; }
+    #cta-band { padding: 5rem 1.5rem; }
+    footer { padding: 3rem 1.5rem 1.5rem; }
+  }
+
+  /* ─── RESPONSIVE 600px ─── */
+  @media (max-width: 600px) {
+    .hero-content { padding: 0 1.25rem 3.5rem; }
+    .hero-stats { display: none; }
+    .hero-actions { flex-direction: column; align-items: flex-start; }
+    .btn-primary, .btn-ghost { width: 100%; text-align: center; }
+    .services-grid { grid-template-columns: 1fr; }
+    .service-card { border-right: none !important; border-bottom: 1px solid rgba(246,247,215,0.08); padding: 3rem 1.5rem; }
+    .service-card:nth-child(even) { border-right: none; }
+    .reviews-grid { grid-template-columns: 1fr; gap: 1rem; background: transparent; }
+    .review-card { border-radius: 4px; }
+    .classes-grid { grid-template-columns: 1fr; gap: 1.5rem; }
+    .class-card { aspect-ratio: 16/11; border-radius: 4px; }
+    .proof-bar { flex-wrap: wrap; margin-top: 2rem; }
+    .proof-bar-item { flex: 1 1 45%; padding: 1.5rem 1rem; border-bottom: 1px solid rgba(246,247,215,0.08); }
+    .proof-bar-item:nth-child(odd) { border-right: 1px solid rgba(246,247,215,0.08); }
+    .proof-bar-item:nth-last-child(-n+2) { border-bottom: none; }
+    .footer-top { grid-template-columns: 1fr; gap: 2.5rem; }
+    .footer-bottom { flex-direction: column; text-align: center; gap: 1rem; }
+    #services, #proof, #classes { padding: 4rem 1.25rem; }
+    footer { padding: 3rem 1.25rem 1.5rem; }
+    #cta-band { padding: 5rem 1.25rem; }
+    #cta-band::before { font-size: 25vw; opacity: 0.04; }
+    nav { padding: 0.8rem 1.25rem; background: rgba(26,26,26,0.9); backdrop-filter: blur(10px); }
+    nav.scrolled { padding: 0.7rem 1.25rem; }
+    .nav-logo { font-size: 1.3rem; }
+    .nav-cta { font-size: 0.7rem; padding: 0.5rem 1rem; }
+    .section-title { font-size: 2.4rem; line-height: 1.1; margin-bottom: 2.5rem; }
+    .hero-eyebrow { font-size: 0.65rem; letter-spacing: 0.15em; }
+    .hero-sub { font-size: 0.95rem; line-height: 1.6; margin-bottom: 2rem; }
+    .marquee-strip { padding: 0.6rem 0; }
+    .marquee-item { font-size: 0.65rem; padding: 0 1.5rem; }
+    .about-content { padding: 3.5rem 1.5rem; }
+    .about-body { font-size: 0.95rem; }
+    .rating-num { font-size: 3rem; }
+    .proof-bar-num { font-size: 2rem; }
+    .cta-band-title { font-size: 2.2rem; }
+  }
+
+  /* ─── ULTRA SMALL SCREENS ─── */
+  @media (max-width: 380px) {
+    .hero-headline { font-size: 2.8rem; }
+    .section-title { font-size: 2rem; }
+    .nav-logo { font-size: 1.1rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ─── NAV ─── -->
+<nav id="mainNav">
+  <a href="#" class="nav-logo">BAT<span>.</span>TERY</a>
+  <a href="#cta-band" class="nav-cta">Get Started</a>
+</nav>
+
+<!-- ─── HERO ─── -->
+<section id="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-content">
+    <p class="hero-eyebrow">London's Boldest Fitness Club</p>
+    <h1 class="hero-headline">
+      Work<br>
+      <span class="accent">Today.</span><br>
+      Enjoy<br>
+      <span class="accent-y">Tomorrow.</span>
+    </h1>
+    <p class="hero-sub">Online classes, personal training, yoga, pilates, and nutrition — built for people who refuse to settle.</p>
+    <div class="hero-actions">
+      <a href="#classes" class="btn-primary">Explore Classes</a>
+      <a href="#about" class="btn-ghost">Our Story</a>
+    </div>
+  </div>
+  <div class="hero-stats">
+    <div class="stat-item">
+      <div class="stat-num">2,400+</div>
+      <div class="stat-label">Members</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num">4.9★</div>
+      <div class="stat-label">Average Rating</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num">100%</div>
+      <div class="stat-label">Commitment</div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── MARQUEE ─── -->
+<div class="marquee-strip">
+  <div class="marquee-track">
+    <span class="marquee-item">Online Classes <span class="marquee-dot">◆</span></span>
+    <span class="marquee-item">Personal Training <span class="marquee-dot">◆</span></span>
+    <span class="marquee-item">Yoga <span class="marquee-dot">◆</span></span>
+    <span class="marquee-item">Pilates <span class="marquee-dot">◆</span></span>
+    <span class="marquee-item">Nutrition <span class="marquee-dot">◆</span></span>
+    <span class="marquee-item">London Based <span class="marquee-dot">◆</span></span>
+    <span class="marquee-item">Work Today <span class="marquee-dot">◆</span></span>
+    <span class="marquee-item">Enjoy Tomorrow <span class="marquee-dot">◆</span></span>
+    <span class="marquee-item">Online Classes <span class="marquee-dot">◆</span></span>
+    <span class="marquee-item">Personal Training <span class="marquee-dot">◆</span></span>
+    <span class="marquee-item">Yoga <span class="marquee-dot">◆</span></span>
+    <span class="marquee-item">Pilates <span class="marquee-dot">◆</span></span>
+    <span class="marquee-item">Nutrition <span class="marquee-dot">◆</span></span>
+    <span class="marquee-item">London Based <span class="marquee-dot">◆</span></span>
+    <span class="marquee-item">Work Today <span class="marquee-dot">◆</span></span>
+    <span class="marquee-item">Enjoy Tomorrow <span class="marquee-dot">◆</span></span>
+  </div>
+</div>
+
+<!-- ─── SERVICES ─── -->
+<section id="services">
+  <p class="section-label reveal">What We Offer</p>
+  <h2 class="section-title reveal">Five Paths.<br><em>One Goal.</em></h2>
+  <div class="services-grid">
+    <div class="service-card reveal">
+      <div class="service-num">01</div>
+      <span class="service-icon">💻</span>
+      <div class="service-name">Online Classes</div>
+      <p class="service-desc">Train anywhere, anytime. Live and on-demand sessions led by expert coaches who push you further than you thought possible.</p>
+      <span class="service-arrow">→</span>
+    </div>
+    <div class="service-card reveal">
+      <div class="service-num">02</div>
+      <span class="service-icon">🏋️</span>
+      <div class="service-name">Personal Training</div>
+      <p class="service-desc">One-to-one sessions built entirely around your goals. Your coach, your programme, your transformation.</p>
+      <span class="service-arrow">→</span>
+    </div>
+    <div class="service-card reveal">
+      <div class="service-num">03</div>
+      <span class="service-icon">🧘</span>
+      <div class="service-name">Yoga</div>
+      <p class="service-desc">Strength meets stillness. Our yoga sessions are for those who want to perform better, move smarter, and recover faster.</p>
+      <span class="service-arrow">→</span>
+    </div>
+    <div class="service-card reveal">
+      <div class="service-num">04</div>
+      <span class="service-icon">🌀</span>
+      <div class="service-name">Pilates</div>
+      <p class="service-desc">Core-led, science-backed movement that builds a body that lasts. Modern Pilates for modern athletes.</p>
+      <span class="service-arrow">→</span>
+    </div>
+    <div class="service-card reveal">
+      <div class="service-num">05</div>
+      <span class="service-icon">🥗</span>
+      <div class="service-name">Nutrition</div>
+      <p class="service-desc">Performance starts on your plate. Our nutrition plans are practical, flexible, and designed to fuel every session.</p>
+      <span class="service-arrow">→</span>
+    </div>
+  </div>
+</section>
+
+<!-- ─── SPLIT ABOUT ─── -->
+<section id="about">
+  <div class="about-image">
+    <img src="https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=1200&q=80" alt="Battery fitness member training hard">
+    <div class="about-image-badge">London, UK</div>
+  </div>
+  <div class="about-content">
+    <p class="section-label reveal">Who We Are</p>
+    <h2 class="section-title reveal">Built for People Who<br><em>Actually Show Up.</em></h2>
+    <p class="about-body reveal">Battery isn't about quick fixes or empty hype. We're here for the people who lace up when they don't feel like it, who track their meals, who show up on the hard days — and we make sure every single session is worth it. Based in London, built for everywhere.</p>
+    <div class="about-features reveal">
+      <div class="feature-row">No commitment-free excuses — just results</div>
+      <div class="feature-row">Expert coaches with real-world credentials</div>
+      <div class="feature-row">Classes from 20 mins to 90 mins</div>
+      <div class="feature-row">Online and in-person options</div>
+      <div class="feature-row">Nutrition plans that actually fit your life</div>
+    </div>
+    <a href="mailto:hello@ezwebone.co.uk" class="about-cta reveal">Talk to Our Team</a>
+  </div>
+</section>
+
+<!-- ─── SOCIAL PROOF ─── -->
+<section id="proof">
+  <div class="proof-header">
+    <div>
+      <p class="section-label reveal">Real People. Real Results.</p>
+      <h2 class="section-title reveal">What Our Members<br><em>Actually Say.</em></h2>
+    </div>
+    <div class="rating-block reveal">
+      <div class="rating-num">4.9</div>
+      <div class="stars">★★★★★</div>
+      <div class="rating-sub">From 800+ reviews</div>
+    </div>
+  </div>
+
+  <div class="reviews-grid">
+    <div class="review-card reveal">
+      <div class="review-stars">★★★★★</div>
+      <div class="review-quote">"</div>
+      <p class="review-text">I've tried every gym in London. Battery is the only place that actually changed how I think about fitness. The online classes fit into my schedule perfectly and the coaching is elite.</p>
+      <div class="review-author">
+        <img class="author-avatar" src="https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?w=80&q=80" alt="Member Sarah">
+        <div>
+          <div class="author-name">Sarah T.</div>
+          <div class="author-service">Personal Training</div>
+        </div>
+      </div>
+    </div>
+    <div class="review-card reveal">
+      <div class="review-stars">★★★★★</div>
+      <div class="review-quote">"</div>
+      <p class="review-text">Lost 12kg in 4 months. The nutrition plan was game-changing — not restrictive, just smart. My PT held me accountable every step of the way. Worth every penny.</p>
+      <div class="review-author">
+        <img class="author-avatar" src="https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=80&q=80" alt="Member Marcus">
+        <div>
+          <div class="author-name">Marcus W.</div>
+          <div class="author-service">Nutrition + PT</div>
+        </div>
+      </div>
+    </div>
+    <div class="review-card reveal">
+      <div class="review-stars">★★★★★</div>
+      <div class="review-quote">"</div>
+      <p class="review-text">The Pilates classes sorted out back pain I'd had for three years. I stream them from home every morning. The instructors are brilliant — proper experts who explain everything.</p>
+      <div class="review-author">
+        <img class="author-avatar" src="https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?w=80&q=80" alt="Member Priya">
+        <div>
+          <div class="author-name">Priya R.</div>
+          <div class="author-service">Pilates</div>
+        </div>
+      </div>
+    </div>
+    <div class="review-card reveal">
+      <div class="review-stars">★★★★★</div>
+      <div class="review-quote">"</div>
+      <p class="review-text">I was skeptical about online classes but Battery completely converted me. The energy through a screen is unreal. I've recommended Battery to everyone I know.</p>
+      <div class="review-author">
+        <img class="author-avatar" src="https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?w=80&q=80" alt="Member Tom">
+        <div>
+          <div class="author-name">Tom F.</div>
+          <div class="author-service">Online Classes</div>
+        </div>
+      </div>
+    </div>
+    <div class="review-card reveal">
+      <div class="review-stars">★★★★★</div>
+      <div class="review-quote">"</div>
+      <p class="review-text">Yoga at Battery is unlike anything I've done before. It's intense, focused, and you walk out feeling unstoppable. The coaches genuinely care about your progress.</p>
+      <div class="review-author">
+        <img class="author-avatar" src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=80&q=80" alt="Member Amara">
+        <div>
+          <div class="author-name">Amara O.</div>
+          <div class="author-service">Yoga</div>
+        </div>
+      </div>
+    </div>
+    <div class="review-card reveal">
+      <div class="review-stars">★★★★★</div>
+      <div class="review-quote">"</div>
+      <p class="review-text">Six months in and I'm in the best shape of my life at 42. Battery treats you like a serious person who wants serious results. No fluff, no fads. Just work that works.</p>
+      <div class="review-author">
+        <img class="author-avatar" src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=80&q=80" alt="Member James">
+        <div>
+          <div class="author-name">James K.</div>
+          <div class="author-service">PT + Nutrition</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="proof-bar reveal">
+    <div class="proof-bar-item">
+      <div class="proof-bar-num">2,400+</div>
+      <div class="proof-bar-label">Active Members</div>
+    </div>
+    <div class="proof-bar-item">
+      <div class="proof-bar-num">800+</div>
+      <div class="proof-bar-label">5-Star Reviews</div>
+    </div>
+    <div class="proof-bar-item">
+      <div class="proof-bar-num">50+</div>
+      <div class="proof-bar-label">Weekly Classes</div>
+    </div>
+    <div class="proof-bar-item">
+      <div class="proof-bar-num">94%</div>
+      <div class="proof-bar-label">Retention Rate</div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── CLASS GALLERY ─── -->
+<section id="classes">
+  <p class="section-label reveal">The Experience</p>
+  <h2 class="section-title reveal">Every Class Is<br><em>Built to Hit Different.</em></h2>
+  <div class="classes-grid">
+    <div class="class-card reveal">
+      <img src="https://images.unsplash.com/photo-1549060279-7e168fcee0c2?w=800&q=80" alt="High intensity fitness class">
+      <div class="class-overlay">
+        <div class="class-tag">Most Popular</div>
+        <div class="class-name">HIIT & Conditioning</div>
+        <div class="class-detail">45 min · All Levels · Online & In-Person</div>
+      </div>
+    </div>
+    <div class="class-card reveal">
+      <img src="https://images.unsplash.com/photo-1518611012118-696072aa579a?w=800&q=80" alt="Yoga class in session">
+      <div class="class-overlay">
+        <div class="class-tag">Sell-Out Sessions</div>
+        <div class="class-name">Power Yoga</div>
+        <div class="class-detail">60 min · Intermediate · Online & In-Person</div>
+      </div>
+    </div>
+    <div class="class-card reveal">
+      <img src="https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?w=800&q=80" alt="Personal training session">
+      <div class="class-overlay">
+        <div class="class-tag">1-on-1</div>
+        <div class="class-name">Personal Training</div>
+        <div class="class-detail">60 min · Your Goals · Fully Tailored</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── CTA BAND ─── -->
+<section id="cta-band">
+  <p class="cta-band-label">Ready to Start?</p>
+  <h2 class="cta-band-title">Your Next Chapter<br>Starts Now.</h2>
+  <p class="cta-band-sub">Join Battery and discover what you're actually capable of. Work today. Enjoy tomorrow.</p>
+  <a href="mailto:hello@ezwebone.co.uk" class="btn-dark">Get In Touch Today</a>
+</section>
+
+<!-- ─── FOOTER ─── -->
+<footer>
+  <div class="footer-top">
+    <div class="footer-brand">
+      <a href="#" class="nav-logo">BAT<span>.</span>TERY</a>
+      <p class="footer-tagline">London's boldest fitness community. Built for those who show up. Work today, enjoy tomorrow.</p>
+      <a href="mailto:hello@ezwebone.co.uk" class="footer-email">hello@ezwebone.co.uk</a>
+    </div>
+    <div>
+      <p class="footer-col-title">Services</p>
+      <ul class="footer-links">
+        <li><a href="#services">Online Classes</a></li>
+        <li><a href="#services">Personal Training</a></li>
+        <li><a href="#services">Yoga</a></li>
+        <li><a href="#services">Pilates</a></li>
+        <li><a href="#services">Nutrition</a></li>
+      </ul>
+    </div>
+    <div>
+      <p class="footer-col-title">Get Started</p>
+      <ul class="footer-links">
+        <li><a href="mailto:hello@ezwebone.co.uk">Contact Us</a></li>
+        <li><a href="#proof">Read Reviews</a></li>
+        <li><a href="#about">About Battery</a></li>
+        <li><a href="#classes">Our Classes</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p class="footer-copy">© 2024 Battery Fitness. All rights reserved.</p>
+    <p class="footer-location">📍 London, United Kingdom</p>
+  </div>
+</footer>
+
+<script>
+  // Nav scroll behaviour
+  const nav = document.getElementById('mainNav');
+  window.addEventListener('scroll', () => {
+    if (window.scrollY > 60) {
+      nav.classList.add('scrolled');
+    } else {
+      nav.classList.remove('scrolled');
+    }
+  });
+
+  // Hero load animation
+  window.addEventListener('load', () => {
+    document.getElementById('hero').classList.add('loaded');
+  });
+
+  // Scroll reveal
+  const revealEls = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry, i) => {
+      if (entry.isIntersecting) {
+        setTimeout(() => {
+          entry.target.classList.add('visible');
+        }, 80);
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+
+  revealEls.forEach(el => observer.observe(el));
+
+  // Stagger sibling reveals
+  document.querySelectorAll('.services-grid, .reviews-grid, .classes-grid, .about-features').forEach(parent => {
+    const children = parent.querySelectorAll('.reveal, .service-card, .review-card, .class-card, .feature-row');
+    const parentObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          children.forEach((child, i) => {
+            setTimeout(() => {
+              child.classList.add('visible');
+            }, i * 100);
+          });
+          parentObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.05 });
+    parentObserver.observe(parent);
+  });
+
+  // Smooth anchor links
+  document.querySelectorAll('a[href^="#"]').forEach(a => {
+    a.addEventListener('click', e => {
+      const target = document.querySelector(a.getAttribute('href'));
+      if (target) {
+        e.preventDefault();
+        target.scrollIntoView({ behavior: 'smooth' });
+      }
+    });
+  });
+</script>
+</body>
+</html>

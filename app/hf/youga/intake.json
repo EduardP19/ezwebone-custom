@@ -1,0 +1,46 @@
+{
+  "project_id": "youga",
+  "created_at": "2026-04-20",
+  "business": {
+    "name": "YouGa",
+    "type": "Yog/Fitness/Wellbeing",
+    "location": "Los Angeles, California",
+    "target_audience": "Health aware/ Self-Loving",
+    "email": "hello@youga.com",
+    "phone": "",
+    "social": {}
+  },
+  "website": {
+    "purpose": "booking",
+    "primary_action": "book",
+    "pages": [
+      "home"
+    ],
+    "tone_of_voice": "friendly",
+    "brand_colors": [
+      "#F7F3EE",
+      "#C88C6A",
+      "#FFFDF9",
+      "#7A9E8E(Primary CTA) Surface: #FFFDF9 (light ivory)"
+    ],
+    "font_preference_headings": "Primary: #7A9E8E (sage green)",
+    "font_preference_body": "Secondary: #D8BFA9 (soft sand/clay)",
+    "design_reference_notes": "Accent: #C88C6A (muted terracotta)"
+  },
+  "seo": {
+    "primary_keyword": "Yoga for you",
+    "secondary_keywords": [],
+    "meta_description_hint": ""
+  },
+  "content": {
+    "tagline": "Body text: #5B645F (soft gray-green)",
+    "services": [],
+    "usp": "Border / subtle lines: #E6DED",
+    "about_us_ticks": []
+  },
+  "contact": {
+    "form_endpoint": "",
+    "form_provider": "formspree",
+    "notify_email": "hello@youga.com"
+  }
+}
