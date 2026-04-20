@@ -896,16 +896,16 @@ function Projects() {
             className="inline-block text-xs px-4 py-1.5 rounded-full mb-4 uppercase tracking-[0.2em] font-bold"
             style={{ fontFamily: SG, background: '#6BAF6B20', color: '#6BAF6B' }}
           >
-            Diversity
+            Dedicated Focus
           </span>
           <h2
             className="text-4xl md:text-5xl text-black mb-6"
             style={{ fontFamily: SG, fontWeight: 800, lineHeight: 1.12 }}
           >
-            One agency. <span style={{ color: '#6BAF6B' }}>Three worlds</span>.
+            One division. <span style={{ color: '#6BAF6B' }}>Three industries.</span>
           </h2>
           <p className="text-gray-500 text-lg max-w-2xl mx-auto" style={{ fontFamily: SG }}>
-            We specialize in bridging the gap between high-intensity training, mindful wellness, and clinical nutrition.
+            Whether you run a high-intensity gym, a mindful wellness studio, or a clinical nutrition practice — we are the agency with the solution. We build specialized, high-converting digital ecosystems designed exclusively to automate bookings and scale your growth.
           </p>
         </motion.div>
 
