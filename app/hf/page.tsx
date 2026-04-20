@@ -331,7 +331,7 @@ function Preloader({ onComplete }: { onComplete: () => void }) {
       const timer = setTimeout(() => {
         setExiting(true);
         setTimeout(onComplete, 800); 
-      }, 2000);
+      }, 1000);
       return () => clearTimeout(timer);
     }
   }, [complete, onComplete]);
