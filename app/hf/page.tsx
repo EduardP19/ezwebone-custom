@@ -1320,8 +1320,11 @@ function Footer() {
       className="relative py-12 px-6"
       style={{ background: '#080808' }}
     >
-      {/* Neon Gradient Line */}
-      <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-neon/60 to-transparent opacity-60 shadow-[0_0_15px_rgba(57,255,20,0.4)]" />
+      {/* Top neon border */}
+      <div
+        className="absolute top-0 left-0 right-0 h-px"
+        style={{ background: `linear-gradient(90deg, transparent, ${NEON}, transparent)` }}
+      />
 
       <div className="max-w-6xl mx-auto">
         <div className="flex flex-col md:flex-row items-center justify-between gap-8 mb-8">
@@ -1462,7 +1465,7 @@ function ContactForm() {
             className="text-4xl md:text-6xl font-black text-white mb-6"
             style={{ fontFamily: SG }}
           >
-            Ready to Dominate <br/> The Market?
+            Let's Work on it <br/> Remotely
           </motion.h2>
           <motion.p
             initial={{ opacity: 0, y: 20 }}
@@ -1492,13 +1495,7 @@ function ContactForm() {
                 <CheckCircle size={40} className="text-neon" />
               </div>
               <h3 className="text-3xl font-bold text-white mb-4" style={{ fontFamily: SG }}>Mission Accepted!</h3>
-              <p className="text-white/60 mb-8">We've received your transmission. Our team will review your project and contact you within 24 hours.</p>
-              <button 
-                onClick={() => setSubmitted(false)}
-                className="text-neon font-bold text-sm uppercase tracking-widest hover:opacity-80 transition-all underline underline-offset-8"
-              >
-                Send Another Message
-              </button>
+              <p className="text-white/60">We've received your transmission. Our team will review your project and contact you within 24 hours.</p>
             </motion.div>
           ) : (
             <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -1568,8 +1565,8 @@ function ContactForm() {
                 <button
                   type="submit"
                   disabled={loading}
-                  className="w-full bg-[#050505] border-2 py-5 rounded-xl font-black uppercase tracking-widest text-lg hover:bg-neon hover:text-black active:scale-[0.98] transition-all disabled:opacity-50 disabled:scale-100 shadow-[0_0_30px_rgba(57,255,20,0.2)]"
-                  style={{ fontFamily: SG, fontWeight: 900, color: NEON, borderColor: NEON }}
+                  className="w-full bg-[#050505] border-2 border-neon text-neon py-5 rounded-xl font-black uppercase tracking-widest text-lg hover:bg-neon hover:text-black focus:bg-neon focus:text-black outline-none focus:outline-none active:scale-[0.98] transition-all disabled:opacity-50 disabled:scale-100 shadow-[0_0_30px_rgba(57,255,20,0.2)]"
+                  style={{ fontFamily: SG, fontWeight: 900 }}
                 >
                   {loading ? 'Transmitting...' : 'Launch Strategy Session'}
                 </button>
