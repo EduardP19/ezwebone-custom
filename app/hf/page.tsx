@@ -353,14 +353,14 @@ function Preloader({ onComplete }: { onComplete: () => void }) {
         >
           <motion.span>{rounded}</motion.span>%
         </motion.div>
-        <div className="h-4 relative w-full text-center">
+        <div className="h-10 md:h-12 relative w-full text-center">
           <AnimatePresence>
             {complete && (
               <motion.div
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="absolute inset-0 text-white text-xs md:text-sm uppercase tracking-[0.4em] font-bold"
-                style={{ fontFamily: SG, textShadow: `0 0 15px ${NEON}66` }}
+                className="absolute inset-0 text-white text-xl md:text-3xl uppercase tracking-[0.25em] font-black"
+                style={{ fontFamily: SG, textShadow: `0 0 20px ${NEON}80` }}
               >
                 Online Presence
               </motion.div>
