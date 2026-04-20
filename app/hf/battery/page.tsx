@@ -8,33 +8,24 @@ import { ArrowLeft } from 'lucide-react';
 export default function BatteryPage() {
   const iframeRef = useRef<HTMLIFrameElement>(null);
 
-  useEffect(() => {
+  const handleIframeLoad = () => {
     const iframe = iframeRef.current;
     if (!iframe) return;
-
-    const lock = () => {
-      try {
-        const doc = iframe.contentDocument || iframe.contentWindow?.document;
-        if (doc) {
-          const style = doc.createElement('style');
-          style.innerText = `
-            a, button, input, select, textarea, [role="button"], .nav-cta, .btn-primary, .btn-outline, .btn-white { 
-              pointer-events: none !important; 
-              cursor: default !important;
-            }
-          `;
-          doc.head.appendChild(style);
-        }
-      } catch (e) {}
-    };
-
-    iframe.addEventListener('load', lock);
-    if (iframe.contentDocument?.readyState === 'complete') {
-      lock();
-    }
-    
-    return () => iframe.removeEventListener('load', lock);
-  }, []);
+    try {
+      const doc = iframe.contentDocument || iframe.contentWindow?.document;
+      if (doc && !doc.getElementById('ez-preview-lock')) {
+        const style = doc.createElement('style');
+        style.id = 'ez-preview-lock';
+        style.innerText = `
+          a, button, input, select, textarea, [role="button"] { 
+            pointer-events: none !important; 
+            cursor: default !important;
+          }
+        `;
+        doc.head.appendChild(style);
+      }
+    } catch (e) {}
+  };
 
   const [mounted, setMounted] = useState(false);
   useEffect(() => setMounted(true), []);
@@ -74,6 +65,7 @@ export default function BatteryPage() {
             src="/demos/battery/index.html"
             className="w-full h-full border-none"
             title="Battery Project Preview"
+            onLoad={handleIframeLoad}
           />
         </div>
       </div>
