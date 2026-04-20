@@ -305,7 +305,7 @@ function Preloader({ onComplete }: { onComplete: () => void }) {
   const rounded = useTransform(count, (latest) => Math.round(latest));
   const [complete, setComplete] = useState(false);
   const [exiting, setExiting] = useState(false);
-  const colorInterpolated = useTransform(count, [0, 100], ['#061a06', NEON]);
+  const colorInterpolated = useTransform(count, [0, 100], ['#144514', NEON]);
 
   useEffect(() => {
     document.body.style.overflow = 'hidden'; // Lock scroll on mount
@@ -338,7 +338,7 @@ function Preloader({ onComplete }: { onComplete: () => void }) {
 
   return (
     <motion.div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-[#0a0a0a]"
+      className="fixed inset-0 z-[99] flex items-center justify-center bg-[#0a0a0a]"
       animate={exiting ? { opacity: 0, scale: 30 } : { opacity: 1, scale: 1 }}
       transition={{ duration: 0.8, ease: "easeIn" }}
     >
