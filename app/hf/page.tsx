@@ -884,62 +884,12 @@ function Projects() {
   ];
 
   return (
-    <section id="ecosystem" ref={ref} className="py-32 md:py-48 px-6 bg-[#16211C] relative overflow-hidden">
+    <section id="ecosystem" ref={ref} className="py-32 md:py-48 px-6 bg-[#16211C] relative">
       {/* Top Shape Divider */}
-      <div className="absolute top-0 left-0 w-full pointer-events-none z-10" style={{ transform: 'translateY(-1px)' }}>
+      <div className="absolute top-0 left-0 w-full pointer-events-none z-0" style={{ transform: 'translateY(-1px)' }}>
         <svg viewBox="0 0 100 10" preserveAspectRatio="none" className="w-full h-[40px] md:h-[80px]" style={{ fill: '#f7f8fa' }}>
           <polygon points="0,0 100,0 100,10" />
         </svg>
-      </div>
-
-      {/* Background Animated Typography */}
-      <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none select-none z-0 opacity-[0.04]" style={{ fontFamily: SG }}>
-        <motion.div
-          initial="hidden"
-          animate={inView ? "visible" : "hidden"}
-          variants={{
-            hidden: {},
-            visible: { transition: { staggerChildren: 0.12 } }
-          }}
-          className="flex whitespace-nowrap"
-          style={{ fontSize: 'clamp(6rem, 24vw, 20rem)', fontWeight: 900, lineHeight: 0.85, color: '#fff' }}
-        >
-          {"CASE".split('').map((char, index) => (
-            <motion.span
-              key={index}
-              variants={{
-                hidden: { opacity: 0, x: -150, filter: 'blur(10px)' },
-                visible: { opacity: 1, x: 0, filter: 'blur(0px)', transition: { type: "spring", stiffness: 60, damping: 15 } }
-              }}
-              className="inline-block"
-            >
-              {char}
-            </motion.span>
-          ))}
-        </motion.div>
-        <motion.div
-          initial="hidden"
-          animate={inView ? "visible" : "hidden"}
-          variants={{
-            hidden: {},
-            visible: { transition: { staggerChildren: 0.1, delayChildren: 0.2 } }
-          }}
-          className="flex whitespace-nowrap ml-10 md:ml-32"
-          style={{ fontSize: 'clamp(6rem, 24vw, 20rem)', fontWeight: 900, lineHeight: 0.85, color: '#fff' }}
-        >
-          {"STUDIES".split('').map((char, index) => (
-            <motion.span
-              key={index}
-              variants={{
-                hidden: { opacity: 0, x: 150, filter: 'blur(10px)' },
-                visible: { opacity: 1, x: 0, filter: 'blur(0px)', transition: { type: "spring", stiffness: 60, damping: 15 } }
-              }}
-              className="inline-block"
-            >
-              {char}
-            </motion.span>
-          ))}
-        </motion.div>
       </div>
 
       <div className="max-w-6xl mx-auto relative z-10">
