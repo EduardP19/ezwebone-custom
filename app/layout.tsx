@@ -93,7 +93,7 @@ export default async function RootLayout({
         lang={locale}
         data-theme={initialTheme}
         suppressHydrationWarning
-        className={`${inter.variable} ${spaceGrotesk.variable} ${jetbrainsMono.variable} h-full antialiased`}
+        className={`${inter.variable} ${spaceGrotesk.variable} ${jetbrainsMono.variable} h-full antialiased scroll-smooth`}
       >
         <head />
         <body className="min-h-full flex flex-col">
