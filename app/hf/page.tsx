@@ -339,23 +339,21 @@ function Preloader({ onComplete }: { onComplete: () => void }) {
   return (
     <motion.div
       className="fixed inset-0 z-[99] flex items-center justify-center bg-[#0a0a0a]"
-      animate={exiting ? { opacity: 0, scale: 30 } : { opacity: 1, scale: 1 }}
+      animate={exiting ? { opacity: 0 } : { opacity: 1 }}
       transition={{ duration: 0.8, ease: "easeIn" }}
     >
-      <div className="flex flex-col items-center justify-center gap-2">
-        <motion.div
-          animate={{ opacity: complete ? 1 : 0.7 }}
-          className="text-white text-center uppercase tracking-[0.2em] font-bold text-sm md:text-xl transition-all duration-1000"
-          style={{ 
-            fontFamily: SG,
-            textShadow: complete ? `0 0 15px ${NEON}80` : 'none',
-          }}
+      <div className="flex flex-col items-center justify-center gap-4">
+        <div
+          className="text-white text-center uppercase tracking-[0.2em] font-black text-xl md:text-3xl"
+          style={{ fontFamily: SG }}
         >
           LOADING <br className="block md:hidden" /> ONLINE PRESENCE...
-        </motion.div>
+        </div>
 
         <motion.div 
-          className="text-8xl md:text-9xl font-black transition-all duration-1000 select-none"
+          className="text-8xl md:text-[10rem] font-black leading-none select-none"
+          animate={exiting ? { scale: 50, opacity: 0 } : { scale: 1, opacity: 1 }}
+          transition={exiting ? { duration: 0.8, ease: "easeIn" } : {}}
           style={{ 
             fontFamily: SG,
             color: colorInterpolated,
