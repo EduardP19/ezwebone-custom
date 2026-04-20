@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import Link from 'next/link';
-import { ArrowLeft, ShieldCheck } from 'lucide-react';
+import { ArrowLeft } from 'lucide-react';
 
 export default function YogaPage() {
   const iframeRef = useRef<HTMLIFrameElement>(null);
@@ -15,12 +15,15 @@ export default function YogaPage() {
         try {
           const doc = iframe.contentDocument || iframe.contentWindow?.document;
           if (doc) {
+            // 1. Inject Style to disable pointer events (Visual focus and direct block)
             const style = doc.createElement('style');
+            style.id = 'interaction-lock-style';
             style.innerText = `
               * { 
                 pointer-events: none !important; 
                 user-select: none !important;
                 -webkit-user-drag: none !important;
+                cursor: default !important;
               }
               html, body {
                 pointer-events: auto !important;
@@ -29,7 +32,19 @@ export default function YogaPage() {
               body::-webkit-scrollbar { display: none; }
               body { -ms-overflow-style: none; scrollbar-width: none; }
             `;
-            doc.head.appendChild(style);
+            if (!doc.getElementById('interaction-lock-style')) {
+              doc.head.appendChild(style);
+            }
+
+            // 2. Add Event Listeners at the capture phase to swallow all interaction events
+            const swallow = (e: Event) => {
+              e.preventDefault();
+              e.stopPropagation();
+            };
+            
+            ['click', 'mousedown', 'mouseup', 'touchstart', 'touchend', 'contextmenu'].forEach(type => {
+              doc.addEventListener(type, swallow, true);
+            });
           }
         } catch (e) {
           console.error("Could not lock interactions:", e);
@@ -49,28 +64,27 @@ export default function YogaPage() {
 
   return createPortal(
     <div className="fixed inset-0 z-[99999] bg-white flex flex-col overflow-hidden">
-      {/* Agency Toolbar */}
+      {/* Agency Toolbar - REVERSED LAYOUT */}
       <nav className="demo-toolbar h-16 bg-white border-b border-gray-100 px-6 flex items-center justify-between z-[2000] shadow-sm">
-        <div className="flex items-center gap-4">
-          <Link href="/hf" className="hover:opacity-60 transition-opacity">
-            <img src="/brand/HF_EZ-Navy-Tear.png" alt="EZWebOne" className="h-8 w-auto" />
-          </Link>
-          <div className="h-4 w-px bg-gray-200 hidden md:block" />
-          <div className="hidden md:flex flex-col">
-            <span className="text-[9px] uppercase tracking-widest font-bold text-gray-400">Live Preview</span>
-            <span className="text-sm font-bold text-black">Wellness & Mindfulness</span>
-          </div>
-        </div>
-
+        {/* Left Side: Exit Button */}
         <div className="flex items-center gap-3">
-          <div className="hidden lg:flex items-center gap-2 px-3 py-1 bg-green-50 rounded-full text-[9px] font-bold text-green-700 uppercase tracking-widest">
-            <ShieldCheck size={10} /> Interactions Disabled
-          </div>
           <Link 
             href="/hf#ecosystem" 
             className="flex items-center gap-2 px-4 py-2 bg-black text-white rounded-full text-[11px] font-bold hover:bg-gray-800 transition-all shadow-md"
           >
-            <ArrowLeft size={14} /> <span className="hidden sm:inline">Exit Preview</span>
+            <ArrowLeft size={14} /> Exit Preview
+          </Link>
+        </div>
+
+        {/* Right Side: Logo and Info */}
+        <div className="flex items-center gap-4 text-right">
+          <div className="hidden md:flex flex-col">
+            <span className="text-[9px] uppercase tracking-widest font-bold text-gray-400">Live Preview</span>
+            <span className="text-xs font-bold text-black">Wellness & Mindfulness</span>
+          </div>
+          <div className="h-4 w-px bg-gray-200 hidden md:block" />
+          <Link href="/hf" className="hover:opacity-60 transition-opacity">
+            <img src="/brand/HF_EZ-Navy-Tear.png" alt="EZWebOne" className="h-8 w-auto" />
           </Link>
         </div>
       </nav>
