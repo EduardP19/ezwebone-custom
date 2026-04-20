@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import Image from "next/image";
+import { usePathname } from "next/navigation";
 import { LocalizedLink } from "@/components/i18n/LocalizedLink";
 import { useI18n } from "@/components/i18n/LocaleProvider";
 import { BRAND_LOGO_MARK_DARK_SRC } from "@/lib/brand";
@@ -53,12 +54,15 @@ function InstagramIcon({ size = 18 }: { size?: number }) {
 export function Footer() {
   const { dictionary } = useI18n();
   const isDark = useIsDark();
+  const pathname = usePathname();
 
   const contactLinks = [
     { label: dictionary.footer.contact.phone, href: "tel:+447448929894" },
     { label: dictionary.footer.contact.email, href: "mailto:support@ezwebone.co.uk" },
     { label: dictionary.footer.contact.location, href: null },
   ];
+
+  if (pathname?.startsWith("/hf")) return null;
 
   return (
     <footer className={`mt-auto text-white ${isDark ? "bg-[#08080d]" : "bg-[#1C2A44]"}`}>

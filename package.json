@@ -9,6 +9,10 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@axiomhq/js": "^1.4.0",
+    "@axiomhq/logging": "^0.2.0",
+    "@axiomhq/nextjs": "^0.2.0",
+    "@axiomhq/react": "^0.2.0",
     "@react-email/components": "^1.0.12",
     "@sentry/nextjs": "^10.49.0",
     "@supabase/supabase-js": "^2.100.1",

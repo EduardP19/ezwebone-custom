@@ -10,6 +10,7 @@ import { Footer } from "@/components/layout/Footer";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { TrackingProvider } from "@/components/analytics/TrackingProvider";
 import { BRAND_LOGO_MARK_SRC } from "@/lib/brand";
+import { WebVitals } from "@/lib/axiom/client";
 import { getDictionary } from "@/lib/i18n/dictionary";
 import { getRequestLocale } from "@/lib/i18n/request";
 import { absoluteUrl, siteConfig } from "@/lib/seo";
@@ -96,6 +97,7 @@ export default async function RootLayout({
       >
         <head />
         <body className="min-h-full flex flex-col">
+          <WebVitals />
           <LocaleProvider locale={locale} dictionary={dictionary}>
             <Suspense fallback={null}>
               <TrackingProvider />

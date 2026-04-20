@@ -1,4 +1,5 @@
 import { NextResponse, type NextRequest } from "next/server";
+import { transformMiddlewareRequest } from "@axiomhq/nextjs";
 import {
   defaultLocale,
   getLocaleFromPathname,
@@ -7,6 +8,7 @@ import {
   resolvePreferredLocale,
   stripLocaleFromPathname,
 } from "@/lib/i18n/config";
+import { logger } from "@/lib/axiom/server";
 
 function shouldBypass(pathname: string) {
   return (
@@ -25,6 +27,9 @@ export function proxy(request: NextRequest) {
   if (shouldBypass(pathname)) {
     return NextResponse.next();
   }
+
+  logger.info(...transformMiddlewareRequest(request));
+  void logger.flush();
 
   const localeFromPath = getLocaleFromPathname(pathname);
   const preferredLocale = resolvePreferredLocale(
