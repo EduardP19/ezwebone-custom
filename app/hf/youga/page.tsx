@@ -9,60 +9,31 @@ export default function YogaPage() {
   const iframeRef = useRef<HTMLIFrameElement>(null);
 
   useEffect(() => {
-    let intervalId: NodeJS.Timeout;
-    
-    const lock = () => {
-      const iframe = iframeRef.current;
-      if (!iframe) return;
+    const iframe = iframeRef.current;
+    if (!iframe) return;
 
+    const lock = () => {
       try {
         const doc = iframe.contentDocument || iframe.contentWindow?.document;
-        if (!doc) return;
-
-        if (!doc.getElementById('absolute-lock')) {
+        if (doc) {
           const style = doc.createElement('style');
-          style.id = 'absolute-lock';
           style.innerText = `
-            * { 
+            a, button, input, select, textarea, [role="button"], .nav-cta, .btn-primary { 
               pointer-events: none !important; 
-              cursor: default !important;
-              user-select: none !important;
-              -webkit-user-drag: none !important;
-              touch-action: pan-y !important;
-            }
-            html, body {
-              pointer-events: auto !important;
               cursor: default !important;
             }
           `;
           doc.head.appendChild(style);
         }
-
-        const swallow = (e: Event) => {
-          e.preventDefault();
-          e.stopPropagation();
-          return false;
-        };
-
-        const win = iframe.contentWindow;
-        if (win) {
-          ['click', 'dblclick', 'mousedown', 'mouseup', 'contextmenu', 'submit'].forEach(type => {
-            win.addEventListener(type, swallow, true);
-          });
-        }
       } catch (e) {}
     };
 
-    const iframe = iframeRef.current;
-    if (iframe) {
-      iframe.addEventListener('load', lock);
+    iframe.addEventListener('load', lock);
+    if (iframe.contentDocument?.readyState === 'complete') {
       lock();
-      intervalId = setInterval(lock, 500);
     }
-
-    return () => {
-      if (intervalId) clearInterval(intervalId);
-    };
+    
+    return () => iframe.removeEventListener('load', lock);
   }, []);
 
   const [mounted, setMounted] = useState(false);
@@ -95,7 +66,6 @@ export default function YogaPage() {
         </div>
       </nav>
 
-      {/* Preview Container */}
       <div className="flex-grow p-0 md:p-6 bg-gray-100 relative overflow-hidden">
         <div className="w-full h-full bg-white rounded-none md:rounded-xl overflow-hidden shadow-2xl border border-gray-200 flex flex-col">
           <iframe 
