@@ -59,7 +59,7 @@
 - `--color-text-primary`: `#f5f5f7`
 - `--color-text-secondary`: `#a1a1aa`
 - `--color-text-accent`: `#c4b5fd`
-- `--color-live`: `#22c55e`
+- `--color-live`: `#7CB87A`
 - `--color-mesh-teal`: `#7fb4c7`
 - `--color-mesh-blue`: `#5d8da5`
 - `--color-mesh-gold`: `#d6b86e`
@@ -68,22 +68,22 @@
 - `--particle-hover-line`: `167, 139, 250`
 
 ### Light Theme (`[data-theme="light"]`)
-- `--background`: `#ffffff`
+- `--background`: `#F5F2ED`
 - `--foreground`: `#1c2a44`
 - `--color-primary`: `#7c3aed`
 - `--color-primary-light`: `#9333ea`
 - `--color-primary-dark`: `#5b21b6`
 - `--color-accent`: `#f97316`
 - `--color-accent-light`: `#ea580c`
-- `--color-bg-dark`: `#ffffff`
-- `--color-bg-card`: `#ffffff`
+- `--color-bg-dark`: `#F5F2ED`
+- `--color-bg-card`: `#F5F2ED`
 - `--color-bg-elevated`: `#eef0f5`
 - `--color-bg-void`: `#e8eaf0`
 - `--color-border`: `#d1d5e0`
 - `--color-text-primary`: `#1c2a44`
 - `--color-text-secondary`: `#4b5563`
 - `--color-text-accent`: `#7c3aed`
-- `--color-live`: `#16a34a`
+- `--color-live`: `#6BAF6B`
 - `--color-mesh-teal`: `#1c2a44`
 - `--color-mesh-blue`: `#1c2a44`
 - `--color-mesh-gold`: `#1c2a44`

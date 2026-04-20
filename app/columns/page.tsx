@@ -39,7 +39,7 @@ export default async function ColumnsPage() {
   }
 
   return (
-    <div className="bg-[#fafafa]">
+    <div className="bg-[#F5F2ED]">
       <JsonLd
         data={{
           "@context": "https://schema.org",
@@ -79,7 +79,7 @@ export default async function ColumnsPage() {
             ))}
           </div>
         ) : (
-          <div className="rounded-3xl border border-brand-border bg-white p-6 text-brand-gray">
+          <div className="rounded-3xl border border-brand-border bg-[#F5F2ED] p-6 text-brand-gray">
             {dictionary.common.noPublishedColumns}
           </div>
         )}
