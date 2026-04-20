@@ -78,6 +78,7 @@
   --color-mesh-teal: #7fb4c7;
   --color-mesh-blue: #5d8da5;
   --color-mesh-gold: #d6b86e;
+  --color-neon: #39FF14;
 
   --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
   --font-display: var(--font-space-grotesk), ui-sans-serif, system-ui, sans-serif;

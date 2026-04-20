@@ -1317,9 +1317,12 @@ function Footer() {
 
   return (
     <footer
-      className="py-12 px-6"
-      style={{ background: '#080808', borderTop: '1px solid #F5F2ED0c' }}
+      className="relative py-12 px-6"
+      style={{ background: '#080808' }}
     >
+      {/* Neon Gradient Line */}
+      <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-neon/60 to-transparent opacity-60 shadow-[0_0_15px_rgba(57,255,20,0.4)]" />
+
       <div className="max-w-6xl mx-auto">
         <div className="flex flex-col md:flex-row items-center justify-between gap-8 mb-8">
           {/* Logo */}
@@ -1565,8 +1568,8 @@ function ContactForm() {
                 <button
                   type="submit"
                   disabled={loading}
-                  className="w-full bg-[#050505] border-2 border-neon py-5 rounded-xl text-neon font-black uppercase tracking-widest text-lg hover:bg-neon hover:text-black active:scale-[0.98] transition-all disabled:opacity-50 disabled:scale-100 shadow-[0_0_30px_rgba(57,255,20,0.15)]"
-                  style={{ fontFamily: SG, fontWeight: 900 }}
+                  className="w-full bg-[#050505] border-2 py-5 rounded-xl font-black uppercase tracking-widest text-lg hover:bg-neon hover:text-black active:scale-[0.98] transition-all disabled:opacity-50 disabled:scale-100 shadow-[0_0_30px_rgba(57,255,20,0.2)]"
+                  style={{ fontFamily: SG, fontWeight: 900, color: NEON, borderColor: NEON }}
                 >
                   {loading ? 'Transmitting...' : 'Launch Strategy Session'}
                 </button>
