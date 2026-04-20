@@ -1457,7 +1457,7 @@ function ContactForm() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ delay: 0.3 }}
-          className="bg-[#111] border border-white/10 rounded-3xl p-8 md:p-12 shadow-2xl relative"
+          className="bg-[#161616] border border-white/10 rounded-3xl p-8 md:p-12 shadow-2xl relative"
         >
           {submitted ? (
             <motion.div 
@@ -1478,48 +1478,60 @@ function ContactForm() {
               </button>
             </motion.div>
           ) : (
-            <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="space-y-2">
-                <label className="text-xs uppercase tracking-widest text-white/40 font-bold ml-1">Full Name</label>
+            <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              <div className="space-y-3">
+                <div className="flex items-center gap-2 ml-1">
+                  <Users size={14} className="text-neon/70" />
+                  <label className="text-xs uppercase tracking-widest text-white/70 font-bold">Full Name</label>
+                </div>
                 <input
                   required
                   type="text"
                   placeholder="John Doe"
                   value={formData.full_name}
                   onChange={(e) => setFormData({...formData, full_name: e.target.value})}
-                  className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-4 text-white focus:outline-none focus:border-neon/50 transition-all"
+                  className="w-full bg-white/10 border border-white/20 rounded-xl px-5 py-4 text-white placeholder-white/20 focus:outline-none focus:border-neon/50 transition-all font-medium"
                 />
               </div>
-              <div className="space-y-2">
-                <label className="text-xs uppercase tracking-widest text-white/40 font-bold ml-1">Work Email</label>
+              <div className="space-y-3">
+                <div className="flex items-center gap-2 ml-1">
+                  <Mail size={14} className="text-neon/70" />
+                  <label className="text-xs uppercase tracking-widest text-white/70 font-bold">Work Email</label>
+                </div>
                 <input
                   required
                   type="email"
                   placeholder="john@wellness.com"
                   value={formData.email}
                   onChange={(e) => setFormData({...formData, email: e.target.value})}
-                  className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-4 text-white focus:outline-none focus:border-neon/50 transition-all"
+                  className="w-full bg-white/10 border border-white/20 rounded-xl px-5 py-4 text-white placeholder-white/20 focus:outline-none focus:border-neon/50 transition-all font-medium"
                 />
               </div>
-              <div className="space-y-2 md:col-span-2">
-                <label className="text-xs uppercase tracking-widest text-white/40 font-bold ml-1">Business Name</label>
+              <div className="space-y-3 md:col-span-2">
+                <div className="flex items-center gap-2 ml-1">
+                  <Target size={14} className="text-neon/70" />
+                  <label className="text-xs uppercase tracking-widest text-white/70 font-bold">Business Name</label>
+                </div>
                 <input
                   type="text"
                   placeholder="The Wellness Collective"
                   value={formData.business_name}
                   onChange={(e) => setFormData({...formData, business_name: e.target.value})}
-                  className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-4 text-white focus:outline-none focus:border-neon/50 transition-all"
+                  className="w-full bg-white/10 border border-white/20 rounded-xl px-5 py-4 text-white placeholder-white/20 focus:outline-none focus:border-neon/50 transition-all font-medium"
                 />
               </div>
-              <div className="space-y-2 md:col-span-2">
-                <label className="text-xs uppercase tracking-widest text-white/40 font-bold ml-1">Project Details</label>
+              <div className="space-y-3 md:col-span-2">
+                <div className="flex items-center gap-2 ml-1">
+                  <Bot size={14} className="text-neon/70" />
+                  <label className="text-xs uppercase tracking-widest text-white/70 font-bold">Project Details</label>
+                </div>
                 <textarea
                   required
                   rows={4}
-                  placeholder="Tell us about your goals..."
+                  placeholder="Tell us about your goals and what you want to achieve..."
                   value={formData.message}
                   onChange={(e) => setFormData({...formData, message: e.target.value})}
-                  className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-4 text-white focus:outline-none focus:border-neon/50 transition-all resize-none"
+                  className="w-full bg-white/10 border border-white/20 rounded-xl px-5 py-4 text-white placeholder-white/20 focus:outline-none focus:border-neon/50 transition-all resize-none font-medium"
                 />
               </div>
               
