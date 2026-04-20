@@ -466,12 +466,9 @@ function Services() {
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
           {services.map((s, i) => (
-            <motion.div
+            <div
               key={i}
-              initial={{ opacity: 0, y: 30 }}
-              animate={inView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.5, delay: i * 0.09 }}
-              className="bg-[#F5F2ED] rounded-2xl p-7 shadow-sm hover:shadow-lg transition-all duration-300 group relative overflow-hidden cursor-default"
+              className="bg-[#F5F2ED] rounded-2xl p-7 shadow-sm border border-gray-100 relative overflow-hidden cursor-default"
             >
               {/* Top neon stripe */}
               <div
@@ -479,7 +476,7 @@ function Services() {
                 style={{ background: NEON }}
               />
               <div
-                className="w-13 h-13 rounded-xl flex items-center justify-center mb-5 transition-transform group-hover:scale-110 duration-300"
+                className="w-13 h-13 rounded-xl flex items-center justify-center mb-5"
                 style={{ width: 52, height: 52, background: `${NEON}18` }}
               >
                 <span style={{ color: '#111' }}>{s.icon}</span>
@@ -493,7 +490,7 @@ function Services() {
               <p className="text-gray-500 text-sm leading-relaxed" style={{ fontFamily: SG }}>
                 {s.desc}
               </p>
-            </motion.div>
+            </div>
           ))}
         </div>
       </div>
@@ -913,24 +910,21 @@ function Projects() {
         </motion.div>
 
         {/* Mobile Slider / Desktop Grid */}
-        <div 
+        <div
           className="flex md:grid md:grid-cols-3 gap-6 md:gap-8 overflow-x-auto md:overflow-x-visible pb-8 md:pb-0 snap-x snap-mandatory hide-scrollbar"
           style={{ width: 'calc(100% + 3rem)', margin: '0 -1.5rem', padding: '0 1.5rem' }}
         >
           {ecosystems.map((item, i) => (
-            <motion.a
+            <a
               key={i}
               href={item.href}
-              initial={{ opacity: 0, y: 30 }}
-              animate={inView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.5, delay: i * 0.15 }}
-              className="group relative rounded-3xl overflow-hidden bg-white shadow-sm hover:shadow-xl transition-all duration-500 flex flex-col min-w-[85vw] md:min-w-0 snap-center"
+              className="relative rounded-3xl overflow-hidden bg-white shadow-sm border border-gray-100 flex flex-col min-w-[85vw] md:min-w-0 snap-center transition-opacity hover:opacity-90"
             >
-              <div className="aspect-[4/3] overflow-hidden">
+              <div className="aspect-[4/3] overflow-hidden bg-gray-50">
                 <img
                   src={item.image}
                   alt={item.title}
-                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                  className="w-full h-full object-cover"
                 />
                 <div className="absolute top-4 left-4">
                   <span className="px-3 py-1 bg-black/40 backdrop-blur-md rounded-full text-[10px] text-white uppercase tracking-widest font-bold" style={{ fontFamily: SG }}>
@@ -944,11 +938,11 @@ function Projects() {
               </div>
               <div className="px-8 pb-8">
                 <div className="h-px bg-gray-100 mb-6" />
-                <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest transition-colors duration-300 group-hover:text-[#6BAF6B]" style={{ fontFamily: SG }}>
-                  View Expertise <ArrowRight size={14} className="transition-transform group-hover:translate-x-1" />
+                <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-[#6BAF6B]" style={{ fontFamily: SG }}>
+                  View Expertise <ArrowRight size={14} />
                 </div>
               </div>
-            </motion.a>
+            </a>
           ))}
         </div>
       </div>
@@ -1199,7 +1193,7 @@ function FinalCTA() {
             className="text-gray-400 text-lg mb-10 max-w-xl mx-auto"
             style={{ fontFamily: SG }}
           >
-            Book a free 30-minute strategy call. We'll audit your current setup and show you exactly what's holding your business back.
+            Book a free 20-minute strategy call. We'll audit your current setup and show you exactly what's holding your business back.
           </p>
           <a
             href="https://calendly.com/eduard-ezwebone/20min?UTM_SOURCE=HF_LP&UTM_MEDIUM=LP&UTM_CAMPAIGN=HF"
