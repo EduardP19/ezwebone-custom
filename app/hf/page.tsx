@@ -864,7 +864,7 @@ function Projects() {
     {
       title: 'High-Performance Gyms',
       desc: 'Digital engines for strength communities. We build high-conversion funnels that turn local residents into dedicated lifters.',
-      image: 'https://images.unsplash.com/photo-1540497077202-7c8a3999166f?q=80&w=1200&auto=format&fit=crop',
+      image: 'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=1200&auto=format&fit=crop',
       tag: 'Strength',
       href: '/hf/battery'
     },
