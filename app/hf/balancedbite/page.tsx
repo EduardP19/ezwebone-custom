@@ -8,33 +8,7 @@ import { ArrowLeft } from 'lucide-react';
 export default function BalancedBitePage() {
   const iframeRef = useRef<HTMLIFrameElement>(null);
 
-  useEffect(() => {
-    const iframe = iframeRef.current;
-    if (!iframe) return;
-
-    const lock = () => {
-      try {
-        const doc = iframe.contentDocument || iframe.contentWindow?.document;
-        if (doc) {
-          const style = doc.createElement('style');
-          style.innerText = `
-            a, button, input, select, textarea, [role="button"], .nav-cta, .btn-primary { 
-              pointer-events: none !important; 
-              cursor: default !important;
-            }
-          `;
-          doc.head.appendChild(style);
-        }
-      } catch (e) {}
-    };
-
-    iframe.addEventListener('load', lock);
-    if (iframe.contentDocument?.readyState === 'complete') {
-      lock();
-    }
-    
-    return () => iframe.removeEventListener('load', lock);
-  }, []);
+  // Interaction locking logic has been removed as requested.
 
   const [mounted, setMounted] = useState(false);
   useEffect(() => setMounted(true), []);
@@ -45,6 +19,7 @@ export default function BalancedBitePage() {
     <div className="fixed inset-0 z-[99999] bg-white flex flex-col overflow-hidden">
       {/* Agency Toolbar */}
       <nav className="demo-toolbar h-16 bg-white border-b border-gray-100 px-6 flex items-center justify-between z-[2000] shadow-sm">
+        {/* Left Side: Exit Button */}
         <div className="flex items-center gap-3">
           <Link 
             href="/hf#ecosystem" 
@@ -54,6 +29,7 @@ export default function BalancedBitePage() {
           </Link>
         </div>
 
+        {/* Right Side: Logo and Info */}
         <div className="flex items-center gap-4 text-right">
           <div className="hidden md:flex flex-col">
             <span className="text-[9px] uppercase tracking-widest font-bold text-gray-400">Live Preview</span>
@@ -66,6 +42,7 @@ export default function BalancedBitePage() {
         </div>
       </nav>
 
+      {/* Preview Container */}
       <div className="flex-grow p-0 md:p-6 bg-gray-100 relative overflow-hidden">
         <div className="w-full h-full bg-white rounded-none md:rounded-xl overflow-hidden shadow-2xl border border-gray-200 flex flex-col">
           <iframe 
