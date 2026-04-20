@@ -307,7 +307,6 @@ function PresenceCounter() {
   const count = useMotionValue(0);
   const rounded = useTransform(count, (latest) => Math.round(latest));
   const [complete, setComplete] = useState(false);
-  const colorInterpolated = useTransform(count, [0, 100], ['#143d14', NEON]);
 
   useEffect(() => {
     const controls = animate(count, 100, {
@@ -327,7 +326,7 @@ function PresenceCounter() {
         className="text-5xl md:text-6xl font-black transition-all duration-1000"
         style={{ 
           fontFamily: SG,
-          color: colorInterpolated,
+          color: NEON,
           textShadow: complete ? `0 0 30px ${NEON}` : 'none'
         }}
       >
