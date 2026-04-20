@@ -68,7 +68,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
   const showHtml = isHtmlContent(content);
 
   return (
-    <div className="bg-white">
+    <div className="bg-[#F5F2ED]">
       <JsonLd
         id="blog-post-schema"
         data={{

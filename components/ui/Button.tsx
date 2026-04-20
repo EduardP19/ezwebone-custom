@@ -12,8 +12,8 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       primary:
         "border border-[color:var(--color-primary)] bg-[color:var(--color-primary)] text-white shadow-[0_12px_40px_rgba(124,58,237,0.28)] hover:border-[color:var(--color-primary-light)] hover:bg-[color:var(--color-primary-light)] hover:shadow-[0_18px_50px_rgba(124,58,237,0.36)] transition-all",
       secondary:
-        "border border-[color:var(--color-border)] bg-white/5 text-[color:var(--color-text-primary)] backdrop-blur-xl hover:border-[color:var(--color-primary-light)] hover:bg-white/8 transition-all",
-      ghost: "border border-transparent text-[color:var(--color-text-primary)] hover:bg-white/5",
+        "border border-[color:var(--color-border)] bg-[#F5F2ED]/5 text-[color:var(--color-text-primary)] backdrop-blur-xl hover:border-[color:var(--color-primary-light)] hover:bg-[#F5F2ED]/8 transition-all",
+      ghost: "border border-transparent text-[color:var(--color-text-primary)] hover:bg-[#F5F2ED]/5",
     };
 
     const sizes = {

@@ -27,51 +27,51 @@ export default async function CookiesPage() {
   const isRo = locale === "ro";
   const cookieItems = isRo
     ? [
-        {
-          name: "ezw_tracking_consent",
-          purpose:
-            "Stocheaza alegerea ta pentru analytics, astfel incat bannerul sa nu reapara constant.",
-          duration: "Persistent pana la schimbare sau stergere",
-          required: "Da",
-        },
-        {
-          name: "ezw_session_id",
-          purpose:
-            "Creeaza un identificator de sesiune pentru logurile de analytics dupa ce accepti analytics.",
-          duration: "Session storage (tab-ul curent)",
-          required: "Nu",
-        },
-        {
-          name: "ezw_utm",
-          purpose:
-            "Stocheaza valorile de atribuire a campaniilor, precum parametrii UTM, dupa ce accepti analytics.",
-          duration: "Session storage",
-          required: "Nu",
-        },
-      ]
+      {
+        name: "ezw_tracking_consent",
+        purpose:
+          "Stocheaza alegerea ta pentru analytics, astfel incat bannerul sa nu reapara constant.",
+        duration: "Persistent pana la schimbare sau stergere",
+        required: "Da",
+      },
+      {
+        name: "ezw_session_id",
+        purpose:
+          "Creeaza un identificator de sesiune pentru logurile de analytics dupa ce accepti analytics.",
+        duration: "Session storage (tab-ul curent)",
+        required: "Nu",
+      },
+      {
+        name: "ezw_utm",
+        purpose:
+          "Stocheaza valorile de atribuire a campaniilor, precum parametrii UTM, dupa ce accepti analytics.",
+        duration: "Session storage",
+        required: "Nu",
+      },
+    ]
     : [
-        {
-          name: "ezw_tracking_consent",
-          purpose:
-            "Stores your analytics consent choice so the banner does not keep reappearing.",
-          duration: "Persistent until changed or cleared",
-          required: "Yes",
-        },
-        {
-          name: "ezw_session_id",
-          purpose:
-            "Creates a session identifier for analytics logs after you accept analytics.",
-          duration: "Session storage (current tab)",
-          required: "No",
-        },
-        {
-          name: "ezw_utm",
-          purpose:
-            "Stores campaign attribution values such as UTM parameters after you accept analytics.",
-          duration: "Session storage",
-          required: "No",
-        },
-      ];
+      {
+        name: "ezw_tracking_consent",
+        purpose:
+          "Stores your analytics consent choice so the banner does not keep reappearing.",
+        duration: "Persistent until changed or cleared",
+        required: "Yes",
+      },
+      {
+        name: "ezw_session_id",
+        purpose:
+          "Creates a session identifier for analytics logs after you accept analytics.",
+        duration: "Session storage (current tab)",
+        required: "No",
+      },
+      {
+        name: "ezw_utm",
+        purpose:
+          "Stores campaign attribution values such as UTM parameters after you accept analytics.",
+        duration: "Session storage",
+        required: "No",
+      },
+    ];
 
   return (
     <LegalPageShell
@@ -117,7 +117,7 @@ export default async function CookiesPage() {
       <LegalSection title={isRo ? "3. Tehnologii folosite in prezent" : "3. Technologies currently used"}>
         <div className="space-y-4">
           {cookieItems.map((item) => (
-            <div key={item.name} className="rounded-[1.5rem] border border-brand-border bg-white p-5">
+            <div key={item.name} className="rounded-[1.5rem] border border-brand-border bg-[#F5F2ED] p-5">
               <p className="font-mono text-sm text-brand-black">{item.name}</p>
               <p className="mt-2">{item.purpose}</p>
               <div className="mt-3 flex flex-wrap gap-4 text-sm text-brand-gray">

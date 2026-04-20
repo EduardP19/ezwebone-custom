@@ -43,7 +43,7 @@ full before writing a single line of code:
 Pull exact values from `SPEC.md`. Defaults for EZWebOne/Resevia products:
 
 ```
-Background:     #FFFFFF
+Background:     #F5F2ED
 Primary Purple: #6D28D9  — buttons, links, highlights
 Electric Blue:  #2563EB  — secondary CTAs, hover states
 Sand Gold:      #C9A96E  — badges, borders, premium accents

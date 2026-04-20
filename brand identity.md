@@ -68,15 +68,15 @@
 - `--particle-hover-line`: `167, 139, 250`
 
 ### Light Theme (`[data-theme="light"]`)
-- `--background`: `#ffffff`
+- `--background`: `#F5F2ED`
 - `--foreground`: `#1c2a44`
 - `--color-primary`: `#7c3aed`
 - `--color-primary-light`: `#9333ea`
 - `--color-primary-dark`: `#5b21b6`
 - `--color-accent`: `#f97316`
 - `--color-accent-light`: `#ea580c`
-- `--color-bg-dark`: `#ffffff`
-- `--color-bg-card`: `#ffffff`
+- `--color-bg-dark`: `#F5F2ED`
+- `--color-bg-card`: `#F5F2ED`
 - `--color-bg-elevated`: `#eef0f5`
 - `--color-bg-void`: `#e8eaf0`
 - `--color-border`: `#d1d5e0`

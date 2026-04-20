@@ -52,7 +52,7 @@ export default async function ColumnDetailPage({ params }: { params: Promise<{ s
   }
 
   return (
-    <div className="bg-white">
+    <div className="bg-[#F5F2ED]">
       <JsonLd
         data={{
           "@context": "https://schema.org",

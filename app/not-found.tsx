@@ -20,7 +20,7 @@ export default async function NotFoundPage() {
             <div className="relative mx-[-0.2rem] sm:mx-[-0.4rem]">
               <div className="h-[10.5rem] w-[10.5rem] rounded-full bg-[#1C2A44] sm:h-[13rem] sm:w-[13rem] md:h-[16rem] md:w-[16rem]" />
               <div className="absolute inset-0 flex items-center justify-center">
-                <div className="relative h-[7.4rem] w-[7.4rem] rounded-full border-4 border-white/80 bg-white/10 sm:h-[9rem] sm:w-[9rem] md:h-[11rem] md:w-[11rem]">
+                <div className="relative h-[7.4rem] w-[7.4rem] rounded-full border-4 border-white/80 bg-[#F5F2ED]/10 sm:h-[9rem] sm:w-[9rem] md:h-[11rem] md:w-[11rem]">
                   <span className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-[58%] text-[3rem] sm:text-[3.7rem] md:text-[4.4rem]">
                     👨‍🚀
                   </span>

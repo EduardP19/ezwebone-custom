@@ -41,17 +41,17 @@ export default function GuidesPage() {
       : "A practical guide to build the right online presence and attract clients without dependency.",
     bullets: isRo
       ? [
-          "Ce ai nevoie cu adevarat la inceput",
-          "Ce poti face singur si ce nu",
-          "Cum atragi primii clienti fara bugete mari",
-          "Cum eviti dependenta de Google/FB Ads",
-        ]
+        "Ce ai nevoie cu adevarat la inceput",
+        "Ce poti face singur si ce nu",
+        "Cum atragi primii clienti fara bugete mari",
+        "Cum eviti dependenta de Google/FB Ads",
+      ]
       : [
-          "What you really need at the start",
-          "What you can do yourself and what to outsource",
-          "How to attract first clients without huge budgets",
-          "How to avoid dependency on Google/FB Ads",
-        ],
+        "What you really need at the start",
+        "What you can do yourself and what to outsource",
+        "How to attract first clients without huge budgets",
+        "How to avoid dependency on Google/FB Ads",
+      ],
     codePlaceholder: isRo ? "Cod unic" : "Unique code",
     checkButtonIdle: isRo ? "Descarca Gratuit Ghidul" : "Download Free Guide",
     checkButtonLoading: isRo ? "Verificam codul..." : "Checking code...",
@@ -85,35 +85,35 @@ export default function GuidesPage() {
     healthyTitle: isRo ? "Crestere sanatoasa" : "Healthy growth",
     healthyItems: isRo
       ? [
-          "Website propriu, simplu",
-          "Vizibilitate locala in Google",
-          "Programari directe",
-          "Control asupra clientilor",
-          "Costuri predictibile",
-        ]
+        "Website propriu, simplu",
+        "Vizibilitate locala in Google",
+        "Programari directe",
+        "Control asupra clientilor",
+        "Costuri predictibile",
+      ]
       : [
-          "Simple, owned website",
-          "Local Google visibility",
-          "Direct bookings",
-          "Control over customer data",
-          "Predictable costs",
-        ],
+        "Simple, owned website",
+        "Local Google visibility",
+        "Direct bookings",
+        "Control over customer data",
+        "Predictable costs",
+      ],
     unstableTitle: isRo ? "Crestere instabila" : "Unstable growth",
     unstableItems: isRo
       ? [
-          "Dependenta de o singura platforma",
-          "Comisioane mari",
-          "Lipsa de control",
-          "Social media fara strategie",
-          "Mult efort, putine rezultate",
-        ]
+        "Dependenta de o singura platforma",
+        "Comisioane mari",
+        "Lipsa de control",
+        "Social media fara strategie",
+        "Mult efort, putine rezultate",
+      ]
       : [
-          "Dependency on one platform",
-          "High commissions",
-          "Lack of control",
-          "Social media without strategy",
-          "High effort, low return",
-        ],
+        "Dependency on one platform",
+        "High commissions",
+        "Lack of control",
+        "Social media without strategy",
+        "High effort, low return",
+      ],
 
     supportTitle: isRo ? "Suport Total Pentru Prezenta Ta Online" : "Full Support For Your Online Presence",
     supportSubtitle: isRo
@@ -121,87 +121,87 @@ export default function GuidesPage() {
       : "A complete service stack to improve your website, SEO, and campaigns.",
     supportItems: isRo
       ? [
-          {
-            title: "Dezvoltare Web & Design",
-            body: "Website-uri personalizate, construite de la zero folosind cele mai noi tehnologii si bune practici.",
-          },
-          {
-            title: "Landing Pages",
-            body: "Pagini mini cu obiectiv clar pentru cod email, reclame sau recomandari.",
-          },
-          {
-            title: "Optimizare SEO",
-            body: "SEO practic integrat pentru a urca site-ul tau in rezultatele Google.",
-          },
-          {
-            title: "AI Agentic & Automatizare",
-            body: "Agenti AI si fluxuri de automatizare care raspund rapid, filtreaza lead-uri si reduc munca repetitiva.",
-          },
-          {
-            title: "Marketing & Integrari",
-            body: "Conecteaza website-ul cu postari automate, tracking si retargeting pentru crestere constanta.",
-          },
-        ]
+        {
+          title: "Dezvoltare Web & Design",
+          body: "Website-uri personalizate, construite de la zero folosind cele mai noi tehnologii si bune practici.",
+        },
+        {
+          title: "Landing Pages",
+          body: "Pagini mini cu obiectiv clar pentru cod email, reclame sau recomandari.",
+        },
+        {
+          title: "Optimizare SEO",
+          body: "SEO practic integrat pentru a urca site-ul tau in rezultatele Google.",
+        },
+        {
+          title: "AI Agentic & Automatizare",
+          body: "Agenti AI si fluxuri de automatizare care raspund rapid, filtreaza lead-uri si reduc munca repetitiva.",
+        },
+        {
+          title: "Marketing & Integrari",
+          body: "Conecteaza website-ul cu postari automate, tracking si retargeting pentru crestere constanta.",
+        },
+      ]
       : [
-          {
-            title: "Web Development & Design",
-            body: "Custom websites built from scratch using modern technologies and conversion-focused structure.",
-          },
-          {
-            title: "Landing Pages",
-            body: "Focused pages for guide downloads, ads, or referral traffic with clean conversion paths.",
-          },
-          {
-            title: "SEO Optimization",
-            body: "Practical SEO setup so your business is discoverable for local intent and high-value services.",
-          },
-          {
-            title: "AI Agentic & Automation",
-            body: "AI agents and automation flows that respond faster, qualify leads, and reduce repetitive manual tasks.",
-          },
-          {
-            title: "Marketing & Integrations",
-            body: "Connect your website with automation, tracking, and retargeting for predictable growth.",
-          },
-        ],
+        {
+          title: "Web Development & Design",
+          body: "Custom websites built from scratch using modern technologies and conversion-focused structure.",
+        },
+        {
+          title: "Landing Pages",
+          body: "Focused pages for guide downloads, ads, or referral traffic with clean conversion paths.",
+        },
+        {
+          title: "SEO Optimization",
+          body: "Practical SEO setup so your business is discoverable for local intent and high-value services.",
+        },
+        {
+          title: "AI Agentic & Automation",
+          body: "AI agents and automation flows that respond faster, qualify leads, and reduce repetitive manual tasks.",
+        },
+        {
+          title: "Marketing & Integrations",
+          body: "Connect your website with automation, tracking, and retargeting for predictable growth.",
+        },
+      ],
 
     testimonialsTitle: isRo ? "Ce spun clientii nostri" : "What our clients say",
     testimonialsSubtitle: isRo ? "Rezultate reale de la business-uri reale." : "Real outcomes from real businesses.",
     testimonials: isRo
       ? [
-          {
-            name: "Mika Roberts",
-            quote: "Sistemul ne-a oferit claritate imediata si programari mai bune.",
-            image: "/clients/client1.png",
-          },
-          {
-            name: "David Evans",
-            quote: "Lead-urile sunt mai calitative si pierdem mai putin timp pe apeluri inutile.",
-            image: "/clients/client2.png",
-          },
-          {
-            name: "Sarah Taylor",
-            quote: "Website-ul nou si automarile ne-au ajutat sa crestem constant, fara haos.",
-            image: "/clients/client3.png",
-          },
-        ]
+        {
+          name: "Mika Roberts",
+          quote: "Sistemul ne-a oferit claritate imediata si programari mai bune.",
+          image: "/clients/client1.png",
+        },
+        {
+          name: "David Evans",
+          quote: "Lead-urile sunt mai calitative si pierdem mai putin timp pe apeluri inutile.",
+          image: "/clients/client2.png",
+        },
+        {
+          name: "Sarah Taylor",
+          quote: "Website-ul nou si automarile ne-au ajutat sa crestem constant, fara haos.",
+          image: "/clients/client3.png",
+        },
+      ]
       : [
-          {
-            name: "Mika Roberts",
-            quote: "The system gave us immediate clarity and better bookings.",
-            image: "/clients/client1.png",
-          },
-          {
-            name: "David Evans",
-            quote: "Lead quality improved and we waste far less time on low-intent calls.",
-            image: "/clients/client2.png",
-          },
-          {
-            name: "Sarah Taylor",
-            quote: "The new website and automations helped us grow steadily without chaos.",
-            image: "/clients/client3.png",
-          },
-        ],
+        {
+          name: "Mika Roberts",
+          quote: "The system gave us immediate clarity and better bookings.",
+          image: "/clients/client1.png",
+        },
+        {
+          name: "David Evans",
+          quote: "Lead quality improved and we waste far less time on low-intent calls.",
+          image: "/clients/client2.png",
+        },
+        {
+          name: "Sarah Taylor",
+          quote: "The new website and automations helped us grow steadily without chaos.",
+          image: "/clients/client3.png",
+        },
+      ],
 
     finalTitle: isRo
       ? "Esti gata sa atragi mai multi clienti in fiecare luna?"
@@ -446,7 +446,7 @@ export default function GuidesPage() {
                 onChange={(event) => setCode(event.target.value.toUpperCase())}
                 placeholder={copy.codePlaceholder}
                 data-track-label="stampuser:guides-code-input"
-                className="min-h-12 rounded-xl border border-[color:var(--color-border)] bg-white px-4 text-center text-base font-medium tracking-[0.12em] text-[#1C2A44] placeholder:text-[#1C2A44]/65 outline-none focus:border-orange-400/60"
+                className="min-h-12 rounded-xl border border-[color:var(--color-border)] bg-[#F5F2ED] px-4 text-center text-base font-medium tracking-[0.12em] text-[#1C2A44] placeholder:text-[#1C2A44]/65 outline-none focus:border-orange-400/60"
               />
               <button
                 type="submit"
@@ -667,14 +667,14 @@ export default function GuidesPage() {
                 value={firstName}
                 onChange={(event) => setFirstName(event.target.value)}
                 placeholder={copy.firstName}
-                className="min-h-11 w-full rounded-xl border border-[color:var(--color-border)] bg-white px-3.5 text-sm text-[color:var(--color-text-primary)] outline-none focus:border-[color:var(--color-primary)]/60"
+                className="min-h-11 w-full rounded-xl border border-[color:var(--color-border)] bg-[#F5F2ED] px-3.5 text-sm text-[color:var(--color-text-primary)] outline-none focus:border-[color:var(--color-primary)]/60"
               />
               <input
                 value={email}
                 onChange={(event) => setEmail(event.target.value)}
                 placeholder={copy.email}
                 type="email"
-                className="min-h-11 w-full rounded-xl border border-[color:var(--color-border)] bg-white px-3.5 text-sm text-[color:var(--color-text-primary)] outline-none focus:border-[color:var(--color-primary)]/60"
+                className="min-h-11 w-full rounded-xl border border-[color:var(--color-border)] bg-[#F5F2ED] px-3.5 text-sm text-[color:var(--color-text-primary)] outline-none focus:border-[color:var(--color-primary)]/60"
               />
 
               {submitError ? <p className="text-sm text-rose-600">{submitError}</p> : null}

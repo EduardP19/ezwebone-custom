@@ -221,14 +221,14 @@ export default function Page() {
           background-color: #E50045;
           border-radius: 8px;
           width: 500px;
-          color: #FFFFFF;
+          color: #F5F2ED;
           border: 1px solid #A80033;
           text-align: center;
           margin: 0;
         }
 
         .connectivity-error a {
-          color: #FFFFFF;
+          color: #F5F2ED;
           text-decoration: underline;
         }
       `}</style>

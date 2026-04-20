@@ -4,13 +4,13 @@ export function PhoneMockup() {
   return (
     <div className="mx-auto w-full max-w-[22rem] rounded-[2.2rem] border border-white/10 bg-[#09090f] p-3 shadow-[0_24px_90px_rgba(0,0,0,0.35)]">
       <div className="mb-3 flex justify-center">
-        <div className="h-1.5 w-20 rounded-full bg-white/10" />
+        <div className="h-1.5 w-20 rounded-full bg-[#F5F2ED]/10" />
       </div>
 
       <div className="rounded-[1.65rem] border border-white/6 bg-[linear-gradient(180deg,#111118,#171727)] p-4">
         <div className="mb-4 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="flex h-11 w-11 items-center justify-center rounded-2xl border border-white/8 bg-white/6">
+            <div className="flex h-11 w-11 items-center justify-center rounded-2xl border border-white/8 bg-[#F5F2ED]/6">
               <Image
                 src="/resevia/logo.svg"
                 alt="Resevia logo"
@@ -28,7 +28,7 @@ export function PhoneMockup() {
         </div>
 
         <div className="space-y-3 text-sm leading-6">
-          <div className="mr-8 rounded-2xl rounded-bl-md bg-white/7 px-4 py-3 text-[color:var(--color-text-primary)]">
+          <div className="mr-8 rounded-2xl rounded-bl-md bg-[#F5F2ED]/7 px-4 py-3 text-[color:var(--color-text-primary)]">
             Hi, I&apos;d like to book a cut and colour for Saturday.
           </div>
 
@@ -36,7 +36,7 @@ export function PhoneMockup() {
             Hi! I have availability at 10:00, 13:30, or 15:00 on Saturday. Which works best for you?
           </div>
 
-          <div className="mr-16 rounded-2xl rounded-bl-md bg-white/7 px-4 py-3 text-[color:var(--color-text-primary)]">
+          <div className="mr-16 rounded-2xl rounded-bl-md bg-[#F5F2ED]/7 px-4 py-3 text-[color:var(--color-text-primary)]">
             13:30 please.
           </div>
 

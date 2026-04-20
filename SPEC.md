@@ -10,7 +10,7 @@
 - Domain: ezwebone.co.uk
 
 ## Brand Colours
-- Background: #FFFFFF
+- Background: #F5F2ED
 - Primary Black: #0A0A0A — headings, primary buttons
 - Accent Electric: #2563EB — links, highlights, hover states
 - Warm White: #F8F7F4 — alternating section backgrounds

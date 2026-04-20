@@ -23,7 +23,7 @@ export function LegalPageShell({
   children,
 }: LegalPageShellProps) {
   return (
-    <div className="bg-white py-20">
+    <div className="bg-[#F5F2ED] py-20">
       <div className="container mx-auto max-w-4xl px-4 md:px-6">
         <Badge className="mb-5">{badge}</Badge>
         <div className="mb-6 flex flex-wrap items-center gap-3 text-xs font-semibold uppercase tracking-[0.18em] text-brand-gray">

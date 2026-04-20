@@ -42,7 +42,7 @@ export function HowItWorks() {
         </div>
 
         <div className="relative mt-16">
-          <div className="absolute left-5 top-0 bottom-0 hidden w-px bg-white/8 md:left-0 md:right-0 md:top-5 md:block md:h-px md:w-auto" />
+          <div className="absolute left-5 top-0 bottom-0 hidden w-px bg-[#F5F2ED]/8 md:left-0 md:right-0 md:top-5 md:block md:h-px md:w-auto" />
           <motion.div
             className="absolute left-5 top-0 hidden w-px bg-[linear-gradient(180deg,var(--color-primary-light),var(--color-primary))] shadow-[0_0_24px_rgba(124,58,237,0.45)] md:left-0 md:right-0 md:top-5 md:block md:h-px"
             animate={

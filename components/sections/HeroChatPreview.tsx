@@ -474,107 +474,107 @@ export function HeroChatPreview({ apiPath: _apiPath, agentKey: _agentKey }: Hero
                   className={cn(
                     "text-left",
                     chatState === "locked" &&
-                      "flex items-center justify-center text-center"
+                    "flex items-center justify-center text-center"
                   )}
                 >
                   {chatState === "locked" ? null : (
                     <AnimatePresence mode="wait">
                       {chatState === "idle" ? (
-                      <motion.div
-                        key="idle"
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        exit={{ opacity: 0 }}
-                        transition={{ duration: 0.3 }}
-                        className="mb-4 sm:mb-5"
-                      >
-                        <div className="mb-5 flex min-h-[64px] items-center px-1 text-base italic leading-7 tracking-[0.01em] text-white/92 sm:min-h-[72px] sm:text-lg">
-                          <span suppressHydrationWarning className="max-w-[28ch] sm:max-w-none">
-                            {heroCopy.placeholderChat}
-                          </span>
-                        </div>
-                      </motion.div>
-                      ) : (
-                      <motion.div
-                        key="active"
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        exit={{ opacity: 0 }}
-                        transition={{ duration: 0.3 }}
-                        ref={historyRef}
-                        className="mb-4 max-h-[245px] space-y-2.5 overflow-y-auto pr-1 sm:mb-5 sm:max-h-[300px] sm:space-y-3"
-                      >
-                        {messages.length === 0 ? (
+                        <motion.div
+                          key="idle"
+                          initial={{ opacity: 0 }}
+                          animate={{ opacity: 1 }}
+                          exit={{ opacity: 0 }}
+                          transition={{ duration: 0.3 }}
+                          className="mb-4 sm:mb-5"
+                        >
                           <div className="mb-5 flex min-h-[64px] items-center px-1 text-base italic leading-7 tracking-[0.01em] text-white/92 sm:min-h-[72px] sm:text-lg">
                             <span suppressHydrationWarning className="max-w-[28ch] sm:max-w-none">
                               {heroCopy.placeholderChat}
                             </span>
                           </div>
-                        ) : null}
+                        </motion.div>
+                      ) : (
+                        <motion.div
+                          key="active"
+                          initial={{ opacity: 0 }}
+                          animate={{ opacity: 1 }}
+                          exit={{ opacity: 0 }}
+                          transition={{ duration: 0.3 }}
+                          ref={historyRef}
+                          className="mb-4 max-h-[245px] space-y-2.5 overflow-y-auto pr-1 sm:mb-5 sm:max-h-[300px] sm:space-y-3"
+                        >
+                          {messages.length === 0 ? (
+                            <div className="mb-5 flex min-h-[64px] items-center px-1 text-base italic leading-7 tracking-[0.01em] text-white/92 sm:min-h-[72px] sm:text-lg">
+                              <span suppressHydrationWarning className="max-w-[28ch] sm:max-w-none">
+                                {heroCopy.placeholderChat}
+                              </span>
+                            </div>
+                          ) : null}
 
-                        {messages.map((message) =>
-                          message.role === "user" ? (
+                          {messages.map((message) =>
+                            message.role === "user" ? (
+                              <motion.div
+                                key={message.id}
+                                initial={{ opacity: 0, y: 10 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                className="ml-auto max-w-[92%] rounded-2xl rounded-br-md bg-[color:var(--color-primary)] px-3.5 py-2.5 text-[13px] leading-6 text-white sm:max-w-[80%] sm:px-4 sm:py-3 sm:text-sm"
+                              >
+                                {message.text}
+                              </motion.div>
+                            ) : (
+                              <motion.div
+                                key={message.id}
+                                initial={{ opacity: 0, y: 10 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                className={cn(
+                                  "max-w-[92%] rounded-2xl rounded-bl-md px-3.5 py-2.5 text-[13px] leading-6 sm:max-w-[80%] sm:px-4 sm:py-3 sm:text-sm",
+                                  "bg-[color:var(--color-bg-card)] text-[color:var(--color-text-primary)] shadow-sm"
+                                )}
+                              >
+                                <span className="mr-2 inline-flex rounded bg-[color:var(--color-primary)]/15 px-1.5 py-0.5 font-mono text-xs text-[color:var(--color-primary)]">
+                                  EZ
+                                </span>
+                                {message.text}
+                                {message.ctaHref && message.ctaLabel && message.text.trim().length > 0 ? (
+                                  <div className="mt-3">
+                                    <a
+                                      href={message.ctaHref}
+                                      target="_blank"
+                                      rel="noreferrer"
+                                      data-track-label="stampuser:chat-window-book-call"
+                                      className="ai-command-send-button inline-flex min-h-10 items-center justify-center rounded-[0.9rem] px-4 text-xs font-semibold tracking-[0.02em] text-white sm:text-sm"
+                                    >
+                                      {message.ctaLabel}
+                                    </a>
+                                  </div>
+                                ) : null}
+                              </motion.div>
+                            )
+                          )}
+
+                          {isSending && !isStreaming ? (
                             <motion.div
-                              key={message.id}
-                              initial={{ opacity: 0, y: 10 }}
-                              animate={{ opacity: 1, y: 0 }}
-                              className="ml-auto max-w-[92%] rounded-2xl rounded-br-md bg-[color:var(--color-primary)] px-3.5 py-2.5 text-[13px] leading-6 text-white sm:max-w-[80%] sm:px-4 sm:py-3 sm:text-sm"
-                            >
-                              {message.text}
-                            </motion.div>
-                          ) : (
-                            <motion.div
-                              key={message.id}
+                              key="assistant-thinking"
                               initial={{ opacity: 0, y: 10 }}
                               animate={{ opacity: 1, y: 0 }}
                               className={cn(
                                 "max-w-[92%] rounded-2xl rounded-bl-md px-3.5 py-2.5 text-[13px] leading-6 sm:max-w-[80%] sm:px-4 sm:py-3 sm:text-sm",
                                 "bg-[color:var(--color-bg-card)] text-[color:var(--color-text-primary)] shadow-sm"
                               )}
+                              aria-label="Agent is thinking"
                             >
                               <span className="mr-2 inline-flex rounded bg-[color:var(--color-primary)]/15 px-1.5 py-0.5 font-mono text-xs text-[color:var(--color-primary)]">
                                 EZ
                               </span>
-                              {message.text}
-                              {message.ctaHref && message.ctaLabel && message.text.trim().length > 0 ? (
-                                <div className="mt-3">
-                                  <a
-                                    href={message.ctaHref}
-                                    target="_blank"
-                                    rel="noreferrer"
-                                    data-track-label="stampuser:chat-window-book-call"
-                                    className="ai-command-send-button inline-flex min-h-10 items-center justify-center rounded-[0.9rem] px-4 text-xs font-semibold tracking-[0.02em] text-white sm:text-sm"
-                                  >
-                                    {message.ctaLabel}
-                                  </a>
-                                </div>
-                              ) : null}
+                              <span className="ai-thinking-dots" aria-hidden="true">
+                                <span className="ai-thinking-dot" />
+                                <span className="ai-thinking-dot" />
+                                <span className="ai-thinking-dot" />
+                              </span>
                             </motion.div>
-                          )
-                        )}
-
-                        {isSending && !isStreaming ? (
-                          <motion.div
-                            key="assistant-thinking"
-                            initial={{ opacity: 0, y: 10 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            className={cn(
-                              "max-w-[92%] rounded-2xl rounded-bl-md px-3.5 py-2.5 text-[13px] leading-6 sm:max-w-[80%] sm:px-4 sm:py-3 sm:text-sm",
-                              "bg-[color:var(--color-bg-card)] text-[color:var(--color-text-primary)] shadow-sm"
-                            )}
-                            aria-label="Agent is thinking"
-                          >
-                            <span className="mr-2 inline-flex rounded bg-[color:var(--color-primary)]/15 px-1.5 py-0.5 font-mono text-xs text-[color:var(--color-primary)]">
-                              EZ
-                            </span>
-                            <span className="ai-thinking-dots" aria-hidden="true">
-                              <span className="ai-thinking-dot" />
-                              <span className="ai-thinking-dot" />
-                              <span className="ai-thinking-dot" />
-                            </span>
-                          </motion.div>
-                        ) : null}
-                      </motion.div>
+                          ) : null}
+                        </motion.div>
                       )}
                     </AnimatePresence>
                   )}
@@ -627,7 +627,7 @@ export function HeroChatPreview({ apiPath: _apiPath, agentKey: _agentKey }: Hero
                             }}
                             aria-label={heroCopy.placeholderChat}
                             disabled={handoffRequired || isSending || isStreaming}
-                            className="min-h-14 w-full rounded-[1.05rem] border border-[color:var(--color-border)]/70 bg-white px-4 text-base tracking-[0.01em] text-[color:#111827] outline-none transition focus:border-[color:var(--color-primary-light)]/70"
+                            className="min-h-14 w-full rounded-[1.05rem] border border-[color:var(--color-border)]/70 bg-[#F5F2ED] px-4 text-base tracking-[0.01em] text-[color:#111827] outline-none transition focus:border-[color:var(--color-primary-light)]/70"
                           />
                         </div>
 

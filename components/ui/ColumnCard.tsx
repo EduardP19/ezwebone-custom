@@ -30,7 +30,7 @@ export function ColumnCard({
     <LocalizedLink href={`/columns/${slug}`} className="group block">
       <motion.div
         whileHover={{ y: -5 }}
-        className="relative flex h-full flex-col overflow-hidden rounded-3xl border border-brand-border bg-white transition-all duration-300 hover:shadow-[0_20px_50px_rgba(28,42,68,0.14)]"
+        className="relative flex h-full flex-col overflow-hidden rounded-3xl border border-brand-border bg-[#F5F2ED] transition-all duration-300 hover:shadow-[0_20px_50px_rgba(28,42,68,0.14)]"
       >
         <div className="relative aspect-[16/10] overflow-hidden">
           <Image

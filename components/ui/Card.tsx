@@ -16,7 +16,7 @@ export function Card({ children, className, padding = "md" }: CardProps) {
   return (
     <div
       className={cn(
-        "bg-white/85 border border-brand-border/80 rounded-[1.75rem] shadow-[0_18px_50px_rgba(16,24,38,0.06)] overflow-hidden backdrop-blur-sm",
+        "bg-[#F5F2ED]/85 border border-brand-border/80 rounded-[1.75rem] shadow-[0_18px_50px_rgba(16,24,38,0.06)] overflow-hidden backdrop-blur-sm",
         paddings[padding],
         className
       )}

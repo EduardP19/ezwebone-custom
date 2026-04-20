@@ -90,14 +90,14 @@ export function Footer() {
                 <a
                   href="#"
                   aria-label="EZWebOne on LinkedIn"
-                  className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-white/20 bg-white/5 text-white/70 transition hover:border-[color:var(--color-primary-light)] hover:text-white/100"
+                  className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-white/20 bg-[#F5F2ED]/5 text-white/70 transition hover:border-[color:var(--color-primary-light)] hover:text-white/100"
                 >
                   <LinkedInIcon size={18} />
                 </a>
                 <a
                   href="#"
                   aria-label="EZWebOne on Instagram"
-                  className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-white/20 bg-white/5 text-white/70 transition hover:border-[color:var(--color-primary-light)] hover:text-white/100"
+                  className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-white/20 bg-[#F5F2ED]/5 text-white/70 transition hover:border-[color:var(--color-primary-light)] hover:text-white/100"
                 >
                   <InstagramIcon size={18} />
                 </a>

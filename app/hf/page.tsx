@@ -80,7 +80,7 @@ function Nav() {
 
   return (
     <motion.nav
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 bg-white shadow-lg`}
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 bg-[#F5F2ED] shadow-lg`}
       animate={{
         filter: [
           `drop-shadow(0 0 2px ${NEON}44)`,
@@ -136,7 +136,7 @@ function Nav() {
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
-            className="bg-white border-t border-gray-100 px-6 py-8 flex flex-col gap-6"
+            className="bg-[#F5F2ED] border-t border-gray-100 px-6 py-8 flex flex-col gap-6"
             style={{ fontFamily: SG }}
           >
             {[
@@ -160,7 +160,7 @@ function Nav() {
         >
           <path
             d="M0 0 L600 120 L1200 0 Z"
-            fill="white"
+            fill="#F5F2ED"
           />
           {/* Neon line at the point edge */}
           <path
@@ -199,7 +199,7 @@ function Hero() {
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7 }}
-          className="inline-flex items-center gap-2 px-4 py-2 rounded-full mb-8 border border-white/20 bg-white/10 backdrop-blur-sm"
+          className="inline-flex items-center gap-2 px-4 py-2 rounded-full mb-8 border border-white/20 bg-[#F5F2ED]/10 backdrop-blur-sm"
         >
           <span
             className="w-2 h-2 rounded-full animate-pulse"
@@ -250,7 +250,7 @@ function Hero() {
           </a>
           <a
             href="#services"
-            className="px-8 py-4 rounded-full text-white border-2 border-white transition-all hover:bg-white hover:text-black flex items-center justify-center gap-2 font-bold"
+            className="px-8 py-4 rounded-full text-white border-2 border-white transition-all hover:bg-[#F5F2ED] hover:text-black flex items-center justify-center gap-2 font-bold"
             style={{ fontFamily: SG }}
           >
             See What We Do
@@ -270,7 +270,7 @@ function Hero() {
           >
             The Method
           </span>
-          <div className="w-px h-12 bg-white/10 relative overflow-hidden">
+          <div className="w-px h-12 bg-[#F5F2ED]/10 relative overflow-hidden">
             <motion.div
               className="absolute top-0 left-0 w-full h-1/2"
               style={{ background: NEON, boxShadow: `0 0 10px ${NEON}` }}
@@ -293,7 +293,7 @@ function TrustBar() {
   ];
 
   return (
-    <section className="relative bg-white py-5 overflow-hidden">
+    <section className="relative bg-[#F5F2ED] py-5 overflow-hidden">
       <div className="absolute top-0 left-0 right-0 h-0.5" style={{ background: `linear-gradient(90deg, transparent, ${NEON}, transparent)` }} />
       <div className="absolute bottom-0 left-0 right-0 h-0.5" style={{ background: `linear-gradient(90deg, transparent, ${NEON}, transparent)` }} />
 
@@ -348,7 +348,7 @@ function Problem() {
   ];
 
   return (
-    <section ref={ref} className="bg-white py-24 px-6">
+    <section ref={ref} className="bg-[#F5F2ED] py-24 px-6">
       <div className="max-w-6xl mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 32 }}
@@ -375,7 +375,7 @@ function Problem() {
               initial={{ opacity: 0, y: 28 }}
               animate={inView ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.55, delay: i * 0.1 }}
-              className="bg-white rounded-2xl p-7 flex gap-5 border border-gray-100 shadow-sm hover:shadow-md transition-shadow"
+              className="bg-[#F5F2ED] rounded-2xl p-7 flex gap-5 border border-gray-100 shadow-sm hover:shadow-md transition-shadow"
               style={{ borderLeft: `4px solid ${NEON}` }}
             >
               <div
@@ -468,7 +468,7 @@ function Services() {
               initial={{ opacity: 0, y: 30 }}
               animate={inView ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.5, delay: i * 0.09 }}
-              className="bg-white rounded-2xl p-7 shadow-sm hover:shadow-lg transition-all duration-300 group relative overflow-hidden cursor-default"
+              className="bg-[#F5F2ED] rounded-2xl p-7 shadow-sm hover:shadow-lg transition-all duration-300 group relative overflow-hidden cursor-default"
             >
               {/* Top neon stripe */}
               <div
@@ -522,7 +522,7 @@ function SocialMedia() {
   ];
 
   return (
-    <section id="social-media" ref={ref} className="py-24 px-6 bg-white border-b border-gray-100">
+    <section id="social-media" ref={ref} className="py-24 px-6 bg-[#F5F2ED] border-b border-gray-100">
       <div className="max-w-6xl mx-auto">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
           <motion.div
@@ -571,7 +571,7 @@ function SocialMedia() {
                 className="w-full h-full object-cover opacity-60 group-hover:scale-105 transition-transform duration-700"
               />
               <div className="absolute inset-0 flex items-center justify-center p-8">
-                <div className="bg-white/10 backdrop-blur-md border border-white/20 p-8 rounded-2xl text-center max-w-sm">
+                <div className="bg-[#F5F2ED]/10 backdrop-blur-md border border-white/20 p-8 rounded-2xl text-center max-w-sm">
                   <Star className="text-yellow-400 mx-auto mb-4" size={32} fill="currentColor" />
                   <p className="text-white text-lg font-medium italic mb-4" style={{ fontFamily: SG }}>
                     "Our engagement doubled within the first month. We no longer worry about what to post."
@@ -666,7 +666,7 @@ function Automations() {
                         <CountUp to={item.val} duration={3.5} delay={item.delay} inView={inView} />
                       </div>
                     </div>
-                    <div className="h-2 bg-white/5 rounded-full overflow-hidden relative border border-white/5">
+                    <div className="h-2 bg-[#F5F2ED]/5 rounded-full overflow-hidden relative border border-white/5">
                       <motion.div
                         className="h-full rounded-full"
                         style={{
@@ -802,7 +802,7 @@ function WhyUs() {
               animate={inView ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.55, delay: i * 0.15 }}
               className="rounded-2xl p-8 text-center border"
-              style={{ borderColor: '#ffffff12', background: '#ffffff07' }}
+              style={{ borderColor: '#F5F2ED12', background: '#F5F2ED07' }}
             >
               <div
                 className="w-16 h-16 rounded-xl flex items-center justify-center mx-auto mb-5"
@@ -829,13 +829,13 @@ function WhyUs() {
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6, delay: 0.5 }}
           className="grid grid-cols-3 rounded-2xl overflow-hidden border"
-          style={{ borderColor: '#ffffff12', background: '#ffffff05' }}
+          style={{ borderColor: '#F5F2ED12', background: '#F5F2ED05' }}
         >
           {stats.map((s, i) => (
             <div
               key={i}
               className="py-10 px-4 text-center"
-              style={{ borderRight: i < stats.length - 1 ? '1px solid #ffffff12' : 'none' }}
+              style={{ borderRight: i < stats.length - 1 ? '1px solid #F5F2ED12' : 'none' }}
             >
               <div
                 className="text-4xl md:text-5xl mb-2"
@@ -878,7 +878,7 @@ function HowItWorks() {
   ];
 
   return (
-    <section id="how-it-works" ref={ref} className="bg-white py-24 px-6">
+    <section id="how-it-works" ref={ref} className="bg-[#F5F2ED] py-24 px-6">
       <div className="max-w-5xl mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
@@ -986,7 +986,7 @@ function Testimonials() {
   ];
 
   return (
-    <section id="testimonials" ref={ref} className="py-24 px-6" style={{ background: '#f4f5f7' }}>
+    <section id="testimonials" ref={ref} className="py-24 px-6" style={{ background: '#F5F2ED' }}>
       <div className="max-w-6xl mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
@@ -1015,7 +1015,7 @@ function Testimonials() {
               initial={{ opacity: 0, y: 28 }}
               animate={inView ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.55, delay: i * 0.15 }}
-              className="bg-white rounded-2xl p-8 shadow-sm flex flex-col"
+              className="bg-[#F5F2ED] rounded-2xl p-8 shadow-sm flex flex-col"
             >
               {/* Stars */}
               <div className="flex gap-1 mb-5">
@@ -1127,7 +1127,7 @@ function Footer() {
   return (
     <footer
       className="py-12 px-6"
-      style={{ background: '#080808', borderTop: '1px solid #ffffff0c' }}
+      style={{ background: '#080808', borderTop: '1px solid #F5F2ED0c' }}
     >
       <div className="max-w-6xl mx-auto">
         <div className="flex flex-col md:flex-row items-center justify-between gap-8 mb-8">
@@ -1160,7 +1160,7 @@ function Footer() {
 
         <div
           className="pt-6 flex flex-col md:flex-row items-center justify-between gap-3"
-          style={{ borderTop: '1px solid #ffffff08' }}
+          style={{ borderTop: '1px solid #F5F2ED08' }}
         >
           <p className="text-gray-600 text-xs" style={{ fontFamily: SG }}>
             © 2026 EZWebOne. All rights reserved.

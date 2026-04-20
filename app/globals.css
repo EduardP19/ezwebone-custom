@@ -28,15 +28,15 @@
 }
 
 [data-theme="light"] {
-  --background: #ffffff;
+  --background: #F5F2ED;
   --foreground: #1c2a44;
   --color-primary: #7c3aed;
   --color-primary-light: #9333ea;
   --color-primary-dark: #5b21b6;
   --color-accent: #f97316;
   --color-accent-light: #ea580c;
-  --color-bg-dark: #ffffff;
-  --color-bg-card: #ffffff;
+  --color-bg-dark: #F5F2ED;
+  --color-bg-card: #F5F2ED;
   --color-bg-elevated: #eef0f5;
   --color-border: #d1d5e0;
   --color-text-primary: #1c2a44;
@@ -203,13 +203,11 @@
   }
 
   .hero-chat-preview__pill-viewport {
-    mask-image: linear-gradient(
-      to right,
-      rgba(0, 0, 0, 1) 0%,
-      rgba(0, 0, 0, 1) 82%,
-      rgba(0, 0, 0, 0.35) 94%,
-      rgba(0, 0, 0, 0) 100%
-    );
+    mask-image: linear-gradient(to right,
+        rgba(0, 0, 0, 1) 0%,
+        rgba(0, 0, 0, 1) 82%,
+        rgba(0, 0, 0, 0.35) 94%,
+        rgba(0, 0, 0, 0) 100%);
   }
 
   .hero-chat-preview__cursor {
@@ -238,16 +236,14 @@
     content: "";
     position: absolute;
     inset: -128%;
-    background: conic-gradient(
-      from 8deg,
-      transparent 0deg,
-      transparent 36deg,
-      color-mix(in srgb, var(--color-primary) 28%, transparent) 86deg,
-      color-mix(in srgb, var(--color-primary-light) 90%, transparent) 142deg,
-      color-mix(in srgb, var(--color-primary) 36%, transparent) 206deg,
-      transparent 272deg,
-      transparent 360deg
-    );
+    background: conic-gradient(from 8deg,
+        transparent 0deg,
+        transparent 36deg,
+        color-mix(in srgb, var(--color-primary) 28%, transparent) 86deg,
+        color-mix(in srgb, var(--color-primary-light) 90%, transparent) 142deg,
+        color-mix(in srgb, var(--color-primary) 36%, transparent) 206deg,
+        transparent 272deg,
+        transparent 360deg);
     filter: blur(10px);
     opacity: 0.95;
     animation: hero-chat-preview-spin var(--hero-spin-duration, 6.75s) linear infinite;
@@ -412,11 +408,9 @@
 
   [data-theme="light"] .project-card-shell {
     border-color: color-mix(in srgb, var(--color-border) 75%, transparent);
-    background: linear-gradient(
-      180deg,
-      color-mix(in srgb, white 92%, var(--color-bg-card) 8%),
-      color-mix(in srgb, white 80%, var(--color-bg-card) 20%)
-    );
+    background: linear-gradient(180deg,
+        color-mix(in srgb, white 92%, var(--color-bg-card) 8%),
+        color-mix(in srgb, white 80%, var(--color-bg-card) 20%));
     box-shadow:
       0 18px 50px rgb(28 42 68 / 0.12),
       inset 0 1px 0 rgb(255 255 255 / 0.8);
@@ -460,22 +454,18 @@
 
   .trustbar-shell {
     border-color: rgb(255 255 255 / 0.08);
-    background: linear-gradient(
-      90deg,
-      rgb(124 58 237 / 0.12),
-      rgb(17 17 24 / 1),
-      rgb(124 58 237 / 0.12)
-    );
+    background: linear-gradient(90deg,
+        rgb(124 58 237 / 0.12),
+        rgb(17 17 24 / 1),
+        rgb(124 58 237 / 0.12));
   }
 
   [data-theme="light"] .trustbar-shell {
     border-color: color-mix(in srgb, var(--color-border) 75%, transparent);
-    background: linear-gradient(
-      90deg,
-      rgb(34 211 238 / 0.12),
-      rgb(255 255 255 / 0.96),
-      rgb(139 92 246 / 0.08)
-    );
+    background: linear-gradient(90deg,
+        rgb(34 211 238 / 0.12),
+        rgb(255 255 255 / 0.96),
+        rgb(139 92 246 / 0.08));
   }
 }
 
@@ -489,13 +479,33 @@ body {
 [data-theme="light"] {
   --tw-bg-opacity: 1;
 }
-[data-theme="light"] .bg-white\/5 { background-color: rgb(0 0 0 / 0.05); }
-[data-theme="light"] .bg-white\/8 { background-color: rgb(0 0 0 / 0.08); }
-[data-theme="light"] .bg-white\/10 { background-color: rgb(0 0 0 / 0.10); }
-[data-theme="light"] .border-white\/10 { border-color: rgb(0 0 0 / 0.10); }
-[data-theme="light"] .border-white\/8 { border-color: rgb(0 0 0 / 0.08); }
 
-h1, h2, h3, h4, h5, h6 {
+[data-theme="light"] .bg-white\/5 {
+  background-color: rgb(0 0 0 / 0.05);
+}
+
+[data-theme="light"] .bg-white\/8 {
+  background-color: rgb(0 0 0 / 0.08);
+}
+
+[data-theme="light"] .bg-white\/10 {
+  background-color: rgb(0 0 0 / 0.10);
+}
+
+[data-theme="light"] .border-white\/10 {
+  border-color: rgb(0 0 0 / 0.10);
+}
+
+[data-theme="light"] .border-white\/8 {
+  border-color: rgb(0 0 0 / 0.08);
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   font-family: var(--font-display);
   letter-spacing: -0.03em;
 }
@@ -506,7 +516,9 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 @keyframes livePulse {
-  0%, 100% {
+
+  0%,
+  100% {
     opacity: 0.8;
     transform: scale(1);
     box-shadow: 0 0 8px rgb(34 197 94 / 0.6);
@@ -526,6 +538,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 @keyframes hero-chat-preview-cursor {
+
   0%,
   50% {
     border-color: color-mix(in srgb, var(--color-primary) 95%, transparent);
@@ -538,7 +551,9 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 @keyframes ai-command-pulse {
-  0%, 100% {
+
+  0%,
+  100% {
     box-shadow:
       0 0 0 1px rgb(167 139 250 / 0.35),
       0 0 20px rgb(124 58 237 / 0.2);
@@ -552,7 +567,10 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 @keyframes ai-thinking-bounce {
-  0%, 80%, 100% {
+
+  0%,
+  80%,
+  100% {
     transform: translateY(0);
     opacity: 0.4;
   }
@@ -590,6 +608,7 @@ h1, h2, h3, h4, h5, h6 {
 
 @media (max-width: 768px) {
   :root {
-    --particle-count: 38; /* Further reduce particle count by 30% */
+    --particle-count: 38;
+    /* Further reduce particle count by 30% */
   }
 }
