@@ -1562,11 +1562,27 @@ function ContactForm() {
 // ─── App ──────────────────────────────────────────────────────────────────────
 export default function App() {
   const [loading, setLoading] = useState(true);
+  const [isReady, setIsReady] = useState(false);
+
+  useEffect(() => {
+    const hasLoaded = sessionStorage.getItem('hf_loaded');
+    if (hasLoaded) {
+      setLoading(false);
+    }
+    setIsReady(true);
+  }, []);
+
+  const handleComplete = () => {
+    sessionStorage.setItem('hf_loaded', 'true');
+    setLoading(false);
+  };
+
+  if (!isReady) return <div style={{ background: '#000', minHeight: '100vh' }} />;
 
   return (
     <div style={{ fontFamily: SG, overflowX: 'hidden' }}>
       <AnimatePresence>
-        {loading && <Preloader onComplete={() => setLoading(false)} />}
+        {loading && <Preloader onComplete={handleComplete} />}
       </AnimatePresence>
       <Nav />
       <Hero />
