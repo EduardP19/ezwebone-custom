@@ -197,37 +197,37 @@ function Hero() {
       />
 
       <div className="relative z-10 max-w-5xl mx-auto px-6 text-center mt-[-30px]">
-        {/* Badge */}
+        {/* Combined Badge & Trust */}
         <motion.div
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7 }}
-          className="inline-flex items-center gap-2 px-4 py-2 rounded-full mb-8 border border-white/20 bg-[#F5F2ED]/10 backdrop-blur-sm"
+          className="inline-flex items-center gap-4 px-5 py-2.5 rounded-full mb-8 border border-white/20 bg-[#F5F2ED]/10 backdrop-blur-md"
         >
-          <span
-            className="w-2 h-2 rounded-full animate-pulse"
-            style={{ background: NEON, boxShadow: `0 0 8px ${NEON}` }}
-          />
-          <span className="text-white text-sm font-semibold" style={{ fontFamily: SG }}>
-            Health &amp; Wellness
-          </span>
+          <div className="flex items-center gap-2 pr-4 border-r border-white/10">
+            <span
+              className="w-2 h-2 rounded-full animate-pulse"
+              style={{ background: NEON, boxShadow: `0 0 8px ${NEON}` }}
+            />
+            <span className="text-white text-sm font-semibold" style={{ fontFamily: SG }}>
+              Health &amp; Wellness
+            </span>
+          </div>
+          
+          <div className="flex items-center gap-1.5">
+            <div className="flex gap-0.5">
+              {[...Array(5)].map((_, i) => (
+                <Star key={i} size={12} fill={NEON} className="text-neon" style={{ filter: `drop-shadow(0 0 3px ${NEON}60)` }} />
+              ))}
+            </div>
+            <span className="text-white font-bold text-xs" style={{ fontFamily: SG }}>5.0</span>
+          </div>
         </motion.div>
 
-        {/* Trust Element */}
-        <motion.div
-           initial={{ opacity: 0 }}
-           animate={{ opacity: 1 }}
-           transition={{ delay: 0.3 }}
-           className="flex items-center justify-center gap-1.5 mb-4"
-        >
-          <div className="flex gap-0.5">
-            {[...Array(5)].map((_, i) => (
-              <Star key={i} size={14} fill={NEON} className="text-neon" style={{ filter: `drop-shadow(0 0 4px ${NEON}80)` }} />
-            ))}
-          </div>
-          <span className="text-white font-bold text-sm" style={{ fontFamily: SG }}>5.0</span>
-          <span className="text-white/40 text-[10px] uppercase tracking-widest font-bold ml-1" style={{ fontFamily: SG }}>Trusted Solution</span>
-        </motion.div>
+        {/* Online Presence Counter (Above Headline) */}
+        <div className="mb-6">
+          <PresenceCounter />
+        </div>
 
         {/* Headline */}
         <motion.h1
@@ -245,43 +245,36 @@ function Hero() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.38 }}
-          className="text-lg md:text-xl text-white/75 mb-10 max-w-2xl mx-auto"
+          className="text-lg md:text-xl text-white/75 mb-10 max-max-2xl mx-auto"
           style={{ fontFamily: SG, fontWeight: 400 }}
         >
           We build digital systems that fill your schedule and grow your wellness business.
         </motion.p>
 
         {/* CTAs */}
-        <div className="relative inline-block">
-          <motion.div
-            initial={{ opacity: 0, y: 18 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.55 }}
-            className="flex flex-col sm:flex-row gap-4 justify-center"
+        <motion.div
+          initial={{ opacity: 0, y: 18 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.55 }}
+          className="flex flex-col sm:flex-row gap-4 justify-center"
+        >
+          <a
+            href="https://calendly.com/eduard-ezwebone/20min?UTM_SOURCE=HF_LP&UTM_MEDIUM=LP&UTM_CAMPAIGN=HF"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="px-8 py-4 rounded-full text-black transition-all hover:scale-105 active:scale-95 flex items-center justify-center gap-2"
+            style={{ fontFamily: SG, fontWeight: 700, fontSize: '1rem', background: NEON, boxShadow: `0 0 35px ${NEON}65` }}
           >
-            <a
-              href="https://calendly.com/eduard-ezwebone/20min?UTM_SOURCE=HF_LP&UTM_MEDIUM=LP&UTM_CAMPAIGN=HF"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="px-8 py-4 rounded-full text-black transition-all hover:scale-105 active:scale-95 flex items-center justify-center gap-2"
-              style={{ fontFamily: SG, fontWeight: 700, fontSize: '1rem', background: NEON, boxShadow: `0 0 35px ${NEON}65` }}
-            >
-              Get a Free Audit <ArrowRight size={18} />
-            </a>
-            <a
-              href="#services"
-              className="px-8 py-4 rounded-full text-white border-2 border-white transition-all hover:bg-[#F5F2ED] hover:text-black flex items-center justify-center gap-2 font-bold"
-              style={{ fontFamily: SG }}
-            >
-              See What We Do
-            </a>
-          </motion.div>
-
-          {/* Online Presence Counter */}
-          <div className="mt-14 flex flex-col items-center">
-            <PresenceCounter />
-          </div>
-        </div>
+            Get a Free Audit <ArrowRight size={18} />
+          </a>
+          <a
+            href="#services"
+            className="px-8 py-4 rounded-full text-white border-2 border-white transition-all hover:bg-[#F5F2ED] hover:text-black flex items-center justify-center gap-2 font-bold"
+            style={{ fontFamily: SG }}
+          >
+            See What We Do
+          </a>
+        </motion.div>
 
         {/* Scroll cue */}
         <motion.div
@@ -314,6 +307,7 @@ function PresenceCounter() {
   const count = useMotionValue(0);
   const rounded = useTransform(count, (latest) => Math.round(latest));
   const [complete, setComplete] = useState(false);
+  const colorInterpolated = useTransform(count, [0, 100], ['#143d14', NEON]);
 
   useEffect(() => {
     const controls = animate(count, 100, {
@@ -333,7 +327,7 @@ function PresenceCounter() {
         className="text-5xl md:text-6xl font-black transition-all duration-1000"
         style={{ 
           fontFamily: SG,
-          color: complete ? NEON : '#1a1a1a',
+          color: colorInterpolated,
           textShadow: complete ? `0 0 30px ${NEON}` : 'none'
         }}
       >
