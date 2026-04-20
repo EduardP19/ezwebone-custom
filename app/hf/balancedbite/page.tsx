@@ -9,52 +9,60 @@ export default function BalancedBitePage() {
   const iframeRef = useRef<HTMLIFrameElement>(null);
 
   useEffect(() => {
+    let intervalId: NodeJS.Timeout;
+    
+    const lock = () => {
+      const iframe = iframeRef.current;
+      if (!iframe) return;
+
+      try {
+        const doc = iframe.contentDocument || iframe.contentWindow?.document;
+        if (!doc) return;
+
+        if (!doc.getElementById('absolute-lock')) {
+          const style = doc.createElement('style');
+          style.id = 'absolute-lock';
+          style.innerText = `
+            * { 
+              pointer-events: none !important; 
+              cursor: default !important;
+              user-select: none !important;
+              -webkit-user-drag: none !important;
+              touch-action: pan-y !important;
+            }
+            html, body {
+              pointer-events: auto !important;
+              cursor: default !important;
+            }
+          `;
+          doc.head.appendChild(style);
+        }
+
+        const swallow = (e: Event) => {
+          e.preventDefault();
+          e.stopPropagation();
+          return false;
+        };
+
+        const win = iframe.contentWindow;
+        if (win) {
+          ['click', 'dblclick', 'mousedown', 'mouseup', 'contextmenu', 'submit'].forEach(type => {
+            win.addEventListener(type, swallow, true);
+          });
+        }
+      } catch (e) {}
+    };
+
     const iframe = iframeRef.current;
     if (iframe) {
-      const lockInteractions = () => {
-        try {
-          const doc = iframe.contentDocument || iframe.contentWindow?.document;
-          if (doc) {
-            // 1. Inject Style to disable pointer events (Visual focus and direct block)
-            const style = doc.createElement('style');
-            style.id = 'interaction-lock-style';
-            style.innerText = `
-              * { 
-                pointer-events: none !important; 
-                user-select: none !important;
-                -webkit-user-drag: none !important;
-                cursor: default !important;
-              }
-              html, body {
-                pointer-events: auto !important;
-                overflow-x: hidden !important;
-              }
-              body::-webkit-scrollbar { display: none; }
-              body { -ms-overflow-style: none; scrollbar-width: none; }
-            `;
-            if (!doc.getElementById('interaction-lock-style')) {
-              doc.head.appendChild(style);
-            }
-
-            // 2. Add Event Listeners at the capture phase to swallow all interaction events
-            const swallow = (e: Event) => {
-              e.preventDefault();
-              e.stopPropagation();
-            };
-            
-            ['click', 'mousedown', 'mouseup', 'touchstart', 'touchend', 'contextmenu'].forEach(type => {
-              doc.addEventListener(type, swallow, true);
-            });
-          }
-        } catch (e) {
-          console.error("Could not lock interactions:", e);
-        }
-      };
-
-      iframe.addEventListener('load', lockInteractions);
-      lockInteractions();
-      return () => iframe.removeEventListener('load', lockInteractions);
+      iframe.addEventListener('load', lock);
+      lock();
+      intervalId = setInterval(lock, 500);
     }
+
+    return () => {
+      if (intervalId) clearInterval(intervalId);
+    };
   }, []);
 
   const [mounted, setMounted] = useState(false);
@@ -64,19 +72,17 @@ export default function BalancedBitePage() {
 
   return createPortal(
     <div className="fixed inset-0 z-[99999] bg-white flex flex-col overflow-hidden">
-      {/* Agency Toolbar - REVERSED LAYOUT */}
+      {/* Agency Toolbar */}
       <nav className="demo-toolbar h-16 bg-white border-b border-gray-100 px-6 flex items-center justify-between z-[2000] shadow-sm">
-        {/* Left Side: Exit Button */}
         <div className="flex items-center gap-3">
           <Link 
-            href="/hf#ecosystem" 
+            href="/hf" 
             className="flex items-center gap-2 px-4 py-2 bg-black text-white rounded-full text-[11px] font-bold hover:bg-gray-800 transition-all shadow-md"
           >
             <ArrowLeft size={14} /> Exit Preview
           </Link>
         </div>
 
-        {/* Right Side: Logo and Info */}
         <div className="flex items-center gap-4 text-right">
           <div className="hidden md:flex flex-col">
             <span className="text-[9px] uppercase tracking-widest font-bold text-gray-400">Live Preview</span>
