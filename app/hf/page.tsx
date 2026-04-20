@@ -1,3 +1,5 @@
+"use client";
+
 import { useState, useEffect, useRef } from 'react';
 import { supabase } from '@/lib/supabase';
 import { motion, useInView, AnimatePresence, useMotionValue, useTransform, animate } from 'framer-motion';
