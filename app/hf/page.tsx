@@ -10,7 +10,7 @@ import {
 } from 'lucide-react';
 
 // ─── Constants ───────────────────────────────────────────────────────────────
-const NEON = '#7CB87A';
+const NEON = '#6BAF6B';
 const HERO_BG =
   'https://images.unsplash.com/photo-1758521958525-eedaa20ffdb7?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxneW0lMjBmaXRuZXNzJTIwYXRobGV0ZSUyMHRyYWluaW5nJTIwYWN0aW9ufGVufDF8fHx8MTc3NjY5NDg2N3ww&ixlib=rb-4.1.0&q=80&w=1920';
 const AVATAR_FEMALE =

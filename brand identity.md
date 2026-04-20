@@ -59,7 +59,7 @@
 - `--color-text-primary`: `#f5f5f7`
 - `--color-text-secondary`: `#a1a1aa`
 - `--color-text-accent`: `#c4b5fd`
-- `--color-live`: `#7CB87A`
+- `--color-live`: `#6BAF6B`
 - `--color-mesh-teal`: `#7fb4c7`
 - `--color-mesh-blue`: `#5d8da5`
 - `--color-mesh-gold`: `#d6b86e`
