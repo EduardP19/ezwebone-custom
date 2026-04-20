@@ -880,7 +880,7 @@ function Projects() {
       desc: 'Precision systems for clinical experts. We automate bookings and consultations so you can focus on health outcomes.',
       image: 'https://images.unsplash.com/photo-1490645935967-10de6ba17061?q=80&w=1200&auto=format&fit=crop',
       tag: 'Fuel',
-      href: '#'
+      href: '/hf/balancedbite'
     }
   ];
 
