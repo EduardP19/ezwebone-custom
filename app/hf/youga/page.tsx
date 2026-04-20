@@ -39,12 +39,26 @@ export default function YogaPage() {
           if (doc) {
             const style = doc.createElement('style');
             style.innerText = `
-              a, button, input, select, textarea, [role="button"], .nav-cta, .btn-primary, .btn-ghost { 
+              /* Nuclear Read-Only: Disable interaction on EVERYTHING */
+              * { 
                 pointer-events: none !important; 
-                cursor: default !important;
+                user-select: none !important;
+                -webkit-user-drag: none !important;
+              }
+              
+              /* Except the root, to allow scrolling */
+              html, body {
+                pointer-events: auto !important;
+                overflow-x: hidden !important;
+              }
+
+              /* Hide scrollbars for a cleaner look if desired, but keep scrolling */
+              body::-webkit-scrollbar {
+                display: none;
               }
               body {
-                user-select: none !important;
+                -ms-overflow-style: none;
+                scrollbar-width: none;
               }
             `;
             doc.head.appendChild(style);
@@ -55,6 +69,9 @@ export default function YogaPage() {
       };
 
       iframe.addEventListener('load', lockInteractions);
+      // Fallback for fast loads
+      lockInteractions();
+      
       return () => iframe.removeEventListener('load', lockInteractions);
     }
   }, []);
