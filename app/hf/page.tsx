@@ -884,8 +884,15 @@ function Projects() {
   ];
 
   return (
-    <section id="ecosystem" ref={ref} className="py-24 md:py-32 px-6 bg-[#F5F2ED] overflow-hidden">
-      <div className="max-w-6xl mx-auto">
+    <section id="ecosystem" ref={ref} className="py-32 md:py-48 px-6 bg-[#16211C] relative">
+      {/* Top Shape Divider */}
+      <div className="absolute top-0 left-0 w-full pointer-events-none z-0" style={{ transform: 'translateY(-1px)' }}>
+        <svg viewBox="0 0 100 10" preserveAspectRatio="none" className="w-full h-[40px] md:h-[80px]" style={{ fill: '#0a0a0a' }}>
+          <polygon points="0,0 100,0 100,10" />
+        </svg>
+      </div>
+
+      <div className="max-w-6xl mx-auto relative z-10">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
@@ -896,15 +903,15 @@ function Projects() {
             className="inline-block text-xs px-4 py-1.5 rounded-full mb-4 uppercase tracking-[0.2em] font-bold"
             style={{ fontFamily: SG, background: '#6BAF6B20', color: '#6BAF6B' }}
           >
-            Dedicated Focus
+            Case Studies
           </span>
           <h2
-            className="text-4xl md:text-5xl text-black mb-6"
+            className="text-4xl md:text-5xl text-white mb-6"
             style={{ fontFamily: SG, fontWeight: 800, lineHeight: 1.12 }}
           >
             One division. <span style={{ color: '#6BAF6B' }}>Three industries.</span>
           </h2>
-          <p className="text-gray-500 text-lg max-w-2xl mx-auto" style={{ fontFamily: SG }}>
+          <p className="text-gray-400 text-lg max-w-2xl mx-auto" style={{ fontFamily: SG }}>
             Whether you run a high-intensity gym, a mindful wellness studio, or a clinical nutrition practice — we are the agency with the solution. We build specialized, high-converting digital ecosystems designed exclusively to automate bookings and scale your growth.
           </p>
         </motion.div>
@@ -945,6 +952,13 @@ function Projects() {
             </a>
           ))}
         </div>
+      </div>
+
+      {/* Bottom Shape Divider */}
+      <div className="absolute bottom-0 left-0 w-full pointer-events-none z-0" style={{ transform: 'translateY(1px)' }}>
+        <svg viewBox="0 0 100 10" preserveAspectRatio="none" className="w-full h-[40px] md:h-[80px]" style={{ fill: '#F5F2ED' }}>
+          <polygon points="0,10 100,10 100,0" />
+        </svg>
       </div>
     </section>
   );
