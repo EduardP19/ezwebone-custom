@@ -213,6 +213,22 @@ function Hero() {
           </span>
         </motion.div>
 
+        {/* Trust Element */}
+        <motion.div
+           initial={{ opacity: 0 }}
+           animate={{ opacity: 1 }}
+           transition={{ delay: 0.3 }}
+           className="flex items-center justify-center gap-1.5 mb-4"
+        >
+          <div className="flex gap-0.5">
+            {[...Array(5)].map((_, i) => (
+              <Star key={i} size={14} fill={NEON} className="text-neon" style={{ filter: `drop-shadow(0 0 4px ${NEON}80)` }} />
+            ))}
+          </div>
+          <span className="text-white font-bold text-sm" style={{ fontFamily: SG }}>5.0</span>
+          <span className="text-white/40 text-[10px] uppercase tracking-widest font-bold ml-1" style={{ fontFamily: SG }}>Trusted Solution</span>
+        </motion.div>
+
         {/* Headline */}
         <motion.h1
           initial={{ opacity: 0, y: 28 }}
@@ -236,33 +252,40 @@ function Hero() {
         </motion.p>
 
         {/* CTAs */}
-        <motion.div
-          initial={{ opacity: 0, y: 18 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.55 }}
-          className="flex flex-col sm:flex-row gap-4 justify-center"
-        >
-          <a
-            href="https://calendly.com/eduard-ezwebone/20min?UTM_SOURCE=HF_LP&UTM_MEDIUM=LP&UTM_CAMPAIGN=HF"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="px-8 py-4 rounded-full text-black transition-all hover:scale-105 active:scale-95 flex items-center justify-center gap-2"
-            style={{ fontFamily: SG, fontWeight: 700, fontSize: '1rem', background: NEON, boxShadow: `0 0 35px ${NEON}65` }}
+        <div className="relative inline-block">
+          <motion.div
+            initial={{ opacity: 0, y: 18 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.55 }}
+            className="flex flex-col sm:flex-row gap-4 justify-center"
           >
-            Get a Free Audit <ArrowRight size={18} />
-          </a>
-          <a
-            href="#services"
-            className="px-8 py-4 rounded-full text-white border-2 border-white transition-all hover:bg-[#F5F2ED] hover:text-black flex items-center justify-center gap-2 font-bold"
-            style={{ fontFamily: SG }}
-          >
-            See What We Do
-          </a>
-        </motion.div>
+            <a
+              href="https://calendly.com/eduard-ezwebone/20min?UTM_SOURCE=HF_LP&UTM_MEDIUM=LP&UTM_CAMPAIGN=HF"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="px-8 py-4 rounded-full text-black transition-all hover:scale-105 active:scale-95 flex items-center justify-center gap-2"
+              style={{ fontFamily: SG, fontWeight: 700, fontSize: '1rem', background: NEON, boxShadow: `0 0 35px ${NEON}65` }}
+            >
+              Get a Free Audit <ArrowRight size={18} />
+            </a>
+            <a
+              href="#services"
+              className="px-8 py-4 rounded-full text-white border-2 border-white transition-all hover:bg-[#F5F2ED] hover:text-black flex items-center justify-center gap-2 font-bold"
+              style={{ fontFamily: SG }}
+            >
+              See What We Do
+            </a>
+          </motion.div>
+
+          {/* Online Presence Counter */}
+          <div className="mt-14 flex flex-col items-center">
+            <PresenceCounter />
+          </div>
+        </div>
 
         {/* Scroll cue */}
         <motion.div
-          className="mt-20 flex flex-col items-center gap-3"
+          className="mt-16 flex flex-col items-center gap-3"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 1, delay: 1 }}
@@ -284,6 +307,40 @@ function Hero() {
         </motion.div>
       </div>
     </section>
+  );
+}
+
+function PresenceCounter() {
+  const count = useMotionValue(0);
+  const rounded = useTransform(count, (latest) => Math.round(latest));
+  const [complete, setComplete] = useState(false);
+
+  useEffect(() => {
+    const controls = animate(count, 100, {
+      duration: 4,
+      ease: "easeOut",
+      delay: 1.5,
+      onUpdate: (latest) => {
+        if (latest >= 100) setComplete(true);
+      }
+    });
+    return controls.stop;
+  }, [count]);
+
+  return (
+    <div className="flex flex-col items-center gap-1">
+      <motion.div 
+        className="text-5xl md:text-6xl font-black transition-all duration-1000"
+        style={{ 
+          fontFamily: SG,
+          color: complete ? NEON : '#1a1a1a',
+          textShadow: complete ? `0 0 30px ${NEON}` : 'none'
+        }}
+      >
+        <motion.span>{rounded}</motion.span>%
+      </motion.div>
+      <div className="text-white/30 text-[9px] uppercase tracking-[0.3em] font-bold">Online Presence</div>
+    </div>
   );
 }
 
