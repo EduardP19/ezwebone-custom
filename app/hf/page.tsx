@@ -887,7 +887,7 @@ function Projects() {
     <section id="ecosystem" ref={ref} className="py-32 md:py-48 px-6 bg-[#16211C] relative">
       {/* Top Shape Divider */}
       <div className="absolute top-0 left-0 w-full pointer-events-none z-0" style={{ transform: 'translateY(-1px)' }}>
-        <svg viewBox="0 0 100 10" preserveAspectRatio="none" className="w-full h-[40px] md:h-[80px]" style={{ fill: '#0a0a0a' }}>
+        <svg viewBox="0 0 100 10" preserveAspectRatio="none" className="w-full h-[40px] md:h-[80px]" style={{ fill: '#f7f8fa' }}>
           <polygon points="0,0 100,0 100,10" />
         </svg>
       </div>
