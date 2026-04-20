@@ -8,6 +8,29 @@ export default function YogaPage() {
   const iframeRef = useRef<HTMLIFrameElement>(null);
 
   useEffect(() => {
+    // We force the parent main container to lose its top padding and hide global layout parts
+    const main = document.querySelector('main');
+    const nav = document.querySelector('nav:not(.demo-toolbar)');
+    const footer = document.querySelector('footer');
+
+    if (main) {
+      main.classList.remove('pt-24', 'md:pt-28');
+      main.style.paddingTop = '0';
+    }
+    if (nav instanceof HTMLElement) nav.style.display = 'none';
+    if (footer instanceof HTMLElement) footer.style.display = 'none';
+
+    return () => {
+      if (main) {
+        main.classList.add('pt-24', 'md:pt-28');
+        main.style.paddingTop = '';
+      }
+      if (nav instanceof HTMLElement) nav.style.display = '';
+      if (footer instanceof HTMLElement) footer.style.display = '';
+    };
+  }, []);
+
+  useEffect(() => {
     const iframe = iframeRef.current;
     if (iframe) {
       const lockInteractions = () => {
@@ -39,7 +62,7 @@ export default function YogaPage() {
   return (
     <div className="fixed inset-0 z-[5000] bg-white flex flex-col overflow-hidden">
       {/* Agency Toolbar */}
-      <nav className="h-16 bg-white border-b border-gray-100 px-6 flex items-center justify-between z-[2000] shadow-sm">
+      <nav className="demo-toolbar h-16 bg-white border-b border-gray-100 px-6 flex items-center justify-between z-[2000] shadow-sm">
         <div className="flex items-center gap-4">
           <Link href="/hf" className="hover:opacity-60 transition-opacity">
             <img src="/brand/HF_EZ-Navy-Tear.png" alt="EZWebOne" className="h-8 w-auto" />
@@ -65,7 +88,7 @@ export default function YogaPage() {
       </nav>
 
       {/* Preview Container */}
-      <div className="flex-grow p-0 md:p-6 bg-gray-50 relative overflow-hidden">
+      <div className="flex-grow p-0 md:p-6 bg-gray-100 relative overflow-hidden">
         <div className="w-full h-full bg-white rounded-none md:rounded-xl overflow-hidden shadow-2xl border border-gray-200 flex flex-col">
           <iframe 
             ref={iframeRef}
