@@ -5,7 +5,6 @@ import { usePathname, useSearchParams } from "next/navigation";
 import {
   TRACKING_SESSION_KEY,
   TRACKING_UTM_KEY,
-  readTrackingConsent,
 } from "@/lib/consent";
 import { supabase } from "@/lib/supabase";
 
@@ -214,10 +213,6 @@ function getPagePath(pathname: string, searchParams: URLSearchParams): string {
 }
 
 async function insertLog(payload: LogPayload) {
-  if (readTrackingConsent() !== "accepted") {
-    return;
-  }
-
   if (!supabase) {
     console.error("Tracking insert skipped: Supabase client is not configured.");
     return;

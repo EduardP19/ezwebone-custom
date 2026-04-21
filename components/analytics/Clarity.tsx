@@ -1,22 +1,13 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { readTrackingConsent, TRACKING_CONSENT_UPDATED_EVENT } from "@/lib/consent";
 
 export function Clarity() {
-  const [consent, setConsent] = useState<"accepted" | "rejected" | null>(null);
+  const [consent, setConsent] = useState<"accepted" | "rejected" | "accepted">("accepted");
 
   useEffect(() => {
-    // Initial check
-    setConsent(readTrackingConsent());
-
-    // Listen for updates from the banner
-    const handleConsentUpdate = () => {
-      setConsent(readTrackingConsent());
-    };
-
-    window.addEventListener(TRACKING_CONSENT_UPDATED_EVENT, handleConsentUpdate);
-    return () => window.removeEventListener(TRACKING_CONSENT_UPDATED_EVENT, handleConsentUpdate);
+    // Always active
+    setConsent("accepted");
   }, []);
 
   if (consent !== "accepted") return null;
