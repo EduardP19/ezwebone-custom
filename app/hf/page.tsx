@@ -125,7 +125,7 @@ function Nav() {
             target="_blank"
             rel="noopener noreferrer"
             className="px-5 py-2 md:px-8 md:py-3 rounded-full text-xs md:text-sm text-black transition-all hover:scale-105 active:scale-95 whitespace-nowrap"
-            style={{ fontFamily: SG, fontWeight: 700, background: NEON, boxShadow: `0 0-18px ${NEON}55` }}
+            style={{ fontFamily: SG, fontWeight: 700, background: NEON, boxShadow: `0 0 18px ${NEON}55` }}
           >
             Audit
           </a>
@@ -1318,12 +1318,10 @@ function Footer() {
       className="relative pt-12 pb-0 px-6 overflow-hidden"
       style={{ background: '#080808' }}
     >
-      {/* Top neon border shadow effect */}
       <div
         className="absolute top-0 left-0 right-0 h-px"
         style={{ background: `linear-gradient(90deg, transparent, ${NEON}, transparent)` }}
       />
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-32 bg-neon/5 blur-[120px] pointer-events-none" />
 
       <div className="max-w-7xl mx-auto relative z-10 flex flex-col items-center">
         {/* 3X Bigger Centered Logo */}
