@@ -317,6 +317,7 @@ export async function sendDueLetters(params?: {
   limit?: number;
   source?: SendSource;
   templateId?: number;
+  statuses?: string[];
 }) {
   if (!supabaseAdmin) {
     throw new Error("SUPABASE_SERVICE_ROLE_KEY or SUPABASE_SECRET_KEY is required for Stannp operations.");
@@ -326,19 +327,36 @@ export async function sendDueLetters(params?: {
   const limit = Math.max(1, Math.min(params?.limit ?? 25, 100));
   const source = params?.source ?? "non_ro";
   const sourceTable = getSourceTable(source);
+  const statuses = Array.from(
+    new Set(
+      (params?.statuses ?? ["to_send"])
+        .map((value) => value.trim())
+        .filter((value) => value.length > 0)
+    )
+  );
+  if (statuses.length === 0) {
+    throw new Error("At least one campaign status is required.");
+  }
   const templateId = Number(params?.templateId ?? process.env.STANNP_TEMPLATE_ID ?? 723214);
   if (!Number.isFinite(templateId) || templateId <= 0) {
     throw new Error("A valid STANNP template id is required.");
   }
 
-  const { data: rows, error } = await supabaseAdmin
+  let query = supabaseAdmin
     .from(sourceTable)
     .select(
       "id, company_number, company_name, full_name, correspondence_address, registered_address, company_status, campaign_status, industry, qr_code_link, download_code, letter_template"
     )
-    .eq("campaign_status", "to_send")
     .order("created_at", { ascending: true })
     .limit(limit);
+
+  if (statuses.length === 1) {
+    query = query.eq("campaign_status", statuses[0]);
+  } else {
+    query = query.in("campaign_status", statuses);
+  }
+
+  const { data: rows, error } = await query;
 
   if (error) {
     throw new Error(`Failed to fetch due letters: ${error.message}`);
@@ -360,7 +378,7 @@ export async function sendDueLetters(params?: {
         const { error: updateError } = await supabaseAdmin
           .from(sourceTable)
           .update({
-            campaign_status: "letter_sent",
+            campaign_status: "letter sent",
             updated_at: now,
           })
           .eq("id", item.id);
@@ -419,5 +437,6 @@ export async function sendDueLetters(params?: {
     test,
     source,
     templateId,
+    statuses,
   };
 }

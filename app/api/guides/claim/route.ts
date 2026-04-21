@@ -118,7 +118,7 @@ export async function POST(req: Request) {
 
     const { error: statusError } = await supabaseAdmin
       .from(resolved.sourceTable)
-      .update({ campaign_status: "lead_captured" })
+      .update({ campaign_status: "lead capture" })
       .eq("id", resolved.row.id);
 
     if (statusError) {

@@ -25,9 +25,9 @@ function normalizeSource(input: string | null | undefined): "ro" | "non_ro" | nu
 async function markVisited(table: "ch_directors_non_ro" | "ch_directors_ro", companyNumber: string) {
   const { error } = await supabaseAdmin!
     .from(table)
-    .update({ campaign_status: "qr_visited" })
+    .update({ campaign_status: "QR scanned" })
     .eq("company_number", companyNumber)
-    .eq("campaign_status", "letter_sent");
+    .in("campaign_status", ["letter sent", "letter_sent"]);
 
   if (error) {
     throw new Error(`Failed updating ${table}: ${error.message}`);

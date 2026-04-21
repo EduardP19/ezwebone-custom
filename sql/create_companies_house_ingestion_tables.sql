@@ -193,6 +193,8 @@ begin
       || '&UTM_TITLE=' || replace(coalesce(new.company_name, ''), ' ', '%20')
       || '&UTM_TERM=' || replace(coalesce(first_name_from_full, ''), ' ', '%20')
       || '&UTM_CONTENT=' || coalesce(new.company_number, '')
+      || '&company_number=' || coalesce(new.company_number, '')
+      || '&source=' || case when tg_table_name = 'ch_directors_ro' then 'ro' else 'non_ro' end
       || '&code=' || new.download_code;
   end if;
 

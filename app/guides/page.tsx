@@ -312,7 +312,9 @@ export default function GuidesPage() {
     const companyNumber =
       params.get("company_number") ??
       params.get("companyNumber") ??
-      params.get("cn");
+      params.get("cn") ??
+      params.get("UTM_CONTENT") ??
+      params.get("utm_content");
 
     const sourceHint =
       params.get("source") ??
