@@ -151,6 +151,7 @@ as $$
 declare
   campaign_name text;
   base_qr_url text;
+  normalized_full_name text;
   first_name_from_full text;
   should_refresh_qr boolean;
 begin
@@ -183,7 +184,23 @@ begin
     end;
 
     base_qr_url := coalesce(current_setting('app.qr_base_url', true), 'https://www.ezwebone.co.uk/guides');
-    first_name_from_full := split_part(coalesce(new.full_name, ''), ' ', 1);
+    normalized_full_name := btrim(
+      regexp_replace(
+        coalesce(new.full_name, ''),
+        '^\\s*(?:(?:mr|mrs|ms|miss|mx|dr|prof|mister|madam|professor|sir|lady|lord|dame)\\b[[:punct:]]*\\s+)+',
+        '',
+        'i'
+      )
+    );
+    first_name_from_full := split_part(normalized_full_name, ' ', 1);
+
+    if first_name_from_full ~* '^(mr|mrs|ms|miss|mx|dr|prof|mister|madam|professor|sir|lady|lord|dame)[[:punct:]]*$' then
+      first_name_from_full := split_part(normalized_full_name, ' ', 2);
+    end if;
+
+    if first_name_from_full is null or btrim(first_name_from_full) = '' then
+      first_name_from_full := split_part(btrim(coalesce(new.full_name, '')), ' ', 1);
+    end if;
 
     new.qr_code_link := base_qr_url
       || '?UTM_CAMPAIGN=' || campaign_name
