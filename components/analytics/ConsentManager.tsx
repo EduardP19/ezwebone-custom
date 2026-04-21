@@ -10,9 +10,7 @@ export function ConsentManager() {
   useEffect(() => {
     const consent = readTrackingConsent();
     if (!consent) {
-      // Small delay for better UX
-      const timer = setTimeout(() => setShowBanner(true), 1500);
-      return () => clearTimeout(timer);
+      setShowBanner(true);
     }
   }, []);
 

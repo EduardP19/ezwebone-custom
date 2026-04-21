@@ -102,9 +102,6 @@ export default async function RootLayout({
           <WebVitals />
           <LocaleProvider locale={locale} dictionary={dictionary}>
             <Suspense fallback={null}>
-              <Clarity />
-              <TrackingProvider />
-              <ConsentManager />
             </Suspense>
             <JsonLd
               id="organization-schema"
@@ -133,6 +130,11 @@ export default async function RootLayout({
             <NavbarClient />
             <main className="flex-grow pt-24 md:pt-28">{children}</main>
             <Footer />
+            <Suspense fallback={null}>
+              <Clarity />
+              <TrackingProvider />
+              <ConsentManager />
+            </Suspense>
           </LocaleProvider>
         </body>
       </html>
