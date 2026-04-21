@@ -1,16 +1,36 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { usePathname, useSearchParams } from "next/navigation";
+import { updateTrackingConsent } from "@/lib/consent";
+
+declare global {
+  interface Window {
+    clarity?: (...args: unknown[]) => void;
+  }
+}
 
 export function Clarity() {
-  const [consent, setConsent] = useState<"accepted" | "rejected" | "accepted">("accepted");
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const [isAcceptedForClarity, setIsAcceptedForClarity] = useState(false);
+  const projectId = process.env.NEXT_PUBLIC_CLARITY_PROJECT_ID ?? "";
+  const pageKey = useMemo(() => {
+    const query = searchParams.toString();
+    return query ? `${pathname}?${query}` : pathname;
+  }, [pathname, searchParams]);
 
   useEffect(() => {
-    // Always active
-    setConsent("accepted");
-  }, []);
+    const timer = window.setTimeout(() => {
+      updateTrackingConsent("accepted");
+      setIsAcceptedForClarity(true);
+      window.clarity?.("consent");
+    }, 3000);
 
-  if (consent !== "accepted") return null;
+    return () => window.clearTimeout(timer);
+  }, [pageKey]);
+
+  if (!projectId || !isAcceptedForClarity) return null;
 
   return (
     <script
@@ -20,7 +40,7 @@ export function Clarity() {
               c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
               t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
               y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
-          })(window, document, "clarity", "script", "${process.env.NEXT_PUBLIC_CLARITY_PROJECT_ID}");
+          })(window, document, "clarity", "script", "${projectId}");
         `,
       }}
     />
