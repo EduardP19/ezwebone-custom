@@ -109,12 +109,12 @@ function Nav() {
         </div>
 
         {/* Center: Logo (Global) */}
-        <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
+        <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 flex items-center justify-center">
           <a href="/hf" className="block hover:opacity-80 transition-opacity">
             <img
               src="/brand/HF_EZ-Navy-Tear.png"
               alt="EZWebOne"
-              className="h-28 md:h-40 w-auto block"
+              className="h-28 md:h-44 w-auto block object-contain"
             />
           </a>
         </div>
@@ -1313,69 +1313,55 @@ function FinalCTA() {
 
 // ─── Footer ───────────────────────────────────────────────────────────────────
 function Footer() {
-  const socialLinks: any[] = [];
-
   return (
     <footer
-      className="relative py-12 px-6"
+      className="relative pt-12 pb-0 px-6 overflow-hidden"
       style={{ background: '#080808' }}
     >
-      {/* Top neon border */}
+      {/* Top neon border shadow effect */}
       <div
         className="absolute top-0 left-0 right-0 h-px"
         style={{ background: `linear-gradient(90deg, transparent, ${NEON}, transparent)` }}
       />
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-32 bg-neon/5 blur-[120px] pointer-events-none" />
 
-      <div className="max-w-6xl mx-auto">
-        <div className="flex flex-col md:flex-row items-center justify-between gap-8 mb-8">
-          {/* Logo */}
-          <div>
-            <div className="flex items-center">
-              <img src="/brand/HF_EZ-White-_Tear.png" alt="EZWebOne" className="h-32 w-auto" />
-            </div>
-            <p className="text-gray-600 text-xs mt-3" style={{ fontFamily: SG }}>
-              Health &amp; Wellness Division
-            </p>
-          </div>
+      <div className="max-w-7xl mx-auto relative z-10 flex flex-col items-center">
+        {/* 3X Bigger Centered Logo */}
+        <motion.div 
+          initial={{ opacity: 0, scale: 0.95 }}
+          whileInView={{ opacity: 1, scale: 1 }}
+          viewport={{ once: true }}
+          className="mb-10 flex justify-center"
+        >
+          <img 
+            src="/brand/HF_EZ-White-_Tear.png" 
+            alt="EZWebOne" 
+            className="h-64 md:h-[400px] w-auto object-contain brightness-110" 
+          />
+        </motion.div>
 
-          {/* Nav links */}
-          <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2">
-            {['Services', 'Why Us', 'Process', 'Reviews', 'Contact'].map((l) => (
-              <a
-                key={l}
-                href="#"
-                className="text-gray-500 text-sm hover:text-white transition-colors"
-                style={{ fontFamily: SG }}
-              >
-                {l}
-              </a>
-            ))}
-          </div>
-
-          {/* Socials removed */}
+        {/* Quick Links */}
+        <div className="flex flex-wrap items-center justify-center gap-x-12 gap-y-6 mb-16">
+          {['Services', 'Why Us', 'Process', 'Reviews', 'Contact'].map((l) => (
+            <a
+              key={l}
+              href={`#${l.toLowerCase().replace(' ', '')}`}
+              className="text-gray-500 text-sm font-bold tracking-[0.2em] hover:text-neon transition-all uppercase"
+              style={{ fontFamily: SG }}
+            >
+              {l}
+            </a>
+          ))}
         </div>
 
-        <div
-          className="pt-6 flex flex-col md:flex-row items-center justify-between gap-3"
-          style={{ borderTop: '1px solid #F5F2ED08' }}
-        >
-          <p className="text-gray-600 text-xs" style={{ fontFamily: SG }}>
-            © 2026 EZWebOne. All rights reserved.
+        {/* Copyright */}
+        <div className="mb-12">
+          <p className="text-gray-700 text-[10px] tracking-[0.4em] font-bold uppercase" style={{ fontFamily: SG }}>
+            © 2026 EZWebOne. ALL RIGHTS RESERVED.
           </p>
-          <div className="flex gap-5">
-            {['Privacy Policy', 'Terms of Service'].map((t) => (
-              <a
-                key={t}
-                href="#"
-                className="text-gray-600 text-xs hover:text-white transition-colors"
-                style={{ fontFamily: SG }}
-              >
-                {t}
-              </a>
-            ))}
-          </div>
         </div>
       </div>
+
     </footer>
   );
 }
