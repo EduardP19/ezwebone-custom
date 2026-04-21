@@ -198,7 +198,10 @@ function extractImageKey(filename: string): { kind: "before" | "after"; key: str
   const stem = filename.slice(0, filename.length - extension.length).trim();
   const kind: "before" | "after" = BEFORE_PREFIX.test(stem) ? "before" : "after";
   const withoutPrefix = kind === "before" ? stem.replace(BEFORE_PREFIX, "") : stem;
-  const [base] = withoutPrefix.split(/\s*-\s*/, 1);
+  
+  // Use regex to only split if there is whitespace around the dash (e.g. "Project - Home")
+  // but keep "resevia-agent" whole.
+  const base = withoutPrefix.split(/\s+-\s+/)[0].trim();
   return { kind, key: toKey(base) };
 }
 
@@ -321,12 +324,16 @@ export async function getPublishedProjects(locale: Locale = "en"): Promise<Proje
 
     return source.map((project) => {
       const resolved = imageMap.get(project.slug);
+      
+      // Force local paths only to save Supabase quota
+      const finalImage = resolved?.image || (project.image.startsWith('http') ? '/window.svg' : project.image);
+      const finalBeforeImage = resolved?.beforeImage || (project.beforeImage?.startsWith('http') ? null : project.beforeImage);
 
       return localizeProject(
         {
           ...project,
-          image: resolved?.image ?? project.image,
-          beforeImage: resolved?.beforeImage ?? project.beforeImage,
+          image: finalImage,
+          beforeImage: finalBeforeImage,
         },
         locale
       );

@@ -9,6 +9,8 @@ import { NavbarClient } from "@/components/layout/NavbarClient";
 import { Footer } from "@/components/layout/Footer";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { TrackingProvider } from "@/components/analytics/TrackingProvider";
+import { Clarity } from "@/components/analytics/Clarity";
+import { ConsentManager } from "@/components/analytics/ConsentManager";
 import { BRAND_LOGO_MARK_SRC } from "@/lib/brand";
 import { WebVitals } from "@/lib/axiom/client";
 import { getDictionary } from "@/lib/i18n/dictionary";
@@ -100,18 +102,9 @@ export default async function RootLayout({
           <WebVitals />
           <LocaleProvider locale={locale} dictionary={dictionary}>
             <Suspense fallback={null}>
-              <script
-                dangerouslySetInnerHTML={{
-                  __html: `
-                    (function(c,l,a,r,i,t,y){
-                        c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
-                        t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
-                        y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
-                    })(window, document, "clarity", "script", "${process.env.NEXT_PUBLIC_CLARITY_PROJECT_ID}");
-                  `,
-                }}
-              />
+              <Clarity />
               <TrackingProvider />
+              <ConsentManager />
             </Suspense>
             <JsonLd
               id="organization-schema"

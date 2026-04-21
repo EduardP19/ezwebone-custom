@@ -130,7 +130,7 @@ export function ProjectCard({
             ))}
           </div>
 
-          <div className="mt-6 inline-flex items-center gap-2 text-sm font-medium text-[color:var(--color-text-accent)] transition group-hover:text-white">
+          <div className="mt-6 inline-flex items-center gap-2 text-sm font-medium text-[color:var(--color-text-accent)]">
             {dictionary.common.viewDetails}
             <ArrowUpRight size={14} />
           </div>

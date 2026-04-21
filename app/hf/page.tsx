@@ -225,7 +225,14 @@ function Hero() {
           </div>
         </motion.div>
 
-
+        <style>{`
+          a, button, [role="button"] {
+            cursor: pointer !important;
+          }
+          .cursor-default {
+            cursor: default !important;
+          }
+        `}</style>
 
         {/* Headline */}
         <motion.h1
@@ -340,6 +347,7 @@ function Preloader({ onComplete }: { onComplete: () => void }) {
   return (
     <motion.div
       className="fixed inset-0 z-[99] flex items-center justify-center bg-[#0a0a0a]"
+      style={{ pointerEvents: exiting ? 'none' : 'auto' }}
       animate={exiting ? { opacity: 0 } : { opacity: 1 }}
       transition={{ duration: 0.8, ease: "easeIn" }}
     >
