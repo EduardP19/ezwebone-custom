@@ -27,6 +27,14 @@ type ImportResponse = {
   error?: string;
 };
 
+const SIC_REFERENCE: Array<{ code: string; description: string }> = [
+  { code: "86210", description: "General medical practice activities" },
+  { code: "86900", description: "Other human health activities" },
+  { code: "96020", description: "Hairdressing and other beauty treatment" },
+  { code: "96040", description: "Physical well-being activities" },
+  { code: "85590", description: "Other education n.e.c." },
+];
+
 function defaultFromDate() {
   const now = new Date();
   now.setDate(now.getDate() - 2);
@@ -95,194 +103,215 @@ export default function CompaniesHouseDevPage() {
 
   return (
     <main className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
-      <section className="rounded-3xl border border-[color:var(--color-border)] bg-[color:var(--color-bg-elevated)] p-6 sm:p-8">
-        <h1 className="text-3xl font-semibold tracking-tight text-[color:var(--color-text-primary)]">
-          Companies House Import (Dev)
-        </h1>
-        <p className="mt-3 text-sm text-[color:var(--color-text-secondary)]">
-          Pull new companies, enrich via PSC nationality, then split into non-RO and RO tables.
-        </p>
+      <div className="grid grid-cols-1 gap-6 xl:grid-cols-[minmax(0,1fr)_320px]">
+        <div>
+          <section className="rounded-3xl border border-[color:var(--color-border)] bg-[color:var(--color-bg-elevated)] p-6 sm:p-8">
+            <h1 className="text-3xl font-semibold tracking-tight text-[color:var(--color-text-primary)]">
+              Companies House Import (Dev)
+            </h1>
+            <p className="mt-3 text-sm text-[color:var(--color-text-secondary)]">
+              Pull new companies, enrich via PSC nationality, then split into non-RO and RO tables.
+            </p>
 
-        <form onSubmit={onSubmit} className="mt-8 grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-5">
-          <label className="flex flex-col gap-2">
-            <span className="text-xs font-semibold uppercase tracking-wide text-[color:var(--color-text-secondary)]">
-              Incorporated From
-            </span>
-            <input
-              type="date"
-              value={incorporatedFrom}
-              onChange={(event) => setIncorporatedFrom(event.target.value)}
-              className="rounded-xl border border-[color:var(--color-border)] bg-[color:var(--color-bg)] px-3 py-2 text-sm text-[color:var(--color-text-primary)]"
-              required
-            />
-          </label>
+            <form onSubmit={onSubmit} className="mt-8 grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-5">
+              <label className="flex flex-col gap-2">
+                <span className="text-xs font-semibold uppercase tracking-wide text-[color:var(--color-text-secondary)]">
+                  Incorporated From
+                </span>
+                <input
+                  type="date"
+                  value={incorporatedFrom}
+                  onChange={(event) => setIncorporatedFrom(event.target.value)}
+                  className="rounded-xl border border-[color:var(--color-border)] bg-[color:var(--color-bg)] px-3 py-2 text-sm text-[color:var(--color-text-primary)]"
+                  required
+                />
+              </label>
 
-          <label className="flex flex-col gap-2">
-            <span className="text-xs font-semibold uppercase tracking-wide text-[color:var(--color-text-secondary)]">
-              Incorporated To
-            </span>
-            <input
-              type="date"
-              value={incorporatedTo}
-              onChange={(event) => setIncorporatedTo(event.target.value)}
-              className="rounded-xl border border-[color:var(--color-border)] bg-[color:var(--color-bg)] px-3 py-2 text-sm text-[color:var(--color-text-primary)]"
-              required
-            />
-          </label>
+              <label className="flex flex-col gap-2">
+                <span className="text-xs font-semibold uppercase tracking-wide text-[color:var(--color-text-secondary)]">
+                  Incorporated To
+                </span>
+                <input
+                  type="date"
+                  value={incorporatedTo}
+                  onChange={(event) => setIncorporatedTo(event.target.value)}
+                  className="rounded-xl border border-[color:var(--color-border)] bg-[color:var(--color-bg)] px-3 py-2 text-sm text-[color:var(--color-text-primary)]"
+                  required
+                />
+              </label>
 
-          <label className="flex flex-col gap-2">
-            <span className="text-xs font-semibold uppercase tracking-wide text-[color:var(--color-text-secondary)]">
-              SIC Code
-            </span>
-            <input
-              type="text"
-              value={sicCode}
-              onChange={(event) => setSicCode(event.target.value)}
-              placeholder="e.g. 96020"
-              className="rounded-xl border border-[color:var(--color-border)] bg-[color:var(--color-bg)] px-3 py-2 text-sm text-[color:var(--color-text-primary)]"
-              required
-            />
-          </label>
+              <label className="flex flex-col gap-2">
+                <span className="text-xs font-semibold uppercase tracking-wide text-[color:var(--color-text-secondary)]">
+                  SIC Code
+                </span>
+                <input
+                  type="text"
+                  value={sicCode}
+                  onChange={(event) => setSicCode(event.target.value)}
+                  placeholder="e.g. 96020"
+                  className="rounded-xl border border-[color:var(--color-border)] bg-[color:var(--color-bg)] px-3 py-2 text-sm text-[color:var(--color-text-primary)]"
+                  required
+                />
+              </label>
 
-          <label className="flex flex-col gap-2">
-            <span className="text-xs font-semibold uppercase tracking-wide text-[color:var(--color-text-secondary)]">
-              Size
-            </span>
-            <input
-              type="text"
-              value={size}
-              onChange={(event) => setSize(event.target.value)}
-              placeholder="micro-entity"
-              className="rounded-xl border border-[color:var(--color-border)] bg-[color:var(--color-bg)] px-3 py-2 text-sm text-[color:var(--color-text-primary)]"
-              required
-            />
-          </label>
+              <label className="flex flex-col gap-2">
+                <span className="text-xs font-semibold uppercase tracking-wide text-[color:var(--color-text-secondary)]">
+                  Size
+                </span>
+                <input
+                  type="text"
+                  value={size}
+                  onChange={(event) => setSize(event.target.value)}
+                  placeholder="micro-entity"
+                  className="rounded-xl border border-[color:var(--color-border)] bg-[color:var(--color-bg)] px-3 py-2 text-sm text-[color:var(--color-text-primary)]"
+                  required
+                />
+              </label>
 
-          <label className="flex flex-col gap-2">
-            <span className="text-xs font-semibold uppercase tracking-wide text-[color:var(--color-text-secondary)]">
-              Max Companies
-            </span>
-            <input
-              type="number"
-              min={1}
-              max={10000}
-              value={maxCompanies}
-              onChange={(event) => setMaxCompanies(event.target.value)}
-              className="rounded-xl border border-[color:var(--color-border)] bg-[color:var(--color-bg)] px-3 py-2 text-sm text-[color:var(--color-text-primary)]"
-            />
-          </label>
+              <label className="flex flex-col gap-2">
+                <span className="text-xs font-semibold uppercase tracking-wide text-[color:var(--color-text-secondary)]">
+                  Max Companies
+                </span>
+                <input
+                  type="number"
+                  min={1}
+                  max={10000}
+                  value={maxCompanies}
+                  onChange={(event) => setMaxCompanies(event.target.value)}
+                  className="rounded-xl border border-[color:var(--color-border)] bg-[color:var(--color-bg)] px-3 py-2 text-sm text-[color:var(--color-text-primary)]"
+                />
+              </label>
 
-          <div className="md:col-span-2 xl:col-span-5">
-            <button
-              type="submit"
-              disabled={loading}
-              className="inline-flex items-center rounded-xl bg-[color:var(--color-primary)] px-4 py-2 text-sm font-semibold text-white disabled:cursor-not-allowed disabled:opacity-60"
-            >
-              {loading ? "Running import..." : "Fetch + split + save"}
-            </button>
+              <div className="md:col-span-2 xl:col-span-5">
+                <button
+                  type="submit"
+                  disabled={loading}
+                  className="inline-flex items-center rounded-xl bg-[color:var(--color-primary)] px-4 py-2 text-sm font-semibold text-white disabled:cursor-not-allowed disabled:opacity-60"
+                >
+                  {loading ? "Running import..." : "Fetch + split + save"}
+                </button>
+              </div>
+            </form>
+
+            {error ? (
+              <div className="mt-6 rounded-xl border border-red-300 bg-red-50 p-3 text-sm text-red-700">
+                {error}
+              </div>
+            ) : null}
+          </section>
+
+          {summary ? (
+            <section className="mt-8 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
+              {summary.map((item) => (
+                <article
+                  key={item.label}
+                  className="rounded-2xl border border-[color:var(--color-border)] bg-[color:var(--color-bg-elevated)] p-4"
+                >
+                  <p className="text-xs uppercase tracking-wide text-[color:var(--color-text-secondary)]">
+                    {item.label}
+                  </p>
+                  <p className="mt-2 text-base font-semibold text-[color:var(--color-text-primary)] break-words">
+                    {item.value}
+                  </p>
+                </article>
+              ))}
+            </section>
+          ) : null}
+
+          {result ? (
+            <section className="mt-8 grid grid-cols-1 gap-6 xl:grid-cols-2">
+              <article className="overflow-hidden rounded-2xl border border-[color:var(--color-border)] bg-[color:var(--color-bg-elevated)]">
+                <header className="border-b border-[color:var(--color-border)] px-4 py-3">
+                  <h2 className="text-sm font-semibold uppercase tracking-wide text-[color:var(--color-text-primary)]">
+                    Non-RO Sample
+                  </h2>
+                </header>
+                <div className="overflow-x-auto">
+                  <table className="min-w-full text-sm">
+                    <thead>
+                      <tr className="text-left text-[color:var(--color-text-secondary)]">
+                        <th className="px-4 py-2">Company #</th>
+                        <th className="px-4 py-2">Director</th>
+                        <th className="px-4 py-2">Raw</th>
+                        <th className="px-4 py-2">Normalized</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {result.nonRoSample.map((row, index) => (
+                        <tr key={`${row.company_number}-${index}`} className="border-t border-[color:var(--color-border)]">
+                          <td className="px-4 py-2">{row.company_number}</td>
+                          <td className="px-4 py-2">{row.director_full_name}</td>
+                          <td className="px-4 py-2">{row.nationality_raw}</td>
+                          <td className="px-4 py-2">{row.nationality_normalized}</td>
+                        </tr>
+                      ))}
+                      {result.nonRoSample.length === 0 ? (
+                        <tr>
+                          <td colSpan={4} className="px-4 py-6 text-[color:var(--color-text-secondary)]">
+                            No rows returned for non-RO sample.
+                          </td>
+                        </tr>
+                      ) : null}
+                    </tbody>
+                  </table>
+                </div>
+              </article>
+
+              <article className="overflow-hidden rounded-2xl border border-[color:var(--color-border)] bg-[color:var(--color-bg-elevated)]">
+                <header className="border-b border-[color:var(--color-border)] px-4 py-3">
+                  <h2 className="text-sm font-semibold uppercase tracking-wide text-[color:var(--color-text-primary)]">
+                    RO Sample
+                  </h2>
+                </header>
+                <div className="overflow-x-auto">
+                  <table className="min-w-full text-sm">
+                    <thead>
+                      <tr className="text-left text-[color:var(--color-text-secondary)]">
+                        <th className="px-4 py-2">Company #</th>
+                        <th className="px-4 py-2">Director</th>
+                        <th className="px-4 py-2">Raw</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {result.roSample.map((row, index) => (
+                        <tr key={`${row.company_number}-${index}`} className="border-t border-[color:var(--color-border)]">
+                          <td className="px-4 py-2">{row.company_number}</td>
+                          <td className="px-4 py-2">{row.director_full_name}</td>
+                          <td className="px-4 py-2">{row.nationality_raw}</td>
+                        </tr>
+                      ))}
+                      {result.roSample.length === 0 ? (
+                        <tr>
+                          <td colSpan={3} className="px-4 py-6 text-[color:var(--color-text-secondary)]">
+                            No rows returned for RO sample.
+                          </td>
+                        </tr>
+                      ) : null}
+                    </tbody>
+                  </table>
+                </div>
+              </article>
+            </section>
+          ) : null}
+        </div>
+
+        <aside className="h-fit rounded-2xl border border-[color:var(--color-border)] bg-[color:var(--color-bg-elevated)] p-4 xl:sticky xl:top-24">
+          <h2 className="text-sm font-semibold uppercase tracking-wide text-[color:var(--color-text-primary)]">
+            SIC Targets
+          </h2>
+          <p className="mt-2 text-xs text-[color:var(--color-text-secondary)]">
+            Quick reference list. Add more as you refine API targeting.
+          </p>
+          <div className="mt-4 space-y-2">
+            {SIC_REFERENCE.map((item) => (
+              <article key={item.code} className="rounded-xl border border-[color:var(--color-border)] bg-[color:var(--color-bg)] p-3">
+                <p className="text-sm font-semibold text-[color:var(--color-text-primary)]">{item.code}</p>
+                <p className="mt-1 text-xs text-[color:var(--color-text-secondary)]">{item.description}</p>
+              </article>
+            ))}
           </div>
-        </form>
-
-        {error ? (
-          <div className="mt-6 rounded-xl border border-red-300 bg-red-50 p-3 text-sm text-red-700">
-            {error}
-          </div>
-        ) : null}
-      </section>
-
-      {summary ? (
-        <section className="mt-8 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
-          {summary.map((item) => (
-            <article
-              key={item.label}
-              className="rounded-2xl border border-[color:var(--color-border)] bg-[color:var(--color-bg-elevated)] p-4"
-            >
-              <p className="text-xs uppercase tracking-wide text-[color:var(--color-text-secondary)]">
-                {item.label}
-              </p>
-              <p className="mt-2 text-base font-semibold text-[color:var(--color-text-primary)] break-words">
-                {item.value}
-              </p>
-            </article>
-          ))}
-        </section>
-      ) : null}
-
-      {result ? (
-        <section className="mt-8 grid grid-cols-1 gap-6 xl:grid-cols-2">
-          <article className="overflow-hidden rounded-2xl border border-[color:var(--color-border)] bg-[color:var(--color-bg-elevated)]">
-            <header className="border-b border-[color:var(--color-border)] px-4 py-3">
-              <h2 className="text-sm font-semibold uppercase tracking-wide text-[color:var(--color-text-primary)]">
-                Non-RO Sample
-              </h2>
-            </header>
-            <div className="overflow-x-auto">
-              <table className="min-w-full text-sm">
-                <thead>
-                  <tr className="text-left text-[color:var(--color-text-secondary)]">
-                    <th className="px-4 py-2">Company #</th>
-                    <th className="px-4 py-2">Director</th>
-                    <th className="px-4 py-2">Raw</th>
-                    <th className="px-4 py-2">Normalized</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {result.nonRoSample.map((row, index) => (
-                    <tr key={`${row.company_number}-${index}`} className="border-t border-[color:var(--color-border)]">
-                      <td className="px-4 py-2">{row.company_number}</td>
-                      <td className="px-4 py-2">{row.director_full_name}</td>
-                      <td className="px-4 py-2">{row.nationality_raw}</td>
-                      <td className="px-4 py-2">{row.nationality_normalized}</td>
-                    </tr>
-                  ))}
-                  {result.nonRoSample.length === 0 ? (
-                    <tr>
-                      <td colSpan={4} className="px-4 py-6 text-[color:var(--color-text-secondary)]">
-                        No rows returned for non-RO sample.
-                      </td>
-                    </tr>
-                  ) : null}
-                </tbody>
-              </table>
-            </div>
-          </article>
-
-          <article className="overflow-hidden rounded-2xl border border-[color:var(--color-border)] bg-[color:var(--color-bg-elevated)]">
-            <header className="border-b border-[color:var(--color-border)] px-4 py-3">
-              <h2 className="text-sm font-semibold uppercase tracking-wide text-[color:var(--color-text-primary)]">
-                RO Sample
-              </h2>
-            </header>
-            <div className="overflow-x-auto">
-              <table className="min-w-full text-sm">
-                <thead>
-                  <tr className="text-left text-[color:var(--color-text-secondary)]">
-                    <th className="px-4 py-2">Company #</th>
-                    <th className="px-4 py-2">Director</th>
-                    <th className="px-4 py-2">Raw</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {result.roSample.map((row, index) => (
-                    <tr key={`${row.company_number}-${index}`} className="border-t border-[color:var(--color-border)]">
-                      <td className="px-4 py-2">{row.company_number}</td>
-                      <td className="px-4 py-2">{row.director_full_name}</td>
-                      <td className="px-4 py-2">{row.nationality_raw}</td>
-                    </tr>
-                  ))}
-                  {result.roSample.length === 0 ? (
-                    <tr>
-                      <td colSpan={3} className="px-4 py-6 text-[color:var(--color-text-secondary)]">
-                        No rows returned for RO sample.
-                      </td>
-                    </tr>
-                  ) : null}
-                </tbody>
-              </table>
-            </div>
-          </article>
-        </section>
-      ) : null}
+        </aside>
+      </div>
     </main>
   );
 }
