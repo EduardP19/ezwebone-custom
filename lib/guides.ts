@@ -86,19 +86,19 @@ export async function markGuideDownloadStarted(resolved: ResolvedGuideCode) {
   }
 
   const currentStatus = (resolved.row.campaign_status ?? "").trim().toLowerCase();
-  if (currentStatus === "lead capture" || currentStatus === "lead_captured") {
+  if (currentStatus === "lead_capture" || currentStatus === "lead_captured" || currentStatus === "lead capture") {
     return;
   }
 
   const { error } = await supabaseAdmin
     .from(resolved.sourceTable)
     .update({
-      campaign_status: "download started",
+      campaign_status: "download_started",
       updated_at: new Date().toISOString(),
     })
     .eq("id", resolved.row.id);
 
   if (error) {
-    throw new Error(`Failed to set download started: ${error.message}`);
+    throw new Error(`Failed to set download_started: ${error.message}`);
   }
 }

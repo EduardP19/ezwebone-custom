@@ -226,7 +226,7 @@ export default function StannpPreviewPage() {
               </button>
             </div>
             <p className="mt-2 text-xs text-[color:var(--color-text-secondary)]">
-              Uses selected bucket and sends rows in both queued statuses: `to_send` and `to send`.
+              Uses selected bucket and sends rows in queued status: `to_send`.
             </p>
           </div>
         </form>

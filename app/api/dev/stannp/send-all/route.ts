@@ -38,7 +38,7 @@ export async function POST(request: Request) {
   const templateId = asOptionalNumber(body.templateId);
   const test = asOptionalBoolean(body.test) ?? false;
 
-  const statuses = ["to_send", "to send"];
+  const statuses = ["to_send"];
 
   try {
     let queuedTotal = 0;

@@ -89,11 +89,30 @@ function resolveIndustryLabel(rawIndustry: string | null) {
   return value;
 }
 
-function resolveBodyTemplate(item: DirectorRow) {
+function resolveBodyTemplate(item: DirectorRow, source: SendSource) {
   const normalizedName = normalizeLetterFullName(item.full_name);
   const firstName = asString(normalizedName).split(/\s+/)[0] || "antreprenor";
   const niche = resolveIndustryLabel(item.industry);
   const customBody = asString(item.letter_template);
+
+  if (source === "non_ro") {
+    return {
+      headline: "Companies House notified us about your new company",
+      body:
+        customBody ||
+        `Hi ${firstName},\n\nIn ${niche}, the first client is hard to win, and the next ones only come when your online presence builds trust.\n\nWhen you start a new business, your website is the first filter people use to decide whether to choose you or move on.\n\nAt EZWebOne, we build websites and digital presence systems for early-stage businesses, focused on clarity, credibility, and growth.\n\nIf a customer found you online today, would they clearly understand what you offer and why to choose you? The answer starts with the right online presence.\n\nBest regards,\nEduard Proca\nCEO & Founder, EZWebOne`,
+      highlightText: "Free guide: www.ezwebone.co.uk/guides or scan the QR and enter your code.",
+      qrContentDescription: [
+        "This guide shows you:",
+        "• what you actually need at the start",
+        "• how to attract your first clients without large budgets",
+        "• how to avoid dependency on platforms like Treatwell",
+      ].join("\n"),
+      footer:
+        "EZWebOne is the trading name of EMAGF LTD (UK), registered under company number 12437054.",
+      privacyNotice: "Contact details come from UK Companies House public records.",
+    };
+  }
 
   return {
     headline: "Companies House ne-a informat despre firma ta",
@@ -169,7 +188,7 @@ function buildPayload(item: DirectorRow, source: SendSource, templateId: number,
   const city = asString(address.locality);
   const postcode = asString(address.postal_code);
   const downloadCode = asString(item.download_code);
-  const copy = resolveBodyTemplate(item);
+  const copy = resolveBodyTemplate(item, source);
   const normalizedFullName = normalizeLetterFullName(item.full_name) || asString(item.full_name);
 
   const payload: PostLetterPayload = {
@@ -378,7 +397,7 @@ export async function sendDueLetters(params?: {
         const { error: updateError } = await supabaseAdmin
           .from(sourceTable)
           .update({
-            campaign_status: "letter sent",
+            campaign_status: "letter_sent",
             updated_at: now,
           })
           .eq("id", item.id);
