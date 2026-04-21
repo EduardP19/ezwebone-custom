@@ -43,7 +43,7 @@ type SendAllResult = {
 
 export default function StannpPreviewPage() {
   const [companyNumber, setCompanyNumber] = useState("");
-  const [source, setSource] = useState<"non_ro" | "ro">("non_ro");
+  const [source, setSource] = useState<"non_ro" | "ro">("ro");
   const [isTestMode, setIsTestMode] = useState(true);
   const [templateId, setTemplateId] = useState("");
   const [loading, setLoading] = useState(false);
@@ -185,8 +185,8 @@ export default function StannpPreviewPage() {
               onChange={(event) => setSource(event.target.value === "ro" ? "ro" : "non_ro")}
               className="rounded-xl border border-[color:var(--color-border)] bg-[color:var(--color-bg)] px-3 py-2 text-sm text-[color:var(--color-text-primary)]"
             >
-              <option value="non_ro">Non-raw (Non-RO)</option>
-              <option value="ro">Raw (RO)</option>
+              <option value="ro">RO</option>
+              <option value="non_ro">NON_RO</option>
             </select>
           </label>
 
@@ -216,7 +216,7 @@ export default function StannpPreviewPage() {
                 type="button"
                 onClick={onSendAllQueued}
                 disabled={loading || sendingAll}
-                className="inline-flex items-center rounded-xl border border-[color:var(--color-border)] bg-[color:var(--color-bg)] px-4 py-2 text-sm font-semibold text-[color:var(--color-text-primary)] disabled:cursor-not-allowed disabled:opacity-60"
+                className="inline-flex items-center rounded-xl bg-emerald-600 px-4 py-2 text-sm font-semibold text-white hover:bg-emerald-500 disabled:cursor-not-allowed disabled:opacity-60"
               >
                 {sendingAll
                   ? "Sending All..."
