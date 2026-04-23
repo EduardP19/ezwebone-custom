@@ -27,23 +27,28 @@ export function Clarity() {
   }, []);
 
   useEffect(() => {
-    if (!isAcceptedForClarity) return;
-    window.clarity?.("consent");
-  }, [isAcceptedForClarity]);
+    if (!projectId || !isAcceptedForClarity) return;
 
-  if (!projectId || !isAcceptedForClarity) return null;
+    if (!window.clarity) {
+      window.clarity = (...args: unknown[]) => {
+        const clarityWithQueue = window.clarity as ((...params: unknown[]) => void) & {
+          q?: unknown[][];
+        };
+        clarityWithQueue.q = clarityWithQueue.q || [];
+        clarityWithQueue.q.push(args);
+      };
+    }
 
-  return (
-    <script
-      dangerouslySetInnerHTML={{
-        __html: `
-          (function(c,l,a,r,i,t,y){
-              c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
-              t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
-              y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
-          })(window, document, "clarity", "script", "${projectId}");
-        `,
-      }}
-    />
-  );
+    if (!document.querySelector("script[data-clarity-tag='true']")) {
+      const script = document.createElement("script");
+      script.async = true;
+      script.src = `https://www.clarity.ms/tag/${projectId}`;
+      script.setAttribute("data-clarity-tag", "true");
+      document.head.appendChild(script);
+    }
+
+    window.clarity("consent");
+  }, [isAcceptedForClarity, projectId]);
+
+  return null;
 }
