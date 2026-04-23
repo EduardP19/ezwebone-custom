@@ -1,8 +1,10 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
-import { usePathname, useSearchParams } from "next/navigation";
-import { updateTrackingConsent } from "@/lib/consent";
+import { useEffect, useState } from "react";
+import {
+  TRACKING_CONSENT_UPDATED_EVENT,
+  readTrackingConsent,
+} from "@/lib/consent";
 
 declare global {
   interface Window {
@@ -11,24 +13,23 @@ declare global {
 }
 
 export function Clarity() {
-  const pathname = usePathname();
-  const searchParams = useSearchParams();
   const [isAcceptedForClarity, setIsAcceptedForClarity] = useState(false);
   const projectId = process.env.NEXT_PUBLIC_CLARITY_PROJECT_ID ?? "";
-  const pageKey = useMemo(() => {
-    const query = searchParams.toString();
-    return query ? `${pathname}?${query}` : pathname;
-  }, [pathname, searchParams]);
 
   useEffect(() => {
-    const timer = window.setTimeout(() => {
-      updateTrackingConsent("accepted");
-      setIsAcceptedForClarity(true);
-      window.clarity?.("consent");
-    }, 3000);
+    const syncConsent = () => {
+      setIsAcceptedForClarity(readTrackingConsent() === "accepted");
+    };
 
-    return () => window.clearTimeout(timer);
-  }, [pageKey]);
+    syncConsent();
+    window.addEventListener(TRACKING_CONSENT_UPDATED_EVENT, syncConsent);
+    return () => window.removeEventListener(TRACKING_CONSENT_UPDATED_EVENT, syncConsent);
+  }, []);
+
+  useEffect(() => {
+    if (!isAcceptedForClarity) return;
+    window.clarity?.("consent");
+  }, [isAcceptedForClarity]);
 
   if (!projectId || !isAcceptedForClarity) return null;
 

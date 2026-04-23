@@ -10,29 +10,12 @@ export function ConsentManager() {
   const pathname = usePathname();
 
   useEffect(() => {
-    const maybeShowBanner = () => {
+    const timerId = window.setTimeout(() => {
       const consent = readTrackingConsent();
       setShowBanner(!consent);
-    };
+    }, 3000);
 
-    const isHfRoute = pathname === "/hf" || pathname.endsWith("/hf");
-    if (!isHfRoute) {
-      maybeShowBanner();
-      return;
-    }
-
-    if (window.sessionStorage.getItem("hf_loaded")) {
-      maybeShowBanner();
-      return;
-    }
-
-    const intervalId = window.setInterval(() => {
-      if (!window.sessionStorage.getItem("hf_loaded")) return;
-      window.clearInterval(intervalId);
-      maybeShowBanner();
-    }, 250);
-
-    return () => window.clearInterval(intervalId);
+    return () => window.clearTimeout(timerId);
   }, [pathname]);
 
   const handleAccept = () => {

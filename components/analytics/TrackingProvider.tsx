@@ -1,10 +1,12 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { usePathname, useSearchParams } from "next/navigation";
 import {
+  TRACKING_CONSENT_UPDATED_EVENT,
   TRACKING_SESSION_KEY,
   TRACKING_UTM_KEY,
+  readTrackingConsent,
 } from "@/lib/consent";
 import { supabase } from "@/lib/supabase";
 
@@ -236,9 +238,20 @@ async function insertLog(payload: LogPayload) {
 export function TrackingProvider() {
   const pathname = usePathname();
   const searchParams = useSearchParams();
+  const [isAcceptedForTracking, setIsAcceptedForTracking] = useState(false);
 
   useEffect(() => {
-    if (!pathname) return;
+    const syncConsent = () => {
+      setIsAcceptedForTracking(readTrackingConsent() === "accepted");
+    };
+
+    syncConsent();
+    window.addEventListener(TRACKING_CONSENT_UPDATED_EVENT, syncConsent);
+    return () => window.removeEventListener(TRACKING_CONSENT_UPDATED_EVENT, syncConsent);
+  }, []);
+
+  useEffect(() => {
+    if (!pathname || !isAcceptedForTracking) return;
 
     const sessionId = getOrCreateSessionId();
     const utms = mergeAndStoreUtms(searchParams);
@@ -268,9 +281,11 @@ export function TrackingProvider() {
         title: document.title || null,
       },
     });
-  }, [pathname, searchParams]);
+  }, [isAcceptedForTracking, pathname, searchParams]);
 
   useEffect(() => {
+    if (!isAcceptedForTracking) return;
+
     const onClick = (event: MouseEvent) => {
       const target = event.target as HTMLElement | null;
       if (!target) return;
@@ -330,7 +345,7 @@ export function TrackingProvider() {
 
     document.addEventListener("click", onClick, true);
     return () => document.removeEventListener("click", onClick, true);
-  }, []);
+  }, [isAcceptedForTracking]);
 
   return null;
 }
