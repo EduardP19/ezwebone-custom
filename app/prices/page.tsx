@@ -8,8 +8,11 @@ type ScopeValue = "in" | "out";
 type Plan = {
   id: PlanId;
   name: string;
+  blurb: string;
   price: string;
   subtitle: string;
+  badge?: string;
+  featured?: boolean;
   included: string[];
   excludedTitle?: string;
   excluded?: string[];
@@ -24,8 +27,9 @@ const plans: Plan[] = [
   {
     id: "starter",
     name: "Starter",
+    blurb: "Best for launching a high-quality custom website quickly.",
     price: "£299",
-    subtitle: "One-off",
+    subtitle: "",
     included: [
       "Custom built website - not a template",
       "Up to 5 pages",
@@ -49,8 +53,11 @@ const plans: Plan[] = [
   {
     id: "growth",
     name: "Growth",
+    blurb: "Built for businesses that want consistent visibility and leads.",
     price: "£149/month + £199 setup fee",
-    subtitle: "6 month minimum",
+    subtitle: "* 6 month minimum",
+    badge: "Most Popular",
+    featured: true,
     included: [
       "Everything in Starter",
       "Enhanced SEO",
@@ -68,8 +75,9 @@ const plans: Plan[] = [
   {
     id: "pro",
     name: "Pro",
+    blurb: "For teams that want marketing, updates, and execution handled.",
     price: "£249/month + £199 setup fee",
-    subtitle: "6 month minimum",
+    subtitle: "* 6 month minimum",
     included: [
       "Everything in Growth",
       "Email marketing setup & management",
@@ -86,6 +94,7 @@ const plans: Plan[] = [
   {
     id: "ai",
     name: "AI & Automations",
+    blurb: "Custom AI systems scoped around your operations and workflows.",
     price: "Price on request",
     subtitle: "Scoped per project - book a free discovery call",
     included: [
@@ -173,6 +182,33 @@ const whyEzWebOne = [
   "You own it - no platform lock-in, move or scale whenever you want",
 ];
 
+const planTone: Record<PlanId, { border: string; glow: string; pill: string; pillLabel: string }> = {
+  starter: {
+    border: "border-cyan-400/45",
+    glow: "shadow-[0_18px_55px_rgba(34,211,238,0.16)]",
+    pill: "bg-cyan-300 text-slate-950 border-cyan-200",
+    pillLabel: "One-off Build",
+  },
+  growth: {
+    border: "border-emerald-400/45",
+    glow: "shadow-[0_18px_55px_rgba(52,211,153,0.16)]",
+    pill: "bg-emerald-300 text-slate-950 border-emerald-200",
+    pillLabel: "Popular for Local Growth",
+  },
+  pro: {
+    border: "border-amber-400/45",
+    glow: "shadow-[0_18px_55px_rgba(251,191,36,0.16)]",
+    pill: "bg-amber-300 text-slate-950 border-amber-200",
+    pillLabel: "Scale Plan",
+  },
+  ai: {
+    border: "border-fuchsia-400/45",
+    glow: "shadow-[0_18px_55px_rgba(217,70,239,0.16)]",
+    pill: "bg-fuchsia-300 text-slate-950 border-fuchsia-200",
+    pillLabel: "Custom Automations",
+  },
+};
+
 export const metadata: Metadata = createMetadata({
   title: "Pricing",
   description: "Transparent pricing for websites, growth systems, and AI automations.",
@@ -201,7 +237,61 @@ function ScopeCell({ value }: { value: ScopeValue }) {
   );
 }
 
+function PlanCard({ plan, className = "" }: { plan: Plan; className?: string }) {
+  const tone = planTone[plan.id];
+  const isFeatured = Boolean(plan.featured);
+  const badgeLabel = plan.badge ?? tone.pillLabel;
+
+  return (
+    <article
+      className={`relative surface-card rounded-[1.6rem] border p-6 pt-9 sm:p-7 sm:pt-10 ${tone.border} ${tone.glow} ${isFeatured ? "border-[#f59e0b]/80 shadow-[0_24px_70px_rgba(249,115,22,0.24)] lg:-translate-y-1" : ""} ${className}`}
+    >
+      <div
+        className={`absolute left-1/2 top-0 inline-flex -translate-x-1/2 -translate-y-1/2 rounded-full border px-3.5 py-1 text-[11px] font-semibold uppercase tracking-[0.11em] ${isFeatured ? "bg-[#f59e0b] text-white border-[#fb923c]" : tone.pill}`}
+      >
+        {badgeLabel}
+      </div>
+
+      <h2 className="text-3xl font-semibold tracking-tight text-[color:var(--color-text-primary)] md:text-[2rem]">
+        {plan.name}
+      </h2>
+      <p className="mt-2 text-sm leading-6 text-[color:var(--color-text-secondary)]">{plan.blurb}</p>
+      <p className="mt-5 text-3xl font-semibold tracking-tight text-[color:var(--color-text-primary)]">{plan.price}</p>
+      {plan.subtitle ? (
+        <p className="mt-2 text-sm text-[color:var(--color-text-secondary)]">{plan.subtitle}</p>
+      ) : null}
+
+      <p className="mt-6 text-sm font-semibold text-[color:var(--color-text-primary)]">What&apos;s included:</p>
+      <ul className="mt-3 space-y-2 text-sm leading-6 text-[color:var(--color-text-secondary)]">
+        {plan.included.map((item) => (
+          <li key={item} className="flex items-start gap-2.5">
+            <Check className="mt-1 h-4 w-4 shrink-0 text-emerald-400" />
+            <span>{item}</span>
+          </li>
+        ))}
+      </ul>
+
+      {plan.excludedTitle && plan.excluded && plan.excluded.length > 0 ? (
+        <>
+          <p className="mt-6 text-sm font-semibold text-[color:var(--color-text-secondary)]">{plan.excludedTitle}</p>
+          <ul className="mt-3 space-y-2 text-sm leading-6 text-slate-400">
+            {plan.excluded.map((item) => (
+              <li key={item} className="flex items-start gap-2.5">
+                <X className="mt-1 h-4 w-4 shrink-0 text-slate-500" />
+                <span>{item}</span>
+              </li>
+            ))}
+          </ul>
+        </>
+      ) : null}
+    </article>
+  );
+}
+
 export default function PricesPage() {
+  const mainPlans = plans.filter((plan) => plan.id !== "ai");
+  const customPlan = plans.find((plan) => plan.id === "ai");
+
   return (
     <div className="bg-[color:var(--color-bg-dark)]">
       <section className="section-shell py-24 md:py-32">
@@ -217,45 +307,17 @@ export default function PricesPage() {
             </p>
           </div>
 
-          <div className="mt-14 grid grid-cols-1 gap-6 lg:grid-cols-2">
-            {plans.map((plan) => (
-              <article key={plan.id} className="surface-card rounded-[1.6rem] border border-white/10 p-6 sm:p-7">
-                <p className="text-xs uppercase tracking-[0.14em] text-[color:var(--color-text-accent)]">
-                  {plan.name}
-                </p>
-                <h2 className="mt-3 text-3xl font-semibold tracking-tight text-[color:var(--color-text-primary)]">
-                  {plan.price}
-                </h2>
-                <p className="mt-2 text-sm text-[color:var(--color-text-secondary)]">{plan.subtitle}</p>
-
-                <p className="mt-6 text-sm font-semibold text-[color:var(--color-text-primary)]">What&apos;s included:</p>
-                <ul className="mt-3 space-y-2 text-sm leading-6 text-[color:var(--color-text-secondary)]">
-                  {plan.included.map((item) => (
-                    <li key={item} className="flex items-start gap-2.5">
-                      <Check className="mt-1 h-4 w-4 shrink-0 text-emerald-400" />
-                      <span>{item}</span>
-                    </li>
-                  ))}
-                </ul>
-
-                {plan.excludedTitle && plan.excluded && plan.excluded.length > 0 ? (
-                  <>
-                    <p className="mt-6 text-sm font-semibold text-[color:var(--color-text-secondary)]">
-                      {plan.excludedTitle}
-                    </p>
-                    <ul className="mt-3 space-y-2 text-sm leading-6 text-slate-400">
-                      {plan.excluded.map((item) => (
-                        <li key={item} className="flex items-start gap-2.5">
-                          <X className="mt-1 h-4 w-4 shrink-0 text-slate-500" />
-                          <span>{item}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </>
-                ) : null}
-              </article>
+          <div className="mt-14 grid grid-cols-1 gap-6 lg:grid-cols-3">
+            {mainPlans.map((plan) => (
+              <PlanCard key={plan.id} plan={plan} />
             ))}
           </div>
+
+          {customPlan ? (
+            <div className="mt-6 flex justify-center">
+              <PlanCard plan={customPlan} className="w-full max-w-2xl" />
+            </div>
+          ) : null}
         </div>
       </section>
 
