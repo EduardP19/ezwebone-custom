@@ -10,6 +10,6 @@ const NavbarNoSsr = dynamic(
 
 export function NavbarClient() {
   const pathname = usePathname();
-  if (pathname?.startsWith("/hf")) return null;
+  if (pathname?.startsWith("/hf") || pathname?.startsWith("/ro/hf")) return null;
   return <NavbarNoSsr />;
 }
