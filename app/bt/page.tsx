@@ -20,7 +20,6 @@ import { useI18n } from "@/components/i18n/LocaleProvider";
 import { localizePath } from "@/lib/i18n/config";
 import { CALENDLY_BOOKING_URL } from "@/lib/links";
 import { BRAND_LOGO_MARK_LIGHT_SRC } from "@/lib/brand";
-import { supabase } from "@/lib/supabase";
 
 const palette = {
   primary: "#EAE6DF",
@@ -42,14 +41,14 @@ const content = {
       sectors: "Sectors",
       process: "Process",
       contact: "Contact",
-      cta: "Book Consultation",
+      cta: "Get Free Guide",
     },
     hero: {
       badge: "Beauty & Aesthetics",
       title: "Digital presence for premium clinics and modern salons.",
       sub:
         "Elegant websites, refined booking journeys, and discreet automations for beauty brands that need to feel trusted before the first consultation.",
-      primaryCta: "Discuss Your Clinic",
+      primaryCta: "Get The Free Guide",
       secondaryCta: "View Services",
       markers: ["Neutral luxury", "Unisex design", "Premium minimal"],
     },
@@ -117,28 +116,33 @@ const content = {
       ],
     },
     form: {
-      badge: "Start The Conversation",
-      title: "Tell us what your beauty brand needs next.",
+      badge: "Free Guide",
+      title: "Get the guide to improve your online presence yourself.",
       sub:
-        "Share a few details and we will come back with a clear direction for the site, booking flow, and automation layer.",
-      successTitle: "Enquiry received",
-      successBody: "We have your details and will review the project within 24 hours.",
+        "A practical guide for beauty and aesthetics businesses that want a cleaner website, stronger trust signals, and more confident booking journeys.",
+      successTitle: "Your guide request is in",
+      successBody: "We have your details. The guide will be sent to your inbox shortly.",
       fullName: "Full name",
       email: "Work email",
-      businessName: "Clinic / salon name",
-      message: "What do you want to improve?",
+      industry: "Industry",
+      message: "What should the guide help you improve?",
       placeholders: {
         fullName: "Alex Morgan",
         email: "alex@clinic.com",
-        businessName: "Your clinic",
-        message: "Tell us about the services, current website, and what should feel more premium.",
+        industry: "Aesthetic clinic, skincare, salon...",
+        message: "Tell us what feels unclear, outdated, or hard to book online.",
       },
-      submit: "Send Project Brief",
+      submit: "Send Me The Free Guide",
       sending: "Sending...",
       error: "Something went wrong. Please try again.",
       supabaseError: "Supabase is not configured.",
-      altCta: "Prefer to talk?",
+      altCta: "Want tailored advice after the guide?",
       altCtaLink: "Book a consultation",
+      successPoints: [
+        "Website clarity checklist",
+        "Trust signals clients look for",
+        "Simple booking journey improvements",
+      ],
     },
     footer: "Beauty & aesthetics digital systems for premium modern brands.",
   },
@@ -148,14 +152,14 @@ const content = {
       sectors: "Segmente",
       process: "Proces",
       contact: "Contact",
-      cta: "Programeaza consultatie",
+      cta: "Primeste ghidul",
     },
     hero: {
       badge: "Beauty & Aesthetics",
       title: "Prezenta digitala pentru clinici premium si saloane moderne.",
       sub:
         "Website-uri elegante, fluxuri de booking rafinate si automatizari discrete pentru branduri beauty care trebuie sa inspire incredere inainte de prima consultatie.",
-      primaryCta: "Discuta despre clinica ta",
+      primaryCta: "Primeste ghidul gratuit",
       secondaryCta: "Vezi serviciile",
       markers: ["Luxury neutru", "Design unisex", "Premium minimal"],
     },
@@ -223,28 +227,33 @@ const content = {
       ],
     },
     form: {
-      badge: "Incepe Conversatia",
-      title: "Spune-ne ce are nevoie brandul tau beauty mai departe.",
+      badge: "Ghid Gratuit",
+      title: "Primeste ghidul pentru a-ti imbunatati singur prezenta online.",
       sub:
-        "Trimite cateva detalii si revenim cu o directie clara pentru website, booking si stratul de automatizare.",
-      successTitle: "Cerere primita",
-      successBody: "Avem detaliile tale si vom analiza proiectul in 24 de ore.",
+        "Un ghid practic pentru business-uri beauty si aesthetics care vor un website mai clar, mai multa incredere online si un traseu de booking mai bun.",
+      successTitle: "Cererea pentru ghid este primita",
+      successBody: "Avem detaliile tale. Ghidul va fi trimis in inbox in scurt timp.",
       fullName: "Nume complet",
       email: "Email de lucru",
-      businessName: "Nume clinica / salon",
-      message: "Ce vrei sa imbunatatesti?",
+      industry: "Industrie",
+      message: "La ce sa te ajute ghidul?",
       placeholders: {
         fullName: "Alex Popescu",
         email: "alex@clinica.ro",
-        businessName: "Clinica ta",
-        message: "Spune-ne despre servicii, website-ul actual si ce ar trebui sa se simta mai premium.",
+        industry: "Clinica estetica, skincare, salon...",
+        message: "Spune-ne ce pare neclar, invechit sau greu de programat online.",
       },
-      submit: "Trimite brief-ul",
+      submit: "Trimite-mi ghidul gratuit",
       sending: "Se trimite...",
       error: "Ceva nu a mers bine. Incearca din nou.",
       supabaseError: "Supabase nu este configurat.",
-      altCta: "Preferi sa vorbim?",
+      altCta: "Vrei sfaturi personalizate dupa ghid?",
       altCtaLink: "Programeaza consultatie",
+      successPoints: [
+        "Checklist pentru claritatea website-ului",
+        "Semnale de incredere cautate de clienti",
+        "Imbunatatiri simple pentru fluxul de booking",
+      ],
     },
     footer: "Sisteme digitale pentru beauty si aesthetics, create pentru branduri premium moderne.",
   },
@@ -253,8 +262,13 @@ const content = {
 type FormState = {
   full_name: string;
   email: string;
-  business_name: string;
+  industry: string;
   message: string;
+};
+
+type GuideRequestResponse = {
+  ok?: boolean;
+  error?: string;
 };
 
 export default function BTPage() {
@@ -264,7 +278,7 @@ export default function BTPage() {
   const [formData, setFormData] = useState<FormState>({
     full_name: "",
     email: "",
-    business_name: "",
+    industry: "",
     message: "",
   });
   const [loading, setLoading] = useState(false);
@@ -277,22 +291,32 @@ export default function BTPage() {
     setError(null);
 
     try {
-      if (!supabase) throw new Error(t.form.supabaseError);
-
-      const { error: submitError } = await supabase.from("forms").insert([
-        {
-          full_name: formData.full_name,
+      const landingUrl = typeof window !== "undefined" ? window.location.href : "";
+      const trackingParams =
+        typeof window !== "undefined"
+          ? Object.fromEntries(new URL(window.location.href).searchParams.entries())
+          : {};
+      const response = await fetch("/api/bt/guide", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          fullName: formData.full_name,
           email: formData.email,
-          business_name: formData.business_name,
+          industry: formData.industry,
           message: formData.message,
-          source: isRo ? "Beauty & Aesthetics Landing Page RO" : "Beauty & Aesthetics Landing Page",
-        },
-      ]);
+          locale,
+          landingUrl,
+          trackingParams,
+        }),
+      });
+      const payload = (await response.json().catch(() => ({}))) as GuideRequestResponse;
 
-      if (submitError) throw submitError;
+      if (!response.ok || !payload.ok) {
+        throw new Error(payload.error ?? t.form.error);
+      }
 
       setSubmitted(true);
-      setFormData({ full_name: "", email: "", business_name: "", message: "" });
+      setFormData({ full_name: "", email: "", industry: "", message: "" });
     } catch (caughtError: unknown) {
       setError(caughtError instanceof Error ? caughtError.message : t.form.error);
     } finally {
@@ -347,9 +371,7 @@ export default function BTPage() {
           </div>
 
           <a
-            href={CALENDLY_BOOKING_URL}
-            target="_blank"
-            rel="noreferrer"
+            href="#contact"
             className="inline-flex max-w-[11rem] items-center justify-center rounded-md px-3 py-2 text-center text-[10px] uppercase leading-tight tracking-[0.08em] md:max-w-none md:px-5 md:text-[11px] md:tracking-[0.12em]"
             style={{
               fontFamily: "var(--font-bt-ui), Montserrat, sans-serif",
@@ -575,15 +597,32 @@ export default function BTPage() {
             style={{ borderColor: palette.secondary, background: "#FBFAF8", boxShadow: "0 18px 40px rgba(43,43,43,0.08)" }}
           >
             {submitted ? (
-              <div className="py-12 text-center">
-                <CheckCircle className="mx-auto mb-5" size={42} color={palette.accent} />
+              <div className="py-10 text-center md:py-12">
+                <div
+                  className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-full border"
+                  style={{ borderColor: palette.secondary, background: palette.primary }}
+                >
+                  <CheckCircle size={34} color={palette.accent} />
+                </div>
                 <h3
-                  className="text-[34px] leading-[1.1]"
+                  className="mx-auto max-w-md text-[32px] leading-[1.1] md:text-[38px]"
                   style={{ fontFamily: "var(--font-bt-subheading), Cormorant Garamond, serif" }}
                 >
                   {t.form.successTitle}
                 </h3>
                 <p className="mx-auto mt-3 max-w-md text-[16px] leading-[1.6] text-[#55524C] md:text-[17px]">{t.form.successBody}</p>
+                <div className="mx-auto mt-7 grid max-w-md gap-3 text-left">
+                  {t.form.successPoints.map((point) => (
+                    <div
+                      key={point}
+                      className="flex items-center gap-3 rounded-md border px-4 py-3 text-sm"
+                      style={{ borderColor: palette.secondary, background: palette.bg }}
+                    >
+                      <Star size={14} color={palette.premium} fill={palette.premium} />
+                      <span>{point}</span>
+                    </div>
+                  ))}
+                </div>
               </div>
             ) : (
               <form onSubmit={handleSubmit} className="grid gap-4 md:grid-cols-2 md:gap-5">
@@ -607,10 +646,11 @@ export default function BTPage() {
                 <div className="md:col-span-2">
                   <TextField
                     icon={Building2}
-                    label={t.form.businessName}
-                    placeholder={t.form.placeholders.businessName}
-                    value={formData.business_name}
-                    onChange={(value) => setFormData((current) => ({ ...current, business_name: value }))}
+                    label={t.form.industry}
+                    placeholder={t.form.placeholders.industry}
+                    value={formData.industry}
+                    onChange={(value) => setFormData((current) => ({ ...current, industry: value }))}
+                    required
                   />
                 </div>
                 <div className="md:col-span-2">
