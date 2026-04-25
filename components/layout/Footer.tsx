@@ -62,7 +62,14 @@ export function Footer() {
     { label: dictionary.footer.contact.location, href: null },
   ];
 
-  if (pathname?.startsWith("/hf") || pathname?.startsWith("/ro/hf")) return null;
+  if (
+    pathname?.startsWith("/hf") ||
+    pathname?.startsWith("/ro/hf") ||
+    pathname?.startsWith("/bt") ||
+    pathname?.startsWith("/ro/bt")
+  ) {
+    return null;
+  }
 
   return (
     <footer className={`mt-auto text-white ${isDark ? "bg-[#08080d]" : "bg-[#1C2A44]"}`}>

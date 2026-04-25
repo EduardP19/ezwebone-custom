@@ -1,1 +1,5 @@
-export const CALENDLY_BOOKING_URL = "https://calendly.com/eduard-ezwebone/20min";
+const CALENDLY_BASE_URL = "https://calendly.com/eduard-ezwebone/20min";
+
+export const CALENDLY_BOOKING_URL = `${CALENDLY_BASE_URL}?UTM_CAMPAIGN=cp`;
+
+export const CALENDLY_BOOKING_URL_HF = `${CALENDLY_BASE_URL}?UTM_SOURCE=HF_LP&UTM_MEDIUM=LP&UTM_CAMPAIGN=HF_cp`;

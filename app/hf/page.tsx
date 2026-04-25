@@ -5,6 +5,7 @@ import { supabase } from '@/lib/supabase';
 import { motion, useInView, AnimatePresence, useMotionValue, useTransform, animate } from 'framer-motion';
 import { useI18n } from '@/components/i18n/LocaleProvider';
 import { localizePath } from '@/lib/i18n/config';
+import { CALENDLY_BOOKING_URL_HF } from '@/lib/links';
 import {
   Monitor, Calendar, CreditCard, Mail, Search, Bot,
   Star, ArrowRight, Zap, Target, TrendingUp,
@@ -137,7 +138,7 @@ function Nav() {
 
         <div className="flex-1 flex justify-end">
           <a
-            href="https://calendly.com/eduard-ezwebone/20min?UTM_SOURCE=HF_LP&UTM_MEDIUM=LP&UTM_CAMPAIGN=HF"
+            href={CALENDLY_BOOKING_URL_HF}
             target="_blank"
             rel="noopener noreferrer"
             className="px-5 py-2 md:px-8 md:py-3 rounded-full text-xs md:text-sm text-black transition-all hover:scale-105 active:scale-95 whitespace-nowrap"
@@ -284,7 +285,7 @@ function Hero() {
           className="flex flex-col sm:flex-row gap-4 justify-center"
         >
           <a
-            href="https://calendly.com/eduard-ezwebone/20min?UTM_SOURCE=HF_LP&UTM_MEDIUM=LP&UTM_CAMPAIGN=HF"
+            href={CALENDLY_BOOKING_URL_HF}
             target="_blank"
             rel="noopener noreferrer"
             className="px-8 py-4 rounded-full text-black transition-all hover:scale-105 active:scale-95 flex items-center justify-center gap-2"
@@ -1424,7 +1425,7 @@ function FinalCTA() {
               : 'Book a free 20-minute strategy call. We\'ll audit your current setup and show you exactly what\'s holding your business back.'}
           </p>
           <a
-            href="https://calendly.com/eduard-ezwebone/20min?UTM_SOURCE=HF_LP&UTM_MEDIUM=LP&UTM_CAMPAIGN=HF"
+            href={CALENDLY_BOOKING_URL_HF}
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center gap-3 px-10 py-5 rounded-full text-black transition-all hover:scale-105 active:scale-95"
