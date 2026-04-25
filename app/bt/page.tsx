@@ -1,9 +1,26 @@
 "use client";
 
-import { ArrowRight, CheckCircle, Sparkles, Calendar, Monitor, Bot, Star, Quote } from "lucide-react";
+import Image from "next/image";
+import { type FormEvent, useState } from "react";
+import {
+  ArrowRight,
+  Bot,
+  Calendar,
+  CheckCircle,
+  Monitor,
+  Quote,
+  Sparkles,
+  Star,
+  UserRound,
+  Mail,
+  Building2,
+  MessageSquareText,
+} from "lucide-react";
 import { useI18n } from "@/components/i18n/LocaleProvider";
 import { localizePath } from "@/lib/i18n/config";
 import { CALENDLY_BOOKING_URL } from "@/lib/links";
+import { BRAND_LOGO_MARK_LIGHT_SRC } from "@/lib/brand";
+import { supabase } from "@/lib/supabase";
 
 const palette = {
   primary: "#EAE6DF",
@@ -12,7 +29,11 @@ const palette = {
   dark: "#2B2B2B",
   bg: "#F8F7F5",
   premium: "#C2A878",
+  inkSoft: "#55524C",
 };
+
+const heroImage =
+  "https://images.unsplash.com/photo-1522337660859-02fbefca4702?q=85&w=2200&auto=format&fit=crop";
 
 const content = {
   en: {
@@ -20,205 +41,316 @@ const content = {
       services: "Services",
       sectors: "Sectors",
       process: "Process",
-      testimonials: "Reviews",
+      contact: "Contact",
       cta: "Book Consultation",
     },
     hero: {
-      badge: "Beauty & Aesthetics Division",
-      title: "Neutral luxury digital systems for modern beauty brands.",
+      badge: "Beauty & Aesthetics",
+      title: "Digital presence for premium clinics and modern salons.",
       sub:
-        "We design elegant websites, seamless booking journeys, and automations for salons, skin clinics, and aesthetic practitioners who want premium positioning.",
-      primaryCta: "Book Strategy Call",
+        "Elegant websites, refined booking journeys, and discreet automations for beauty brands that need to feel trusted before the first consultation.",
+      primaryCta: "Discuss Your Clinic",
       secondaryCta: "View Services",
-      stats: ["Unisex premium design", "Booking-first websites", "Automation with clinic tone"],
+      markers: ["Neutral luxury", "Unisex design", "Premium minimal"],
     },
     services: {
-      badge: "What We Build",
-      title: "Structured systems for beauty businesses that sell trust.",
+      badge: "Digital Systems",
+      title: "A complete online experience for clients who buy confidence.",
       cards: [
         {
+          icon: Monitor,
           title: "Premium Website Design",
-          desc: "Editorial-inspired layouts with clean structure, refined spacing, and high-converting pages.",
+          desc: "Editorial layouts, treatment-led navigation, and pages that make your service quality immediately visible.",
         },
         {
-          title: "Booking Journey Optimization",
-          desc: "Clear treatment menus, practitioner pages, and frictionless booking flows that increase completed appointments.",
+          icon: Calendar,
+          title: "Booking Journey",
+          desc: "Clear service menus, consultation pathways, and booking flows shaped around trust and conversion.",
         },
         {
-          title: "Automation & Follow-up",
-          desc: "Consultation reminders, aftercare journeys, and rebooking sequences with the right premium tone.",
+          icon: Bot,
+          title: "Clinic Automation",
+          desc: "Consultation reminders, aftercare messages, rebooking prompts, and lead follow-up with a calm premium tone.",
         },
         {
-          title: "Aesthetic Content Systems",
-          desc: "Reusable page blocks and campaign sections for treatments, seasonal offers, and clinic updates.",
+          icon: Sparkles,
+          title: "Treatment Campaigns",
+          desc: "Reusable sections for seasonal offers, new treatments, practitioner launches, and education-led campaigns.",
         },
       ],
     },
     sectors: {
-      badge: "Who It Is For",
-      title: "Built for salons, clinics, and aesthetic specialists.",
+      badge: "Built For",
+      title: "A refined fit for beauty, skincare, and aesthetic practices.",
       items: [
         "Advanced skincare clinics",
         "Injectables and facial aesthetics",
-        "Hair and beauty salons",
+        "Hair, beauty, and grooming salons",
         "Medical-aesthetic practices",
       ],
     },
     process: {
       badge: "Process",
-      title: "From concept to launch in three clear stages.",
+      title: "Calm, structured, and built around your client journey.",
       steps: [
         {
-          title: "Positioning & Direction",
-          desc: "We define your digital tone, service hierarchy, and visual direction with a premium-unisex lens.",
+          title: "Positioning",
+          desc: "We define the visual tone, service hierarchy, and credibility signals your ideal client needs to see.",
         },
         {
-          title: "Build & Integration",
-          desc: "We craft the website and connect bookings, lead capture, and automation tools into one clean system.",
+          title: "Build",
+          desc: "We design and connect the website, booking flow, enquiry capture, and automation foundations.",
         },
         {
-          title: "Launch & Refinement",
-          desc: "We go live, review behavior data, and refine pages and journeys for stronger booking performance.",
+          title: "Refine",
+          desc: "We launch, read the behaviour data, and tune the journey so more visitors become booked consultations.",
         },
       ],
     },
     testimonials: {
-      badge: "Client Feedback",
-      title: "Trusted by teams that care about detail.",
+      badge: "Proof",
+      title: "Details matter when the service is personal.",
       quotes: [
-        "The brand finally looks as premium as the treatments we provide.",
-        "Our consultations increased because the booking flow became genuinely effortless.",
-        "The whole system feels elegant, clear, and professional on every device.",
+        "The website finally matches the level of care inside the clinic.",
+        "The booking flow feels effortless, and consultation enquiries are much more qualified.",
+        "It feels polished without looking overly feminine. Exactly what we needed.",
       ],
     },
-    final: {
-      title: "Ready to elevate your beauty brand online?",
-      sub: "Book a 20-minute strategy call and we will map the fastest route to a cleaner, higher-converting digital experience.",
-      cta: "Book Consultation",
-      note: "No pressure. No hard sell. Just clear next steps.",
+    form: {
+      badge: "Start The Conversation",
+      title: "Tell us what your beauty brand needs next.",
+      sub:
+        "Share a few details and we will come back with a clear direction for the site, booking flow, and automation layer.",
+      successTitle: "Enquiry received",
+      successBody: "We have your details and will review the project within 24 hours.",
+      fullName: "Full name",
+      email: "Work email",
+      businessName: "Clinic / salon name",
+      message: "What do you want to improve?",
+      placeholders: {
+        fullName: "Alex Morgan",
+        email: "alex@clinic.com",
+        businessName: "Your clinic",
+        message: "Tell us about the services, current website, and what should feel more premium.",
+      },
+      submit: "Send Project Brief",
+      sending: "Sending...",
+      error: "Something went wrong. Please try again.",
+      supabaseError: "Supabase is not configured.",
+      altCta: "Prefer to talk?",
+      altCtaLink: "Book a consultation",
     },
+    footer: "Beauty & aesthetics digital systems for premium modern brands.",
   },
   ro: {
     nav: {
       services: "Servicii",
       sectors: "Segmente",
       process: "Proces",
-      testimonials: "Recenzii",
+      contact: "Contact",
       cta: "Programeaza consultatie",
     },
     hero: {
-      badge: "Divizia Beauty & Aesthetics",
-      title: "Sisteme digitale luxury-neutre pentru branduri moderne de beauty.",
+      badge: "Beauty & Aesthetics",
+      title: "Prezenta digitala pentru clinici premium si saloane moderne.",
       sub:
-        "Construim website-uri elegante, fluxuri de programare fara frictiune si automatizari pentru saloane, clinici de skincare si practicieni de estetica care vor pozitionare premium.",
-      primaryCta: "Programeaza call strategic",
+        "Website-uri elegante, fluxuri de booking rafinate si automatizari discrete pentru branduri beauty care trebuie sa inspire incredere inainte de prima consultatie.",
+      primaryCta: "Discuta despre clinica ta",
       secondaryCta: "Vezi serviciile",
-      stats: ["Design premium unisex", "Website-uri orientate pe programari", "Automatizari cu ton de clinica"],
+      markers: ["Luxury neutru", "Design unisex", "Premium minimal"],
     },
     services: {
-      badge: "Ce Construim",
-      title: "Sisteme structurate pentru business-uri beauty care vand incredere.",
+      badge: "Sisteme Digitale",
+      title: "O experienta online completa pentru clienti care cumpara incredere.",
       cards: [
         {
+          icon: Monitor,
           title: "Web Design Premium",
-          desc: "Layout-uri cu vibe editorial, structura curata, spacing rafinat si pagini care convertesc.",
+          desc: "Layout-uri editoriale, navigatie pe tratamente si pagini care arata imediat calitatea serviciilor tale.",
         },
         {
-          title: "Optimizare Flux Programari",
-          desc: "Meniuri clare de tratamente, pagini pentru specialisti si fluxuri de booking care cresc programarile finalizate.",
+          icon: Calendar,
+          title: "Flux De Booking",
+          desc: "Liste preturi clare, trasee pentru consultatii si programari gandite pentru incredere si conversie.",
         },
         {
-          title: "Automatizari & Follow-up",
-          desc: "Reminder-e pentru consultatii, fluxuri de aftercare si secvente de reprogramare cu ton premium.",
+          icon: Bot,
+          title: "Automatizari De Clinica",
+          desc: "Reminder-e, mesaje aftercare, rebooking si follow-up pentru lead-uri cu ton calm si premium.",
         },
         {
-          title: "Sisteme de Continut Estetic",
-          desc: "Blocuri reutilizabile pentru tratamente, oferte sezoniere si update-uri de clinica.",
+          icon: Sparkles,
+          title: "Campanii Pentru Tratamente",
+          desc: "Sectiuni reutilizabile pentru oferte sezoniere, tratamente noi, specialisti si campanii educative.",
         },
       ],
     },
     sectors: {
       badge: "Pentru Cine",
-      title: "Construit pentru saloane, clinici si specialisti in estetica.",
+      title: "Potrivit pentru beauty, skincare si practici estetice.",
       items: [
         "Clinici de skincare avansat",
         "Injectabile si estetica faciala",
-        "Saloane de hair si beauty",
+        "Saloane hair, beauty si grooming",
         "Practici medico-estetice",
       ],
     },
     process: {
       badge: "Proces",
-      title: "De la concept la lansare in trei etape clare.",
+      title: "Calm, structurat si construit in jurul clientului tau.",
       steps: [
         {
-          title: "Pozitionare & Directie",
-          desc: "Stabilim tonul digital, ierarhia serviciilor si directia vizuala printr-o lentila premium-unisex.",
+          title: "Pozitionare",
+          desc: "Definim tonul vizual, ierarhia serviciilor si semnalele de incredere pe care clientul ideal trebuie sa le vada.",
         },
         {
-          title: "Build & Integrare",
-          desc: "Construim website-ul si conectam booking-ul, captarea lead-urilor si automatizarile intr-un singur sistem curat.",
+          title: "Build",
+          desc: "Design-ul, website-ul, fluxul de booking, captarea lead-urilor si automatizarile sunt conectate intr-un sistem clar.",
         },
         {
-          title: "Lansare & Rafinare",
-          desc: "Lansam, analizam comportamentul utilizatorilor si optimizam paginile pentru performanta mai buna in programari.",
+          title: "Rafinare",
+          desc: "Lansam, citim datele de comportament si ajustam traseul ca mai multi vizitatori sa devina consultatii programate.",
         },
       ],
     },
     testimonials: {
-      badge: "Feedback Clienti",
-      title: "Ales de echipe care tin la detalii.",
+      badge: "Dovada",
+      title: "Detaliile conteaza cand serviciul este personal.",
       quotes: [
-        "Brandul arata in sfarsit la fel de premium ca tratamentele pe care le oferim.",
-        "Consultatiile au crescut pentru ca fluxul de booking a devenit cu adevarat simplu.",
-        "Tot sistemul se simte elegant, clar si profesionist pe orice device.",
+        "Website-ul arata in sfarsit la nivelul experientei din clinica.",
+        "Fluxul de booking e simplu, iar cererile de consultatie sunt mult mai calificate.",
+        "Se simte premium fara sa fie prea feminin. Exact ce aveam nevoie.",
       ],
     },
-    final: {
-      title: "Vrei sa ridici brandul tau beauty in online?",
-      sub: "Programeaza un call strategic de 20 de minute si iti aratam cea mai rapida ruta spre o experienta digitala mai curata si cu conversie mai mare.",
-      cta: "Programeaza consultatie",
-      note: "Fara presiune. Fara hard sell. Doar pasi clari.",
+    form: {
+      badge: "Incepe Conversatia",
+      title: "Spune-ne ce are nevoie brandul tau beauty mai departe.",
+      sub:
+        "Trimite cateva detalii si revenim cu o directie clara pentru website, booking si stratul de automatizare.",
+      successTitle: "Cerere primita",
+      successBody: "Avem detaliile tale si vom analiza proiectul in 24 de ore.",
+      fullName: "Nume complet",
+      email: "Email de lucru",
+      businessName: "Nume clinica / salon",
+      message: "Ce vrei sa imbunatatesti?",
+      placeholders: {
+        fullName: "Alex Popescu",
+        email: "alex@clinica.ro",
+        businessName: "Clinica ta",
+        message: "Spune-ne despre servicii, website-ul actual si ce ar trebui sa se simta mai premium.",
+      },
+      submit: "Trimite brief-ul",
+      sending: "Se trimite...",
+      error: "Ceva nu a mers bine. Incearca din nou.",
+      supabaseError: "Supabase nu este configurat.",
+      altCta: "Preferi sa vorbim?",
+      altCtaLink: "Programeaza consultatie",
     },
+    footer: "Sisteme digitale pentru beauty si aesthetics, create pentru branduri premium moderne.",
   },
 } as const;
+
+type FormState = {
+  full_name: string;
+  email: string;
+  business_name: string;
+  message: string;
+};
 
 export default function BTPage() {
   const { locale } = useI18n();
   const isRo = locale === "ro";
   const t = isRo ? content.ro : content.en;
+  const [formData, setFormData] = useState<FormState>({
+    full_name: "",
+    email: "",
+    business_name: "",
+    message: "",
+  });
+  const [loading, setLoading] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    setLoading(true);
+    setError(null);
+
+    try {
+      if (!supabase) throw new Error(t.form.supabaseError);
+
+      const { error: submitError } = await supabase.from("forms").insert([
+        {
+          full_name: formData.full_name,
+          email: formData.email,
+          business_name: formData.business_name,
+          message: formData.message,
+          source: isRo ? "Beauty & Aesthetics Landing Page RO" : "Beauty & Aesthetics Landing Page",
+        },
+      ]);
+
+      if (submitError) throw submitError;
+
+      setSubmitted(true);
+      setFormData({ full_name: "", email: "", business_name: "", message: "" });
+    } catch (caughtError: unknown) {
+      setError(caughtError instanceof Error ? caughtError.message : t.form.error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
-    <div style={{ background: palette.bg, color: palette.dark, fontFamily: "var(--font-bt-body), Inter, sans-serif" }}>
+    <div
+      style={{
+        background: palette.bg,
+        color: palette.dark,
+        fontFamily: "var(--font-bt-body), Inter, sans-serif",
+      }}
+    >
       <nav
-        className="fixed top-0 left-0 right-0 z-[100] border-b"
+        className="fixed left-0 right-0 top-0 z-[100] border-b"
         style={{
-          background: "rgba(248, 247, 245, 0.88)",
-          backdropFilter: "blur(10px)",
-          borderColor: palette.secondary,
+          background: "rgba(248, 247, 245, 0.9)",
+          backdropFilter: "blur(14px)",
+          borderColor: "rgba(207, 199, 189, 0.65)",
         }}
       >
-        <div className="mx-auto flex h-20 w-full max-w-7xl items-center justify-between px-4 md:px-8">
-          <a
-            href={localizePath(locale, "/bt")}
-            style={{ fontFamily: "var(--font-bt-heading), Playfair Display, serif", letterSpacing: "-0.02em" }}
-            className="text-2xl"
-          >
-            BT <span style={{ color: palette.premium }}>|</span> EZWebOne
+        <div className="mx-auto flex h-16 w-full max-w-7xl items-center justify-between px-4 md:h-20 md:px-8">
+          <a href={localizePath(locale, "/bt")} className="flex items-center" aria-label="EZWebOne BT">
+            <Image
+              src={BRAND_LOGO_MARK_LIGHT_SRC}
+              alt="EZWebOne"
+              width={84}
+              height={84}
+              priority
+              className="h-12 w-12 object-contain md:h-16 md:w-16"
+            />
           </a>
 
-          <div className="hidden items-center gap-8 md:flex" style={{ fontFamily: "var(--font-bt-ui), Montserrat, sans-serif" }}>
-            <a href="#services" className="text-xs uppercase tracking-[0.16em]">{t.nav.services}</a>
-            <a href="#sectors" className="text-xs uppercase tracking-[0.16em]">{t.nav.sectors}</a>
-            <a href="#process" className="text-xs uppercase tracking-[0.16em]">{t.nav.process}</a>
-            <a href="#testimonials" className="text-xs uppercase tracking-[0.16em]">{t.nav.testimonials}</a>
+          <div
+            className="hidden items-center gap-8 md:flex"
+            style={{ fontFamily: "var(--font-bt-ui), Montserrat, sans-serif" }}
+          >
+            <a href="#services" className="text-xs uppercase tracking-[0.16em]">
+              {t.nav.services}
+            </a>
+            <a href="#sectors" className="text-xs uppercase tracking-[0.16em]">
+              {t.nav.sectors}
+            </a>
+            <a href="#process" className="text-xs uppercase tracking-[0.16em]">
+              {t.nav.process}
+            </a>
+            <a href="#contact" className="text-xs uppercase tracking-[0.16em]">
+              {t.nav.contact}
+            </a>
           </div>
 
           <a
             href={CALENDLY_BOOKING_URL}
             target="_blank"
             rel="noreferrer"
-            className="inline-flex items-center justify-center rounded-full px-5 py-2 text-[11px] uppercase tracking-[0.12em]"
+            className="inline-flex max-w-[11rem] items-center justify-center rounded-md px-3 py-2 text-center text-[10px] uppercase leading-tight tracking-[0.08em] md:max-w-none md:px-5 md:text-[11px] md:tracking-[0.12em]"
             style={{
               fontFamily: "var(--font-bt-ui), Montserrat, sans-serif",
               background: palette.dark,
@@ -230,218 +362,368 @@ export default function BTPage() {
         </div>
       </nav>
 
-      <section className="relative overflow-hidden px-4 pb-20 pt-36 md:px-8 md:pt-44">
+      <section className="relative flex min-h-[86svh] items-end overflow-hidden px-4 pb-10 pt-24 md:min-h-[92svh] md:px-8 md:pb-16 md:pt-28">
         <div
-          className="pointer-events-none absolute inset-0"
+          className="absolute inset-0 bg-cover bg-[65%_center] md:bg-center"
+          style={{ backgroundImage: `url(${heroImage})` }}
+        />
+        <div
+          className="absolute inset-0"
           style={{
             background:
-              "radial-gradient(circle at 15% 20%, rgba(194,168,120,0.18), transparent 38%), radial-gradient(circle at 85% 75%, rgba(138,143,122,0.16), transparent 40%)",
+              "linear-gradient(90deg, rgba(248,247,245,0.98) 0%, rgba(248,247,245,0.9) 52%, rgba(43,43,43,0.18) 100%)",
           }}
         />
+        <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-[#F8F7F5] to-transparent" />
 
-        <div className="relative mx-auto grid w-full max-w-7xl gap-12 md:grid-cols-[1.2fr_0.8fr] md:items-end">
-          <div>
+        <div className="relative mx-auto w-full max-w-7xl">
+          <div className="max-w-3xl">
             <p
-              className="mb-5 text-base"
-              style={{ fontFamily: "var(--font-bt-subheading), Cormorant Garamond, serif", color: palette.accent }}
+              className="mb-3 text-base md:mb-4 md:text-lg"
+              style={{
+                fontFamily: "var(--font-bt-subheading), Cormorant Garamond, serif",
+                color: palette.accent,
+              }}
             >
               {t.hero.badge}
             </p>
             <h1
-              className="max-w-4xl text-[clamp(3rem,7vw,4rem)] leading-[1.06]"
-              style={{ fontFamily: "var(--font-bt-heading), Playfair Display, serif", letterSpacing: "-0.02em" }}
+              className="max-w-[18ch] text-[40px] leading-[1.04] sm:text-[54px] lg:text-[64px]"
+              style={{
+                fontFamily: "var(--font-bt-heading), Playfair Display, serif",
+                letterSpacing: "0",
+              }}
             >
               {t.hero.title}
             </h1>
-            <p className="mt-7 max-w-2xl text-[17px] leading-[1.6] text-[#4C4C4C]">{t.hero.sub}</p>
+            <p className="mt-5 max-w-2xl text-[16px] leading-[1.6] text-[#47433E] md:mt-6 md:text-[17px]">{t.hero.sub}</p>
 
-            <div className="mt-10 flex flex-wrap gap-4" style={{ fontFamily: "var(--font-bt-ui), Montserrat, sans-serif" }}>
+            <div
+              className="mt-7 flex flex-col gap-3 sm:flex-row sm:flex-wrap md:mt-9"
+              style={{ fontFamily: "var(--font-bt-ui), Montserrat, sans-serif" }}
+            >
               <a
-                href={CALENDLY_BOOKING_URL}
-                target="_blank"
-                rel="noreferrer"
-                className="inline-flex items-center gap-2 rounded-full px-7 py-3 text-xs uppercase tracking-[0.14em]"
+                href="#contact"
+                className="inline-flex w-full items-center justify-center gap-2 rounded-md px-6 py-3 text-center text-xs uppercase tracking-[0.12em] sm:w-auto md:px-7 md:tracking-[0.14em]"
                 style={{ background: palette.dark, color: palette.bg }}
               >
                 {t.hero.primaryCta} <ArrowRight size={16} />
               </a>
               <a
                 href="#services"
-                className="inline-flex items-center gap-2 rounded-full border px-7 py-3 text-xs uppercase tracking-[0.14em]"
-                style={{ borderColor: palette.secondary, color: palette.dark }}
+                className="inline-flex w-full items-center justify-center gap-2 rounded-md border px-6 py-3 text-center text-xs uppercase tracking-[0.12em] sm:w-auto md:px-7 md:tracking-[0.14em]"
+                style={{ borderColor: palette.secondary, color: palette.dark, background: "rgba(248,247,245,0.72)" }}
               >
                 {t.hero.secondaryCta}
               </a>
             </div>
           </div>
 
-          <div className="rounded-[2rem] border p-8" style={{ background: palette.primary, borderColor: palette.secondary, boxShadow: "0 18px 40px rgba(43,43,43,0.08)" }}>
-            <p
-              className="mb-5 text-sm"
-              style={{ fontFamily: "var(--font-bt-subheading), Cormorant Garamond, serif", color: palette.accent }}
-            >
-              neutral luxury | unisex design | premium minimal
-            </p>
-            <div className="space-y-4">
-              {t.hero.stats.map((item) => (
-                <div key={item} className="flex items-center gap-3">
-                  <CheckCircle size={16} color={palette.premium} />
-                  <span className="text-[15px]">{item}</span>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section id="services" className="px-4 py-20 md:px-8">
-        <div className="mx-auto w-full max-w-7xl">
-          <p className="mb-3 text-base" style={{ fontFamily: "var(--font-bt-subheading), Cormorant Garamond, serif", color: palette.accent }}>
-            {t.services.badge}
-          </p>
-          <h2
-            className="max-w-4xl text-[clamp(2rem,5vw,2.5rem)] leading-[1.1]"
-            style={{ fontFamily: "var(--font-bt-heading), Playfair Display, serif", letterSpacing: "-0.01em" }}
-          >
-            {t.services.title}
-          </h2>
-
-          <div className="mt-10 grid gap-5 md:grid-cols-2">
-            {t.services.cards.map((card, idx) => (
-              <article
-                key={card.title}
-                className="rounded-3xl border p-7"
+          <div className="mt-7 flex flex-wrap gap-2 md:mt-10 md:gap-3">
+            {t.hero.markers.map((marker) => (
+              <span
+                key={marker}
+                className="border px-3 py-2 text-[13px] md:px-4 md:text-sm"
                 style={{
-                  borderColor: palette.secondary,
-                  background: idx % 2 === 0 ? "#FBFAF8" : palette.primary,
-                  boxShadow: "0 12px 30px rgba(43,43,43,0.06)",
+                  borderColor: "rgba(194,168,120,0.55)",
+                  background: "rgba(248,247,245,0.7)",
+                  color: palette.inkSoft,
                 }}
               >
-                <div className="mb-4 inline-flex rounded-full border px-3 py-1 text-[11px] uppercase tracking-[0.12em]" style={{ borderColor: palette.premium, color: palette.accent, fontFamily: "var(--font-bt-ui), Montserrat, sans-serif" }}>
-                  {idx === 0 && <Monitor size={14} className="mr-2" />}
-                  {idx === 1 && <Calendar size={14} className="mr-2" />}
-                  {idx === 2 && <Bot size={14} className="mr-2" />}
-                  {idx === 3 && <Sparkles size={14} className="mr-2" />}
-                  service
-                </div>
-                <h3 className="text-[30px] leading-[1.2]" style={{ fontFamily: "var(--font-bt-subheading), Cormorant Garamond, serif" }}>
-                  {card.title}
-                </h3>
-                <p className="mt-3 text-[17px] leading-[1.6] text-[#505050]">{card.desc}</p>
-              </article>
+                {marker}
+              </span>
             ))}
           </div>
         </div>
       </section>
 
-      <section id="sectors" className="px-4 py-20 md:px-8" style={{ background: "#F3F1EC" }}>
-        <div className="mx-auto grid w-full max-w-7xl gap-10 md:grid-cols-[1.1fr_0.9fr] md:items-center">
+      <section id="services" className="px-4 py-14 md:px-8 md:py-20">
+        <div className="mx-auto w-full max-w-7xl">
+          <SectionIntro badge={t.services.badge} title={t.services.title} />
+
+          <div className="mt-8 grid gap-4 md:mt-10 md:grid-cols-2 md:gap-5">
+            {t.services.cards.map((card) => {
+              const Icon = card.icon;
+              return (
+                <article
+                  key={card.title}
+                  className="rounded-lg border p-5 md:p-7"
+                  style={{
+                    borderColor: palette.secondary,
+                    background: "#FBFAF8",
+                    boxShadow: "0 18px 40px rgba(43,43,43,0.06)",
+                  }}
+                >
+                  <Icon size={20} color={palette.premium} />
+                  <h3
+                    className="mt-4 text-[28px] leading-[1.12] md:mt-5 md:text-[32px]"
+                    style={{ fontFamily: "var(--font-bt-subheading), Cormorant Garamond, serif" }}
+                  >
+                    {card.title}
+                  </h3>
+                  <p className="mt-3 text-[16px] leading-[1.6] text-[#55524C] md:text-[17px]">{card.desc}</p>
+                </article>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
+      <section id="sectors" className="px-4 py-14 md:px-8 md:py-20" style={{ background: "#F1EEE9" }}>
+        <div className="mx-auto grid w-full max-w-7xl gap-10 md:grid-cols-[1.05fr_0.95fr] md:items-center md:gap-12">
           <div>
-            <p className="mb-3 text-base" style={{ fontFamily: "var(--font-bt-subheading), Cormorant Garamond, serif", color: palette.accent }}>
-              {t.sectors.badge}
-            </p>
-            <h2 className="text-[clamp(2rem,5vw,2.5rem)] leading-[1.12]" style={{ fontFamily: "var(--font-bt-heading), Playfair Display, serif" }}>
-              {t.sectors.title}
-            </h2>
-            <div className="mt-8 grid gap-4">
+            <SectionIntro badge={t.sectors.badge} title={t.sectors.title} />
+            <div className="mt-6 grid gap-3 md:mt-8">
               {t.sectors.items.map((item) => (
-                <div key={item} className="flex items-center gap-3 rounded-2xl border px-4 py-4" style={{ borderColor: palette.secondary, background: "#F8F7F5" }}>
+                <div
+                  key={item}
+                  className="flex items-center gap-3 rounded-lg border px-4 py-3 md:py-4"
+                  style={{ borderColor: palette.secondary, background: palette.bg }}
+                >
                   <Star size={14} color={palette.premium} fill={palette.premium} />
-                  <span className="text-[17px]">{item}</span>
+                  <span className="text-[16px] leading-snug md:text-[17px]">{item}</span>
                 </div>
               ))}
             </div>
           </div>
 
-          <div className="grid gap-4 sm:grid-cols-2">
-            <div className="aspect-[3/4] rounded-3xl bg-cover bg-center" style={{ backgroundImage: "url('https://images.unsplash.com/photo-1512290923902-8a9f81dc236c?q=80&w=1000&auto=format&fit=crop')" }} />
-            <div className="aspect-[3/4] rounded-3xl bg-cover bg-center" style={{ backgroundImage: "url('https://images.unsplash.com/photo-1616683693504-3ea7e9ad6fec?q=80&w=1000&auto=format&fit=crop')" }} />
+          <div className="grid grid-cols-2 gap-3 sm:gap-4">
+            <div
+              className="aspect-[4/5] rounded-lg bg-cover bg-center shadow-[0_18px_40px_rgba(43,43,43,0.12)] md:aspect-[3/4]"
+              style={{
+                backgroundImage:
+                  "url('https://images.unsplash.com/photo-1512290923902-8a9f81dc236c?q=80&w=1000&auto=format&fit=crop')",
+              }}
+            />
+            <div
+              className="aspect-[4/5] rounded-lg bg-cover bg-center shadow-[0_18px_40px_rgba(43,43,43,0.12)] md:aspect-[3/4] md:mt-12"
+              style={{
+                backgroundImage:
+                  "url('https://images.unsplash.com/photo-1616683693504-3ea7e9ad6fec?q=80&w=1000&auto=format&fit=crop')",
+              }}
+            />
           </div>
         </div>
       </section>
 
-      <section id="process" className="px-4 py-20 md:px-8">
+      <section id="process" className="px-4 py-14 md:px-8 md:py-20">
         <div className="mx-auto w-full max-w-7xl">
-          <p className="mb-3 text-base" style={{ fontFamily: "var(--font-bt-subheading), Cormorant Garamond, serif", color: palette.accent }}>
-            {t.process.badge}
-          </p>
-          <h2 className="text-[clamp(2rem,5vw,2.5rem)] leading-[1.12]" style={{ fontFamily: "var(--font-bt-heading), Playfair Display, serif" }}>
-            {t.process.title}
-          </h2>
-
-          <div className="mt-10 grid gap-5 md:grid-cols-3">
-            {t.process.steps.map((step, i) => (
-              <article key={step.title} className="rounded-3xl border p-7" style={{ borderColor: palette.secondary, background: "#FBFAF8" }}>
-                <span className="inline-flex h-10 w-10 items-center justify-center rounded-full text-sm" style={{ background: palette.dark, color: palette.bg, fontFamily: "var(--font-bt-ui), Montserrat, sans-serif" }}>
-                  0{i + 1}
+          <SectionIntro badge={t.process.badge} title={t.process.title} />
+          <div className="mt-8 grid gap-4 md:mt-10 md:grid-cols-3 md:gap-5">
+            {t.process.steps.map((step, index) => (
+              <article
+                key={step.title}
+                className="rounded-lg border p-5 md:p-7"
+                style={{ borderColor: palette.secondary, background: "#FBFAF8" }}
+              >
+                <span
+                  className="inline-flex h-10 w-10 items-center justify-center rounded-full text-sm"
+                  style={{
+                    background: palette.dark,
+                    color: palette.bg,
+                    fontFamily: "var(--font-bt-ui), Montserrat, sans-serif",
+                  }}
+                >
+                  0{index + 1}
                 </span>
-                <h3 className="mt-5 text-[30px] leading-[1.2]" style={{ fontFamily: "var(--font-bt-subheading), Cormorant Garamond, serif" }}>
+                <h3
+                  className="mt-4 text-[28px] leading-[1.12] md:mt-5 md:text-[32px]"
+                  style={{ fontFamily: "var(--font-bt-subheading), Cormorant Garamond, serif" }}
+                >
                   {step.title}
                 </h3>
-                <p className="mt-3 text-[17px] leading-[1.6] text-[#505050]">{step.desc}</p>
+                <p className="mt-3 text-[16px] leading-[1.6] text-[#55524C] md:text-[17px]">{step.desc}</p>
               </article>
             ))}
           </div>
         </div>
       </section>
 
-      <section id="testimonials" className="px-4 py-20 md:px-8" style={{ background: palette.primary }}>
+      <section className="px-4 py-14 md:px-8 md:py-20" style={{ background: palette.primary }}>
         <div className="mx-auto w-full max-w-7xl">
-          <p className="mb-3 text-base" style={{ fontFamily: "var(--font-bt-subheading), Cormorant Garamond, serif", color: palette.accent }}>
-            {t.testimonials.badge}
-          </p>
-          <h2 className="text-[clamp(2rem,5vw,2.5rem)] leading-[1.12]" style={{ fontFamily: "var(--font-bt-heading), Playfair Display, serif" }}>
-            {t.testimonials.title}
-          </h2>
-
-          <div className="mt-10 grid gap-5 md:grid-cols-3">
+          <SectionIntro badge={t.testimonials.badge} title={t.testimonials.title} />
+          <div className="mt-8 grid gap-4 md:mt-10 md:grid-cols-3 md:gap-5">
             {t.testimonials.quotes.map((quote) => (
-              <blockquote key={quote} className="rounded-3xl border p-7" style={{ borderColor: palette.secondary, background: "#F8F7F5" }}>
+              <blockquote
+                key={quote}
+                className="rounded-lg border p-5 md:p-7"
+                style={{ borderColor: palette.secondary, background: palette.bg }}
+              >
                 <Quote size={18} color={palette.premium} />
-                <p className="mt-4 text-[17px] leading-[1.6] text-[#4A4A4A]">{quote}</p>
+                <p className="mt-4 text-[16px] leading-[1.6] text-[#4A4A4A] md:text-[17px]">{quote}</p>
               </blockquote>
             ))}
           </div>
         </div>
       </section>
 
-      <section className="px-4 pb-20 pt-24 md:px-8">
-        <div className="mx-auto w-full max-w-5xl rounded-[2rem] border px-6 py-12 text-center md:px-12" style={{ borderColor: palette.secondary, background: "#FBFAF8", boxShadow: "0 18px 40px rgba(43,43,43,0.08)" }}>
-          <h2 className="text-[clamp(2rem,5vw,2.5rem)] leading-[1.1]" style={{ fontFamily: "var(--font-bt-heading), Playfair Display, serif", letterSpacing: "-0.01em" }}>
-            {t.final.title}
-          </h2>
-          <p className="mx-auto mt-5 max-w-2xl text-[17px] leading-[1.6] text-[#4E4E4E]">{t.final.sub}</p>
+      <section id="contact" className="px-4 py-14 md:px-8 md:py-20">
+        <div className="mx-auto grid w-full max-w-7xl gap-8 md:grid-cols-[0.9fr_1.1fr] md:items-start md:gap-10">
+          <div>
+            <SectionIntro badge={t.form.badge} title={t.form.title} />
+            <p className="mt-4 max-w-xl text-[16px] leading-[1.6] text-[#55524C] md:mt-5 md:text-[17px]">{t.form.sub}</p>
+            <p className="mt-6 text-sm md:mt-8" style={{ color: palette.accent }}>
+              {t.form.altCta}{" "}
+              <a href={CALENDLY_BOOKING_URL} target="_blank" rel="noreferrer" className="underline underline-offset-4">
+                {t.form.altCtaLink}
+              </a>
+            </p>
+          </div>
 
-          <a
-            href={CALENDLY_BOOKING_URL}
-            target="_blank"
-            rel="noreferrer"
-            className="mt-8 inline-flex items-center gap-2 rounded-full px-8 py-3 text-xs uppercase tracking-[0.14em]"
-            style={{
-              fontFamily: "var(--font-bt-ui), Montserrat, sans-serif",
-              background: palette.dark,
-              color: palette.bg,
-            }}
+          <div
+            className="rounded-lg border p-4 md:p-8"
+            style={{ borderColor: palette.secondary, background: "#FBFAF8", boxShadow: "0 18px 40px rgba(43,43,43,0.08)" }}
           >
-            {t.final.cta} <ArrowRight size={16} />
-          </a>
+            {submitted ? (
+              <div className="py-12 text-center">
+                <CheckCircle className="mx-auto mb-5" size={42} color={palette.accent} />
+                <h3
+                  className="text-[34px] leading-[1.1]"
+                  style={{ fontFamily: "var(--font-bt-subheading), Cormorant Garamond, serif" }}
+                >
+                  {t.form.successTitle}
+                </h3>
+                <p className="mx-auto mt-3 max-w-md text-[16px] leading-[1.6] text-[#55524C] md:text-[17px]">{t.form.successBody}</p>
+              </div>
+            ) : (
+              <form onSubmit={handleSubmit} className="grid gap-4 md:grid-cols-2 md:gap-5">
+                <TextField
+                  icon={UserRound}
+                  label={t.form.fullName}
+                  placeholder={t.form.placeholders.fullName}
+                  value={formData.full_name}
+                  onChange={(value) => setFormData((current) => ({ ...current, full_name: value }))}
+                  required
+                />
+                <TextField
+                  icon={Mail}
+                  type="email"
+                  label={t.form.email}
+                  placeholder={t.form.placeholders.email}
+                  value={formData.email}
+                  onChange={(value) => setFormData((current) => ({ ...current, email: value }))}
+                  required
+                />
+                <div className="md:col-span-2">
+                  <TextField
+                    icon={Building2}
+                    label={t.form.businessName}
+                    placeholder={t.form.placeholders.businessName}
+                    value={formData.business_name}
+                    onChange={(value) => setFormData((current) => ({ ...current, business_name: value }))}
+                  />
+                </div>
+                <div className="md:col-span-2">
+                  <label className="mb-2 flex items-center gap-2 text-[11px] uppercase tracking-[0.1em] text-[#6A655D] md:text-xs md:tracking-[0.14em]">
+                    <MessageSquareText size={14} color={palette.premium} />
+                    {t.form.message}
+                  </label>
+                  <textarea
+                    required
+                    rows={5}
+                    placeholder={t.form.placeholders.message}
+                    value={formData.message}
+                    onChange={(event) => setFormData((current) => ({ ...current, message: event.target.value }))}
+                    className="w-full resize-none rounded-md border bg-[#F8F7F5] px-4 py-3 text-[16px] outline-none transition placeholder:text-[#8B867E] focus:border-[#8A8F7A]"
+                    style={{ borderColor: palette.secondary }}
+                  />
+                </div>
 
-          <p className="mt-6 text-sm" style={{ color: palette.accent }}>{t.final.note}</p>
+                {error ? (
+                  <div className="rounded-md border border-red-200 bg-red-50 p-4 text-sm text-red-700 md:col-span-2">
+                    {error}
+                  </div>
+                ) : null}
+
+                <div className="md:col-span-2">
+                  <button
+                    type="submit"
+                    disabled={loading}
+                    className="inline-flex w-full items-center justify-center gap-2 rounded-md px-5 py-4 text-xs uppercase tracking-[0.1em] transition disabled:opacity-60 md:px-7 md:tracking-[0.14em]"
+                    style={{
+                      background: palette.dark,
+                      color: palette.bg,
+                      fontFamily: "var(--font-bt-ui), Montserrat, sans-serif",
+                    }}
+                  >
+                    {loading ? t.form.sending : t.form.submit} <ArrowRight size={16} />
+                  </button>
+                </div>
+              </form>
+            )}
+          </div>
         </div>
       </section>
 
-      <footer className="border-t px-4 py-8 md:px-8" style={{ borderColor: palette.secondary, background: "#F4F2ED" }}>
+      <footer className="border-t px-4 py-7 md:px-8 md:py-8" style={{ borderColor: palette.secondary, background: "#F4F2ED" }}>
         <div className="mx-auto flex w-full max-w-7xl flex-col items-center justify-between gap-4 text-center md:flex-row md:text-left">
-          <a
-            href={localizePath(locale, "/bt")}
-            className="text-xl"
-            style={{ fontFamily: "var(--font-bt-heading), Playfair Display, serif", letterSpacing: "-0.02em" }}
-          >
-            BT <span style={{ color: palette.premium }}>|</span> EZWebOne
+          <a href={localizePath(locale, "/bt")} className="flex items-center" aria-label="EZWebOne BT">
+            <Image
+              src={BRAND_LOGO_MARK_LIGHT_SRC}
+              alt="EZWebOne"
+              width={76}
+              height={76}
+              className="h-12 w-12 object-contain md:h-14 md:w-14"
+            />
           </a>
-          <p className="text-sm text-[#5A5A5A]">{isRo ? "Divizie beauty si aesthetics pentru branduri premium moderne." : "Beauty & aesthetics division for modern premium brands."}</p>
+          <p className="max-w-sm text-sm leading-6 text-[#5A5A5A] md:max-w-none">{t.footer}</p>
         </div>
       </footer>
+    </div>
+  );
+}
+
+function SectionIntro({ badge, title }: { badge: string; title: string }) {
+  return (
+    <>
+      <p
+        className="mb-2 text-base md:mb-3 md:text-lg"
+        style={{ fontFamily: "var(--font-bt-subheading), Cormorant Garamond, serif", color: palette.accent }}
+      >
+        {badge}
+      </p>
+      <h2
+        className="max-w-4xl text-[30px] leading-[1.12] md:text-[40px]"
+        style={{ fontFamily: "var(--font-bt-heading), Playfair Display, serif", letterSpacing: "0" }}
+      >
+        {title}
+      </h2>
+    </>
+  );
+}
+
+function TextField({
+  icon: Icon,
+  label,
+  placeholder,
+  value,
+  onChange,
+  type = "text",
+  required = false,
+}: {
+  icon: typeof UserRound;
+  label: string;
+  placeholder: string;
+  value: string;
+  onChange: (value: string) => void;
+  type?: "text" | "email";
+  required?: boolean;
+}) {
+  return (
+    <div>
+      <label className="mb-2 flex items-center gap-2 text-[11px] uppercase tracking-[0.1em] text-[#6A655D] md:text-xs md:tracking-[0.14em]">
+        <Icon size={14} color={palette.premium} />
+        {label}
+      </label>
+      <input
+        required={required}
+        type={type}
+        placeholder={placeholder}
+        value={value}
+        onChange={(event) => onChange(event.target.value)}
+        className="w-full rounded-md border bg-[#F8F7F5] px-4 py-3 text-[16px] outline-none transition placeholder:text-[#8B867E] focus:border-[#8A8F7A]"
+        style={{ borderColor: palette.secondary }}
+      />
     </div>
   );
 }

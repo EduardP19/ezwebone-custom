@@ -332,6 +332,7 @@ function Hero() {
 function Preloader({ onComplete }: { onComplete: () => void }) {
   const { locale } = useI18n();
   const isRo = locale === 'ro';
+  const SPEED_FACTOR = 0.7; // 30% faster
   const count = useMotionValue(0);
   const rounded = useTransform(count, (latest) => Math.round(latest));
   const [complete, setComplete] = useState(false);
@@ -341,9 +342,9 @@ function Preloader({ onComplete }: { onComplete: () => void }) {
   useEffect(() => {
     document.body.style.overflow = 'hidden'; // Lock scroll on mount
     const controls = animate(count, 100, {
-      duration: 3,
+      duration: 3 * SPEED_FACTOR,
       ease: "easeInOut",
-      delay: 0.5,
+      delay: 0.5 * SPEED_FACTOR,
       onUpdate: (latest) => {
         if (latest >= 100 && !complete) {
           setComplete(true);
@@ -361,18 +362,18 @@ function Preloader({ onComplete }: { onComplete: () => void }) {
     if (complete) {
       const timer = setTimeout(() => {
         setExiting(true);
-        setTimeout(onComplete, 800); 
-      }, 1000);
+        setTimeout(onComplete, 800 * SPEED_FACTOR);
+      }, 1000 * SPEED_FACTOR);
       return () => clearTimeout(timer);
     }
-  }, [complete, onComplete]);
+  }, [complete, onComplete, SPEED_FACTOR]);
 
   return (
     <motion.div
       className="fixed inset-0 z-[99] flex items-center justify-center bg-[#0a0a0a]"
       style={{ pointerEvents: exiting ? 'none' : 'auto' }}
       animate={exiting ? { opacity: 0 } : { opacity: 1 }}
-      transition={{ duration: 0.8, ease: "easeIn" }}
+      transition={{ duration: 0.8 * SPEED_FACTOR, ease: "easeIn" }}
     >
       <div className="flex flex-col items-center justify-center gap-4">
         <div
@@ -386,7 +387,7 @@ function Preloader({ onComplete }: { onComplete: () => void }) {
         <motion.div 
           className="text-8xl md:text-[10rem] font-black leading-none select-none"
           animate={exiting ? { scale: 50, opacity: 0 } : { scale: 1, opacity: 1 }}
-          transition={exiting ? { duration: 0.8, ease: "easeIn" } : {}}
+          transition={exiting ? { duration: 0.8 * SPEED_FACTOR, ease: "easeIn" } : {}}
           style={{ 
             fontFamily: SG,
             color: colorInterpolated,
