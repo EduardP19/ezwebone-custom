@@ -10,10 +10,13 @@ export function ConsentManager() {
   const pathname = usePathname();
 
   useEffect(() => {
+    const isHfRoute = pathname?.startsWith("/hf") || pathname?.startsWith("/ro/hf");
+    const delayMs = isHfRoute ? 7000 : 3000;
+
     const timerId = window.setTimeout(() => {
       const consent = readTrackingConsent();
       setShowBanner(!consent);
-    }, 3000);
+    }, delayMs);
 
     return () => window.clearTimeout(timerId);
   }, [pathname]);

@@ -53,12 +53,19 @@ function getOrCreateSessionId(): string {
 }
 
 function parseUtmsFromSearch(search: URLSearchParams): UTMFields {
+  const utmSource = search.get("utm_source") ?? search.get("UTM_SOURCE");
+  const utmMedium = search.get("utm_medium") ?? search.get("UTM_MEDIUM");
+  const utmCampaign =
+    search.get("utm_campaign") ?? search.get("UTM_CAMPAIGN") ?? search.get("cp");
+  const utmTerm = search.get("utm_term") ?? search.get("UTM_TERM");
+  const utmContent = search.get("utm_content") ?? search.get("UTM_CONTENT");
+
   return {
-    utm_source: search.get("utm_source"),
-    utm_medium: search.get("utm_medium"),
-    utm_campaign: search.get("utm_campaign"),
-    utm_term: search.get("utm_term"),
-    utm_content: search.get("utm_content"),
+    utm_source: utmSource,
+    utm_medium: utmMedium,
+    utm_campaign: utmCampaign,
+    utm_term: utmTerm,
+    utm_content: utmContent,
   };
 }
 
