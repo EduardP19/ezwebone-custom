@@ -214,12 +214,8 @@
       background-image: url('https://images.unsplash.com/photo-1490645935967-10de6ba17061?w=1800&q=80');
       background-size: cover;
       background-position: center 30%;
-      transform: scale(1.05);
-      transition: transform 8s ease-out;
-    }
-
-    .hero-bg.loaded {
-      transform: scale(1);
+      transform: none;
+      transition: none;
     }
 
     .hero-overlay {
@@ -252,8 +248,8 @@
       letter-spacing: 0.18em;
       color: var(--green);
       margin-bottom: 1.5rem;
-      opacity: 0;
-      animation: fadeUp 0.8s 0.2s forwards;
+      opacity: 1;
+      animation: none;
     }
 
     .hero-eyebrow::before {
@@ -273,8 +269,8 @@
       letter-spacing: -0.02em;
       max-width: 750px;
       margin-bottom: 1.8rem;
-      opacity: 0;
-      animation: fadeUp 0.9s 0.4s forwards;
+      opacity: 1;
+      animation: none;
     }
 
     .hero-headline em {
@@ -289,8 +285,8 @@
       max-width: 460px;
       line-height: 1.7;
       margin-bottom: 2.8rem;
-      opacity: 0;
-      animation: fadeUp 0.9s 0.6s forwards;
+      opacity: 1;
+      animation: none;
     }
 
     .hero-actions {
@@ -298,8 +294,8 @@
       align-items: center;
       gap: 1.5rem;
       flex-wrap: wrap;
-      opacity: 0;
-      animation: fadeUp 0.9s 0.8s forwards;
+      opacity: 1;
+      animation: none;
     }
 
     .btn-primary {
@@ -354,8 +350,8 @@
       flex-direction: column;
       align-items: center;
       gap: 0.5rem;
-      opacity: 0;
-      animation: fadeUp 1s 1.2s forwards;
+      opacity: 1;
+      animation: none;
     }
 
     .hero-scroll-hint span {
@@ -369,7 +365,7 @@
       width: 1px;
       height: 40px;
       background: linear-gradient(to bottom, rgba(255, 255, 255, 0.5), transparent);
-      animation: scrollPulse 2s infinite;
+      animation: none;
     }
 
     /* Floating badge */
@@ -382,8 +378,8 @@
       padding: 1.4rem 1.8rem;
       box-shadow: 0 20px 60px rgba(31, 45, 42, 0.15);
       text-align: center;
-      opacity: 0;
-      animation: fadeUp 0.9s 1s forwards;
+      opacity: 1;
+      animation: none;
       z-index: 2;
     }
 
@@ -1788,10 +1784,6 @@
       }
     });
 
-    // Hero image pan
-    const heroBg = document.getElementById('hero-bg');
-    setTimeout(() => { heroBg.classList.add('loaded'); }, 100);
-
     // Mobile menu
     const hamburger = document.getElementById('hamburger');
     const mobileMenu = document.getElementById('mobile-menu');
@@ -1844,11 +1836,4 @@
       });
     });
 
-    // Parallax on hero background
-    window.addEventListener('scroll', () => {
-      const scrolled = window.scrollY;
-      if (scrolled < window.innerHeight * 1.5) {
-        heroBg.style.transform = `scale(1) translateY(${scrolled * 0.3}px)`;
-      }
-    });
   </script>

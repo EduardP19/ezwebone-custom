@@ -4,8 +4,12 @@ import { useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import Link from 'next/link';
 import { ArrowLeft } from 'lucide-react';
+import { useI18n } from '@/components/i18n/LocaleProvider';
+import { localizePath } from '@/lib/i18n/config';
 
 export default function BalancedBitePage() {
+  const { locale } = useI18n();
+  const isRo = locale === 'ro';
   const iframeRef = useRef<HTMLIFrameElement>(null);
 
   const handleIframeLoad = () => {
@@ -39,33 +43,33 @@ export default function BalancedBitePage() {
       <nav className="demo-toolbar min-h-[64px] py-2 bg-white border-b border-gray-100 px-6 flex items-center justify-between z-[2000] shadow-sm">
         <div className="flex items-center gap-3">
           <Link 
-            href="/hf#ecosystem" 
+            href={localizePath(locale, '/hf#ecosystem')}
             className="flex items-center gap-2 px-4 py-2 bg-black text-white rounded-full text-[11px] font-bold hover:bg-gray-800 transition-all shadow-md"
           >
-            <ArrowLeft size={14} /> Exit Preview
+            <ArrowLeft size={14} /> {isRo ? 'Iesire din preview' : 'Exit Preview'}
           </Link>
         </div>
 
         <div className="flex items-center gap-4 text-right">
           <div className="hidden md:flex flex-col">
-            <span className="text-[9px] uppercase tracking-widest font-bold text-gray-400">Live Preview</span>
-            <span className="text-xs font-bold text-black">Nutrition & Dietetics</span>
+            <span className="text-[9px] uppercase tracking-widest font-bold text-gray-400">{isRo ? 'Preview live' : 'Live Preview'}</span>
+            <span className="text-xs font-bold text-black">{isRo ? 'Nutritie si dietetica' : 'Nutrition & Dietetics'}</span>
           </div>
           <div className="h-4 w-px bg-gray-200 hidden md:block" />
-          <Link href="/hf" className="hover:opacity-60 transition-opacity block">
+          <Link href={localizePath(locale, '/hf')} className="hover:opacity-60 transition-opacity block">
             <img src="/brand/HF_EZ-Navy-Tear.png" alt="EZWebOne" className="h-[6rem] md:h-24 w-auto object-contain" />
           </Link>
         </div>
       </nav>
 
       {/* Preview Container */}
-      <div className="flex-grow p-0 md:p-6 bg-gray-100 relative overflow-hidden">
-        <div className="w-full h-full bg-white rounded-none md:rounded-xl overflow-hidden shadow-2xl border border-gray-200 flex flex-col">
+      <div className="flex-grow px-[10px] py-[10px] md:p-6 bg-gray-100 relative overflow-hidden">
+        <div className="w-full h-full bg-white rounded-xl md:rounded-xl overflow-hidden shadow-2xl border border-gray-300 flex flex-col">
           <iframe 
             ref={iframeRef}
             src="/demos/balancedbite/index.html"
             className="w-full h-full border-none"
-            title="BalancedBite Project Preview"
+            title={isRo ? 'Preview proiect BalancedBite' : 'BalancedBite Project Preview'}
             onLoad={handleIframeLoad}
           />
         </div>

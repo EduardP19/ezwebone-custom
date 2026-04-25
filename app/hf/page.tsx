@@ -3,6 +3,8 @@
 import { useState, useEffect, useRef } from 'react';
 import { supabase } from '@/lib/supabase';
 import { motion, useInView, AnimatePresence, useMotionValue, useTransform, animate } from 'framer-motion';
+import { useI18n } from '@/components/i18n/LocaleProvider';
+import { localizePath } from '@/lib/i18n/config';
 import {
   Monitor, Calendar, CreditCard, Mail, Search, Bot,
   Star, ArrowRight, Zap, Target, TrendingUp,
@@ -24,34 +26,44 @@ const AVATAR_OWNER =
 const SG = "'Space Grotesk', sans-serif";
 
 // ─── Typewriter ───────────────────────────────────────────────────────────────
-const PHRASES = [
+const PHRASES_EN = [
   'More Bookings. More Revenue.',
   'Modern Design. Proven Results.',
   'Your Business. Fully Online.',
   'Better Experience. Faster Growth.',
 ];
 
+const PHRASES_RO = [
+  'Mai multe programari. Mai mult venit.',
+  'Design modern. Rezultate dovedite.',
+  'Afacerea ta. Complet online.',
+  'Experienta mai buna. Crestere mai rapida.',
+];
+
 function TypewriterText() {
+  const { locale } = useI18n();
+  const isRo = locale === 'ro';
+  const phrases = isRo ? PHRASES_RO : PHRASES_EN;
   const [displayed, setDisplayed] = useState('');
   const [phraseIdx, setPhraseIdx] = useState(0);
   const [deleting, setDeleting] = useState(false);
 
   useEffect(() => {
-    const phrase = PHRASES[phraseIdx];
+    const phrase = phrases[phraseIdx];
     let timer: ReturnType<typeof setTimeout>;
 
     if (!deleting && displayed === phrase) {
       timer = setTimeout(() => setDeleting(true), 2400);
     } else if (deleting && displayed === '') {
       setDeleting(false);
-      setPhraseIdx((i) => (i + 1) % PHRASES.length);
+      setPhraseIdx((i) => (i + 1) % phrases.length);
     } else if (!deleting) {
       timer = setTimeout(() => setDisplayed(phrase.slice(0, displayed.length + 1)), 72);
     } else {
       timer = setTimeout(() => setDisplayed(displayed.slice(0, -1)), 34);
     }
     return () => clearTimeout(timer);
-  }, [displayed, deleting, phraseIdx]);
+  }, [displayed, deleting, phraseIdx, phrases]);
 
   return (
     <span>
@@ -68,6 +80,8 @@ function TypewriterText() {
 
 // ─── Nav ──────────────────────────────────────────────────────────────────────
 function Nav() {
+  const { locale } = useI18n();
+  const isRo = locale === 'ro';
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
 
@@ -101,16 +115,18 @@ function Nav() {
           <button
             className="p-1 text-black flex items-center gap-2 hover:opacity-60 transition-opacity"
             onClick={() => setOpen(!open)}
-            aria-label="Toggle menu"
+            aria-label={isRo ? 'Comuta meniu' : 'Toggle menu'}
           >
             {open ? <X size={28} /> : <Menu size={28} />}
-            <span className="hidden md:block text-xs uppercase tracking-widest font-bold" style={{ fontFamily: SG }}>MENU</span>
+            <span className="hidden md:block text-xs uppercase tracking-widest font-bold" style={{ fontFamily: SG }}>
+              {isRo ? 'MENIU' : 'MENU'}
+            </span>
           </button>
         </div>
 
         {/* Center: Logo (Global) */}
         <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 flex items-center justify-center">
-          <a href="/hf" className="block hover:opacity-80 transition-opacity">
+          <a href={localizePath(locale, '/hf')} className="block hover:opacity-80 transition-opacity">
             <img
               src="/brand/HF_EZ-Navy-Tear.png"
               alt="EZWebOne"
@@ -127,7 +143,7 @@ function Nav() {
             className="px-5 py-2 md:px-8 md:py-3 rounded-full text-xs md:text-sm text-black transition-all hover:scale-105 active:scale-95 whitespace-nowrap"
             style={{ fontFamily: SG, fontWeight: 700, background: NEON, boxShadow: `0 0 18px ${NEON}55` }}
           >
-            Audit
+            {isRo ? 'Audit' : 'Audit'}
           </a>
         </div>
       </div>
@@ -143,11 +159,11 @@ function Nav() {
             style={{ fontFamily: SG }}
           >
             {[
-              ['#services', 'Growth'],
-              ['#ecosystem', 'Expertise'],
-              ['#why-us', 'Flexibility'],
-              ['#how-it-works', 'Process'],
-              ['#testimonials', 'Reviews']
+              ['#services', isRo ? 'Crestere' : 'Growth'],
+              ['#ecosystem', isRo ? 'Expertiza' : 'Expertise'],
+              ['#why-us', isRo ? 'Flexibilitate' : 'Flexibility'],
+              ['#how-it-works', isRo ? 'Proces' : 'Process'],
+              ['#testimonials', isRo ? 'Recenzii' : 'Reviews']
             ].map(([href, label]) => (
               <a key={href} href={href} className="text-lg font-bold text-black" onClick={() => setOpen(false)}>{label}</a>
             ))}
@@ -181,6 +197,8 @@ function Nav() {
 
 // ─── Hero ─────────────────────────────────────────────────────────────────────
 function Hero() {
+  const { locale } = useI18n();
+  const isRo = locale === 'ro';
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
       {/* BG image */}
@@ -211,7 +229,7 @@ function Hero() {
               style={{ background: NEON, boxShadow: `0 0 8px ${NEON}` }}
             />
             <span className="text-white text-sm font-semibold" style={{ fontFamily: SG }}>
-              Health &amp; Wellness
+              {isRo ? 'Sanatate si Wellness' : 'Health & Wellness'}
             </span>
           </div>
           
@@ -253,7 +271,9 @@ function Hero() {
           className="text-lg md:text-xl text-white/75 mb-10 max-max-2xl mx-auto"
           style={{ fontFamily: SG, fontWeight: 400 }}
         >
-          We build digital systems that fill your schedule and grow your wellness business.
+          {isRo
+            ? 'Construim sisteme digitale care iti umplu calendarul si iti cresc afacerea de wellness.'
+            : 'We build digital systems that fill your schedule and grow your wellness business.'}
         </motion.p>
 
         {/* CTAs */}
@@ -270,14 +290,14 @@ function Hero() {
             className="px-8 py-4 rounded-full text-black transition-all hover:scale-105 active:scale-95 flex items-center justify-center gap-2"
             style={{ fontFamily: SG, fontWeight: 700, fontSize: '1rem', background: NEON, boxShadow: `0 0 35px ${NEON}65` }}
           >
-            Get a Free Audit <ArrowRight size={18} />
+            {isRo ? 'Obtine un audit gratuit' : 'Get a Free Audit'} <ArrowRight size={18} />
           </a>
           <a
             href="#services"
             className="px-8 py-4 rounded-full text-white border-2 border-white transition-all hover:bg-[#F5F2ED] hover:text-black flex items-center justify-center gap-2 font-bold"
             style={{ fontFamily: SG }}
           >
-            See What We Do
+            {isRo ? 'Vezi ce facem' : 'See What We Do'}
           </a>
         </motion.div>
 
@@ -292,7 +312,7 @@ function Hero() {
             className="text-xs uppercase tracking-[0.4em] font-bold"
             style={{ fontFamily: SG, color: NEON, textShadow: `0 0 12px ${NEON}66` }}
           >
-            The Method
+            {isRo ? 'Metoda' : 'The Method'}
           </span>
           <div className="w-px h-12 bg-[#F5F2ED]/10 relative overflow-hidden">
             <motion.div
@@ -309,6 +329,8 @@ function Hero() {
 }
 
 function Preloader({ onComplete }: { onComplete: () => void }) {
+  const { locale } = useI18n();
+  const isRo = locale === 'ro';
   const count = useMotionValue(0);
   const rounded = useTransform(count, (latest) => Math.round(latest));
   const [complete, setComplete] = useState(false);
@@ -356,7 +378,8 @@ function Preloader({ onComplete }: { onComplete: () => void }) {
           className="text-white text-center uppercase tracking-[0.2em] font-black text-xl md:text-3xl"
           style={{ fontFamily: SG }}
         >
-          LOADING <br className="block md:hidden" /> ONLINE PRESENCE...
+          {isRo ? 'SE INCARCA' : 'LOADING'} <br className="block md:hidden" />{' '}
+          {isRo ? 'PREZENTA ONLINE...' : 'ONLINE PRESENCE...'}
         </div>
 
         <motion.div 
@@ -378,10 +401,12 @@ function Preloader({ onComplete }: { onComplete: () => void }) {
 
 // ─── Trust Bar ────────────────────────────────────────────────────────────────
 function TrustBar() {
+  const { locale } = useI18n();
+  const isRo = locale === 'ro';
   const badges = [
-    { emoji: '🚀', label: 'Growth Partner' },
-    { emoji: '💪', label: 'Trusted by 30+ Wellness Businesses' },
-    { emoji: '⭐', label: '5.0 Star Rated' }
+    { emoji: '🚀', label: isRo ? 'Partener de crestere' : 'Growth Partner' },
+    { emoji: '💪', label: isRo ? 'De incredere pentru 30+ afaceri wellness' : 'Trusted by 30+ Wellness Businesses' },
+    { emoji: '⭐', label: isRo ? 'Evaluare 5.0 stele' : '5.0 Star Rated' }
   ];
 
   return (
@@ -413,29 +438,39 @@ function TrustBar() {
 
 // ─── Problem ─────────────────────────────────────────────────────────────────
 function Problem() {
+  const { locale } = useI18n();
+  const isRo = locale === 'ro';
   const ref = useRef<HTMLElement>(null);
   const inView = useInView(ref, { once: true, margin: '-80px' });
 
   const pain = [
     {
       icon: <Monitor size={22} />,
-      title: 'Your Website Doesn\'t Convert',
-      desc: 'You\'re getting traffic but no sign-ups. Visitors land and leave without booking a trial or joining a session.',
+      title: isRo ? 'Website-ul tau nu converteste' : 'Your Website Doesn\'t Convert',
+      desc: isRo
+        ? 'Primesti trafic, dar fara inscrieri. Vizitatorii intra si pleaca fara sa rezerve o sesiune.'
+        : 'You\'re getting traffic but no sign-ups. Visitors land and leave without booking a trial or joining a session.',
     },
     {
       icon: <Clock size={22} />,
-      title: 'Manual Bookings Eat Your Time',
-      desc: 'You\'re stuck answering DMs, calls, and emails just to schedule someone. That\'s admin hell, not growth.',
+      title: isRo ? 'Programarile manuale iti consuma timpul' : 'Manual Bookings Eat Your Time',
+      desc: isRo
+        ? 'Ramai blocat in DM-uri, apeluri si emailuri doar ca sa programezi pe cineva. Asta inseamna administratie, nu crestere.'
+        : 'You\'re stuck answering DMs, calls, and emails just to schedule someone. That\'s admin hell, not growth.',
     },
     {
       icon: <Users size={22} />,
-      title: 'No Follow-Up System',
-      desc: 'Leads come in and go cold. There\'s no automated sequence nurturing them from enquiry to paying client.',
+      title: isRo ? 'Fara sistem de follow-up' : 'No Follow-Up System',
+      desc: isRo
+        ? 'Lead-urile vin si se racesc. Nu exista o secventa automata care sa le duca de la intrebare la client platitor.'
+        : 'Leads come in and go cold. There\'s no automated sequence nurturing them from enquiry to paying client.',
     },
     {
       icon: <Search size={22} />,
-      title: 'Invisible on Google',
-      desc: 'People nearby are searching for wellness practitioners right now — and finding your competitors, not you.',
+      title: isRo ? 'Invizibil pe Google' : 'Invisible on Google',
+      desc: isRo
+        ? 'Oamenii din zona cauta acum servicii wellness si iti gasesc competitorii, nu afacerea ta.'
+        : 'People nearby are searching for wellness practitioners right now — and finding your competitors, not you.',
     },
   ];
 
@@ -452,11 +487,20 @@ function Problem() {
             className="text-4xl md:text-5xl text-black mb-5"
             style={{ fontFamily: SG, fontWeight: 800, lineHeight: 1.12 }}
           >
-            Running a top-tier business<br />
-            <span style={{ color: NEON }}>isn&apos;t enough</span> anymore.
+            {isRo ? 'Conduci o afacere de top' : 'Running a top-tier business'}
+            <br />
+            {isRo ? (
+              <span style={{ color: NEON }}>nu mai este suficient.</span>
+            ) : (
+              <>
+                <span style={{ color: NEON }}>isn&apos;t enough</span> anymore.
+              </>
+            )}
           </h2>
           <p className="text-gray-500 text-lg max-w-xl mx-auto" style={{ fontFamily: SG }}>
-            If your digital presence doesn't match your coaching quality, you're leaving money on the table every single day.
+            {isRo
+              ? 'Daca prezenta ta digitala nu se ridica la nivelul calitatii serviciilor tale, pierzi bani in fiecare zi.'
+              : 'If your digital presence doesn\'t match your coaching quality, you\'re leaving money on the table every single day.'}
           </p>
         </motion.div>
 
@@ -494,39 +538,53 @@ function Problem() {
 
 // ─── Services ─────────────────────────────────────────────────────────────────
 function Services() {
+  const { locale } = useI18n();
+  const isRo = locale === 'ro';
   const ref = useRef<HTMLElement>(null);
   const inView = useInView(ref, { once: true, margin: '-80px' });
 
   const services = [
     {
       icon: <Monitor size={26} />,
-      title: 'Websites',
-      desc: 'Fast, mobile-first sites built to convert visitors into clients — not just look pretty.',
+      title: isRo ? 'Website-uri' : 'Websites',
+      desc: isRo
+        ? 'Website-uri rapide, mobile-first, construite sa transforme vizitatorii in clienti, nu doar sa arate bine.'
+        : 'Fast, mobile-first sites built to convert visitors into clients — not just look pretty.',
     },
     {
       icon: <Calendar size={26} />,
-      title: 'Booking Integration',
-      desc: 'Connect Mindbody, Glofox, or any booking system seamlessly into your digital presence.',
+      title: isRo ? 'Integrare programari' : 'Booking Integration',
+      desc: isRo
+        ? 'Conectam Mindbody, Glofox sau orice sistem de programari direct in prezenta ta digitala.'
+        : 'Connect Mindbody, Glofox, or any booking system seamlessly into your digital presence.',
     },
     {
       icon: <CreditCard size={26} />,
-      title: 'Payment Systems',
-      desc: 'Online bookings, service plans, and product sales — all automated and frictionless.',
+      title: isRo ? 'Sisteme de plata' : 'Payment Systems',
+      desc: isRo
+        ? 'Programari online, planuri de servicii si vanzari de produse, totul automatizat si fara frictiune.'
+        : 'Online bookings, service plans, and product sales — all automated and frictionless.',
     },
     {
       icon: <Mail size={26} />,
-      title: 'Email Marketing',
-      desc: 'Automated sequences that retain clients, re-engage churners, and fill your schedule.',
+      title: isRo ? 'Email marketing' : 'Email Marketing',
+      desc: isRo
+        ? 'Secvente automate care pastreaza clientii, reactiveaza clientii pierduti si iti umplu calendarul.'
+        : 'Automated sequences that retain clients, re-engage churners, and fill your schedule.',
     },
     {
       icon: <Search size={26} />,
       title: 'SEO',
-      desc: 'Get found on Google by people searching for wellness services near them — before your competitors do.',
+      desc: isRo
+        ? 'Fii gasit pe Google de oamenii care cauta servicii wellness in apropiere, inaintea competitorilor.'
+        : 'Get found on Google by people searching for wellness services near them — before your competitors do.',
     },
     {
       icon: <Bot size={26} />,
-      title: 'AI Agents & Automations',
-      desc: '24/7 AI reception, intelligent lead follow-up, and smart workflows so nothing slips through.',
+      title: isRo ? 'Agenti AI si automatizari' : 'AI Agents & Automations',
+      desc: isRo
+        ? 'Receptie AI 24/7, follow-up inteligent pentru lead-uri si fluxuri smart ca sa nu scape nimic.'
+        : '24/7 AI reception, intelligent lead follow-up, and smart workflows so nothing slips through.',
     },
   ];
 
@@ -543,13 +601,15 @@ function Services() {
             className="inline-block text-xs px-4 py-1.5 rounded-full mb-4 uppercase tracking-widest"
             style={{ fontFamily: SG, fontWeight: 700, background: `${NEON}20`, color: '#111' }}
           >
-            Growth
+            {isRo ? 'Crestere' : 'Growth'}
           </span>
           <h2
             className="text-4xl md:text-5xl text-black"
             style={{ fontFamily: SG, fontWeight: 800, lineHeight: 1.12 }}
           >
-            Everything your business<br />needs — in one place.
+            {isRo ? 'Tot ce are nevoie afacerea ta' : 'Everything your business'}
+            <br />
+            {isRo ? 'intr-un singur loc.' : 'needs — in one place.'}
           </h2>
         </motion.div>
 
@@ -589,23 +649,31 @@ function Services() {
 
 // ─── Social Media ─────────────────────────────────────────────────────────────
 function SocialMedia() {
+  const { locale } = useI18n();
+  const isRo = locale === 'ro';
   const ref = useRef<HTMLElement>(null);
   const inView = useInView(ref, { once: true, margin: '-80px' });
 
   const steps = [
     {
-      title: 'Strategy & Concept',
-      desc: 'We define your brand voice, content pillars, and aesthetic style to ensure every post serves your growth goals.',
+      title: isRo ? 'Strategie si concept' : 'Strategy & Concept',
+      desc: isRo
+        ? 'Definim vocea brandului, pilonii de continut si stilul vizual pentru ca fiecare postare sa sustina obiectivele tale de crestere.'
+        : 'We define your brand voice, content pillars, and aesthetic style to ensure every post serves your growth goals.',
       icon: <Target size={24} />,
     },
     {
-      title: 'Premium Asset Creation',
-      desc: 'High-fidelity photography, custom graphics, and professional video editing tailored specifically for wellness platforms.',
+      title: isRo ? 'Creare de materiale premium' : 'Premium Asset Creation',
+      desc: isRo
+        ? 'Fotografie de inalta calitate, grafica personalizata si editare video profesionala, adaptate pentru platforme wellness.'
+        : 'High-fidelity photography, custom graphics, and professional video editing tailored specifically for wellness platforms.',
       icon: <Users size={24} />,
     },
     {
-      title: 'Hands-off Publishing',
-      desc: 'Daily management, captions, and scheduling. We handle the technical side so you can stay in the flow of your practice.',
+      title: isRo ? 'Publicare hands-off' : 'Hands-off Publishing',
+      desc: isRo
+        ? 'Management zilnic, texte si programare. Noi gestionam partea tehnica, tu ramai concentrat pe clienti.'
+        : 'Daily management, captions, and scheduling. We handle the technical side so you can stay in the flow of your practice.',
       icon: <Calendar size={24} />,
     },
   ];
@@ -623,14 +691,17 @@ function SocialMedia() {
               className="inline-block text-xs px-4 py-1.5 rounded-full mb-4 uppercase tracking-widest"
               style={{ fontFamily: SG, fontWeight: 700, background: `${NEON}20`, color: '#111' }}
             >
-              Presence
+              {isRo ? 'Prezenta' : 'Presence'}
             </span>
             <h2
               className="text-4xl md:text-5xl text-black mb-8"
               style={{ fontFamily: SG, fontWeight: 800, lineHeight: 1.12 }}
             >
-              Your Social Media,<br />
-              <span style={{ color: NEON, background: '#000', padding: '0 8px' }}>Done For You.</span>
+              {isRo ? 'Social media-ul tau,' : 'Your Social Media,'}
+              <br />
+              <span style={{ color: NEON, background: '#000', padding: '0 8px' }}>
+                {isRo ? 'facut pentru tine.' : 'Done For You.'}
+              </span>
             </h2>
             <div className="space-y-8">
               {steps.map((step, i) => (
@@ -663,10 +734,12 @@ function SocialMedia() {
                 <div className="bg-[#F5F2ED]/10 backdrop-blur-md border border-white/20 p-8 rounded-2xl text-center max-w-sm">
                   <Star className="text-yellow-400 mx-auto mb-4" size={32} fill="currentColor" />
                   <p className="text-white text-lg font-medium italic mb-4" style={{ fontFamily: SG }}>
-                    "Our engagement doubled within the first month. We no longer worry about what to post."
+                    {isRo
+                      ? '"Engagement-ul nostru s-a dublat in prima luna. Nu ne mai facem griji despre ce sa postam."'
+                      : '"Our engagement doubled within the first month. We no longer worry about what to post."'}
                   </p>
                   <p className="text-white/60 text-sm uppercase tracking-widest font-bold" style={{ fontFamily: SG }}>
-                    - Wellness Business Owner
+                    {isRo ? '- Proprietar afacere wellness' : '- Wellness Business Owner'}
                   </p>
                 </div>
               </div>
@@ -703,23 +776,31 @@ function CountUp({ to, duration, delay, inView }: { to: number; duration: number
 
 // ─── Automations ──────────────────────────────────────────────────────────────
 function Automations() {
+  const { locale } = useI18n();
+  const isRo = locale === 'ro';
   const ref = useRef<HTMLElement>(null);
   const inView = useInView(ref, { once: true, margin: '-80px' });
 
   const features = [
     {
-      title: 'Auto-Pilot Bookings',
-      desc: 'Seamless integration with Cal.com, Acuity, or Mindbody. Your schedule fills up while you sleep.',
+      title: isRo ? 'Programari pe pilot automat' : 'Auto-Pilot Bookings',
+      desc: isRo
+        ? 'Integrare fara frictiuni cu Cal.com, Acuity sau Mindbody. Calendarul se umple chiar si cand dormi.'
+        : 'Seamless integration with Cal.com, Acuity, or Mindbody. Your schedule fills up while you sleep.',
       icon: <Calendar size={24} />,
     },
     {
-      title: 'Retention Sequences',
-      desc: 'Automated email & SMS follow-ups that ensure your clients keep coming back for more.',
+      title: isRo ? 'Secvente de retentie' : 'Retention Sequences',
+      desc: isRo
+        ? 'Follow-up automat pe email si SMS pentru ca clientii sa revina constant.'
+        : 'Automated email & SMS follow-ups that ensure your clients keep coming back for more.',
       icon: <Mail size={24} />,
     },
     {
-      title: 'Smart Lead Nurturing',
-      desc: 'Instantly capture and segment new enquiries based on their specific wellness goals.',
+      title: isRo ? 'Nurturing inteligent pentru lead-uri' : 'Smart Lead Nurturing',
+      desc: isRo
+        ? 'Captezi instant si segmentezi noile solicitari in functie de obiectivele wellness ale fiecaruia.'
+        : 'Instantly capture and segment new enquiries based on their specific wellness goals.',
       icon: <Bot size={24} />,
     },
   ];
@@ -742,9 +823,9 @@ function Automations() {
               <div className="absolute -top-4 -right-4 w-24 h-24 bg-neon opacity-20 blur-2xl" style={{ backgroundColor: NEON }} />
               <div className="space-y-10">
                 {[
-                  { label: 'Booking Automation', val: 100, delay: 0.2 },
-                  { label: 'Email Marketing', val: 100, delay: 1.2 },
-                  { label: 'Sales Funnel', val: 100, delay: 2.2 }
+                  { label: isRo ? 'Automatizare programari' : 'Booking Automation', val: 100, delay: 0.2 },
+                  { label: isRo ? 'Email marketing' : 'Email Marketing', val: 100, delay: 1.2 },
+                  { label: isRo ? 'Funnel de vanzari' : 'Sales Funnel', val: 100, delay: 2.2 }
                 ].map((item, i) => (
                   <div key={i} className="space-y-3">
                     <div className="flex justify-between items-end">
@@ -772,7 +853,7 @@ function Automations() {
                 <div className="pt-4 text-center">
                   <div className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-neon/10 border border-neon/20 text-[10px] font-bold uppercase tracking-[0.2em]" style={{ color: NEON }}>
                     <div className="w-1.5 h-1.5 rounded-full bg-neon animate-pulse" style={{ backgroundColor: NEON }} />
-                    System Status: Optimized
+                    {isRo ? 'Status sistem: optimizat' : 'System Status: Optimized'}
                   </div>
                 </div>
               </div>
@@ -789,17 +870,20 @@ function Automations() {
               className="inline-block text-xs px-4 py-1.5 rounded-full mb-4 uppercase tracking-widest"
               style={{ fontFamily: SG, fontWeight: 700, background: `${NEON}20`, color: NEON }}
             >
-              Efficiency
+              {isRo ? 'Eficienta' : 'Efficiency'}
             </span>
             <h2
               className="text-4xl md:text-5xl text-white mb-8"
               style={{ fontFamily: SG, fontWeight: 800, lineHeight: 1.12 }}
             >
-              Systems that scale<br />
-              <span style={{ color: NEON }}>without you.</span>
+              {isRo ? 'Sisteme care scaleaza' : 'Systems that scale'}
+              <br />
+              <span style={{ color: NEON }}>{isRo ? 'fara tine.' : 'without you.'}</span>
             </h2>
             <p className="text-gray-400 mb-10 max-w-lg" style={{ fontFamily: SG }}>
-              We don't just build websites; we build engines. Our automation stacks handle the heavy lifting so you can focus on your clients.
+              {isRo
+                ? 'Nu construim doar website-uri, construim motoare de crestere. Stivele noastre de automatizare preiau munca grea, ca tu sa te concentrezi pe clienti.'
+                : 'We don\'t just build websites; we build engines. Our automation stacks handle the heavy lifting so you can focus on your clients.'}
             </p>
             <div className="grid grid-cols-1 gap-6">
               {features.map((f, i) => (
@@ -823,31 +907,39 @@ function Automations() {
 
 // ─── Why Us (Black) ───────────────────────────────────────────────────────────
 function WhyUs() {
+  const { locale } = useI18n();
+  const isRo = locale === 'ro';
   const ref = useRef<HTMLElement>(null);
   const inView = useInView(ref, { once: true, margin: '-80px' });
 
   const pillars = [
     {
       icon: <Target size={30} />,
-      title: 'Industry Expertise',
-      desc: 'We understand the unique needs of personal trainers, nutritionists, and therapists.',
+      title: isRo ? 'Expertiza in industrie' : 'Industry Expertise',
+      desc: isRo
+        ? 'Intelegem nevoile specifice ale antrenorilor personali, nutritionistilor si terapeutilor.'
+        : 'We understand the unique needs of personal trainers, nutritionists, and therapists.',
     },
     {
       icon: <Zap size={30} />,
-      title: 'End-to-End Delivery',
-      desc: 'Strategy to launch and beyond — we handle everything so you can focus on what you do best.',
+      title: isRo ? 'Livrare cap-coada' : 'End-to-End Delivery',
+      desc: isRo
+        ? 'De la strategie la lansare si mai departe, ne ocupam de tot ca tu sa faci ce stii mai bine.'
+        : 'Strategy to launch and beyond — we handle everything so you can focus on what you do best.',
     },
     {
       icon: <TrendingUp size={30} />,
-      title: 'Results-Led Approach',
-      desc: 'We measure what matters: leads, bookings, revenue. Not vanity metrics.',
+      title: isRo ? 'Abordare orientata pe rezultate' : 'Results-Led Approach',
+      desc: isRo
+        ? 'Masuram ce conteaza: lead-uri, programari, venit. Nu metrici de vanitate.'
+        : 'We measure what matters: leads, bookings, revenue. Not vanity metrics.',
     },
   ];
 
   const stats = [
-    { num: '50+', label: 'Wellness Businesses' },
-    { num: '3×', label: 'Avg Revenue Growth' },
-    { num: '98%', label: 'Client Retention' },
+    { num: '50+', label: isRo ? 'Afaceri wellness' : 'Wellness Businesses' },
+    { num: '3×', label: isRo ? 'Crestere medie venit' : 'Avg Revenue Growth' },
+    { num: '98%', label: isRo ? 'Retentie clienti' : 'Client Retention' },
   ];
 
   return (
@@ -863,22 +955,24 @@ function WhyUs() {
             className="inline-block text-xs px-4 py-1.5 rounded-full mb-4 uppercase tracking-widest"
             style={{ fontFamily: SG, fontWeight: 700, background: `${NEON}22`, color: NEON }}
           >
-            Flexibility
+            {isRo ? 'Flexibilitate' : 'Flexibility'}
           </span>
           <h2
             className="text-4xl md:text-5xl text-white mb-6"
             style={{ fontFamily: SG, fontWeight: 800, lineHeight: 1.12 }}
           >
-            Built for{' '}
-            <span style={{ color: NEON }}>growth</span>.
+            {isRo ? 'Construit pentru ' : 'Built for '}
+            <span style={{ color: NEON }}>{isRo ? 'crestere' : 'growth'}</span>.
             <br />
-            Designed for <span style={{ color: NEON }}>results</span>.
+            {isRo ? 'Gandit pentru ' : 'Designed for '}<span style={{ color: NEON }}>{isRo ? 'rezultate' : 'results'}</span>.
           </h2>
           <p
             className="text-gray-400 text-lg max-w-2xl mx-auto"
             style={{ fontFamily: SG }}
           >
-            We provide tailored systems that handle the complexity of growing your digital presence, so you can focus entirely on delivering exceptional results for your clients.
+            {isRo
+              ? 'Oferim sisteme personalizate care gestioneaza complexitatea cresterii prezentei tale digitale, ca tu sa te concentrezi pe rezultate excelente pentru clientii tai.'
+              : 'We provide tailored systems that handle the complexity of growing your digital presence, so you can focus entirely on delivering exceptional results for your clients.'}
           </p>
         </motion.div>
 
@@ -945,30 +1039,38 @@ function WhyUs() {
 
 // ─── Projects (Holistic Ecosystem) ──────────────────────────────────────────
 function Projects() {
+  const { locale } = useI18n();
+  const isRo = locale === 'ro';
   const ref = useRef<HTMLElement>(null);
   const inView = useInView(ref, { once: true, margin: '-80px' });
 
   const ecosystems = [
     {
-      title: 'High-Performance Gyms',
-      desc: 'Digital engines for strength communities. We build high-conversion funnels that turn local residents into dedicated lifters.',
+      title: isRo ? 'Sali de fitness performante' : 'High-Performance Gyms',
+      desc: isRo
+        ? 'Motoare digitale pentru comunitati de forta. Construim funnel-uri cu conversie mare care transforma localnicii in membri fideli.'
+        : 'Digital engines for strength communities. We build high-conversion funnels that turn local residents into dedicated lifters.',
       image: 'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=1200&auto=format&fit=crop',
-      tag: 'Strength',
-      href: '/hf/battery'
+      tag: isRo ? 'Forta' : 'Strength',
+      href: localizePath(locale, '/hf/battery')
     },
     {
-      title: 'Wellness & Mindfulness',
-      desc: 'Serene, beautiful platforms for yoga studios and mindfulness practitioners. Designed to calm the mind and fill the mat.',
+      title: isRo ? 'Wellness si mindfulness' : 'Wellness & Mindfulness',
+      desc: isRo
+        ? 'Platforme calme si elegante pentru studiouri de yoga si practicieni mindfulness. Gandite sa aduca liniste si sa umple clasele.'
+        : 'Serene, beautiful platforms for yoga studios and mindfulness practitioners. Designed to calm the mind and fill the mat.',
       image: 'https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?q=80&w=1200&auto=format&fit=crop',
-      tag: 'Balance',
-      href: '/hf/youga'
+      tag: isRo ? 'Echilibru' : 'Balance',
+      href: localizePath(locale, '/hf/youga')
     },
     {
-      title: 'Nutrition & Dietetics',
-      desc: 'Precision systems for clinical experts. We automate bookings and consultations so you can focus on health outcomes.',
+      title: isRo ? 'Nutritie si dietetica' : 'Nutrition & Dietetics',
+      desc: isRo
+        ? 'Sisteme precise pentru experti clinici. Automatizam programarile si consultatiile ca tu sa te concentrezi pe rezultate pentru sanatate.'
+        : 'Precision systems for clinical experts. We automate bookings and consultations so you can focus on health outcomes.',
       image: 'https://images.unsplash.com/photo-1490645935967-10de6ba17061?q=80&w=1200&auto=format&fit=crop',
-      tag: 'Fuel',
-      href: '/hf/balancedbite'
+      tag: isRo ? 'Energie' : 'Fuel',
+      href: localizePath(locale, '/hf/balancedbite')
     }
   ];
 
@@ -992,16 +1094,18 @@ function Projects() {
             className="inline-block text-xs px-4 py-1.5 rounded-full mb-4 uppercase tracking-[0.2em] font-bold"
             style={{ fontFamily: SG, background: '#6BAF6B20', color: '#6BAF6B' }}
           >
-            Case Studies
+            {isRo ? 'Studii de caz' : 'Case Studies'}
           </span>
           <h2
             className="text-4xl md:text-5xl text-white mb-6"
             style={{ fontFamily: SG, fontWeight: 800, lineHeight: 1.12 }}
           >
-            One division. <span style={{ color: '#6BAF6B' }}>Three industries.</span>
+            {isRo ? 'O divizie. ' : 'One division. '}<span style={{ color: '#6BAF6B' }}>{isRo ? 'Trei industrii.' : 'Three industries.'}</span>
           </h2>
           <p className="text-gray-400 text-lg max-w-2xl mx-auto" style={{ fontFamily: SG }}>
-            Whether you run a high-intensity gym, a mindful wellness studio, or a clinical nutrition practice — we are the agency with the solution. We build specialized, high-converting digital ecosystems designed exclusively to automate bookings and scale your growth.
+            {isRo
+              ? 'Fie ca administrezi o sala de antrenament intens, un studio wellness sau o practica de nutritie clinica, avem solutia potrivita. Construim ecosisteme digitale specializate, cu conversie mare, create pentru automatizarea programarilor si scalarea cresterii.'
+              : 'Whether you run a high-intensity gym, a mindful wellness studio, or a clinical nutrition practice — we are the agency with the solution. We build specialized, high-converting digital ecosystems designed exclusively to automate bookings and scale your growth.'}
           </p>
         </motion.div>
 
@@ -1035,7 +1139,7 @@ function Projects() {
               <div className="px-8 pb-8">
                 <div className="h-px bg-gray-100 mb-6" />
                 <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-[#6BAF6B]" style={{ fontFamily: SG }}>
-                  View Expertise <ArrowRight size={14} />
+                  {isRo ? 'Vezi expertiza' : 'View Expertise'} <ArrowRight size={14} />
                 </div>
               </div>
             </a>
@@ -1055,24 +1159,32 @@ function Projects() {
 
 // ─── How It Works ─────────────────────────────────────────────────────────────
 function HowItWorks() {
+  const { locale } = useI18n();
+  const isRo = locale === 'ro';
   const ref = useRef<HTMLElement>(null);
   const inView = useInView(ref, { once: true, margin: '-80px' });
 
   const steps = [
     {
       num: '01',
-      title: 'Discovery',
-      desc: 'We audit your digital presence, understand your goals, and map out exactly what needs to be built.',
+      title: isRo ? 'Descoperire' : 'Discovery',
+      desc: isRo
+        ? 'Auditam prezenta ta digitala, intelegem obiectivele si stabilim exact ce trebuie construit.'
+        : 'We audit your digital presence, understand your goals, and map out exactly what needs to be built.',
     },
     {
       num: '02',
-      title: 'Build',
-      desc: 'Our team designs and develops your complete digital system — website, automations, booking, SEO, and more.',
+      title: isRo ? 'Construire' : 'Build',
+      desc: isRo
+        ? 'Echipa noastra proiecteaza si dezvolta sistemul tau digital complet: website, automatizari, programari, SEO si multe altele.'
+        : 'Our team designs and develops your complete digital system — website, automations, booking, SEO, and more.',
     },
     {
       num: '03',
-      title: 'Launch & Grow',
-      desc: 'We go live, monitor performance, and optimise continuously so your systems keep delivering results.',
+      title: isRo ? 'Lansare si crestere' : 'Launch & Grow',
+      desc: isRo
+        ? 'Lansam, monitorizam performanta si optimizam continuu, ca sistemele tale sa livreze constant rezultate.'
+        : 'We go live, monitor performance, and optimise continuously so your systems keep delivering results.',
     },
   ];
 
@@ -1089,15 +1201,16 @@ function HowItWorks() {
             className="inline-block text-xs px-4 py-1.5 rounded-full mb-4 uppercase tracking-widest"
             style={{ fontFamily: SG, fontWeight: 700, background: `${NEON}20`, color: '#111' }}
           >
-            Our Process
+            {isRo ? 'Procesul nostru' : 'Our Process'}
           </span>
           <h2
             className="text-4xl md:text-5xl text-black"
             style={{ fontFamily: SG, fontWeight: 800, lineHeight: 1.12 }}
           >
-            From zero to{' '}
-            <span style={{ color: NEON }}>fully launched</span>
-            <br />in three steps.
+            {isRo ? 'De la zero la ' : 'From zero to '}
+            <span style={{ color: NEON }}>{isRo ? 'lansat complet' : 'fully launched'}</span>
+            <br />
+            {isRo ? 'in trei pasi.' : 'in three steps.'}
           </h2>
         </motion.div>
 
@@ -1157,29 +1270,37 @@ function HowItWorks() {
 
 // ─── Testimonials ─────────────────────────────────────────────────────────────
 function Testimonials() {
+  const { locale } = useI18n();
+  const isRo = locale === 'ro';
   const ref = useRef<HTMLElement>(null);
   const inView = useInView(ref, { once: true, margin: '-80px' });
 
   const reviews = [
     {
       quote:
-        'EZWebOne completely transformed our online presence. Within 3 months we had 40 new clients from our website alone. The automated follow-up system is a genuine game changer.',
+        isRo
+          ? 'EZWebOne ne-a transformat complet prezenta online. In 3 luni am avut 40 de clienti noi doar din website. Sistemul automat de follow-up chiar schimba jocul.'
+          : 'EZWebOne completely transformed our online presence. Within 3 months we had 40 new clients from our website alone. The automated follow-up system is a genuine game changer.',
       name: 'Sarah Mitchell',
-      role: 'Owner, CrossFit Forge',
+      role: isRo ? 'Proprietar, CrossFit Forge' : 'Owner, CrossFit Forge',
       avatar: AVATAR_FEMALE,
     },
     {
       quote:
-        'They spoke our language from day one. No time wasted explaining how bookings work. The integration is seamless and our clients love the experience.',
+        isRo
+          ? 'Ne-au inteles din prima zi. Fara timp pierdut explicand cum functioneaza programarile. Integrarea e perfecta si clientii adora experienta.'
+          : 'They spoke our language from day one. No time wasted explaining how bookings work. The integration is seamless and our clients love the experience.',
       name: 'James Okafor',
-      role: 'Founder, Peak Performance PT',
+      role: isRo ? 'Fondator, Peak Performance PT' : 'Founder, Peak Performance PT',
       avatar: AVATAR_MALE,
     },
     {
       quote:
-        'Our enquiries tripled in the first two months. The SEO work they did means we\'re now the top result when anyone searches for yoga studios in our city. Absolute legends.',
+        isRo
+          ? 'Solicitarile noastre s-au triplat in primele doua luni. Datorita SEO-ului facut de ei, acum suntem primul rezultat cand cineva cauta studiouri de yoga in orasul nostru.'
+          : 'Our enquiries tripled in the first two months. The SEO work they did means we\'re now the top result when anyone searches for yoga studios in our city. Absolute legends.',
       name: 'Emma Rhodes',
-      role: 'Director, Studio Zen Wellness',
+      role: isRo ? 'Director, Studio Zen Wellness' : 'Director, Studio Zen Wellness',
       avatar: AVATAR_OWNER,
     },
   ];
@@ -1197,13 +1318,13 @@ function Testimonials() {
             className="inline-block text-xs px-4 py-1.5 rounded-full mb-4 uppercase tracking-widest"
             style={{ fontFamily: SG, fontWeight: 700, background: `${NEON}20`, color: '#111' }}
           >
-            Reviews
+            {isRo ? 'Recenzii' : 'Reviews'}
           </span>
           <h2
             className="text-4xl md:text-5xl text-black"
             style={{ fontFamily: SG, fontWeight: 800, lineHeight: 1.12 }}
           >
-            Don&apos;t take our word for it.
+            {isRo ? 'Nu ne crede pe cuvant.' : 'Don&apos;t take our word for it.'}
           </h2>
         </motion.div>
 
@@ -1256,6 +1377,8 @@ function Testimonials() {
 
 // ─── Final CTA ────────────────────────────────────────────────────────────────
 function FinalCTA() {
+  const { locale } = useI18n();
+  const isRo = locale === 'ro';
   const ref = useRef<HTMLElement>(null);
   const inView = useInView(ref, { once: true, margin: '-80px' });
 
@@ -1282,21 +1405,23 @@ function FinalCTA() {
             className="inline-flex items-center gap-2 text-xs px-4 py-1.5 rounded-full mb-6 uppercase tracking-widest"
             style={{ fontFamily: SG, fontWeight: 700, background: `${NEON}22`, color: NEON }}
           >
-            <CheckCircle size={13} /> No contracts. No pressure. Just honest advice.
+            <CheckCircle size={13} /> {isRo ? 'Fara contracte. Fara presiune. Doar sfaturi oneste.' : 'No contracts. No pressure. Just honest advice.'}
           </span>
           <h2
             className="text-4xl md:text-6xl text-white mb-6"
             style={{ fontFamily: SG, fontWeight: 800, lineHeight: 1.08 }}
           >
-            Ready to scale
+            {isRo ? 'Gata sa scalezi' : 'Ready to scale'}
             <br />
-            <span style={{ color: NEON }}>your business?</span>
+            <span style={{ color: NEON }}>{isRo ? 'afacerea ta?' : 'your business?'}</span>
           </h2>
           <p
             className="text-gray-400 text-lg mb-10 max-w-xl mx-auto"
             style={{ fontFamily: SG }}
           >
-            Book a free 20-minute strategy call. We'll audit your current setup and show you exactly what's holding your business back.
+            {isRo
+              ? 'Programeaza un call strategic gratuit de 20 de minute. Iti auditam setup-ul actual si iti aratam exact ce iti blocheaza cresterea.'
+              : 'Book a free 20-minute strategy call. We\'ll audit your current setup and show you exactly what\'s holding your business back.'}
           </p>
           <a
             href="https://calendly.com/eduard-ezwebone/20min?UTM_SOURCE=HF_LP&UTM_MEDIUM=LP&UTM_CAMPAIGN=HF"
@@ -1311,7 +1436,7 @@ function FinalCTA() {
               boxShadow: `0 0 45px ${NEON}65, 0 0 90px ${NEON}25`,
             }}
           >
-            Book a Free Strategy Call <ArrowRight size={20} />
+            {isRo ? 'Programeaza un call strategic gratuit' : 'Book a Free Strategy Call'} <ArrowRight size={20} />
           </a>
         </motion.div>
       </div>
@@ -1321,6 +1446,24 @@ function FinalCTA() {
 
 // ─── Footer ───────────────────────────────────────────────────────────────────
 function Footer() {
+  const { locale } = useI18n();
+  const isRo = locale === 'ro';
+  const footerLinks = isRo
+    ? [
+      { label: 'Servicii', href: '#services' },
+      { label: 'De ce noi', href: '#why-us' },
+      { label: 'Proces', href: '#how-it-works' },
+      { label: 'Recenzii', href: '#testimonials' },
+      { label: 'Contact', href: '#contact' },
+    ]
+    : [
+      { label: 'Services', href: '#services' },
+      { label: 'Why Us', href: '#why-us' },
+      { label: 'Process', href: '#how-it-works' },
+      { label: 'Reviews', href: '#testimonials' },
+      { label: 'Contact', href: '#contact' },
+    ];
+
   return (
     <footer
       className="relative pt-12 pb-0 px-6 overflow-hidden"
@@ -1348,14 +1491,14 @@ function Footer() {
 
         {/* Quick Links */}
         <div className="flex flex-wrap items-center justify-center gap-x-12 gap-y-6 mb-16">
-          {['Services', 'Why Us', 'Process', 'Reviews', 'Contact'].map((l) => (
+          {footerLinks.map((l) => (
             <a
-              key={l}
-              href={`#${l.toLowerCase().replace(' ', '')}`}
+              key={l.label}
+              href={l.href}
               className="text-gray-500 text-sm font-bold tracking-[0.2em] hover:text-neon transition-all uppercase"
               style={{ fontFamily: SG }}
             >
-              {l}
+              {l.label}
             </a>
           ))}
         </div>
@@ -1363,7 +1506,7 @@ function Footer() {
         {/* Copyright */}
         <div className="mb-12">
           <p className="text-gray-700 text-[10px] tracking-[0.4em] font-bold uppercase" style={{ fontFamily: SG }}>
-            © 2026 EZWebOne. ALL RIGHTS RESERVED.
+            © 2026 EZWebOne. {isRo ? 'TOATE DREPTURILE REZERVATE.' : 'ALL RIGHTS RESERVED.'}
           </p>
         </div>
       </div>
@@ -1374,6 +1517,8 @@ function Footer() {
 
 // ─── Contact Form ─────────────────────────────────────────────────────────────
 function ContactForm() {
+  const { locale } = useI18n();
+  const isRo = locale === 'ro';
   const [formData, setFormData] = useState({
     full_name: '',
     email: '',
@@ -1390,7 +1535,7 @@ function ContactForm() {
     setError(null);
 
     try {
-      if (!supabase) throw new Error('Supabase not configured');
+      if (!supabase) throw new Error(isRo ? 'Supabase nu este configurat' : 'Supabase not configured');
       
       const { error: submitError } = await supabase
         .from('forms')
@@ -1399,7 +1544,7 @@ function ContactForm() {
           email: formData.email,
           business_name: formData.business_name,
           message: formData.message,
-          source: 'Health & Wellness Landing Page'
+          source: isRo ? 'Landing Page Sanatate si Wellness' : 'Health & Wellness Landing Page'
         }]);
 
       if (submitError) throw submitError;
@@ -1408,7 +1553,7 @@ function ContactForm() {
       setFormData({ full_name: '', email: '', business_name: '', message: '' });
     } catch (err: any) {
       console.error('Submission error:', err);
-      setError(err.message || 'Something went wrong. Please try again.');
+      setError(err.message || (isRo ? 'Ceva nu a mers bine. Incearca din nou.' : 'Something went wrong. Please try again.'));
     } finally {
       setLoading(false);
     }
@@ -1447,7 +1592,9 @@ function ContactForm() {
             viewport={{ once: true }}
             className="inline-block px-4 py-1 rounded-full bg-neon/20 border border-neon/40 mb-6 shadow-[0_0_15px_rgba(57,255,20,0.1)]"
           >
-            <span className="text-neon text-xs font-bold uppercase tracking-widest" style={{ fontFamily: SG }}>Let's Build It</span>
+            <span className="text-neon text-xs font-bold uppercase tracking-widest" style={{ fontFamily: SG }}>
+              {isRo ? 'Hai sa construim' : 'Let\'s Build It'}
+            </span>
           </motion.div>
           <motion.h2
             initial={{ opacity: 0, y: 20 }}
@@ -1457,7 +1604,7 @@ function ContactForm() {
             className="text-4xl md:text-6xl font-black text-white mb-6"
             style={{ fontFamily: SG }}
           >
-            Let's Work on it <br/> Remotely
+            {isRo ? 'Hai sa lucram' : 'Let\'s Work on it'} <br/> {isRo ? 'de la distanta' : 'Remotely'}
           </motion.h2>
           <motion.p
             initial={{ opacity: 0, y: 20 }}
@@ -1466,7 +1613,9 @@ function ContactForm() {
             transition={{ delay: 0.2 }}
             className="text-white/60 max-w-xl mx-auto text-lg"
           >
-            Fill in the details below and we'll get back to you with a direct battle-plan for your business growth.
+            {isRo
+              ? 'Completeaza detaliile de mai jos si revenim cu un plan clar pentru cresterea afacerii tale.'
+              : 'Fill in the details below and we\'ll get back to you with a direct battle-plan for your business growth.'}
           </motion.p>
         </div>
 
@@ -1486,20 +1635,28 @@ function ContactForm() {
               <div className="w-20 h-20 bg-neon/20 rounded-full flex items-center justify-center mx-auto mb-8 border border-neon/30">
                 <CheckCircle size={40} className="text-neon" />
               </div>
-              <h3 className="text-3xl font-bold text-white mb-4" style={{ fontFamily: SG }}>Mission Accepted!</h3>
-              <p className="text-white/60">We've received your transmission. Our team will review your project and contact you within 24 hours.</p>
+              <h3 className="text-3xl font-bold text-white mb-4" style={{ fontFamily: SG }}>
+                {isRo ? 'Misiune acceptata!' : 'Mission Accepted!'}
+              </h3>
+              <p className="text-white/60">
+                {isRo
+                  ? 'Am primit mesajul tau. Echipa noastra va analiza proiectul si te va contacta in 24 de ore.'
+                  : 'We\'ve received your transmission. Our team will review your project and contact you within 24 hours.'}
+              </p>
             </motion.div>
           ) : (
             <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-8">
               <div className="space-y-3">
                 <div className="flex items-center gap-2 ml-1">
                   <Users size={14} className="text-neon" />
-                  <label className="text-xs uppercase tracking-widest text-white/70 font-bold">Full Name</label>
+                  <label className="text-xs uppercase tracking-widest text-white/70 font-bold">
+                    {isRo ? 'Nume complet' : 'Full Name'}
+                  </label>
                 </div>
                 <input
                   required
                   type="text"
-                  placeholder="John Doe"
+                  placeholder={isRo ? 'Nume Prenume' : 'John Doe'}
                   value={formData.full_name}
                   onChange={(e) => setFormData({...formData, full_name: e.target.value})}
                   className="w-full bg-white/10 border border-white/20 rounded-xl px-5 py-4 text-white placeholder-white/20 focus:outline-none focus:border-neon/50 transition-all font-medium"
@@ -1508,12 +1665,14 @@ function ContactForm() {
               <div className="space-y-3">
                 <div className="flex items-center gap-2 ml-1">
                   <Mail size={14} className="text-neon" />
-                  <label className="text-xs uppercase tracking-widest text-white/70 font-bold">Work Email</label>
+                  <label className="text-xs uppercase tracking-widest text-white/70 font-bold">
+                    {isRo ? 'Email de lucru' : 'Work Email'}
+                  </label>
                 </div>
                 <input
                   required
                   type="email"
-                  placeholder="john@wellness.com"
+                  placeholder={isRo ? 'nume@wellness.ro' : 'john@wellness.com'}
                   value={formData.email}
                   onChange={(e) => setFormData({...formData, email: e.target.value})}
                   className="w-full bg-white/10 border border-white/20 rounded-xl px-5 py-4 text-white placeholder-white/20 focus:outline-none focus:border-neon/50 transition-all font-medium"
@@ -1522,11 +1681,13 @@ function ContactForm() {
               <div className="space-y-3 md:col-span-2">
                 <div className="flex items-center gap-2 ml-1">
                   <Target size={14} className="text-neon" />
-                  <label className="text-xs uppercase tracking-widest text-white/70 font-bold">Business Name</label>
+                  <label className="text-xs uppercase tracking-widest text-white/70 font-bold">
+                    {isRo ? 'Numele afacerii' : 'Business Name'}
+                  </label>
                 </div>
                 <input
                   type="text"
-                  placeholder="The Wellness Collective"
+                  placeholder={isRo ? 'Clinica Wellness' : 'The Wellness Collective'}
                   value={formData.business_name}
                   onChange={(e) => setFormData({...formData, business_name: e.target.value})}
                   className="w-full bg-white/10 border border-white/20 rounded-xl px-5 py-4 text-white placeholder-white/20 focus:outline-none focus:border-neon/50 transition-all font-medium"
@@ -1535,12 +1696,14 @@ function ContactForm() {
               <div className="space-y-3 md:col-span-2">
                 <div className="flex items-center gap-2 ml-1">
                   <Bot size={14} className="text-neon" />
-                  <label className="text-xs uppercase tracking-widest text-white/70 font-bold">Project Details</label>
+                  <label className="text-xs uppercase tracking-widest text-white/70 font-bold">
+                    {isRo ? 'Detalii proiect' : 'Project Details'}
+                  </label>
                 </div>
                 <textarea
                   required
                   rows={4}
-                  placeholder="Tell us about your goals and what you want to achieve..."
+                  placeholder={isRo ? 'Spune-ne ce obiective ai si ce vrei sa obtii...' : 'Tell us about your goals and what you want to achieve...'}
                   value={formData.message}
                   onChange={(e) => setFormData({...formData, message: e.target.value})}
                   className="w-full bg-white/10 border border-white/20 rounded-xl px-5 py-4 text-white placeholder-white/20 focus:outline-none focus:border-neon/50 transition-all resize-none font-medium"
@@ -1560,7 +1723,7 @@ function ContactForm() {
                   className="w-full bg-[#050505] border-2 border-neon text-neon py-5 rounded-xl font-black uppercase tracking-widest text-lg hover:bg-neon hover:text-black focus:bg-neon focus:text-black outline-none focus:outline-none active:scale-[0.98] transition-all disabled:opacity-50 disabled:scale-100 shadow-[0_0_30px_rgba(57,255,20,0.2)]"
                   style={{ fontFamily: SG, fontWeight: 900 }}
                 >
-                  {loading ? 'Transmitting...' : 'Launch Strategy Session'}
+                  {loading ? (isRo ? 'Se trimite...' : 'Transmitting...') : (isRo ? 'Lanseaza sesiunea strategica' : 'Launch Strategy Session')}
                 </button>
               </div>
             </form>

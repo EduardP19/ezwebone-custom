@@ -105,8 +105,8 @@
       background-image: url('https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=1600&q=85');
       background-size: cover;
       background-position: center 30%;
-      transform: scale(1.05);
-      transition: transform 8s ease;
+      transform: none;
+      transition: none;
     }
 
     .hero-bg::after {
@@ -114,10 +114,6 @@
       position: absolute;
       inset: 0;
       background: linear-gradient(to top, var(--black) 0%, rgba(26, 26, 26, 0.6) 50%, rgba(26, 26, 26, 0.2) 100%);
-    }
-
-    #hero.loaded .hero-bg {
-      transform: scale(1);
     }
 
     .hero-content {
@@ -1594,11 +1590,6 @@
       } else {
         nav.classList.remove('scrolled');
       }
-    });
-
-    // Hero load animation
-    window.addEventListener('load', () => {
-      document.getElementById('hero').classList.add('loaded');
     });
 
     // Scroll reveal
