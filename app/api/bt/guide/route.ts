@@ -138,6 +138,7 @@ export async function POST(req: Request) {
     const campaign =
       readTrackingParam(trackingParams, "utm_campaign") ||
       readTrackingParam(trackingParams, "UTM_CAMPAIGN") ||
+      readTrackingParam(trackingParams, "cp") ||
       "bt_guide";
     const medium = readTrackingParam(trackingParams, "utm_medium") || "landing_page";
     const formattedMessage = `Industry: ${industry}${message ? `\n\n${message}` : ""}`;
