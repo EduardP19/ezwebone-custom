@@ -1326,7 +1326,7 @@ function Testimonials() {
             className="text-4xl md:text-5xl text-black"
             style={{ fontFamily: SG, fontWeight: 800, lineHeight: 1.12 }}
           >
-            {isRo ? 'Nu ne crede pe cuvant.' : 'Don&apos;t take our word for it.'}
+            {isRo ? 'Nu ne crede pe cuvant.' : "Don't take our word for it."}
           </h2>
         </motion.div>
 

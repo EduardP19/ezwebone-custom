@@ -31,7 +31,7 @@ const dictionaries = {
       noPublishedColumns: "No published columns yet.",
       founder: "Founder",
       guideEmailOnTheWayTitle: "Email on the way!",
-      guideEmailBodyPrefix: "Your guide is heading to your inbox now. If you don&apos;t see it within a few minutes,",
+      guideEmailBodyPrefix: "Your guide is heading to your inbox now. If you don't see it within a few minutes,",
       guideEmailSpamFolder: "check your spam folder",
       guideEmailCtaQuestion: "In the meantime, want to talk through your situation?",
       guideEmailCtaFootnote: "No pressure, no obligation",
