@@ -12,15 +12,15 @@ type ProjectTranslation = {
 
 const roProjectTranslations: Record<string, ProjectTranslation> = {
   "the-bus-stop": {
-    category: "Ospitalitate · Website Wix",
+    category: "Ospitalitate · Website custom",
     industry: "Glamping si turism",
     description:
-      "Un website Wix construit custom pentru o afacere de glamping din East Lothian recunoscuta prin premii, care combina design bespoke, un flux personalizat pentru vouchere cadou si o structura de continut ghidata de cautare pentru a sustine vizibilitatea si rezervarile.",
+      "Un website construit custom pentru o afacere de glamping din East Lothian recunoscuta prin premii, care combina design bespoke, un flux personalizat pentru vouchere cadou si o structura de continut ghidata de cautare pentru a sustine vizibilitatea si rezervarile.",
     summary:
-      "Build Wix custom cu vouchere cadou, design bespoke si structura SEO profunda pentru un brand de glamping distinctiv.",
-    highlights: ["Cod Wix custom", "Flux vouchere cadou", "Cercetare SEO"],
+      "Build custom cu vouchere cadou, design bespoke si structura SEO profunda pentru un brand de glamping distinctiv.",
+    highlights: ["Cod custom", "Flux vouchere cadou", "Cercetare SEO"],
     caseStudy:
-      "Am folosit Wix ca platforma, dar l-am dus mult dincolo de un template standard, proiectand custom fiecare sectiune, construind cod personalizat in jurul parcursului de voucher cadou si modeland arhitectura site-ului si continutul in jurul cererii reale din cautare, astfel incat afacerea sa poata fi gasita mai usor si sa converteasca mai sigur.",
+      "Am dus proiectul mult dincolo de un template standard, proiectand custom fiecare sectiune, construind cod personalizat in jurul parcursului de voucher cadou si modeland arhitectura site-ului si continutul in jurul cererii reale din cautare, astfel incat afacerea sa poata fi gasita mai usor si sa converteasca mai sigur.",
   },
   "aura-pro-cosmetics": {
     category: "Beauty · E-commerce",
