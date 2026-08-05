@@ -139,7 +139,6 @@ Includes:
 - Payment gateway setup (Stripe, PayPal)
 - CRM connection
 - Email automation setup
-- Custom Wix/Velo logic and workflows
 
 ### AI Agents
 Price from: £99/mo (via Resevia)
