@@ -10,7 +10,7 @@ import {
   Monitor, Calendar, CreditCard, Mail, Search, Bot,
   Star, ArrowRight, Zap, Target, TrendingUp,
   Clock,
-  Menu, X, Users, CheckCircle,
+  Menu, X, Users, CheckCircle, MessageCircle,
 } from 'lucide-react';
 
 // ─── Constants ───────────────────────────────────────────────────────────────
@@ -25,6 +25,9 @@ const AVATAR_OWNER =
   'https://images.unsplash.com/photo-1683889842940-cbdbe08cf5a9?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHx3b21hbiUyMGd5bSUyMGJ1c2luZXNzJTIwb3duZXIlMjBjb25maWRlbnQlMjBzbWlsZXxlbnwxfHx8fDE3NzY2OTQ4ODR8MA&ixlib=rb-4.1.0&q=80&w=200';
 
 const SG = "'Space Grotesk', sans-serif";
+const WHATSAPP_PHONE = '447448929894';
+const WHATSAPP_MESSAGE = 'Hi, I would like to talk about growing my health or fitness business.';
+const WHATSAPP_URL = `https://wa.me/${WHATSAPP_PHONE}?text=${encodeURIComponent(WHATSAPP_MESSAGE)}`;
 
 // ─── Typewriter ───────────────────────────────────────────────────────────────
 const PHRASES_EN = [
@@ -136,7 +139,18 @@ function Nav() {
           </a>
         </div>
 
-        <div className="flex-1 flex justify-end">
+        <div className="flex-1 flex justify-end gap-3">
+          <a
+            href={WHATSAPP_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hidden md:inline-flex items-center gap-2 px-5 py-3 rounded-full text-sm text-black bg-white border border-black/10 transition-all hover:scale-105 active:scale-95 whitespace-nowrap shadow-sm"
+            style={{ fontFamily: SG, fontWeight: 700 }}
+            aria-label={isRo ? 'Trimite mesaj pe WhatsApp' : 'Message on WhatsApp'}
+          >
+            <MessageCircle size={17} />
+            WhatsApp
+          </a>
           <a
             href={CALENDLY_BOOKING_URL_HF}
             target="_blank"
@@ -1775,6 +1789,15 @@ export default function App() {
       <ContactForm />
       <FinalCTA />
       <Footer />
+      <a
+        href={WHATSAPP_URL}
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="Message on WhatsApp"
+        className="fixed bottom-5 right-5 z-50 inline-flex h-14 w-14 items-center justify-center rounded-full bg-[#25D366] text-black shadow-[0_10px_30px_rgba(37,211,102,0.38)] transition-transform active:scale-95 md:hidden"
+      >
+        <MessageCircle size={26} strokeWidth={2.5} />
+      </a>
     </div>
   );
 }
