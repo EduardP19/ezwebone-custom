@@ -6,6 +6,7 @@
     "dev": "next dev --webpack",
     "build": "next build",
     "start": "next start",
+    "blog:context": "node scripts/blog-context.mjs",
     "lint": "eslint"
   },
   "dependencies": {

@@ -11,6 +11,19 @@ const nextConfig: NextConfig = {
   turbopack: {
     root: process.cwd(),
   },
+  async headers() {
+    return [
+      {
+        source: "/google-ads/200-website/:path*",
+        headers: [
+          {
+            key: "X-Robots-Tag",
+            value: "noindex, nofollow, noarchive",
+          },
+        ],
+      },
+    ];
+  },
   images: {
     remotePatterns: [
       ...(supabaseRemotePattern ? [supabaseRemotePattern] : []),

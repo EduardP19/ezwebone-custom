@@ -1,0 +1,1343 @@
+<!--
+Before publishing, edit these lines:
+1. CALENDLY_PLACEHOLDER in the Calendly embed URL.
+2. WHATSAPP_PLACEHOLDER in the WhatsApp link.
+3. EMAIL_PLACEHOLDER in the email link.
+4. PHONE_PLACEHOLDER in the phone link.
+5. PORTFOLIO_SCREENSHOT comments in the Recent work section if swapping examples.
+6. DOMAIN_COST_PLACEHOLDER in the domain FAQ.
+-->
+<!doctype html>
+<html lang="en-GB">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex, nofollow, noarchive" />
+    <meta name="googlebot" content="noindex, nofollow, noarchive" />
+    <title>5-page website for &pound;200 | EZWebOne</title>
+    <meta
+      name="description"
+      content="A 5-page website for UK small businesses. &pound;200, one payment, inc. VAT. Hosting included forever and you pay after you see it."
+    />
+    <meta
+      property="og:title"
+      content="5-page website for &pound;200 | EZWebOne"
+    />
+    <meta
+      property="og:description"
+      content="A clear 5-page website for your small business. &pound;200, one payment, inc. VAT. Hosting included forever."
+    />
+    <meta property="og:type" content="website" />
+    <meta
+      property="og:url"
+      content="https://ezwebone.co.uk/google-ads/200-website/"
+    />
+    <meta property="og:site_name" content="EZWebOne" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Archivo:wght@700;800;900&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://assets.calendly.com/assets/external/widget.css"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --brand: #7c3aed;
+        --brand-soft: #ede9fe;
+        --brand-mid: #c4b5fd;
+        --brand-deep: #4c1d95;
+        --ink: #241638;
+        --dark: #f5f0ff;
+        --paper: #ffffff;
+        --wash: #faf7ff;
+        --line: #d8ccf7;
+        --muted: #685b7e;
+        --brand-text: #ffffff;
+        --display: "Archivo", ui-sans-serif, system-ui, sans-serif;
+        --body: "Inter", ui-sans-serif, system-ui, sans-serif;
+        --mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+        --rule: 2px solid var(--ink);
+        --hairline: 1px solid var(--line);
+        --shadow: 8px 8px 0 var(--brand-mid);
+        --shadow-small: 5px 5px 0 var(--brand-mid);
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html {
+        scroll-behavior: smooth;
+      }
+
+      body {
+        margin: 0;
+        background: linear-gradient(
+          180deg,
+          var(--brand-soft) 0,
+          var(--paper) 42rem
+        );
+        color: var(--ink);
+        font-family: var(--body);
+        font-size: 16px;
+        line-height: 1.55;
+      }
+
+      a {
+        color: inherit;
+      }
+
+      a:focus-visible,
+      button:focus-visible,
+      summary:focus-visible {
+        outline: 3px solid var(--brand);
+        outline-offset: 4px;
+      }
+
+      .skip-link {
+        position: absolute;
+        left: 1rem;
+        top: 1rem;
+        z-index: 100;
+        transform: translateY(-160%);
+        background: var(--ink);
+        color: var(--paper);
+        padding: 0.7rem 0.9rem;
+      }
+
+      .skip-link:focus {
+        transform: translateY(0);
+      }
+
+      .site-header {
+        position: sticky;
+        top: 0;
+        z-index: 50;
+        display: grid;
+        grid-template-columns: auto 1fr auto;
+        align-items: center;
+        gap: 1rem;
+        border-bottom: var(--rule);
+        background: rgba(250, 247, 255, 0.94);
+        padding: 0.75rem clamp(1rem, 4vw, 3rem);
+        backdrop-filter: blur(12px);
+      }
+
+      .wordmark {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.65rem;
+        font-family: var(--display);
+        font-size: clamp(1.05rem, 2vw, 1.35rem);
+        font-weight: 900;
+        letter-spacing: 0;
+        text-decoration: none;
+      }
+
+      .wordmark-mark {
+        display: grid;
+        width: 2.25rem;
+        height: 2.25rem;
+        place-items: center;
+        border: 2px solid var(--ink);
+        background: var(--brand);
+        color: var(--brand-text);
+        font-family: var(--mono);
+        font-size: 0.75rem;
+      }
+
+      .header-proof {
+        justify-self: start;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.6rem;
+        border: 1px solid var(--line);
+        background: var(--paper);
+        color: var(--brand-deep);
+        font-family: var(--mono);
+        font-size: clamp(0.68rem, 1.5vw, 0.78rem);
+        font-weight: 700;
+        letter-spacing: 0.04em;
+        padding: 0.45rem 0.6rem;
+        text-transform: uppercase;
+      }
+
+      .button {
+        display: inline-flex;
+        min-height: 3rem;
+        align-items: center;
+        justify-content: center;
+        border: 2px solid var(--ink);
+        background: var(--brand);
+        color: var(--brand-text);
+        box-shadow: var(--shadow-small);
+        font-family: var(--body);
+        font-size: 0.95rem;
+        font-weight: 800;
+        line-height: 1;
+        padding: 0.85rem 1rem;
+        text-align: center;
+        text-decoration: none;
+        transition:
+          transform 150ms ease,
+          box-shadow 150ms ease;
+      }
+
+      .button:hover {
+        box-shadow: 7px 7px 0 var(--brand-deep);
+        transform: translate(-2px, -2px);
+      }
+
+      .button:active {
+        box-shadow: 2px 2px 0 var(--brand-deep);
+        transform: translate(3px, 3px);
+      }
+
+      .button-dark {
+        background: var(--paper);
+        color: var(--brand-deep);
+        box-shadow: 5px 5px 0 var(--brand-mid);
+      }
+
+      .section {
+        border-bottom: var(--rule);
+        padding: clamp(3rem, 8vw, 6.5rem) clamp(1rem, 4vw, 3rem);
+      }
+
+      .section-light {
+        background: var(--wash);
+      }
+
+      .section-dark {
+        background:
+          linear-gradient(
+            135deg,
+            rgba(124, 58, 237, 0.14) 0 25%,
+            transparent 25% 50%,
+            rgba(124, 58, 237, 0.14) 50% 75%,
+            transparent 75%
+          ),
+          var(--brand-soft);
+        background-size: 34px 34px;
+        color: var(--ink);
+      }
+
+      .wrap {
+        width: min(1120px, 100%);
+        margin: 0 auto;
+      }
+
+      .hero {
+        padding-top: clamp(3.25rem, 7vw, 6rem);
+      }
+
+      .eyebrow {
+        display: inline-flex;
+        border: 1px solid var(--ink);
+        background: var(--paper);
+        font-family: var(--mono);
+        font-size: 0.75rem;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        padding: 0.35rem 0.5rem;
+        text-transform: uppercase;
+      }
+
+      h1,
+      h2,
+      h3,
+      p {
+        margin-top: 0;
+      }
+
+      h1,
+      h2,
+      h3 {
+        font-family: var(--display);
+        font-weight: 900;
+        letter-spacing: 0;
+        line-height: 0.95;
+      }
+
+      h1 {
+        max-width: 980px;
+        margin: 1.2rem 0 1.1rem;
+        font-size: clamp(3rem, 12vw, 7.2rem);
+      }
+
+      h2 {
+        max-width: 850px;
+        margin-bottom: 1rem;
+        font-size: clamp(2.25rem, 7vw, 4.8rem);
+      }
+
+      h3 {
+        margin-bottom: 0.45rem;
+        font-size: clamp(1.35rem, 3vw, 2rem);
+      }
+
+      .highlight {
+        display: inline;
+        background: var(--brand);
+        color: var(--brand-text);
+        box-decoration-break: clone;
+        padding: 0 0.12em;
+        -webkit-box-decoration-break: clone;
+      }
+
+      .hero-copy {
+        max-width: 720px;
+        color: var(--muted);
+        font-size: clamp(1.08rem, 2.5vw, 1.35rem);
+        font-weight: 600;
+      }
+
+      .hero-actions {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 1rem;
+        margin-top: 1.6rem;
+      }
+
+      .reassurance {
+        margin: 0;
+        color: var(--muted);
+        font-size: 0.95rem;
+        font-weight: 700;
+      }
+
+      .brand-proof-line {
+        margin: 1rem 0 0;
+        color: var(--brand-deep);
+        font-family: var(--mono);
+        font-size: 0.78rem;
+        font-weight: 700;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+      }
+
+      .price-panel {
+        display: grid;
+        grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.05fr);
+        border: 2px solid var(--ink);
+        background: var(--brand-soft);
+        box-shadow: var(--shadow);
+        color: var(--ink);
+      }
+
+      .price-main {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        min-height: 260px;
+        border-right: 2px solid var(--ink);
+        padding: clamp(1.4rem, 5vw, 3rem);
+      }
+
+      .price-label {
+        font-family: var(--mono);
+        font-size: 0.78rem;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+
+      .price {
+        color: var(--brand-deep);
+        font-family: var(--display);
+        font-size: clamp(5rem, 18vw, 10rem);
+        font-weight: 900;
+        letter-spacing: 0;
+        line-height: 0.85;
+      }
+
+      .price-main p {
+        margin: 0.85rem 0 0;
+        color: var(--brand-deep);
+        font-size: clamp(1.05rem, 2.2vw, 1.25rem);
+        font-weight: 800;
+      }
+
+      .price-proof {
+        display: inline-flex;
+        width: fit-content;
+        margin-top: 1rem;
+        border: 2px solid var(--ink);
+        background: var(--paper);
+        color: var(--brand-deep);
+        font-family: var(--mono);
+        font-size: 0.78rem;
+        font-weight: 700;
+        letter-spacing: 0.04em;
+        padding: 0.42rem 0.55rem;
+        text-transform: uppercase;
+      }
+
+      .included-list {
+        display: grid;
+        gap: 0;
+        margin: 0;
+        padding: 0;
+        list-style: none;
+      }
+
+      .included-list li {
+        display: grid;
+        grid-template-columns: auto 1fr;
+        gap: 0.75rem;
+        align-items: start;
+        border-bottom: 1px solid var(--line);
+        padding: 1rem clamp(1.1rem, 4vw, 1.8rem);
+        font-weight: 700;
+      }
+
+      .included-list li:last-child {
+        border-bottom: 0;
+      }
+
+      .mark {
+        display: inline-grid;
+        width: 1.45rem;
+        height: 1.45rem;
+        place-items: center;
+        border: 1px solid currentColor;
+        font-size: 0.86rem;
+        line-height: 1;
+      }
+
+      .grid {
+        display: grid;
+        gap: 1px;
+        border: 1px solid var(--line);
+        background: var(--line);
+      }
+
+      .grid-3 {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+
+      .grid-2 {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .cell {
+        min-height: 13rem;
+        background: var(--paper);
+        padding: clamp(1.2rem, 3vw, 1.75rem);
+      }
+
+      .cell-icon {
+        display: inline-grid;
+        width: 3.1rem;
+        height: 3.1rem;
+        place-items: center;
+        margin-bottom: 1.15rem;
+        border: 2px solid var(--ink);
+        background: var(--brand-soft);
+        color: var(--brand-deep);
+        box-shadow: 4px 4px 0 var(--brand-mid);
+      }
+
+      .cell-icon svg {
+        width: 1.55rem;
+        height: 1.55rem;
+        stroke: currentColor;
+        stroke-width: 2.2;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+        fill: none;
+      }
+
+      .cell p,
+      .split p,
+      .step p,
+      .faq-answer {
+        color: var(--muted);
+        font-weight: 500;
+      }
+
+      .section-intro {
+        max-width: 720px;
+        margin-bottom: 2rem;
+        color: var(--muted);
+        font-size: 1.08rem;
+        font-weight: 600;
+      }
+
+      .pages-list {
+        display: grid;
+        gap: 0;
+        border-top: var(--hairline);
+      }
+
+      .page-row {
+        display: grid;
+        grid-template-columns: 13rem 1fr;
+        gap: 1rem;
+        border-bottom: var(--hairline);
+        padding: 1.1rem 0;
+      }
+
+      .page-row strong {
+        font-family: var(--display);
+        font-size: 1.35rem;
+      }
+
+      .steps {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 1px;
+        border: 1px solid var(--line);
+        background: var(--line);
+        counter-reset: steps;
+      }
+
+      .step {
+        counter-increment: steps;
+        background: var(--paper);
+        padding: clamp(1.25rem, 3vw, 1.85rem);
+      }
+
+      .step::before {
+        content: counter(steps);
+        display: grid;
+        width: 3.2rem;
+        height: 3.2rem;
+        place-items: center;
+        margin-bottom: 1.25rem;
+        border: 2px solid var(--ink);
+        background: var(--brand);
+        color: var(--brand-text);
+        font-family: var(--display);
+        font-size: 1.5rem;
+        font-weight: 900;
+      }
+
+      .split {
+        background: var(--paper);
+        padding: clamp(1.25rem, 3vw, 1.85rem);
+      }
+
+      .split ul {
+        display: grid;
+        gap: 0.85rem;
+        margin: 1.2rem 0 0;
+        padding: 0;
+        list-style: none;
+      }
+
+      .split li {
+        display: grid;
+        grid-template-columns: auto 1fr;
+        gap: 0.75rem;
+        align-items: start;
+        font-weight: 650;
+      }
+
+      .honest-note {
+        margin: 1.5rem 0 0;
+        border-left: 6px solid var(--brand);
+        padding-left: 1rem;
+        font-weight: 800;
+      }
+
+      .work-card {
+        display: grid;
+        gap: 0.85rem;
+        margin: 0;
+      }
+
+      .work-card img {
+        display: block;
+        width: 100%;
+        aspect-ratio: 4 / 3;
+        border: 2px solid var(--ink);
+        object-fit: cover;
+        object-position: top center;
+        background: var(--brand-soft);
+      }
+
+      .work-card figcaption {
+        color: var(--brand-deep);
+        font-family: var(--mono);
+        font-size: 0.78rem;
+        font-weight: 700;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+      }
+
+      .faq {
+        display: grid;
+        gap: 0.75rem;
+      }
+
+      details {
+        border: 2px solid var(--ink);
+        background: var(--paper);
+      }
+
+      summary {
+        cursor: pointer;
+        font-family: var(--display);
+        font-size: 1.18rem;
+        font-weight: 900;
+        list-style: none;
+        padding: 1rem 1.1rem;
+      }
+
+      summary::-webkit-details-marker {
+        display: none;
+      }
+
+      summary::after {
+        content: "+";
+        float: right;
+        font-family: var(--display);
+      }
+
+      details[open] summary::after {
+        content: "-";
+      }
+
+      .faq-answer {
+        border-top: var(--hairline);
+        margin: 0;
+        padding: 1rem 1.1rem 1.15rem;
+      }
+
+      .booking-grid {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) minmax(280px, 410px);
+        gap: clamp(1.25rem, 4vw, 2.5rem);
+        align-items: start;
+      }
+
+      .trust-card {
+        display: grid;
+        grid-template-columns: minmax(260px, 0.85fr) minmax(0, 1.15fr);
+        gap: clamp(1.2rem, 4vw, 2.5rem);
+        align-items: stretch;
+        border: 2px solid var(--ink);
+        background: var(--paper);
+        box-shadow: var(--shadow);
+      }
+
+      .trust-card img {
+        display: block;
+        width: 100%;
+        height: 100%;
+        min-height: 330px;
+        object-fit: cover;
+        object-position: center;
+      }
+
+      .trust-copy {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        border-left: 2px solid var(--ink);
+        padding: clamp(1.35rem, 4vw, 2.4rem);
+      }
+
+      .trust-copy p {
+        color: var(--muted);
+        font-size: 1.05rem;
+        font-weight: 600;
+      }
+
+      .trust-links {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.85rem;
+        margin-top: 0.8rem;
+      }
+
+      .section-dark h2,
+      .section-dark p {
+        color: var(--ink);
+      }
+
+      .booking-card {
+        overflow: hidden;
+        border: 2px solid var(--ink);
+        background: var(--paper);
+        box-shadow: 8px 8px 0 var(--brand-mid);
+      }
+
+      .calendly-inline-widget {
+        min-width: 320px;
+        height: 700px;
+      }
+
+      .fallbacks {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.9rem;
+        margin-top: 1.5rem;
+      }
+
+      .footer {
+        display: flex;
+        justify-content: center;
+        border-bottom: 0;
+        padding: 1.1rem clamp(1rem, 4vw, 3rem);
+        color: var(--muted);
+        font-size: 0.9rem;
+        font-weight: 650;
+      }
+
+      .reveal {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+
+      .reveal.is-visible {
+        animation: reveal 520ms ease forwards;
+      }
+
+      @keyframes reveal {
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        html {
+          scroll-behavior: auto;
+        }
+
+        *,
+        *::before,
+        *::after {
+          animation-duration: 0.01ms !important;
+          animation-iteration-count: 1 !important;
+          scroll-behavior: auto !important;
+          transition-duration: 0.01ms !important;
+        }
+
+        .reveal {
+          opacity: 1;
+          transform: none;
+        }
+      }
+
+      @media (max-width: 860px) {
+        .price-panel,
+        .trust-card,
+        .grid-3,
+        .grid-2,
+        .steps,
+        .booking-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .price-main {
+          border-right: 0;
+          border-bottom: 2px solid var(--ink);
+        }
+
+        .page-row {
+          grid-template-columns: 1fr;
+        }
+
+        .trust-copy {
+          border-left: 0;
+          border-top: 2px solid var(--ink);
+        }
+      }
+
+      @media (max-width: 520px) {
+        .site-header {
+          grid-template-columns: auto auto;
+          padding-inline: 0.8rem;
+        }
+
+        .header-proof {
+          display: none;
+        }
+
+        .wordmark span:last-child {
+          display: none;
+        }
+
+        .button {
+          min-height: 2.75rem;
+          padding-inline: 0.75rem;
+        }
+
+        .price-panel {
+          box-shadow: 5px 5px 0 var(--brand-mid);
+        }
+
+        .calendly-inline-widget {
+          min-width: 0;
+          height: 640px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <a class="skip-link" href="#booking">Skip to booking</a>
+
+    <header class="site-header" aria-label="Page header">
+      <a class="wordmark" href="#top" aria-label="EZWebOne home">
+        <span class="wordmark-mark">EZ</span>
+        <span>EZWebOne</span>
+      </a>
+      <span class="header-proof"
+        >&pound;200 · 110+ clients · 5.0 on Google</span
+      >
+      <a class="button" href="#booking">Book a 20-minute call</a>
+    </header>
+
+    <main id="top">
+      <section class="section hero reveal" aria-labelledby="hero-title">
+        <div class="wrap">
+          <span class="eyebrow">Small business websites</span>
+          <h1 id="hero-title">
+            A 5-page website for <span class="highlight">&pound;200</span>.
+            Hosting included forever.
+          </h1>
+          <p class="hero-copy">
+            Built for your business, written in plain English, live in 7 days.
+            One payment. Inc. VAT. Nothing to pay again apart from your domain
+            name.
+          </p>
+          <div class="hero-actions">
+            <a class="button" href="#booking">Book a 20-minute call</a>
+            <p class="reassurance">
+              Free. No obligation. I'll say if it's not a fit.
+            </p>
+          </div>
+          <p class="brand-proof-line">By EZWebOne — 110+ websites live.</p>
+        </div>
+      </section>
+
+      <section
+        class="section section-light reveal"
+        aria-label="Price and included items"
+      >
+        <div class="wrap">
+          <div class="price-panel">
+            <div class="price-main">
+              <span class="price-label">One payment. Inc. VAT.</span>
+              <span class="price">&pound;200</span>
+              <p>You pay after you see it, not before.</p>
+              <span class="price-proof">110+ clients · 5.0 on Google</span>
+            </div>
+            <ul class="included-list">
+              <li>
+                <span class="mark">✓</span
+                ><span>5 pages, written and built for your business.</span>
+              </li>
+              <li>
+                <span class="mark">✓</span
+                ><span
+                  >Full SEO setup: titles, descriptions, structured data,
+                  sitemap, submitted to Google.</span
+                >
+              </li>
+              <li>
+                <span class="mark">✓</span
+                ><span
+                  >Google Business Profile created or claimed and set up
+                  properly.</span
+                >
+              </li>
+              <li>
+                <span class="mark">✓</span
+                ><span
+                  >Hosting included forever. No monthly fee, renewal, or
+                  invoice.</span
+                >
+              </li>
+              <li>
+                <span class="mark">✓</span
+                ><span
+                  >Your domain, your account, your website. No lock-in.</span
+                >
+              </li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section class="section reveal" aria-labelledby="included-title">
+        <div class="wrap">
+          <h2 id="included-title">What's included</h2>
+          <p class="section-intro">
+            The basics done properly, so people can find you, trust you, and
+            contact you without messing about.
+          </p>
+          <div class="grid grid-3">
+            <article class="cell">
+              <span class="cell-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24">
+                  <path
+                    d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z"
+                  ></path>
+                  <path d="M14 2v6h6"></path>
+                  <path d="M8 13h8"></path>
+                  <path d="M8 17h6"></path>
+                </svg>
+              </span>
+              <h3>5 pages written for you</h3>
+              <p>
+                I write the page copy from what you tell me on the call. No
+                blank document homework.
+              </p>
+            </article>
+            <article class="cell">
+              <span class="cell-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24">
+                  <rect width="14" height="20" x="5" y="2" rx="2"></rect>
+                  <path d="M12 18h.01"></path>
+                </svg>
+              </span>
+              <h3>Mobile first</h3>
+              <p>
+                The page is built for people checking you on a phone before they
+                call, message, or visit.
+              </p>
+            </article>
+            <article class="cell">
+              <span class="cell-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24">
+                  <circle cx="11" cy="11" r="7"></circle>
+                  <path d="m21 21-4.3-4.3"></path>
+                  <path d="M8.5 11h5"></path>
+                  <path d="M11 8.5v5"></path>
+                </svg>
+              </span>
+              <h3>Full SEO setup</h3>
+              <p>
+                Page titles, descriptions, structured data, sitemap, and
+                submission to Google are included.
+              </p>
+            </article>
+            <article class="cell">
+              <span class="cell-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24">
+                  <path
+                    d="M20 10c0 5-8 12-8 12S4 15 4 10a8 8 0 1 1 16 0Z"
+                  ></path>
+                  <circle cx="12" cy="10" r="3"></circle>
+                </svg>
+              </span>
+              <h3>Google Business Profile</h3>
+              <p>
+                I create or claim it and set it up properly so you can show on
+                Maps and local search.
+              </p>
+            </article>
+            <article class="cell">
+              <span class="cell-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24">
+                  <path
+                    d="M22 16.92v3a2 2 0 0 1-2.18 2 19.8 19.8 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.12 4.18 2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.35 1.9.66 2.81a2 2 0 0 1-.45 2.11L8.05 9.91a16 16 0 0 0 6.04 6.04l1.27-1.27a2 2 0 0 1 2.11-.45c.91.31 1.85.53 2.81.66A2 2 0 0 1 22 16.92Z"
+                  ></path>
+                </svg>
+              </span>
+              <h3>Contact that works</h3>
+              <p>
+                Tap-to-call, WhatsApp, and a simple form so customers do not
+                have to hunt for you.
+              </p>
+            </article>
+            <article class="cell">
+              <span class="cell-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24">
+                  <rect width="20" height="8" x="2" y="2" rx="2"></rect>
+                  <rect width="20" height="8" x="2" y="14" rx="2"></rect>
+                  <path d="M6 6h.01"></path>
+                  <path d="M6 18h.01"></path>
+                  <path d="M10 6h8"></path>
+                  <path d="M10 18h8"></path>
+                </svg>
+              </span>
+              <h3>Hosting handled</h3>
+              <p>
+                Setup and hosting are included forever. No monthly hosting bill
+                from me.
+              </p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section
+        class="section section-light reveal"
+        aria-labelledby="pages-title"
+      >
+        <div class="wrap">
+          <h2 id="pages-title">The 5 pages</h2>
+          <div class="pages-list">
+            <div class="page-row">
+              <strong>Home</strong>
+              <span
+                >The quick answer to who you help, what you do, and how to
+                contact you.</span
+              >
+            </div>
+            <div class="page-row">
+              <strong>Services</strong>
+              <span
+                >A clear list of what people can book, buy, or ask you
+                for.</span
+              >
+            </div>
+            <div class="page-row">
+              <strong>About</strong>
+              <span
+                >A human page that helps people feel safe choosing a small local
+                business.</span
+              >
+            </div>
+            <div class="page-row">
+              <strong>Gallery or Work</strong>
+              <span
+                >Photos, examples, or proof that show you can do what you
+                say.</span
+              >
+            </div>
+            <div class="page-row">
+              <strong>Contact</strong>
+              <span
+                >Your phone, WhatsApp, form, opening hours, service area, and
+                map details in one place.</span
+              >
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section reveal" aria-labelledby="steps-title">
+        <div class="wrap">
+          <h2 id="steps-title">How it works</h2>
+          <div class="steps">
+            <article class="step">
+              <h3>Day 0</h3>
+              <p>
+                We have a free 20-minute call. I ask what you do, where you
+                work, and what customers need to know.
+              </p>
+            </article>
+            <article class="step">
+              <h3>Days 1-5</h3>
+              <p>
+                I build it and send you a private link. You get unlimited
+                changes until it feels right.
+              </p>
+            </article>
+            <article class="step">
+              <h3>Days 6-7</h3>
+              <p>You pay after you see it. Then it goes live on your domain.</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="section section-light reveal" aria-labelledby="fit-title">
+        <div class="wrap">
+          <h2 id="fit-title">Who it's for</h2>
+          <div class="grid grid-2">
+            <article class="split">
+              <h3>Good fit</h3>
+              <ul>
+                <li>
+                  <span class="mark">✓</span
+                  ><span>Trades who need calls from local customers.</span>
+                </li>
+                <li>
+                  <span class="mark">✓</span
+                  ><span
+                    >Salons, cafes, cleaners, gardeners, tutors, and small
+                    service businesses.</span
+                  >
+                </li>
+                <li>
+                  <span class="mark">✓</span
+                  ><span
+                    >People who want a proper website without agency
+                    drama.</span
+                  >
+                </li>
+                <li>
+                  <span class="mark">✓</span
+                  ><span
+                    >Businesses that need Google Maps and local search set
+                    up.</span
+                  >
+                </li>
+              </ul>
+            </article>
+            <article class="split">
+              <h3>Not a fit</h3>
+              <ul>
+                <li>
+                  <span class="mark">×</span
+                  ><span
+                    >Online shops with product catalogues and checkout.</span
+                  >
+                </li>
+                <li>
+                  <span class="mark">×</span
+                  ><span
+                    >Complex booking systems with staff rotas and
+                    payments.</span
+                  >
+                </li>
+                <li>
+                  <span class="mark">×</span
+                  ><span>Customer logins, dashboards, or memberships.</span>
+                </li>
+                <li>
+                  <span class="mark">×</span
+                  ><span
+                    >Ongoing ads management or social media management.</span
+                  >
+                </li>
+              </ul>
+            </article>
+          </div>
+          <p class="honest-note">
+            Book the call anyway. If it is not me, I'll point you somewhere
+            better.
+          </p>
+        </div>
+      </section>
+
+      <section class="section reveal" aria-labelledby="work-title">
+        <div class="wrap">
+          <h2 id="work-title">Recent work</h2>
+          <p class="section-intro">
+            Real websites already live for small businesses.
+          </p>
+          <div class="grid grid-3">
+            <div class="cell">
+              <!-- PORTFOLIO_SCREENSHOT: The Bus Stop. Swap this image if a newer screenshot is better. -->
+              <figure class="work-card">
+                <img
+                  src="../../portfolio/TheBusStop%20-%20Home.webp"
+                  alt="The Bus Stop website homepage screenshot"
+                />
+                <figcaption>The Bus Stop</figcaption>
+              </figure>
+            </div>
+            <div class="cell">
+              <!-- PORTFOLIO_SCREENSHOT: Aura Pro Cosmetics. Swap this image if a newer screenshot is better. -->
+              <figure class="work-card">
+                <img
+                  src="../../portfolio/AuraProCosmetics%20-%20Home.webp"
+                  alt="Aura Pro Cosmetics website homepage screenshot"
+                />
+                <figcaption>Aura Pro</figcaption>
+              </figure>
+            </div>
+            <div class="cell">
+              <!-- PORTFOLIO_SCREENSHOT: The Memory Corner. Swap this image if a newer screenshot is better. -->
+              <figure class="work-card">
+                <img
+                  src="../../portfolio/TheMemoryCorner%20-%20Home.webp"
+                  alt="The Memory Corner website homepage screenshot"
+                />
+                <figcaption>The Memory Corner</figcaption>
+              </figure>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section section-light reveal" aria-labelledby="faq-title">
+        <div class="wrap">
+          <h2 id="faq-title">Questions people ask</h2>
+          <div class="faq">
+            <details>
+              <summary>Why is it only &pound;200 and what's the catch?</summary>
+              <p class="faq-answer">
+                There is no catch. This is a tight 5-page website for small
+                businesses that need the essentials done well. It is not a
+                custom app, shop, or months-long agency project.
+              </p>
+            </details>
+            <details>
+              <summary>Are there really no monthly fees ever?</summary>
+              <p class="faq-answer">
+                Yes. Hosting is included forever. Not a year. Forever. No
+                monthly fee, no renewal, no invoice ever again.
+              </p>
+            </details>
+            <details>
+              <summary>What about the domain?</summary>
+              <p class="faq-answer">
+                The only thing you ever pay again is your domain name, usually
+                around
+                <!-- DOMAIN_COST_PLACEHOLDER: Confirm the current average domain cost before publishing. -->
+                &pound;12 a year. You pay that directly to the registrar in your
+                own account, never to me.
+              </p>
+            </details>
+            <details>
+              <summary>What do I need to give you?</summary>
+              <p class="faq-answer">
+                Your business name, services, service area, phone number, email,
+                opening hours, and any photos you already have. If you do not
+                have much, we can still start.
+              </p>
+            </details>
+            <details>
+              <summary>Do I own it?</summary>
+              <p class="faq-answer">
+                Yes. Your domain, your account, no lock-in. I set it up so the
+                important things belong to you.
+              </p>
+            </details>
+            <details>
+              <summary>What if I want changes later?</summary>
+              <p class="faq-answer">
+                Small updates can be quoted when you need them. You are not tied
+                to a maintenance plan.
+              </p>
+            </details>
+            <details>
+              <summary>What if I don't like it?</summary>
+              <p class="faq-answer">
+                You see the website before you pay. You get unlimited changes
+                until it feels right, and if it still is not right, you do not
+                have to go ahead.
+              </p>
+            </details>
+          </div>
+        </div>
+      </section>
+
+      <section class="section reveal" aria-labelledby="trust-title">
+        <div class="wrap">
+          <article class="trust-card">
+            <img
+              src="ed-selfie.jpg"
+              alt="Eduard Proca from EZWebOne"
+            />
+            <div class="trust-copy">
+              <span class="eyebrow">The person building it</span>
+              <h2 id="trust-title">
+                You deal with Eduard, not a faceless website factory.
+              </h2>
+              <p>
+                I run EZWebOne and build practical websites for small UK
+                businesses. The focus is simple: a clear site, proper Google
+                setup, and contact details that help real customers reach you.
+              </p>
+              <p>
+                EZWebOne has helped 110+ clients and holds a 5.0 Google rating.
+                You can check who I am before you book.
+              </p>
+              <div class="trust-links">
+                <a
+                  class="button"
+                  href="https://www.linkedin.com/in/eduard-p-34a06b232/"
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  View LinkedIn
+                </a>
+                <a class="button button-dark" href="tel:+447448929894">
+                  Call 07448 929894
+                </a>
+                <a
+                  class="button button-dark"
+                  href="mailto:eduard@ezwebone.co.uk?subject=Question%20about%20the%20%C2%A3200%20website"
+                >
+                  eduard@ezwebone.co.uk
+                </a>
+              </div>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section
+        id="booking"
+        class="section section-dark reveal"
+        aria-labelledby="booking-title"
+      >
+        <div class="wrap booking-grid">
+          <div>
+            <span class="eyebrow">Free call</span>
+            <h2 id="booking-title">Book a 20-minute call</h2>
+            <p>
+              Tell me what you do, where you work, and what you need. I will say
+              clearly whether the &pound;200 website is a fit.
+            </p>
+            <div class="fallbacks">
+              <!-- WHATSAPP_PLACEHOLDER: Replace 447448929894 and the message if needed before publishing. -->
+              <a
+                class="button button-dark"
+                href="https://wa.me/447448929894?text=Hi%2C%20I%20would%20like%20to%20book%20a%2020-minute%20call%20about%20the%20%C2%A3200%20website."
+              >
+                WhatsApp me
+              </a>
+              <!-- PHONE_PLACEHOLDER: Replace +447448929894 if needed before publishing. -->
+              <a class="button button-dark" href="tel:+447448929894">
+                Call 07448 929894
+              </a>
+              <!-- EMAIL_PLACEHOLDER: Replace eduard@ezwebone.co.uk if needed before publishing. -->
+              <a
+                class="button button-dark"
+                href="mailto:eduard@ezwebone.co.uk?subject=20-minute%20call%20about%20the%20%C2%A3200%20website"
+              >
+                eduard@ezwebone.co.uk
+              </a>
+            </div>
+          </div>
+          <div class="booking-card">
+            <!-- CALENDLY_PLACEHOLDER: Replace this Calendly URL with the final campaign booking URL before publishing. -->
+            <div
+              class="calendly-inline-widget"
+              data-url="https://calendly.com/eduard-ezwebone/20min?utm_source=google_ads&utm_medium=cpc&utm_campaign=200_website_landing_page"
+            ></div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="section footer">
+      <span>EZWebOne, United Kingdom &copy; <span id="year"></span></span>
+    </footer>
+
+    <script
+      src="https://assets.calendly.com/assets/external/widget.js"
+      async
+    ></script>
+    <script>
+      document.getElementById("year").textContent = new Date().getFullYear();
+
+      if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+        const observer = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((entry) => {
+              if (entry.isIntersecting) {
+                entry.target.classList.add("is-visible");
+                observer.unobserve(entry.target);
+              }
+            });
+          },
+          { threshold: 0.12 },
+        );
+
+        document
+          .querySelectorAll(".reveal")
+          .forEach((element) => observer.observe(element));
+      } else {
+        document
+          .querySelectorAll(".reveal")
+          .forEach((element) => element.classList.add("is-visible"));
+      }
+    </script>
+  </body>
+</html>
