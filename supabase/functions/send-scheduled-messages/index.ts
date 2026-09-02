@@ -28,7 +28,7 @@ const SUPABASE_URL = Deno.env.get("SUPABASE_URL")!;
 const SERVICE_ROLE_KEY = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
 const RESEND_API_KEY = Deno.env.get("RESEND_API_KEY")!;
 const CRON_SECRET = Deno.env.get("CRON_SECRET")!;
-const EMAIL_FROM = Deno.env.get("SCHEDULED_MESSAGES_FROM") || "EZWebOne <hello@ezwebone.co.uk>";
+const EMAIL_FROM = Deno.env.get("SCHEDULED_MESSAGES_FROM") || "mangobeat <hello@ezwebone.co.uk>";
 
 const TWILIO_ACCOUNT_SID = Deno.env.get("TWILIO_ACCOUNT_SID") ?? "";
 const TWILIO_AUTH_TOKEN = Deno.env.get("TWILIO_AUTH_TOKEN") ?? "";

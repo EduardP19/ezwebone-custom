@@ -2,7 +2,7 @@ import { createMetadata } from "@/lib/seo";
 import { JsonLd } from "@/components/seo/JsonLd";
 
 export const metadata = createMetadata({
-  title: "Health & Wellness Digital Agency | EZWebOne",
+  title: "Health & Wellness Digital Agency | mangobeat",
   description: "We build high-performance websites, booking systems, and AI automations for gyms, wellness studios, therapists, and nutritionists to scale revenue.",
   path: "/hf",
   keywords: [
@@ -27,7 +27,7 @@ export default function HFLayout({
         data={{
           "@context": "https://schema.org",
           "@type": "WebPage",
-          name: "Health & Wellness Digital Agency | EZWebOne",
+          name: "Health & Wellness Digital Agency | mangobeat",
           description: "We build high-performance websites, booking systems, and AI automations for gyms, wellness studios, therapists, and nutritionists.",
           url: "https://ezwebone.co.uk/hf",
           mainEntity: {
@@ -36,7 +36,7 @@ export default function HFLayout({
             serviceType: "Web Design and Business Automation",
             provider: {
               "@type": "Organization",
-              name: "EZWebOne",
+              name: "mangobeat",
               url: "https://ezwebone.co.uk"
             },
             areaServed: "United Kingdom",

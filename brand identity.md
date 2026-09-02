@@ -1,4 +1,4 @@
-# EZWebOne Brand Identity
+# mangobeat Brand Identity
 
 ## Typography
 

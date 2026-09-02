@@ -150,7 +150,7 @@ function Nav() {
           <a href={localizePath(locale, '/hf')} className="block hover:opacity-80 transition-opacity">
             <img
               src="/brand/HF_EZ-Navy-Tear.png"
-              alt="EZWebOne"
+              alt="mangobeat"
               className="h-28 md:h-44 w-auto block object-contain"
             />
           </a>
@@ -1317,8 +1317,8 @@ function Testimonials() {
     {
       quote:
         isRo
-          ? 'EZWebOne ne-a transformat complet prezenta online. In 3 luni am avut 40 de clienti noi doar din website. Sistemul automat de follow-up chiar schimba jocul.'
-          : 'EZWebOne completely transformed our online presence. Within 3 months we had 40 new clients from our website alone. The automated follow-up system is a genuine game changer.',
+          ? 'mangobeat ne-a transformat complet prezenta online. In 3 luni am avut 40 de clienti noi doar din website. Sistemul automat de follow-up chiar schimba jocul.'
+          : 'mangobeat completely transformed our online presence. Within 3 months we had 40 new clients from our website alone. The automated follow-up system is a genuine game changer.',
       name: 'Sarah Mitchell',
       role: isRo ? 'Proprietar, CrossFit Forge' : 'Owner, CrossFit Forge',
       avatar: AVATAR_FEMALE,
@@ -1522,7 +1522,7 @@ function Footer() {
         >
           <img 
             src="/brand/HF_EZ-White-_Tear.png" 
-            alt="EZWebOne" 
+            alt="mangobeat" 
             className="h-64 md:h-[400px] w-auto object-contain brightness-110" 
           />
         </motion.div>
@@ -1544,7 +1544,7 @@ function Footer() {
         {/* Copyright */}
         <div className="mb-12">
           <p className="text-gray-700 text-[10px] tracking-[0.4em] font-bold uppercase" style={{ fontFamily: SG }}>
-            © 2026 EZWebOne. {isRo ? 'TOATE DREPTURILE REZERVATE.' : 'ALL RIGHTS RESERVED.'}
+            © 2026 mangobeat. {isRo ? 'TOATE DREPTURILE REZERVATE.' : 'ALL RIGHTS RESERVED.'}
           </p>
         </div>
       </div>

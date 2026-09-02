@@ -175,7 +175,7 @@ const scopeRows: ScopeRow[] = [
   },
 ];
 
-const whyEzWebOne = [
+const whyMangobeat = [
   "Custom built - designed and coded for your business specifically",
   "No WordPress headaches - nothing to update, nothing to break",
   "Fast load times - clean code, no bloat, better Google rankings",
@@ -369,12 +369,12 @@ export default function PricesPage() {
       <section className="section-shell pb-28 md:pb-32">
         <div className="relative mx-auto max-w-7xl px-4 md:px-6">
           <div className="surface-card rounded-[1.6rem] border border-white/10 p-7 md:p-9">
-            <p className="mono-label text-xs text-[color:var(--color-text-accent)]">Why EZWebOne</p>
+            <p className="mono-label text-xs text-[color:var(--color-text-accent)]">Why mangobeat</p>
             <h2 className="mt-4 text-3xl font-semibold tracking-tight text-[color:var(--color-text-primary)] md:text-5xl">
               Not a Template Agency
             </h2>
             <ul className="mt-6 space-y-3 text-sm leading-7 text-[color:var(--color-text-secondary)] md:text-base">
-              {whyEzWebOne.map((item) => (
+              {whyMangobeat.map((item) => (
                 <li key={item} className="flex items-start gap-2.5">
                   <Check className="mt-1 h-4 w-4 shrink-0 text-emerald-400" />
                   <span>{item}</span>

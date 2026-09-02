@@ -92,7 +92,7 @@ async function sendGuideEmail(locale: "en" | "ro", email: string, firstName: str
   const subject = locale === "ro" ? "Ghidul tau este aici" : "Your free guide is ready";
 
   const { error } = await resend.emails.send({
-    from: process.env.RESEND_FROM ?? "EZWebOne <hello@ezwebone.co.uk>",
+    from: process.env.RESEND_FROM ?? "mangobeat <hello@ezwebone.co.uk>",
     to: email,
     subject,
     html,

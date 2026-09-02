@@ -44,7 +44,7 @@ export function HowItWorks() {
         <div className="relative mt-16">
           <div className="absolute left-5 top-0 bottom-0 hidden w-px bg-[#F5F2ED]/8 md:left-0 md:right-0 md:top-5 md:block md:h-px md:w-auto" />
           <motion.div
-            className="absolute left-5 top-0 hidden w-px bg-[linear-gradient(180deg,var(--color-primary-light),var(--color-primary))] shadow-[0_0_24px_rgba(124,58,237,0.45)] md:left-0 md:right-0 md:top-5 md:block md:h-px"
+            className="absolute left-5 top-0 hidden w-px bg-[linear-gradient(180deg,var(--color-primary-light),var(--color-primary))] shadow-[0_0_24px_rgba(var(--color-primary-rgb),0.45)] md:left-0 md:right-0 md:top-5 md:block md:h-px"
             animate={
               isVisible
                 ? { width: "100%", height: 1, opacity: 1 }
@@ -63,7 +63,7 @@ export function HowItWorks() {
                 transition={{ duration: 0.5, delay: index * 0.08 }}
                 className="relative pl-14 md:pl-0 md:pt-12"
               >
-                <div className="absolute left-0 top-0 flex h-10 w-10 items-center justify-center rounded-full border border-[rgba(124,58,237,0.4)] bg-[color:var(--color-bg-elevated)] text-sm font-semibold text-[color:var(--color-text-primary)] shadow-[0_0_16px_rgba(124,58,237,0.18)] md:left-1/2 md:-translate-x-1/2">
+                <div className="absolute left-0 top-0 flex h-10 w-10 items-center justify-center rounded-full border border-[rgba(var(--color-primary-rgb),0.4)] bg-[color:var(--color-bg-elevated)] text-sm font-semibold text-[color:var(--color-text-primary)] shadow-[0_0_16px_rgba(var(--color-primary-rgb),0.18)] md:left-1/2 md:-translate-x-1/2">
                   {step.step}
                 </div>
                 <h3 className="text-xl font-semibold text-[color:var(--color-text-primary)]">

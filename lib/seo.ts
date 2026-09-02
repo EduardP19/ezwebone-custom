@@ -6,11 +6,11 @@ import {
 } from "@/lib/i18n/config";
 
 export const siteConfig = {
-  name: "EZWebOne",
+  name: "mangobeat",
   url: "https://ezwebone.co.uk",
-  title: "EZWebOne | Websites, Automations, and AI Agents for Small Businesses",
+  title: "mangobeat | Websites, Automations, and AI Agents for Small Businesses",
   description:
-    "EZWebOne is a UK digital agency building websites, automations, AI agents, SEO systems, and lead generation funnels for small businesses that want to grow.",
+    "mangobeat is a UK digital agency building websites, automations, AI agents, SEO systems, and lead generation funnels for small businesses that want to grow.",
   ogImage: "/og-image.png",
 };
 

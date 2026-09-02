@@ -41,8 +41,8 @@ export default async function PrivacyPage() {
       updatedLabel={isRo ? "Ultima actualizare" : "Last updated"}
       intro={
         isRo
-          ? "La EZWebONE, vrem sa reducem stresul gestionarii prezentei tale digitale si sa protejam informatiile pe care ni le incredintezi. Aceasta politica explica de unde provin datele personale, ce colectam, cum le folosim, cu cine le putem partaja si ce drepturi si alegeri ai."
-          : "At EZWebONE, we aim to reduce the stress of managing your digital presence while protecting the information you share with us. This policy explains where personal information comes from, what we collect, how we use it, who we share it with, and the rights and choices available to you."
+          ? "La mangobeat, vrem sa reducem stresul gestionarii prezentei tale digitale si sa protejam informatiile pe care ni le incredintezi. Aceasta politica explica de unde provin datele personale, ce colectam, cum le folosim, cu cine le putem partaja si ce drepturi si alegeri ai."
+          : "At mangobeat, we aim to reduce the stress of managing your digital presence while protecting the information you share with us. This policy explains where personal information comes from, what we collect, how we use it, who we share it with, and the rights and choices available to you."
       }
     >
       <div className="rounded-[1.75rem] border border-brand-border bg-brand-warm/60 p-6 leading-8 text-brand-gray">
@@ -73,8 +73,8 @@ export default async function PrivacyPage() {
       <LegalSection title={isRo ? "1. Ce acopera aceasta politica" : "1. What this policy covers"}>
         <p>
           {isRo
-            ? `Aceasta Politica de confidentialitate se aplica website-ului EZWebONE, formularelor noastre de contact, uneltelor digitale asociate si serviciilor pe care le oferim prin website si fluxurile noastre de lucru cu clientii. In aceasta politica, ${LEGAL_BUSINESS_NAME}, "noi" si "nostru/noastra" se refera la afacerea care opereaza aceste servicii.`
-            : `This Privacy Policy applies to the EZWebONE website, our enquiry forms, our related digital tools, and the services we provide through our website and client workflows. In this policy, ${LEGAL_BUSINESS_NAME}, "we", "us", and "our" refer to the business operating these services.`}
+            ? `Aceasta Politica de confidentialitate se aplica website-ului mangobeat, formularelor noastre de contact, uneltelor digitale asociate si serviciilor pe care le oferim prin website si fluxurile noastre de lucru cu clientii. In aceasta politica, ${LEGAL_BUSINESS_NAME}, "noi" si "nostru/noastra" se refera la afacerea care opereaza aceste servicii.`
+            : `This Privacy Policy applies to the mangobeat website, our enquiry forms, our related digital tools, and the services we provide through our website and client workflows. In this policy, ${LEGAL_BUSINESS_NAME}, "we", "us", and "our" refer to the business operating these services.`}
         </p>
         <p>
           {isRo

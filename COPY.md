@@ -1,7 +1,7 @@
-# EZWebOne — Website Copy
+# mangobeat — Website Copy
 
 ## NAV
-- Logo: EZWebOne
+- Logo: mangobeat
 - Links: Services · Portfolio · About · Blog
 - CTA: Book a Free Call
 
@@ -82,7 +82,7 @@ Label: What Our Clients Say
 Headline: Real results for real businesses.
 
 Testimonial 1:
-"EZWebOne delivered exactly what we needed. Our new site looks professional,
+"mangobeat delivered exactly what we needed. Our new site looks professional,
 loads fast, and we've already had new enquiries through it."
 — UK Small Business Owner
 
@@ -171,12 +171,12 @@ Button: Book a Free Call
 ## ABOUT PAGE
 
 Headline: Small team. Big results.
-Intro: EZWebOne is a UK-based digital agency run by Eduard — a web designer
+Intro: mangobeat is a UK-based digital agency run by Eduard — a web designer
 and developer with a background in STEM and a focus on building fast,
 practical websites for small businesses.
 
 Body:
-We started EZWebOne to solve a simple problem: most small businesses either
+We started mangobeat to solve a simple problem: most small businesses either
 can't afford a decent website or get locked into expensive contracts with
 agencies that don't deliver.
 
@@ -241,4 +241,4 @@ Links col 1 — Services: Website Build · SEO · Automation · AI Agents
 Links col 2 — Company: About · Portfolio · Blog · Contact
 Links col 3 — Products: Resevia →
 Legal: Privacy Policy · Terms of Service
-© 2026 EZWebOne. All rights reserved.
+© 2026 mangobeat. All rights reserved.

@@ -32,7 +32,7 @@ export function PhoneMockup() {
             Hi, I&apos;d like to book a cut and colour for Saturday.
           </div>
 
-          <div className="ml-8 rounded-2xl rounded-br-md bg-[rgba(124,58,237,0.9)] px-4 py-3 text-white">
+          <div className="ml-8 rounded-2xl rounded-br-md bg-[rgba(var(--color-primary-rgb),0.9)] px-4 py-3 text-white">
             Hi! I have availability at 10:00, 13:30, or 15:00 on Saturday. Which works best for you?
           </div>
 
@@ -40,7 +40,7 @@ export function PhoneMockup() {
             13:30 please.
           </div>
 
-          <div className="ml-10 rounded-2xl rounded-br-md bg-[rgba(124,58,237,0.9)] px-4 py-3 text-white">
+          <div className="ml-10 rounded-2xl rounded-br-md bg-[rgba(var(--color-primary-rgb),0.9)] px-4 py-3 text-white">
             You&apos;re all booked in for Saturday at 13:30 with Amo Salon. See you then! ✓
           </div>
         </div>

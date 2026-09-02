@@ -11,8 +11,8 @@ export function AITeaser() {
   const { dictionary } = useI18n();
 
   return (
-    <section className="section-shell bg-[linear-gradient(180deg,#0a0a0f_0%,#120d20_100%)] py-24 md:py-32">
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_left,rgba(124,58,237,0.22),transparent_28%)]" />
+    <section className="section-shell bg-[linear-gradient(180deg,#0c0806_0%,#1f1206_100%)] py-24 md:py-32">
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_left,rgba(var(--color-primary-rgb),0.22),transparent_28%)]" />
 
       <div className="relative mx-auto grid max-w-7xl grid-cols-1 items-center gap-12 px-4 md:px-6 lg:grid-cols-[1.05fr_0.95fr]">
         <motion.div
@@ -21,7 +21,7 @@ export function AITeaser() {
           viewport={{ once: true, amount: 0.2 }}
           className="max-w-2xl"
         >
-          <span className="mono-label inline-flex rounded-full border border-[rgba(124,58,237,0.3)] bg-[rgba(124,58,237,0.1)] px-4 py-2 text-xs text-[color:var(--color-text-accent)]">
+          <span className="mono-label inline-flex rounded-full border border-[rgba(var(--color-primary-rgb),0.3)] bg-[rgba(var(--color-primary-rgb),0.1)] px-4 py-2 text-xs text-[color:var(--color-text-accent)]">
             {dictionary.home.aiTeaser.badge}
           </span>
 
@@ -57,7 +57,7 @@ export function AITeaser() {
           transition={{ delay: 0.08 }}
           className="surface-card relative overflow-hidden p-6 md:p-8"
         >
-          <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(167,139,250,0.2),transparent_24%)]" />
+          <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(var(--color-accent-rgb),0.2),transparent_24%)]" />
           <PhoneMockup />
         </motion.div>
       </div>

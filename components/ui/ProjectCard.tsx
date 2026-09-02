@@ -300,7 +300,7 @@ export function ProjectCard({
                           rel="noreferrer"
                           data-track-label={`Go to website: ${title}`}
                           aria-label={`${dictionary.common.openLiveSite}: ${title}`}
-                          className="inline-flex items-center rounded-full bg-[rgba(109,40,217,0.9)] px-5 py-3 text-sm font-semibold text-white transition hover:bg-[color:var(--color-text-accent)]"
+                          className="inline-flex items-center rounded-full bg-[rgba(var(--color-primary-rgb),0.9)] px-5 py-3 text-sm font-semibold text-white transition hover:bg-[color:var(--color-text-accent)]"
                         >
                           Go to Website
                         </a>

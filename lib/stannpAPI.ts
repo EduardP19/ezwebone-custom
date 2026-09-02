@@ -100,7 +100,7 @@ function resolveBodyTemplate(item: DirectorRow, source: SendSource) {
       headline: "Companies House notified us about your new company",
       body:
         customBody ||
-        `Hi ${firstName},\n\nIn ${niche}, the first client is hard to win, and the next ones only come when your online presence builds trust.\n\nWhen you start a new business, your website is the first filter people use to decide whether to choose you or move on.\n\nAt EZWebOne, we build websites and digital presence systems for early-stage businesses, focused on clarity, credibility, and growth.\n\nIf a customer found you online today, would they clearly understand what you offer and why to choose you? The answer starts with the right online presence.\n\nBest regards,\nEduard Proca\nCEO & Founder, EZWebOne`,
+        `Hi ${firstName},\n\nIn ${niche}, the first client is hard to win, and the next ones only come when your online presence builds trust.\n\nWhen you start a new business, your website is the first filter people use to decide whether to choose you or move on.\n\nAt mangobeat, we build websites and digital presence systems for early-stage businesses, focused on clarity, credibility, and growth.\n\nIf a customer found you online today, would they clearly understand what you offer and why to choose you? The answer starts with the right online presence.\n\nBest regards,\nEduard Proca\nCEO & Founder, mangobeat`,
       highlightText: "Free guide: www.ezwebone.co.uk/guides or scan the QR and enter your code.",
       qrContentDescription: [
         "This guide shows you:",
@@ -109,7 +109,7 @@ function resolveBodyTemplate(item: DirectorRow, source: SendSource) {
         "• how to avoid dependency on platforms like Treatwell",
       ].join("\n"),
       footer:
-        "EZWebOne is the trading name of EMAGF LTD (UK), registered under company number 12437054.",
+        "mangobeat is the trading name of EMAGF LTD (UK), registered under company number 12437054.",
       privacyNotice: "Contact details come from UK Companies House public records.",
     };
   }
@@ -118,7 +118,7 @@ function resolveBodyTemplate(item: DirectorRow, source: SendSource) {
     headline: "Companies House ne-a informat despre firma ta",
     body:
       customBody ||
-      `Salut ${firstName},\n\nIn ${niche}, primul client vine greu, iar urmatorii vin doar daca prezenta ta online inspira incredere.\n\nCand pornesti un business nou, website-ul este primul filtru prin care clientii decid daca te aleg sau merg mai departe.\n\nLa EZWebOne construim website-uri si prezenta digitala pentru firme aflate la inceput de drum, cu accent pe imagine, claritate si incredere.\n\nDaca un client te-ar descoperi astazi online, ar intelege clar ce oferi si de ce sa te aleaga? Raspunsul incepe cu o prezenta online corecta.\n\nCu stima,\nEduard Proca\nCEO & Fondator EZWebOne`,
+      `Salut ${firstName},\n\nIn ${niche}, primul client vine greu, iar urmatorii vin doar daca prezenta ta online inspira incredere.\n\nCand pornesti un business nou, website-ul este primul filtru prin care clientii decid daca te aleg sau merg mai departe.\n\nLa mangobeat construim website-uri si prezenta digitala pentru firme aflate la inceput de drum, cu accent pe imagine, claritate si incredere.\n\nDaca un client te-ar descoperi astazi online, ar intelege clar ce oferi si de ce sa te aleaga? Raspunsul incepe cu o prezenta online corecta.\n\nCu stima,\nEduard Proca\nCEO & Fondator mangobeat`,
     highlightText: `Ghid gratuit: www.ezwebone.co.uk/ro/guides sau scaneaza QR si introdu codul.`,
     qrContentDescription: [
       "Acest ghid iti arata:",
@@ -126,7 +126,7 @@ function resolveBodyTemplate(item: DirectorRow, source: SendSource) {
       "• cum sa atragi primii clienti fara bugete mari",
       "• cum sa eviti dependenta de platforme ca treatwell",
     ].join("\n"),
-    footer: "EZWebOne este numele de trading al companiei EMAGF LTD (UK), inregistrata cu numarul 12437054.",
+    footer: "mangobeat este numele de trading al companiei EMAGF LTD (UK), inregistrata cu numarul 12437054.",
     privacyNotice: "Datele de contact provin din registre publice UK Companies House.",
   };
 }

@@ -65,7 +65,7 @@ export default async function ColumnDetailPage({ params }: { params: Promise<{ s
             {
               "@type": "Person",
               name: column.authorName || "Eduard",
-              jobTitle: column.authorRole || `${founderTitle}, EZWebOne`,
+              jobTitle: column.authorRole || `${founderTitle}, mangobeat`,
               url: "https://ezwebone.co.uk/about",
             },
           ],

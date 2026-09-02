@@ -1,7 +1,6 @@
 "use client";
 
 import * as React from "react";
-import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { LocalizedLink } from "@/components/i18n/LocalizedLink";
 import { useI18n } from "@/components/i18n/LocaleProvider";
@@ -11,8 +10,8 @@ import { CALENDLY_BOOKING_URL } from "@/lib/links";
 import { cn } from "@/lib/utils";
 import { Menu, X } from "lucide-react";
 import { ThemeToggle } from "@/components/layout/ThemeToggle";
-import { BRAND_LOGO_MARK_LIGHT_SRC, BRAND_LOGO_MARK_DARK_SRC } from "@/lib/brand";
-import { useIsDark } from "@/lib/useTheme";
+import { BrandMark } from "@/components/layout/BrandMark";
+import { Wordmark } from "@/components/layout/Wordmark";
 
 const NAV_LINKS = [
   { key: "home", href: "/" },
@@ -25,9 +24,9 @@ const NAV_LINKS = [
 export function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
   const [isScrolled, setIsScrolled] = React.useState(false);
-  const isDark = useIsDark();
   const pathname = usePathname();
   const { locale, dictionary } = useI18n();
+  const showSolidBar = isScrolled || isMenuOpen;
 
   React.useEffect(() => {
     const handleScroll = () => {
@@ -53,24 +52,16 @@ export function Navbar() {
     <nav
       className={cn(
         "fixed left-0 right-0 top-0 z-[120] transition-all duration-300",
-        isScrolled || isMenuOpen
+        showSolidBar
           ? "border-b border-[color:var(--color-border)] bg-[color:var(--color-bg-card)]/90 py-0.5 md:py-2 backdrop-blur-xl"
-          : "bg-transparent py-0 md:py-3"
+          : "bg-[color:var(--color-bg-card)] py-0 md:py-3"
       )}
     >
       <div className="mx-auto w-full max-w-7xl px-4 md:px-6">
         <div className="flex min-h-[92px] items-center justify-between gap-6 md:min-h-[96px]">
-          <LocalizedLink href="/" className="relative z-40 flex items-center" data-track-label="stampuser:navbar-logo">
-            <span className="inline-flex items-center gap-3">
-              <Image
-                src={isDark ? BRAND_LOGO_MARK_DARK_SRC : BRAND_LOGO_MARK_LIGHT_SRC}
-                alt="EZWebOne logo"
-                width={96}
-                height={96}
-                priority
-                className="h-24 w-24 my-0"
-              />
-            </span>
+          <LocalizedLink href="/" className="relative z-40 flex items-center gap-2.5" data-track-label="stampuser:navbar-logo">
+            <BrandMark size={40} priority />
+            <Wordmark className="text-2xl sm:text-3xl" />
           </LocalizedLink>
 
           <div className="hidden md:flex items-center gap-8">

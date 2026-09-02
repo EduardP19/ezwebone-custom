@@ -118,7 +118,7 @@ export function ParticleNetwork({
           context.beginPath();
           context.moveTo(particle.x, particle.y);
           context.lineTo(neighbor.x, neighbor.y);
-          const lineColor = getComputedStyle(document.documentElement).getPropertyValue("--particle-line").trim() || "196, 181, 253";
+          const lineColor = getComputedStyle(document.documentElement).getPropertyValue("--particle-line").trim() || "255, 173, 92";
           context.strokeStyle = `rgba(${lineColor}, ${opacity * baseLineOpacity})`;
           context.lineWidth = 1.15;
           context.stroke();
@@ -138,7 +138,7 @@ export function ParticleNetwork({
             context.beginPath();
             context.moveTo(particle.x, particle.y);
             context.lineTo(pointer.x, pointer.y);
-            const hoverColor = getComputedStyle(document.documentElement).getPropertyValue("--particle-hover-line").trim() || "167, 139, 250";
+            const hoverColor = getComputedStyle(document.documentElement).getPropertyValue("--particle-hover-line").trim() || "255, 197, 61";
             context.strokeStyle = `rgba(${hoverColor}, ${interactionOpacity * 0.42})`;
             context.lineWidth = 1.25;
             context.stroke();
@@ -147,8 +147,8 @@ export function ParticleNetwork({
 
         context.beginPath();
         context.arc(particle.x, particle.y, particle.radius, 0, Math.PI * 2);
-        const dotColor = getComputedStyle(document.documentElement).getPropertyValue("--particle-dot").trim() || "245, 245, 247";
-        const shadowColor = getComputedStyle(document.documentElement).getPropertyValue("--particle-line").trim() || "196, 181, 253";
+        const dotColor = getComputedStyle(document.documentElement).getPropertyValue("--particle-dot").trim() || "255, 244, 230";
+        const shadowColor = getComputedStyle(document.documentElement).getPropertyValue("--particle-line").trim() || "255, 173, 92";
         context.fillStyle = `rgba(${dotColor}, ${dotOpacity})`;
         context.shadowBlur = glowStrength ? 20 : 10;
         context.shadowColor = `rgba(${shadowColor}, 0.88)`;

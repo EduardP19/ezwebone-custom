@@ -1,4 +1,4 @@
-# EZWebOne — Agent Build Instructions
+# mangobeat — Agent Build Instructions
 
 Read SPEC.md and COPY.md fully before writing any code.
 SPEC.md is your technical source of truth.
@@ -25,7 +25,7 @@ Never invent copy or colours — use exactly what is defined.
 ### Step 3 — Resend
 - Create lib/resend.ts
 - Confirmation email from: hello@ezwebone.co.uk
-- Subject: Thanks for getting in touch — EZWebOne
+- Subject: Thanks for getting in touch — mangobeat
 - Body: confirm receipt of enquiry, say we'll respond within 24 hours,
   include Calendly booking link placeholder
 
@@ -162,7 +162,7 @@ Build in this order:
 
 ### Step 9 — Metadata
 Set in layout.tsx:
-- title: EZWebOne — Web Design & Digital Growth Agency
+- title: mangobeat — Web Design & Digital Growth Agency
 - description: We design and build fast, conversion-focused websites for UK
   small businesses. Delivered in 5 days. Fully yours from day one.
 - og:image: /og-image.png

@@ -1,4 +1,4 @@
-# EZWebOne — Project Specification
+# mangobeat — Project Specification
 
 ## Stack
 - Framework: Next.js 14 (App Router, TypeScript)

@@ -57,7 +57,7 @@ export default function BatteryPage() {
           </div>
           <div className="h-4 w-px bg-gray-200 hidden md:block" />
           <Link href={localizePath(locale, '/hf')} className="hover:opacity-60 transition-opacity block">
-            <img src="/brand/HF_EZ-Navy-Tear.png" alt="EZWebOne" className="h-[6rem] md:h-24 w-auto object-contain" />
+            <img src="/brand/HF_EZ-Navy-Tear.png" alt="mangobeat" className="h-[6rem] md:h-24 w-auto object-contain" />
           </Link>
         </div>
       </nav>

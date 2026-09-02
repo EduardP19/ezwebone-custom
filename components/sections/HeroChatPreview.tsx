@@ -2,10 +2,10 @@
 
 import * as React from "react";
 import Image from "next/image";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence, motion, useScroll, useTransform } from "framer-motion";
 import { ArrowRight, MessageCircle } from "lucide-react";
 import { useI18n } from "@/components/i18n/LocaleProvider";
-import { ParticleNetwork } from "@/components/sections/ParticleNetwork";
+import { MagneticPill } from "@/components/ui/MagneticPill";
 import { CALENDLY_BOOKING_URL } from "@/lib/links";
 import { cn } from "@/lib/utils";
 
@@ -38,6 +38,14 @@ const TRUST_IMAGES = [
   "/clients/client3.png",
 ];
 const COMMAND_TAGS = ["Websites", "Automations", "AI Agents", "Marketing", "SEO", "Lead Gen"];
+const COMMAND_TAG_POSITIONS = [
+  "top-[28%] left-[10%] sm:left-[16%]",
+  "top-[34%] right-[9%] sm:right-[15%]",
+  "top-[48%] left-[4%] sm:left-[9%]",
+  "top-[52%] right-[4%] sm:right-[9%]",
+  "top-[64%] left-[12%] sm:left-[18%]",
+  "top-[68%] right-[11%] sm:right-[17%]",
+];
 
 type HeroChatPreviewProps = {
   apiPath?: string;
@@ -118,6 +126,12 @@ function RunningBorder({
 
 export function HeroChatPreview({ apiPath: _apiPath, agentKey: _agentKey }: HeroChatPreviewProps) {
   const sectionRef = React.useRef<HTMLElement>(null);
+  const { scrollYProgress: heroScrollProgress } = useScroll({
+    target: sectionRef,
+    offset: ["start start", "end start"],
+  });
+  const heroBackdropOpacity = useTransform(heroScrollProgress, [0, 1], [1, 0.25]);
+  const heroBackdropScale = useTransform(heroScrollProgress, [0, 1], [1, 1.18]);
   const inputRef = React.useRef<HTMLInputElement>(null);
   const historyRef = React.useRef<HTMLDivElement>(null);
   const sessionIdRef = React.useRef("");
@@ -145,8 +159,8 @@ export function HeroChatPreview({ apiPath: _apiPath, agentKey: _agentKey }: Hero
     locale === "ro"
       ? "Iti pot oferi cele mai utile recomandari intr-un apel scurt. Programeaza un apel si iti arat exact ce sa faci mai departe."
       : "The best next step is a short strategy call where we can map your exact next actions. Book a call below.";
-  const sessionStorageSessionKey = `ezwebone-chat-session-${agentKey}`;
-  const sessionStorageHandoffKey = `ezwebone-chat-handoff-${agentKey}`;
+  const sessionStorageSessionKey = `mangobeat-chat-session-${agentKey}`;
+  const sessionStorageHandoffKey = `mangobeat-chat-handoff-${agentKey}`;
 
   const [chatState, setChatState] = React.useState<ChatState>("idle");
   const [lockReason, setLockReason] = React.useState<ChatLockReason>("complete");
@@ -404,8 +418,38 @@ export function HeroChatPreview({ apiPath: _apiPath, agentKey: _agentKey }: Hero
       className="section-shell relative min-h-[calc(100svh-450px)] pt-16 pb-8 sm:min-h-[calc(100svh-450px)] sm:pb-10 md:min-h-[calc(100svh-500px)] md:pb-12"
       style={{ backgroundColor: "var(--background)" }}
     >
-      <ParticleNetwork className="opacity-45" count={94} interactive={false} maxDistance={190} />
-      <div className="pointer-events-none absolute inset-0 bg-[rgba(91,33,182,0.10)]" />
+      <motion.div
+        aria-hidden="true"
+        className="absolute inset-0"
+        style={{ opacity: heroBackdropOpacity, scale: heroBackdropScale }}
+      >
+        <div className="hero-vignette pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_20%_85%,rgba(28,42,68,0.14),transparent_45%)]" />
+        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_50%_20%,transparent_0%,var(--background)_65%)]" />
+        <div className="pointer-events-none absolute inset-0 bg-[rgba(var(--color-primary-rgb),0.04)]" />
+        <div className="hero-scrim pointer-events-none absolute inset-0" />
+      </motion.div>
+      <div aria-hidden="true" className="pointer-events-none absolute inset-0">
+        {COMMAND_TAGS.map((tag, index) => (
+          <motion.div
+            key={tag}
+            className={cn("absolute", COMMAND_TAG_POSITIONS[index])}
+            animate={{ y: [0, -7, 0] }}
+            transition={{
+              duration: 3.4 + (index % 3) * 0.5,
+              repeat: Infinity,
+              ease: "easeInOut",
+              delay: index * 0.28,
+            }}
+          >
+            <MagneticPill
+              index={index}
+              className="ai-command-chip pointer-events-auto inline-block rounded-full px-3.5 py-2 text-xs font-semibold tracking-[0.02em] sm:px-4 sm:text-sm"
+            >
+              {tag}
+            </MagneticPill>
+          </motion.div>
+        ))}
+      </div>
       <div className="relative z-10 mx-auto max-w-7xl px-3 sm:px-4 md:px-6">
         <div className="mx-auto flex min-h-[calc(100svh-29rem)] max-w-4xl items-start md:min-h-[calc(100svh-31rem)]">
           <motion.div
@@ -455,19 +499,10 @@ export function HeroChatPreview({ apiPath: _apiPath, agentKey: _agentKey }: Hero
             </div>
 
             <div className="mx-auto w-full max-w-2xl">
-              <div className="hero-chat-preview__pill-viewport hero-chat-preview__scrollbar mb-4 flex justify-start overflow-x-auto pr-8 pl-1 sm:mb-5 sm:justify-center sm:pr-1">
-                <div className="flex min-w-max gap-2.5 pb-2 sm:gap-3">
-                  {COMMAND_TAGS.map((tag) => (
-                    <span key={tag} className="ai-command-chip shrink-0 rounded-full px-3.5 py-2 text-xs font-semibold tracking-[0.02em] sm:px-4 sm:text-sm">
-                      {tag}
-                    </span>
-                  ))}
-                </div>
-              </div>
               <RunningBorder
                 radius="2.15rem"
                 duration="6.75s"
-                className="ai-command-center shadow-[0_42px_130px_rgba(124,58,237,0.16)]"
+                className="ai-command-center shadow-[0_42px_130px_rgba(var(--color-primary-rgb),0.16)]"
                 innerClassName="bg-[rgba(28,42,68,0.30)] p-4 backdrop-blur-[20px] sm:p-5 md:p-6"
               >
                 <div
@@ -533,7 +568,7 @@ export function HeroChatPreview({ apiPath: _apiPath, agentKey: _agentKey }: Hero
                                 )}
                               >
                                 <span className="mr-2 inline-flex rounded bg-[color:var(--color-primary)]/15 px-1.5 py-0.5 font-mono text-xs text-[color:var(--color-primary)]">
-                                  EZ
+                                  mb
                                 </span>
                                 {message.text}
                                 {message.ctaHref && message.ctaLabel && message.text.trim().length > 0 ? (
@@ -565,7 +600,7 @@ export function HeroChatPreview({ apiPath: _apiPath, agentKey: _agentKey }: Hero
                               aria-label="Agent is thinking"
                             >
                               <span className="mr-2 inline-flex rounded bg-[color:var(--color-primary)]/15 px-1.5 py-0.5 font-mono text-xs text-[color:var(--color-primary)]">
-                                EZ
+                                mb
                               </span>
                               <span className="ai-thinking-dots" aria-hidden="true">
                                 <span className="ai-thinking-dot" />
@@ -654,7 +689,7 @@ export function HeroChatPreview({ apiPath: _apiPath, agentKey: _agentKey }: Hero
         type="button"
         onClick={openChatWindow}
         data-track-label="stampuser:chat-window-open-fab"
-        className="fixed right-3 bottom-[max(0.75rem,env(safe-area-inset-bottom))] z-[120] inline-flex min-h-11 items-center gap-2 rounded-full border border-[color:var(--color-text-accent)]/45 bg-[color:var(--color-primary)] px-3.5 py-2.5 text-[13px] font-semibold text-white shadow-[0_16px_36px_rgba(124,58,237,0.42)] transition hover:bg-[color:var(--color-text-accent)] hover:text-[color:var(--color-bg-dark)] sm:bottom-6 sm:right-6 sm:min-h-0 sm:px-4 sm:py-3 sm:text-sm"
+        className="fixed right-3 bottom-[max(0.75rem,env(safe-area-inset-bottom))] z-[120] inline-flex min-h-11 items-center gap-2 rounded-full border border-[color:var(--color-text-accent)]/45 bg-[color:var(--color-primary)] px-3.5 py-2.5 text-[13px] font-semibold text-white shadow-[0_16px_36px_rgba(var(--color-primary-rgb),0.42)] transition hover:bg-[color:var(--color-text-accent)] hover:text-[color:var(--color-bg-dark)] sm:bottom-6 sm:right-6 sm:min-h-0 sm:px-4 sm:py-3 sm:text-sm"
         aria-label="Open AI chat"
       >
         <MessageCircle className="h-4 w-4" />

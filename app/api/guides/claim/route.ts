@@ -135,7 +135,7 @@ export async function POST(req: Request) {
       const html = await renderGuideEmailHtml(firstName, guideUrl);
 
       const { data, error: sendError } = await resend.emails.send({
-        from: process.env.RESEND_FROM ?? "EzwebOne <hello@ezwebone.co.uk>",
+        from: process.env.RESEND_FROM ?? "mangobeat <hello@ezwebone.co.uk>",
         to: email,
         subject: "Ghidul tau este aici 🎉",
         html,

@@ -27,7 +27,7 @@ const montserrat = Montserrat({
 });
 
 export const metadata = createMetadata({
-  title: "Beauty & Aesthetics Digital Agency | EZWebOne",
+  title: "Beauty & Aesthetics Digital Agency | mangobeat",
   description:
     "Premium digital systems for beauty clinics, salons, and aesthetic practitioners: websites, bookings, and automations that elevate client experience.",
   path: "/bt",
@@ -55,7 +55,7 @@ export default function BTLayout({
         data={{
           "@context": "https://schema.org",
           "@type": "WebPage",
-          name: "Beauty & Aesthetics Digital Agency | EZWebOne",
+          name: "Beauty & Aesthetics Digital Agency | mangobeat",
           description:
             "We build premium websites, booking journeys, and automations for beauty clinics, salons, and aesthetic professionals.",
           url: "https://ezwebone.co.uk/bt",
@@ -65,7 +65,7 @@ export default function BTLayout({
             serviceType: "Web Design and Booking Automation",
             provider: {
               "@type": "Organization",
-              name: "EZWebOne",
+              name: "mangobeat",
               url: "https://ezwebone.co.uk",
             },
             areaServed: "United Kingdom",

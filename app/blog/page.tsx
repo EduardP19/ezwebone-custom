@@ -36,7 +36,7 @@ export default async function BlogPage() {
 
   return (
     <div className="section-shell bg-[color:var(--color-bg-dark)]">
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(124,58,237,0.16),transparent_32%)]" />
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(var(--color-primary-rgb),0.16),transparent_32%)]" />
       <div className="container mx-auto px-4 py-16 md:px-6 md:py-20">
         <div className="max-w-3xl mb-14 md:mb-16">
           <Badge className="mb-4">{dictionary.pages.blog.badge}</Badge>
@@ -58,7 +58,7 @@ export default async function BlogPage() {
               >
                 <Card
                   padding="sm"
-                  className="h-full border-[color:var(--color-border)] bg-[color:var(--color-bg-card)] shadow-[0_16px_36px_rgba(28,42,68,0.12)] transition-all group hover:border-[rgba(124,58,237,0.35)]"
+                  className="h-full border-[color:var(--color-border)] bg-[color:var(--color-bg-card)] shadow-[0_16px_36px_rgba(28,42,68,0.12)] transition-all group hover:border-[rgba(var(--color-primary-rgb),0.35)]"
                 >
                   <div className="aspect-[16/10] bg-[color:var(--color-bg-elevated)] rounded-xl mb-5 overflow-hidden relative">
                     <Image

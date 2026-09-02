@@ -1,4 +1,4 @@
-# EZWebOne — Freelance Web Studio (Side Project)
+# mangobeat — Freelance Web Studio (Side Project)
 
 > A fully-functional freelance web agency site I built and ran on the side. It never had the goal of replacing a day job — it was a sandbox for real product engineering: API integrations, AI-powered lead qualification, and direct-mail marketing automation. Everything here is production code that ran (or runs) live.
 >
@@ -8,7 +8,7 @@
 
 ## What This Is
 
-**EZWebOne** was my freelance brand for offering custom website builds to small UK businesses. The premise was simple: a polished, trustworthy-looking studio site that could convert cold traffic into paying clients.
+**mangobeat** was my freelance brand for offering custom website builds to small UK businesses. The premise was simple: a polished, trustworthy-looking studio site that could convert cold traffic into paying clients.
 
 The brand was never meant to scale. It was designed to:
 

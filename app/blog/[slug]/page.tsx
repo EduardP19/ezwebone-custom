@@ -68,7 +68,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
   const showHtml = isHtmlContent(content);
 
   return (
-    <div className="bg-[#F5F2ED]">
+    <div className="bg-[color:var(--color-bg-dark)]">
       <JsonLd
         id="blog-post-schema"
         data={{
@@ -89,11 +89,11 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
       />
 
       <section className="relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-b from-brand-warm/70 via-white to-white" />
+        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(var(--color-primary-rgb),0.16),transparent_32%)]" />
         <div className="container mx-auto px-4 md:px-6 py-10 md:py-14 relative">
           <Link
             href={localizePath(locale, "/blog")}
-            className="inline-flex items-center gap-2 text-brand-gray hover:text-brand-black transition-colors mb-8 group"
+            className="inline-flex items-center gap-2 text-[color:var(--color-text-secondary)] hover:text-[color:var(--color-text-primary)] transition-colors mb-8 group"
           >
             <ChevronLeft size={16} className="group-hover:-translate-x-1 transition-transform" />
             <span className="text-xs font-bold uppercase tracking-widest">
@@ -103,25 +103,25 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
 
           <div className="max-w-4xl">
             <Badge className="mb-4">{dictionary.pages.blogPost.journalEntry}</Badge>
-            <h1 className="text-3xl md:text-5xl font-display font-bold tracking-tight text-brand-black mb-5 leading-tight">
+            <h1 className="text-3xl md:text-5xl font-display font-bold tracking-tight text-[color:var(--color-text-primary)] mb-5 leading-tight">
               {post.title}
             </h1>
-            <p className="text-sm md:text-base text-brand-gray flex flex-wrap items-center gap-x-3 gap-y-1 uppercase tracking-[0.15em] font-bold">
+            <p className="text-sm md:text-base text-[color:var(--color-text-secondary)] flex flex-wrap items-center gap-x-3 gap-y-1 uppercase tracking-[0.15em] font-bold">
               <span>{formatPostDate(post.created_at, locale)}</span>
-              <span className="w-1 h-1 rounded-full bg-brand-gray/50" />
+              <span className="w-1 h-1 rounded-full bg-[color:var(--color-text-secondary)]/50" />
               <span>
                 {readTime} {dictionary.common.minRead}
               </span>
             </p>
             {post.excerpt && (
-              <p className="mt-5 text-lg md:text-xl text-brand-gray leading-relaxed max-w-3xl">{post.excerpt}</p>
+              <p className="mt-5 text-lg md:text-xl text-[color:var(--color-text-secondary)] leading-relaxed max-w-3xl">{post.excerpt}</p>
             )}
           </div>
         </div>
       </section>
 
       <div className="container mx-auto px-4 md:px-6 pb-16 md:pb-24">
-        <div className="relative w-full h-[220px] md:h-[420px] bg-brand-warm rounded-2xl md:rounded-3xl overflow-hidden mb-8 md:mb-12 border border-brand-border/70">
+        <div className="relative w-full h-[220px] md:h-[420px] bg-[color:var(--color-bg-elevated)] rounded-2xl md:rounded-3xl overflow-hidden mb-8 md:mb-12 border border-[color:var(--color-border)]">
           <Image
             src={post.cover_image || FALLBACK_IMAGE}
             alt={post.title}
@@ -135,18 +135,18 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
           <article>
             {showHtml ? (
               <div
-                className="prose prose-lg md:prose-xl max-w-none prose-headings:font-display prose-headings:font-bold prose-headings:tracking-tight prose-headings:text-brand-black prose-p:text-brand-gray prose-p:leading-8 prose-a:text-brand-purple prose-strong:text-brand-black prose-li:text-brand-gray"
+                className="prose prose-lg md:prose-xl max-w-none prose-headings:font-display prose-headings:font-bold prose-headings:tracking-tight prose-headings:text-[color:var(--color-text-primary)] prose-p:text-[color:var(--color-text-secondary)] prose-p:leading-8 prose-a:text-[color:var(--color-primary)] prose-strong:text-[color:var(--color-text-primary)] prose-li:text-[color:var(--color-text-secondary)] prose-blockquote:text-[color:var(--color-text-secondary)] prose-blockquote:border-[color:var(--color-border)] prose-code:text-[color:var(--color-text-primary)] prose-hr:border-[color:var(--color-border)]"
                 dangerouslySetInnerHTML={{ __html: content }}
               />
             ) : (
               <div className="space-y-6">
                 {paragraphs.map((paragraph, index) => (
-                  <p key={`${post.id}-p-${index}`} className="text-brand-gray text-lg leading-8">
+                  <p key={`${post.id}-p-${index}`} className="text-[color:var(--color-text-secondary)] text-lg leading-8">
                     {paragraph}
                   </p>
                 ))}
                 {paragraphs.length === 0 && (
-                  <p className="text-brand-gray text-lg leading-8">
+                  <p className="text-[color:var(--color-text-secondary)] text-lg leading-8">
                     {dictionary.pages.blogPost.noContent}
                   </p>
                 )}
@@ -155,41 +155,41 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
           </article>
 
           <aside className="lg:pl-2">
-            <div className="lg:sticky lg:top-28 rounded-2xl border border-brand-border/80 bg-brand-warm/50 p-5 md:p-6">
-              <h2 className="text-xs font-bold uppercase tracking-[0.16em] text-brand-black mb-4">
+            <div className="lg:sticky lg:top-28 rounded-2xl border border-[color:var(--color-border)] bg-[color:var(--color-bg-card)] p-5 md:p-6">
+              <h2 className="text-xs font-bold uppercase tracking-[0.16em] text-[color:var(--color-text-primary)] mb-4">
                 {dictionary.pages.blogPost.onThisPage}
               </h2>
               <div className="space-y-3 text-sm">
                 <div>
-                  <p className="text-brand-gray uppercase text-[10px] tracking-[0.16em] font-bold mb-1">
+                  <p className="text-[color:var(--color-text-secondary)] uppercase text-[10px] tracking-[0.16em] font-bold mb-1">
                     {dictionary.pages.blogPost.published}
                   </p>
-                  <p className="text-brand-black font-semibold">
+                  <p className="text-[color:var(--color-text-primary)] font-semibold">
                     {formatPostDate(post.created_at, locale)}
                   </p>
                 </div>
                 <div>
-                  <p className="text-brand-gray uppercase text-[10px] tracking-[0.16em] font-bold mb-1">
+                  <p className="text-[color:var(--color-text-secondary)] uppercase text-[10px] tracking-[0.16em] font-bold mb-1">
                     {dictionary.pages.blogPost.readingTime}
                   </p>
-                  <p className="text-brand-black font-semibold">
+                  <p className="text-[color:var(--color-text-primary)] font-semibold">
                     {readTime} {dictionary.pages.blogPost.minuteRead}
                   </p>
                 </div>
                 <div>
-                  <p className="text-brand-gray uppercase text-[10px] tracking-[0.16em] font-bold mb-1">
+                  <p className="text-[color:var(--color-text-secondary)] uppercase text-[10px] tracking-[0.16em] font-bold mb-1">
                     {dictionary.pages.blogPost.topic}
                   </p>
-                  <p className="text-brand-black font-semibold">
+                  <p className="text-[color:var(--color-text-primary)] font-semibold">
                     {dictionary.common.growthAndDigitalStrategy}
                   </p>
                 </div>
               </div>
-              <div className="mt-6 pt-5 border-t border-brand-border">
+              <div className="mt-6 pt-5 border-t border-[color:var(--color-border)]">
                 <a href={CALENDLY_BOOKING_URL} target="_blank" rel="noreferrer" className="block">
                   <Button
                     variant="ghost"
-                    className="w-full text-xs font-black uppercase tracking-widest border border-brand-border py-6 hover:bg-brand-black hover:text-white transition-all"
+                    className="w-full text-xs font-black uppercase tracking-widest border border-[color:var(--color-border)] py-6 hover:bg-[color:var(--color-primary)] hover:text-white hover:border-[color:var(--color-primary)] transition-all"
                   >
                     {dictionary.common.bookStrategyCall}
                   </Button>
@@ -201,11 +201,11 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
       </div>
 
       <div className="container mx-auto px-4 md:px-6 pb-20 md:pb-24">
-        <div className="rounded-3xl border border-brand-border/80 bg-gradient-to-r from-brand-warm to-white p-8 md:p-10 text-center">
-          <h2 className="text-2xl md:text-3xl font-display font-bold text-brand-black mb-4">
+        <div className="rounded-3xl border border-[color:var(--color-border)] bg-[color:var(--color-bg-elevated)] p-8 md:p-10 text-center">
+          <h2 className="text-2xl md:text-3xl font-display font-bold text-[color:var(--color-text-primary)] mb-4">
             {dictionary.common.readyToTurnIdeas}
           </h2>
-          <p className="text-brand-gray mb-6 max-w-2xl mx-auto leading-relaxed">
+          <p className="text-[color:var(--color-text-secondary)] mb-6 max-w-2xl mx-auto leading-relaxed">
             {dictionary.common.turnIdeasBody}
           </p>
           <a href={CALENDLY_BOOKING_URL} target="_blank" rel="noreferrer">

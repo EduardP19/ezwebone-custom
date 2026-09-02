@@ -1,20 +1,20 @@
 ---
-name: ezwebone-agency-build
+name: mangobeat-agency-build
 description: >
   Use this skill when building any new website, landing page, or product for
-  EZWebOne or its sub-brands (e.g. Resevia, Omus Labs). Triggers include: any
+  mangobeat or its sub-brands (e.g. Resevia, Omus Labs). Triggers include: any
   request to scaffold a new Next.js project, replicate an existing product's
   backend functions, create a new Supabase database, or build marketing pages
   for the agency's services. Also use when the user says "new project", "new
   DB", "replicate the backend", or references files like SPEC.md, COPY.md, or
   PROMPT.md from the Resevia workspace. Do NOT use for one-off Wix/Velo
   scripts, email drafts, or ad copy tasks.
-license: Internal — EZWebOne / Eduard Nitu
+license: Internal — mangobeat / Eduard Nitu
 ---
 
-# EZWebOne Agency Build Skill
+# mangobeat Agency Build Skill
 
-You are building a production website or product for **EZWebOne** — a solo UK
+You are building a production website or product for **mangobeat** — a solo UK
 digital agency run by Eduard that specialises in web design, automation, and AI
 products for small businesses. Eduard is not a traditional software engineer; he
 vibe-codes and uses AI tooling heavily. All code must be clean, well-commented,
@@ -40,7 +40,7 @@ full before writing a single line of code:
 
 ## 1 — Brand & Design Constraints
 
-Pull exact values from `SPEC.md`. Defaults for EZWebOne/Resevia products:
+Pull exact values from `SPEC.md`. Defaults for mangobeat/Resevia products:
 
 ```
 Background:     #F5F2ED
@@ -250,7 +250,7 @@ Set in `layout.tsx`:
 
 ```tsx
 export const metadata: Metadata = {
-  title: 'PAGE TITLE — EZWebOne / Resevia',
+  title: 'PAGE TITLE — mangobeat / Resevia',
   description: 'PAGE DESCRIPTION',
   openGraph: {
     images: ['/og-image.png'],
@@ -281,9 +281,9 @@ constants or render from component props.
 
 ---
 
-## 10 — EZWebOne Brand Context (for copy tone)
+## 10 — mangobeat Brand Context (for copy tone)
 
-EZWebOne positions itself as:
+mangobeat positions itself as:
 - Fast (5-day delivery)
 - Transparent (no hidden fees, client owns everything)
 - Practical (done-for-you, no jargon)

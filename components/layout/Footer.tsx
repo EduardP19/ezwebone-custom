@@ -1,11 +1,11 @@
 "use client";
 
 import * as React from "react";
-import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { LocalizedLink } from "@/components/i18n/LocalizedLink";
 import { useI18n } from "@/components/i18n/LocaleProvider";
-import { BRAND_LOGO_MARK_DARK_SRC } from "@/lib/brand";
+import { BrandMark } from "@/components/layout/BrandMark";
+import { Wordmark } from "@/components/layout/Wordmark";
 import { useIsDark } from "@/lib/useTheme";
 
 const FOOTER_LINKS = [
@@ -73,20 +73,13 @@ export function Footer() {
 
   return (
     <footer className={`mt-auto text-white ${isDark ? "bg-[#08080d]" : "bg-[#1C2A44]"}`}>
-      <div className="h-[5px] w-full bg-[#F97316]" />
+      <div className="h-[5px] w-full bg-[color:var(--color-primary)]" />
       <div className="mx-auto max-w-7xl px-4 pb-14 pt-12 md:px-6 md:pb-16 md:pt-14">
         <div className="grid grid-cols-1 gap-12 md:grid-cols-3">
           <div>
-            <LocalizedLink href="/" className="inline-flex items-center">
-              <span className="inline-flex items-center gap-3">
-                <Image
-                  src={BRAND_LOGO_MARK_DARK_SRC}
-                  alt="EZWebOne logo"
-                  width={116}
-                  height={116}
-                  className="h-28 w-28"
-                />
-              </span>
+            <LocalizedLink href="/" className="inline-flex items-center gap-3">
+              <BrandMark size={52} />
+              <Wordmark className="text-3xl text-white sm:text-4xl" />
             </LocalizedLink>
             <p className="mt-5 max-w-sm text-sm leading-7 text-white/70">
               {dictionary.footer.strapline}
@@ -96,14 +89,14 @@ export function Footer() {
               <div className="mt-6 flex items-center gap-3">
                 <a
                   href="#"
-                  aria-label="EZWebOne on LinkedIn"
+                  aria-label="mangobeat on LinkedIn"
                   className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-white/20 bg-[#F5F2ED]/5 text-white/70 transition hover:border-[color:var(--color-primary-light)] hover:text-white/100"
                 >
                   <LinkedInIcon size={18} />
                 </a>
                 <a
                   href="#"
-                  aria-label="EZWebOne on Instagram"
+                  aria-label="mangobeat on Instagram"
                   className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-white/20 bg-[#F5F2ED]/5 text-white/70 transition hover:border-[color:var(--color-primary-light)] hover:text-white/100"
                 >
                   <InstagramIcon size={18} />

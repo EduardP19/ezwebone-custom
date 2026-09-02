@@ -11,7 +11,8 @@ import { JsonLd } from "@/components/seo/JsonLd";
 import { TrackingProvider } from "@/components/analytics/TrackingProvider";
 import { Clarity } from "@/components/analytics/Clarity";
 import { ConsentManager } from "@/components/analytics/ConsentManager";
-import { BRAND_LOGO_MARK_SRC } from "@/lib/brand";
+import { CursorSparkle } from "@/components/effects/CursorSparkle";
+import { ScrollProgressBar } from "@/components/effects/ScrollProgressBar";
 import { WebVitals } from "@/lib/axiom/client";
 import { getDictionary } from "@/lib/i18n/dictionary";
 import { getRequestLocale } from "@/lib/i18n/request";
@@ -66,15 +67,6 @@ export const metadata: Metadata = {
     description: siteConfig.description,
     images: [absoluteUrl("/og-image.png")],
   },
-  icons: {
-    icon: [
-      { url: BRAND_LOGO_MARK_SRC, type: "image/png" },
-    ],
-    shortcut: BRAND_LOGO_MARK_SRC,
-    apple: [
-      { url: BRAND_LOGO_MARK_SRC, type: "image/png" },
-    ],
-  },
   category: "business",
 };
 
@@ -108,9 +100,9 @@ export default async function RootLayout({
               data={{
                 "@context": "https://schema.org",
                 "@type": "ProfessionalService",
-                name: "EZWebOne",
+                name: "mangobeat",
                 url: "https://ezwebone.co.uk",
-                logo: absoluteUrl(BRAND_LOGO_MARK_SRC),
+                logo: absoluteUrl("/brand/mangobeat_logo_nobg.png"),
                 description: dictionary.metadata.siteDescription,
                 address: {
                   "@type": "PostalAddress",
@@ -127,6 +119,7 @@ export default async function RootLayout({
                 sameAs: ["https://resevia.co.uk"],
               }}
             />
+            <ScrollProgressBar />
             <NavbarClient />
             <main className="flex-grow pt-24 md:pt-28">{children}</main>
             <Footer />
@@ -134,6 +127,7 @@ export default async function RootLayout({
               <Clarity />
               <TrackingProvider />
               <ConsentManager />
+              <CursorSparkle />
             </Suspense>
           </LocaleProvider>
         </body>

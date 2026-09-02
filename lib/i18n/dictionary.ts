@@ -69,7 +69,7 @@ const dictionaries = {
         location: "United Kingdom",
       },
       companyStatement:
-        "EZWebOne. is a trading name for EMAGF LTD, registered in England and Wales. All rights reserved.",
+        "mangobeat. is a trading name for EMAGF LTD, registered in England and Wales. All rights reserved.",
     },
     home: {
       trust: {
@@ -109,7 +109,7 @@ const dictionaries = {
         trialUsedBody:
           "If you want deeper recommendations and a custom plan, book a strategy call and we will walk through your business in detail.",
         trialUsedCta: "Book a call",
-        placeholderChat: "Tell us about your business...",
+        placeholderChat: "What's your pain point?",
         placeholderEmail: "Your email address...",
         assistantResponses: {
           salon:
@@ -158,6 +158,14 @@ const dictionaries = {
         bodyLight:
           "We design clean websites, practical automations, and AI systems that help service businesses look professional, respond faster, and turn more enquiries into booked work.",
       },
+      aboutMe: {
+        badge: "About Me",
+        name: "Eduard",
+        initial: "E",
+        title: "Hi, I'm Eduard — I run mangobeat.",
+        body:
+          "I started mangobeat to build the kind of websites and systems I always wished more agencies offered: fast, honest, and built around what actually grows a business.",
+      },
       testimonials: {
         badge: "Testimonials",
         title: "Don't Take Our Word For It",
@@ -180,10 +188,10 @@ const dictionaries = {
           "We build for small businesses that want more leads, less admin, and digital systems that keep working after launch.",
       },
       about: {
-        badge: "About EZWebOne",
+        badge: "About mangobeat",
         title: "Built for small businesses that need real systems, not more noise.",
         paragraphs: [
-          "EZWebOne started as a web design service and grew into something more useful: a digital agency that builds the full system around growth.",
+          "mangobeat started as a web design service and grew into something more useful: a digital agency that builds the full system around growth.",
           "That means the website, the automation behind it, the AI tools that answer faster, and the lead generation flow that turns interest into paying customers.",
           "We are based in the United Kingdom and work with small businesses across the UK that want to look sharper, move faster, and stop losing opportunities to slow processes.",
         ],
@@ -263,7 +271,7 @@ const dictionaries = {
         title: "Strategy notes for service brands that want to look sharper and grow with intent.",
         body:
           "Essays on positioning, search visibility, paid growth, automation, and the systems behind better-fit enquiries.",
-        fallbackExcerpt: "Read this latest update from EZWebOne.",
+        fallbackExcerpt: "Read this latest update from mangobeat.",
       },
       columns: {
         badge: "Columns & Insights",
@@ -288,13 +296,13 @@ const dictionaries = {
       },
     },
     metadata: {
-      siteTitle: "EZWebOne | Websites, Automations, and AI Agents for Small Businesses",
+      siteTitle: "mangobeat | Websites, Automations, and AI Agents for Small Businesses",
       siteDescription:
-        "EZWebOne is a UK digital agency building websites, automations, AI agents, SEO systems, and lead generation funnels for small businesses that want to grow.",
+        "mangobeat is a UK digital agency building websites, automations, AI agents, SEO systems, and lead generation funnels for small businesses that want to grow.",
       home: {
         title: "Websites, Automations, and AI Agents for Small Businesses",
         description:
-          "EZWebOne is a UK digital agency building websites, automations, AI agents, marketing systems, SEO, and lead generation for small businesses.",
+          "mangobeat is a UK digital agency building websites, automations, AI agents, marketing systems, SEO, and lead generation for small businesses.",
         keywords: [
           "websites for small businesses uk",
           "automation agency uk",
@@ -305,7 +313,7 @@ const dictionaries = {
       services: {
         title: "Services | Websites, Automations, AI Agents, SEO and Lead Gen",
         description:
-          "Explore EZWebOne services: custom websites, automations, AI agents, marketing, SEO, and lead generation systems for small businesses.",
+          "Explore mangobeat services: custom websites, automations, AI agents, marketing, SEO, and lead generation systems for small businesses.",
         keywords: [
           "website agency uk",
           "business automation agency",
@@ -314,21 +322,21 @@ const dictionaries = {
         ],
       },
       about: {
-        title: "About EZWebOne",
+        title: "About mangobeat",
         description:
-          "Learn about EZWebOne, the UK digital agency building websites, automations, AI agents, and growth systems for small businesses.",
-        keywords: ["about ezwebone", "uk digital agency", "web automation ai agency uk"],
+          "Learn about mangobeat, the UK digital agency building websites, automations, AI agents, and growth systems for small businesses.",
+        keywords: ["about mangobeat", "uk digital agency", "web automation ai agency uk"],
       },
       contact: {
-        title: "Contact EZWebOne",
+        title: "Contact mangobeat",
         description:
-          "Start a project with EZWebOne and discuss positioning, SEO, paid growth, websites, and automation for your business.",
+          "Start a project with mangobeat and discuss positioning, SEO, paid growth, websites, and automation for your business.",
         keywords: ["contact marketing agency", "book strategy call", "service brand marketing enquiry"],
       },
       portfolio: {
         title: "Selected Work and Website Case Studies",
         description:
-          "Browse selected EZWebOne projects and see how sharper positioning, better marketing systems, and stronger digital execution improve trust and conversion.",
+          "Browse selected mangobeat projects and see how sharper positioning, better marketing systems, and stronger digital execution improve trust and conversion.",
         keywords: [
           "marketing agency portfolio uk",
           "service brand case studies",
@@ -348,7 +356,7 @@ const dictionaries = {
       columns: {
         title: "Columns and Insights",
         description:
-          "Read deeper opinion pieces, strategic notes, and technology insights from EZWebOne.",
+          "Read deeper opinion pieces, strategic notes, and technology insights from mangobeat.",
         keywords: [
           "digital strategy columns",
           "business growth insights",
@@ -358,18 +366,18 @@ const dictionaries = {
       legal: {
         privacyTitle: "Privacy Policy",
         privacyDescription:
-          "Read the EZWebOne privacy policy and learn how we handle enquiry, client, and analytics data.",
+          "Read the mangobeat privacy policy and learn how we handle enquiry, client, and analytics data.",
         termsTitle: "Terms and Conditions of Use",
-        termsDescription: "Read the EZWebOne terms and conditions of use for this website and our services.",
+        termsDescription: "Read the mangobeat terms and conditions of use for this website and our services.",
         cookiesTitle: "Cookie Policy",
-        cookiesDescription: "Read the EZWebOne cookie policy and manage analytics consent preferences.",
+        cookiesDescription: "Read the mangobeat cookie policy and manage analytics consent preferences.",
       },
     },
     cookies: {
       bannerLabel: "Privacy choices",
       bannerTitle: "We only enable analytics after you say yes.",
       bannerBody:
-        "EZWebOne uses local storage and similar technologies to measure page views, traffic sources, and on-site interactions. You can accept or reject non-essential tracking.",
+        "mangobeat uses local storage and similar technologies to measure page views, traffic sources, and on-site interactions. You can accept or reject non-essential tracking.",
       reject: "Reject analytics",
       accept: "Accept analytics",
       preferencesTitle: "Cookie preferences",
@@ -448,7 +456,7 @@ const dictionaries = {
         location: "Regatul Unit",
       },
       companyStatement:
-        "EZWebOne. este denumirea comerciala a EMAGF LTD, inregistrata in Anglia si Tara Galilor. Toate drepturile rezervate.",
+        "mangobeat. este denumirea comerciala a EMAGF LTD, inregistrata in Anglia si Tara Galilor. Toate drepturile rezervate.",
     },
     home: {
       trust: {
@@ -488,7 +496,7 @@ const dictionaries = {
         trialUsedBody:
           "Daca vrei recomandari mai detaliate si un plan personalizat, programeaza un apel si discutam punctual despre afacerea ta.",
         trialUsedCta: "Programeaza un apel",
-        placeholderChat: "Spune-ne cate ceva despre afacerea ta...",
+        placeholderChat: "Ce te deranjeaza cel mai mult?",
         placeholderEmail: "Adresa ta de email...",
         assistantResponses: {
           salon:
@@ -537,6 +545,14 @@ const dictionaries = {
         bodyLight:
           "Construim website-uri clare, automatizari practice si sisteme AI care ajuta afacerile de servicii sa arate profesionist, sa raspunda mai rapid si sa transforme mai multe cereri in programari.",
       },
+      aboutMe: {
+        badge: "Despre mine",
+        name: "Eduard",
+        initial: "E",
+        title: "Salut, sunt Eduard — conduc mangobeat.",
+        body:
+          "Am pornit mangobeat ca sa construiesc genul de website-uri si sisteme pe care mi-as fi dorit sa le ofere mai multe agentii: rapide, oneste si construite in jurul a ceea ce chiar creste o afacere.",
+      },
       testimonials: {
         badge: "Testimoniale",
         title: "Nu ne crede doar pe cuvant",
@@ -559,10 +575,10 @@ const dictionaries = {
           "Construim pentru afaceri mici care vor mai multe lead-uri, mai putina administrare si sisteme digitale care continua sa functioneze dupa lansare.",
       },
       about: {
-        badge: "Despre EZWebOne",
+        badge: "Despre mangobeat",
         title: "Construit pentru afaceri mici care au nevoie de sisteme reale, nu de mai mult zgomot.",
         paragraphs: [
-          "EZWebOne a inceput ca un serviciu de web design si a crescut in ceva mai util: o agentie digitala care construieste sistemul complet din jurul cresterii.",
+          "mangobeat a inceput ca un serviciu de web design si a crescut in ceva mai util: o agentie digitala care construieste sistemul complet din jurul cresterii.",
           "Asta inseamna website-ul, automatizarea din spate, uneltele AI care raspund mai repede si fluxul de lead generation care transforma interesul in clienti platitori.",
           "Suntem bazati in Regatul Unit si lucram cu afaceri mici din tot UK-ul care vor sa arate mai bine, sa se miste mai repede si sa nu mai piarda oportunitati din cauza proceselor lente.",
         ],
@@ -642,7 +658,7 @@ const dictionaries = {
         title: "Note strategice pentru branduri de servicii care vor sa arate mai bine si sa creasca intentionat.",
         body:
           "Eseuri despre pozitionare, vizibilitate in cautare, paid growth, automatizare si sistemele din spatele unor cereri mai bine potrivite.",
-        fallbackExcerpt: "Citeste cea mai noua actualizare de la EZWebOne.",
+        fallbackExcerpt: "Citeste cea mai noua actualizare de la mangobeat.",
       },
       columns: {
         badge: "Coloane si insight-uri",
@@ -667,13 +683,13 @@ const dictionaries = {
       },
     },
     metadata: {
-      siteTitle: "EZWebOne | Website-uri, automatizari si agenti AI pentru afaceri mici",
+      siteTitle: "mangobeat | Website-uri, automatizari si agenti AI pentru afaceri mici",
       siteDescription:
-        "EZWebOne este o agentie digitala din UK care construieste website-uri, automatizari, agenti AI, sisteme SEO si funnel-uri de lead generation pentru afaceri mici care vor sa creasca.",
+        "mangobeat este o agentie digitala din UK care construieste website-uri, automatizari, agenti AI, sisteme SEO si funnel-uri de lead generation pentru afaceri mici care vor sa creasca.",
       home: {
         title: "Website-uri, automatizari si agenti AI pentru afaceri mici",
         description:
-          "EZWebOne este o agentie digitala din UK care construieste website-uri, automatizari, agenti AI, sisteme de marketing, SEO si lead generation pentru afaceri mici.",
+          "mangobeat este o agentie digitala din UK care construieste website-uri, automatizari, agenti AI, sisteme de marketing, SEO si lead generation pentru afaceri mici.",
         keywords: [
           "website-uri pentru afaceri mici uk",
           "agentie de automatizare uk",
@@ -684,7 +700,7 @@ const dictionaries = {
       services: {
         title: "Servicii | Website-uri, automatizari, agenti AI, SEO si lead gen",
         description:
-          "Descopera serviciile EZWebOne: website-uri custom, automatizari, agenti AI, marketing, SEO si sisteme de lead generation pentru afaceri mici.",
+          "Descopera serviciile mangobeat: website-uri custom, automatizari, agenti AI, marketing, SEO si sisteme de lead generation pentru afaceri mici.",
         keywords: [
           "agentie website uk",
           "agentie automatizare business",
@@ -693,21 +709,21 @@ const dictionaries = {
         ],
       },
       about: {
-        title: "Despre EZWebOne",
+        title: "Despre mangobeat",
         description:
-          "Afla mai multe despre EZWebOne, agentia digitala din UK care construieste website-uri, automatizari, agenti AI si sisteme de crestere pentru afaceri mici.",
-        keywords: ["despre ezwebone", "agentie digitala uk", "agentie web automatizare ai uk"],
+          "Afla mai multe despre mangobeat, agentia digitala din UK care construieste website-uri, automatizari, agenti AI si sisteme de crestere pentru afaceri mici.",
+        keywords: ["despre mangobeat", "agentie digitala uk", "agentie web automatizare ai uk"],
       },
       contact: {
-        title: "Contact EZWebOne",
+        title: "Contact mangobeat",
         description:
-          "Porneste un proiect cu EZWebOne si discuta despre pozitionare, SEO, paid growth, website-uri si automatizare pentru afacerea ta.",
+          "Porneste un proiect cu mangobeat si discuta despre pozitionare, SEO, paid growth, website-uri si automatizare pentru afacerea ta.",
         keywords: ["contact agentie marketing", "programare apel strategic", "cerere agentie de brand"],
       },
       portfolio: {
         title: "Lucrari selectate si studii de caz website",
         description:
-          "Rasfoieste proiectele selectate EZWebOne si vezi cum pozitionarea mai clara, sistemele de marketing mai bune si executia digitala mai puternica cresc increderea si conversia.",
+          "Rasfoieste proiectele selectate mangobeat si vezi cum pozitionarea mai clara, sistemele de marketing mai bune si executia digitala mai puternica cresc increderea si conversia.",
         keywords: [
           "portofoliu agentie marketing uk",
           "studii de caz brand servicii",
@@ -727,7 +743,7 @@ const dictionaries = {
       columns: {
         title: "Coloane si insight-uri",
         description:
-          "Citeste articole de opinie, note strategice si insight-uri tehnologice de la EZWebOne.",
+          "Citeste articole de opinie, note strategice si insight-uri tehnologice de la mangobeat.",
         keywords: [
           "coloane strategie digitala",
           "insight-uri crestere business",
@@ -737,20 +753,20 @@ const dictionaries = {
       legal: {
         privacyTitle: "Politica de confidentialitate",
         privacyDescription:
-          "Citeste politica de confidentialitate EZWebOne si afla cum gestionam datele din cereri, clienti si analytics.",
+          "Citeste politica de confidentialitate mangobeat si afla cum gestionam datele din cereri, clienti si analytics.",
         termsTitle: "Termeni si conditii de utilizare",
         termsDescription:
-          "Citeste termenii si conditiile EZWebOne pentru acest website si serviciile noastre.",
+          "Citeste termenii si conditiile mangobeat pentru acest website si serviciile noastre.",
         cookiesTitle: "Politica de cookie-uri",
         cookiesDescription:
-          "Citeste politica de cookie-uri EZWebOne si gestioneaza preferintele de analytics.",
+          "Citeste politica de cookie-uri mangobeat si gestioneaza preferintele de analytics.",
       },
     },
     cookies: {
       bannerLabel: "Setari de confidentialitate",
       bannerTitle: "Activam analytics doar dupa acordul tau.",
       bannerBody:
-        "EZWebOne foloseste local storage si tehnologii similare pentru a masura paginile vizitate, sursele de trafic si interactiunile din site. Poti accepta sau respinge tracking-ul ne-esential.",
+        "mangobeat foloseste local storage si tehnologii similare pentru a masura paginile vizitate, sursele de trafic si interactiunile din site. Poti accepta sau respinge tracking-ul ne-esential.",
       reject: "Respinge analytics",
       accept: "Accepta analytics",
       preferencesTitle: "Preferinte cookies",

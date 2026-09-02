@@ -7,9 +7,9 @@ export default async function NotFoundPage() {
   const isRo = locale === "ro";
 
   return (
-    <main className="section-shell relative overflow-hidden bg-[#ede7fb]">
+    <main className="section-shell relative overflow-hidden bg-[#FDF0DE]">
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(28,42,68,0.08),transparent_40%)]" />
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_80%_85%,rgba(6,182,212,0.10),transparent_42%)]" />
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_80%_85%,rgba(234,164,0,0.10),transparent_42%)]" />
 
       <div className="relative mx-auto flex min-h-[calc(100svh-140px)] max-w-6xl items-center justify-center px-4 py-14 md:px-6">
         <div className="w-full max-w-5xl text-center">
@@ -41,14 +41,14 @@ export default async function NotFoundPage() {
           <div className="mt-8">
             <Link
               href={localizePath(locale, "/")}
-              className="inline-flex min-h-12 items-center justify-center rounded-xl bg-[#f97316] px-8 text-base font-semibold text-white shadow-[0_14px_34px_rgba(249,115,22,0.32)] transition hover:bg-[#fb923c]"
+              className="inline-flex min-h-12 items-center justify-center rounded-xl bg-[#F2600C] px-8 text-base font-semibold text-white shadow-[0_14px_34px_rgba(242,96,12,0.32)] transition hover:bg-[#FB8C2B]"
             >
               {isRo ? "Inapoi Acasa" : "Return Home"}
             </Link>
           </div>
 
           <p className="mt-5 text-sm text-[#1C2A44]/65">
-            EZWebOne · 404
+            mangobeat · 404
           </p>
         </div>
       </div>

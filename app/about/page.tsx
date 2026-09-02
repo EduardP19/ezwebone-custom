@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { Button } from "@/components/ui/Button";
 import { FinalCTA } from "@/components/sections/FinalCTA";
 import { JsonLd } from "@/components/seo/JsonLd";
-import { BRAND_LOGO_MARK_SRC } from "@/lib/brand";
 import { localizePath } from "@/lib/i18n/config";
 import { getDictionary } from "@/lib/i18n/dictionary";
 import { getRequestLocale } from "@/lib/i18n/request";
@@ -35,8 +34,8 @@ export default async function AboutPage() {
         data={{
           "@context": "https://schema.org",
           "@type": "ProfessionalService",
-          name: "EZWebOne",
-          image: absoluteUrl(BRAND_LOGO_MARK_SRC),
+          name: "mangobeat",
+          image: absoluteUrl("/brand/mangobeat_logo_nobg.png"),
           "@id": absoluteUrl(localizePath(locale, "/about")),
           url: absoluteUrl(localizePath(locale, "/about")),
           description: dictionary.metadata.about.description,
@@ -52,7 +51,7 @@ export default async function AboutPage() {
       />
 
       <section className="section-shell py-28 md:py-32">
-        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(124,58,237,0.18),transparent_30%)]" />
+        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(var(--color-primary-rgb),0.18),transparent_30%)]" />
         <div className="relative mx-auto max-w-7xl px-4 md:px-6">
           <div className="grid grid-cols-1 gap-12 lg:grid-cols-[minmax(0,1fr)_420px]">
             <div className="max-w-3xl">

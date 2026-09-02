@@ -43,7 +43,7 @@ const roColumnTranslations: Record<string, ColumnTranslation> = {
       "Cum ne-am transformat modelul de livrare pentru a ajuta afacerile mici sa castige mai repede.",
     content:
       "<p>Viteza este mai mult decat o comoditate; este un avantaj competitiv. Cand o afacere mica poate trece mai rapid de la idee la lansare, poate testa mai repede, invata mai repede si castiga momentum inainte ca oportunitatea sa se raceasca.</p>",
-    authorRole: "Fondator, EZWebOne",
+    authorRole: "Fondator, mangobeat",
   },
   "ai-receptionists-uk": {
     title: "Receptionistii AI: Viitorul Afacerilor de Servicii din UK",
@@ -51,7 +51,7 @@ const roColumnTranslations: Record<string, ColumnTranslation> = {
       "Cum schimba AI-ul localizat industria de hair si beauty din Regatul Unit.",
     content:
       "<p>Industria de servicii din UK trece printr-o revolutie tacuta. Receptionistii AI localizati schimba felul in care afacerile raspund la apeluri ratate, gestioneaza programarile si raman disponibile pentru clienti fara sa adauge mai multa presiune pe echipa.</p>",
-    authorRole: "Fondator, EZWebOne",
+    authorRole: "Fondator, mangobeat",
   },
 };
 

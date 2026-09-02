@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { connection } from "next/server";
 import { HeroChatPreview } from "@/components/sections/HeroChatPreview";
 import { FaqSection } from "@/components/guides/FaqSection";
-import { WhoWeAreMini } from "@/components/sections/WhoWeAreMini";
+import { AboutMeMini } from "@/components/sections/AboutMeMini";
 import { TrustBar } from "@/components/sections/TrustBar";
 import { Services } from "@/components/sections/Services";
 import { HowItWorks } from "@/components/sections/HowItWorks";
@@ -42,7 +42,7 @@ export default async function Home() {
         data={{
           "@context": "https://schema.org",
           "@type": "WebSite",
-          name: "EZWebOne",
+          name: "mangobeat",
           url: localizedHomeUrl,
           potentialAction: {
             "@type": "SearchAction",
@@ -54,7 +54,7 @@ export default async function Home() {
       <HeroChatPreview />
       <Services />
       <Portfolio projects={projects} />
-      <WhoWeAreMini />
+      <AboutMeMini />
       <TrustBar />
       <Testimonials />
       <HowItWorks />

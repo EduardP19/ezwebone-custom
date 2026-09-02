@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import { type FormEvent, useState } from "react";
 import {
   ArrowRight,
@@ -19,7 +18,7 @@ import {
 import { useI18n } from "@/components/i18n/LocaleProvider";
 import { localizePath } from "@/lib/i18n/config";
 import { CALENDLY_BOOKING_URL } from "@/lib/links";
-import { BRAND_LOGO_MARK_LIGHT_SRC } from "@/lib/brand";
+import { Wordmark } from "@/components/layout/Wordmark";
 
 const palette = {
   primary: "#EAE6DF",
@@ -341,15 +340,8 @@ export default function BTPage() {
         }}
       >
         <div className="mx-auto flex h-16 w-full max-w-7xl items-center justify-between px-4 md:h-20 md:px-8">
-          <a href={localizePath(locale, "/bt")} className="flex items-center" aria-label="EZWebOne BT">
-            <Image
-              src={BRAND_LOGO_MARK_LIGHT_SRC}
-              alt="EZWebOne"
-              width={84}
-              height={84}
-              priority
-              className="h-12 w-12 object-contain md:h-16 md:w-16"
-            />
+          <a href={localizePath(locale, "/bt")} className="flex items-center" aria-label="mangobeat BT">
+            <Wordmark className="text-xl text-[#2B2B2B] md:text-2xl" />
           </a>
 
           <div
@@ -697,14 +689,8 @@ export default function BTPage() {
 
       <footer className="border-t px-4 py-7 md:px-8 md:py-8" style={{ borderColor: palette.secondary, background: "#F4F2ED" }}>
         <div className="mx-auto flex w-full max-w-7xl flex-col items-center justify-between gap-4 text-center md:flex-row md:text-left">
-          <a href={localizePath(locale, "/bt")} className="flex items-center" aria-label="EZWebOne BT">
-            <Image
-              src={BRAND_LOGO_MARK_LIGHT_SRC}
-              alt="EZWebOne"
-              width={76}
-              height={76}
-              className="h-12 w-12 object-contain md:h-14 md:w-14"
-            />
+          <a href={localizePath(locale, "/bt")} className="flex items-center" aria-label="mangobeat BT">
+            <Wordmark className="text-lg text-[#2B2B2B] md:text-xl" />
           </a>
           <p className="max-w-sm text-sm leading-6 text-[#5A5A5A] md:max-w-none">{t.footer}</p>
         </div>

@@ -14,7 +14,7 @@ export function BusinessJourney() {
       <div className="relative h-fit">
         <div className="absolute left-[1.15rem] top-12 bottom-6 w-px bg-gradient-to-b from-[color:var(--color-primary-light)] via-[color:var(--color-primary)] to-[color:var(--color-primary-dark)]" />
         <motion.div
-          className="absolute left-[0.9rem] top-12 w-2.5 rounded-full bg-[color:var(--color-primary-light)] shadow-[0_0_18px_rgba(167,139,250,0.8)]"
+          className="absolute left-[0.9rem] top-12 w-2.5 rounded-full bg-[color:var(--color-primary-light)] shadow-[0_0_18px_rgba(var(--color-primary-rgb),0.8)]"
           animate={{ y: [0, 144, 290], opacity: [0.8, 1, 0.8] }}
           transition={{ duration: 5.8, repeat: Infinity, ease: "easeInOut" }}
           style={{ height: 10 }}

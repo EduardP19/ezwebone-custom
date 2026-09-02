@@ -417,9 +417,9 @@ export default function GuidesPage() {
       {isSubmitted ? (
         <SuccessSection />
       ) : (
-        <section className="section-shell relative overflow-hidden bg-[linear-gradient(180deg,rgba(124,58,237,0.22)_0%,rgba(124,58,237,0.10)_60%,transparent_100%)] pb-28 pt-20 md:pb-36 md:pt-24">
+        <section className="section-shell relative overflow-hidden bg-[linear-gradient(180deg,rgba(var(--color-primary-rgb),0.22)_0%,rgba(var(--color-primary-rgb),0.10)_60%,transparent_100%)] pb-28 pt-20 md:pb-36 md:pt-24">
           {/* Radial glow top-centre */}
-          <div className="pointer-events-none absolute -top-16 left-1/2 h-96 w-96 -translate-x-1/2 rounded-full bg-violet-500/20 blur-3xl" />
+          <div className="pointer-events-none absolute -top-16 left-1/2 h-96 w-96 -translate-x-1/2 rounded-full bg-[color:var(--color-primary)]/20 blur-3xl" />
           {/* Fade-out mask — clear visual end of section */}
           <div className="pointer-events-none absolute bottom-0 left-0 right-0 h-28 bg-[linear-gradient(to_bottom,transparent,var(--background))]" />
           {/* 1px divider line */}
@@ -554,7 +554,7 @@ export default function GuidesPage() {
         </div>
       </section>
 
-      <section className="section-shell bg-[linear-gradient(180deg,rgba(124,58,237,0.12),rgba(6,182,212,0.08))] py-16">
+      <section className="section-shell bg-[linear-gradient(180deg,rgba(var(--color-primary-rgb),0.12),rgba(var(--color-accent-rgb),0.08))] py-16">
         <div className="mx-auto max-w-6xl px-4 md:px-6">
           <h2 className="text-center text-3xl font-semibold tracking-tight text-[color:var(--color-text-primary)] md:text-5xl">
             {copy.supportTitle}
@@ -619,7 +619,7 @@ export default function GuidesPage() {
         </div>
       </section>
 
-      <section className="section-shell border-y border-[color:var(--color-border)] bg-[linear-gradient(130deg,rgba(124,58,237,0.35),rgba(59,130,246,0.35))] py-16">
+      <section className="section-shell border-y border-[color:var(--color-border)] bg-[linear-gradient(130deg,rgba(var(--color-primary-rgb),0.35),rgba(var(--color-accent-rgb),0.35))] py-16">
         <div className="mx-auto max-w-4xl px-4 text-center md:px-6">
           <h2 className="text-3xl font-semibold tracking-tight text-[color:var(--color-text-primary)] md:text-5xl">
             {copy.finalTitle}

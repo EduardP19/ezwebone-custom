@@ -44,7 +44,7 @@ export default async function ColumnsPage() {
         data={{
           "@context": "https://schema.org",
           "@type": "ItemList",
-          name: locale === "ro" ? "Coloanele EZWebOne" : "EZWebOne Columns",
+          name: locale === "ro" ? "Coloanele mangobeat" : "mangobeat Columns",
           itemListElement: columns.map((column, index) => ({
             "@type": "ListItem",
             position: index + 1,
